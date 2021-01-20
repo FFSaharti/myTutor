@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'welcome_screen.dart';
+import 'package:mytutor/components/ez_button.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
-class tour_screen extends StatefulWidget {
+class TourScreen extends StatefulWidget {
+  static String id = 'tour_screen';
   @override
-  _tour_screenState createState() => _tour_screenState();
+  _TourScreenState createState() => _TourScreenState();
 }
 
-class _tour_screenState extends State<tour_screen> {
+class _TourScreenState extends State<TourScreen> {
   PageController _pageController = PageController();
   MediaQueryData qDate;
   double width;
@@ -23,28 +24,24 @@ class _tour_screenState extends State<tour_screen> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          SizedBox(height: 35,),
+          SizedBox(
+            height: 35,
+          ),
           Container(
             height: height * 0.57,
             width: double.infinity,
             child: PageView(
               controller: _pageController,
               children: <Widget>[
-                TourPages(
-                    "images/portfolio.png",
-                    "Build your resume",
+                TourPages("images/portfolio.png", "Build your resume",
                     "Fill your profile with a list of your experiences, favorite topics and more!"),
-                TourPages(
-                    "images/myTutorLogo.png",
-                    "Find Materials",
+                TourPages("images/myTutorLogo.png", "Find Materials",
                     "View materials posted by other users that could really assist you."),
-
               ],
             ),
           ),
-
           Container(
-            child: GradientButton(
+            child: EZButton(
               width: width,
               buttonColor: null,
               textColor: Colors.white,
@@ -56,7 +53,7 @@ class _tour_screenState extends State<tour_screen> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => tour_screen()),
+                  MaterialPageRoute(builder: (context) => TourScreen()),
                 );
               },
             ),
@@ -77,7 +74,11 @@ class _tour_screenState extends State<tour_screen> {
     );
   }
 
-  Column TourPages(String imgpath, String title, String desc,) {
+  Column TourPages(
+    String imgpath,
+    String title,
+    String desc,
+  ) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -103,11 +104,10 @@ class _tour_screenState extends State<tour_screen> {
           padding: const EdgeInsets.fromLTRB(13.0, 0, 13.0, 13.0),
           child: Text(
             desc,
-
             textAlign: TextAlign.center,
             style: GoogleFonts.secularOne(
                 textStyle: TextStyle(
-                  height: 1.5,
+                    height: 1.5,
                     fontSize: 15,
                     color: Colors.grey[600],
                     fontWeight: FontWeight.w100)),
@@ -116,7 +116,6 @@ class _tour_screenState extends State<tour_screen> {
         SizedBox(
           height: height * 0.05,
         ),
-
       ],
     );
   }

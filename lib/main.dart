@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:mytutor/screens/tour_screen.dart';
+import 'package:mytutor/screens/welcome_screen.dart';
 
 import 'screens/splash_screen.dart';
 
@@ -10,7 +12,13 @@ class TutorApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: SplashScreen(),
+      // Using Named Routes to specify all the screens in the app
+      initialRoute: SplashScreen.id,
+      routes: {
+        SplashScreen.id: (context) => SplashScreen(),
+        WelcomeScreen.id: (context) => WelcomeScreen(),
+        TourScreen.id: (context) => TourScreen(),
+      },
     );
   }
 }
