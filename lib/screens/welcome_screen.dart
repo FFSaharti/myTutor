@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:mytutor/components/ez_button.dart';
 import 'package:mytutor/components/wave_widget.dart';
 import 'package:mytutor/utilities/constants.dart';
@@ -23,14 +24,56 @@ class WelcomeScreen extends StatelessWidget {
           Stack(
             children: [
               Container(
-                height: height - height * 0.1,
+                height: height - height * 0.2,
                 width: double.infinity,
-                color: kBlueScheme[0],
-                // Add Column As Child...
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topRight,
+                    end: Alignment.bottomLeft,
+                    stops: [0.2, 0.4, 0.6, 0.8],
+                    colors: [
+                      kBlueScheme[0],
+                      kBlueScheme[1],
+                      kBlueScheme[2],
+                      kBlueScheme[3]
+                    ],
+                  ),
+                ),
+                child: Column(
+                  children: <Widget>[
+                    SizedBox(
+                      height: height * 0.1,
+                    ),
+                    Hero(
+                      tag: 'logo',
+                      child: Image.asset(
+                        'images/myTutorLogoWhite.png',
+                        width: 150,
+                      ),
+                    ),
+                    Text(
+                      'My Tutor',
+                      style: GoogleFonts.secularOne(
+                          textStyle: TextStyle(
+                              fontSize: 50,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white)),
+                    ),
+                    SizedBox(
+                      height: 1,
+                    ),
+                    Text(
+                      'Your Tutor, right in your pocket',
+                      style: GoogleFonts.secularOne(
+                          textStyle:
+                              TextStyle(fontSize: 15, color: Colors.white70)),
+                    ),
+                  ],
+                ),
               ),
               WaveWidget(
                 size: mediaQueryData.size,
-                yOffset: height / 2.5,
+                yOffset: height / 1.8,
                 color: Colors.white,
               ),
               Padding(
@@ -44,7 +87,10 @@ class WelcomeScreen extends StatelessWidget {
                         buttonColor: null,
                         textColor: Colors.white,
                         isGradient: true,
-                        colors: [Color(0xFF59A1FF), Color(0xFF3F6CF4)],
+                        colors: [
+                          kBlueScheme[2],
+                          kBlueScheme[0],
+                        ],
                         buttonText: 'Get Started',
                         hasBorder: false,
                         borderColor: null,
@@ -70,6 +116,9 @@ class WelcomeScreen extends StatelessWidget {
                         borderColor: Color(0xFF59A1FF),
                         onPressed: () {},
                       ),
+                      SizedBox(
+                        height: 40,
+                      ),
                     ],
                   ),
                 ),
@@ -81,19 +130,3 @@ class WelcomeScreen extends StatelessWidget {
     );
   }
 }
-
-// Hero(
-// tag: 'logo',
-// child: Image.asset(
-// 'images/myTutorLogoColored.png',
-// ),
-// ),
-
-// Text(
-// 'My Tutor',
-// style: GoogleFonts.secularOne(
-// textStyle: TextStyle(
-// fontSize: 30,
-// fontWeight: FontWeight.bold,
-// color: Color(0xFF3F6CF4))),
-// ),

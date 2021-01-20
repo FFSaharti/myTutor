@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:mytutor/components/animated_resume_widget.dart';
 import 'package:mytutor/components/ez_button.dart';
+import 'package:mytutor/utilities/constants.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class TourScreen extends StatefulWidget {
@@ -22,21 +24,22 @@ class _TourScreenState extends State<TourScreen> {
     height = qDate.size.height;
     return Scaffold(
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          SizedBox(
-            height: 35,
-          ),
           Container(
-            height: height * 0.57,
+            height: height - height * 0.23,
             width: double.infinity,
             child: PageView(
               controller: _pageController,
               children: <Widget>[
-                TourPages("images/portfolio.png", "Build your resume",
+                TourPages(AnimatedResumeWidget(), "Build your resume",
                     "Fill your profile with a list of your experiences, favorite topics and more!"),
-                TourPages("images/myTutorLogo.png", "Find Materials",
-                    "View materials posted by other users that could really assist you."),
+                TourPages(AnimatedResumeWidget(), "Build your resume",
+                    "Fill your profile with a list of your experiences, favorite topics and more!"),
+                TourPages(AnimatedResumeWidget(), "Build your resume",
+                    "Fill your profile with a list of your experiences, favorite topics and more!"),
+                // TourPages("images/myTutorLogo.png", "Find Materials",
+                //     "View materials posted by other users that could really assist you."),
               ],
             ),
           ),
@@ -46,7 +49,7 @@ class _TourScreenState extends State<TourScreen> {
               buttonColor: null,
               textColor: Colors.white,
               isGradient: true,
-              colors: [Color(0xFF59A1FF), Color(0xFF3F6CF4)],
+              colors: [kBlueScheme[1], kBlueScheme[0]],
               buttonText: 'Get Started',
               hasBorder: false,
               borderColor: null,
@@ -59,49 +62,46 @@ class _TourScreenState extends State<TourScreen> {
             ),
           ),
           SizedBox(
-            height: height * 0.10,
+            height: height * 0.06,
           ),
           SmoothPageIndicator(
               controller: _pageController, // PageController
               count: 3,
-              effect: WormEffect(), // your preferred effect
+              effect: JumpingDotEffect(
+                  dotColor: kGreyish,
+                  activeDotColor: kBlueScheme[2]), // your preferred effect
               onDotClicked: (index) {}),
-          SizedBox(
-            height: 10,
-          ),
         ],
       ),
     );
   }
 
   Column TourPages(
-    String imgpath,
+    Widget animatedWidget,
     String title,
     String desc,
   ) {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        Image.asset(
-          imgpath,
-          height: height * 0.30,
-        ),
         SizedBox(
-          height: height * 0.07,
+          height: height * 0.10,
+        ),
+        animatedWidget,
+        SizedBox(
+          height: height * 0.03,
         ),
         Text(
           title,
           style: GoogleFonts.secularOne(
               textStyle: TextStyle(
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF505050))),
+                  fontSize: 30, fontWeight: FontWeight.bold, color: kBlackish)),
         ),
         SizedBox(
-          height: height * 0.01,
+          height: height * 0.02,
         ),
         Padding(
-          padding: const EdgeInsets.fromLTRB(13.0, 0, 13.0, 13.0),
+          padding: const EdgeInsets.fromLTRB(13.0, 0, 13.0, 0.0),
           child: Text(
             desc,
             textAlign: TextAlign.center,
@@ -109,13 +109,13 @@ class _TourScreenState extends State<TourScreen> {
                 textStyle: TextStyle(
                     height: 1.5,
                     fontSize: 15,
-                    color: Colors.grey[600],
+                    color: kGreyish,
                     fontWeight: FontWeight.w100)),
           ),
         ),
-        SizedBox(
-          height: height * 0.05,
-        ),
+        // SizedBox(
+        //   height: height * 0.05,
+        // ),
       ],
     );
   }
