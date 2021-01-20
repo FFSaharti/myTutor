@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'tour_screen.dart';
 
 class WelcomeScreen extends StatelessWidget {
   double width;
@@ -65,7 +66,12 @@ class WelcomeScreen extends StatelessWidget {
                   buttonText: 'Get Started',
                   hasBorder: false,
                   borderColor: null,
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => tour_screen()),
+                    );
+                  },
                 ),
                 SizedBox(
                   height: 20,
@@ -91,16 +97,15 @@ class WelcomeScreen extends StatelessWidget {
 }
 
 class GradientButton extends StatelessWidget {
-  GradientButton(
-      {@required this.width,
-      @required this.buttonColor,
-      @required this.textColor,
-      @required this.isGradient,
-      @required this.colors,
-      @required this.buttonText,
-      @required this.hasBorder,
-      @required this.borderColor,
-      @required this.onPressed});
+  GradientButton({@required this.width,
+    @required this.buttonColor,
+    @required this.textColor,
+    @required this.isGradient,
+    @required this.colors,
+    @required this.buttonText,
+    @required this.hasBorder,
+    @required this.borderColor,
+    @required this.onPressed});
 
   final double width;
   final Color buttonColor;
@@ -126,16 +131,16 @@ class GradientButton extends StatelessWidget {
           decoration: BoxDecoration(
               gradient: isGradient
                   ? LinearGradient(
-                      colors: [colors[0], colors[1]],
-                      begin: Alignment.centerLeft,
-                      end: Alignment.centerRight,
-                    )
+                colors: [colors[0], colors[1]],
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
+              )
                   : null,
               color: isGradient ? null : buttonColor,
               borderRadius: BorderRadius.circular(8.0)),
           child: Container(
             constraints:
-                BoxConstraints(maxWidth: width * 0.75, minHeight: 50.0),
+            BoxConstraints(maxWidth: width * 0.75, minHeight: 50.0),
             alignment: Alignment.center,
             child: Text(
               buttonText,
