@@ -39,8 +39,9 @@ class _ScaleImgWidgetState extends State<ScaleImgWidget>
 
   @override
   void dispose() {
-    super.dispose();
     _controller.dispose();
+    super.dispose();
+
   }
 
   @override
