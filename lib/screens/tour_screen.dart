@@ -4,6 +4,8 @@ import 'package:mytutor/components/animated_resume_widget.dart';
 import 'package:mytutor/components/ez_button.dart';
 import 'package:mytutor/utilities/constants.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:mytutor/components/animated_solveproblem_widget.dart';
+import 'package:mytutor/components/animated_materials_widget.dart';
 
 class TourScreen extends StatefulWidget {
   static String id = 'tour_screen';
@@ -34,10 +36,10 @@ class _TourScreenState extends State<TourScreen> {
               children: <Widget>[
                 TourPages(AnimatedResumeWidget(), "Build your resume",
                     "Fill your profile with a list of your experiences, favorite topics and more!"),
-                TourPages(AnimatedResumeWidget(), "Build your resume",
-                    "Fill your profile with a list of your experiences, favorite topics and more!"),
-                TourPages(AnimatedResumeWidget(), "Build your resume",
-                    "Fill your profile with a list of your experiences, favorite topics and more!"),
+                TourPages(AnimatedSolveProblemWidget(), "Solve your problems",
+                    "Explain your problem, and find solution responses from other tutors!"),
+                TourPages(AnimatedmMaterialsWidget(), "Find Materials",
+                    "View materials posted by others users that could really assist you!"),
                 // TourPages("images/myTutorLogo.png", "Find Materials",
                 //     "View materials posted by other users that could really assist you."),
               ],
