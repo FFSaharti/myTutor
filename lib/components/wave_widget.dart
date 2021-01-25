@@ -6,12 +6,12 @@ import 'package:mytutor/components/clipper_widget.dart';
 class WaveWidget extends StatefulWidget {
   final Size size;
   final double yOffset;
-  final Color color;
+  final List<Color> colors;
 
   WaveWidget({
     this.size,
     this.yOffset,
-    this.color,
+    this.colors,
   });
 
   @override
@@ -69,7 +69,13 @@ class _WaveWidgetState extends State<WaveWidget> with TickerProviderStateMixin {
           child: Container(
             width: widget.size.width,
             height: widget.size.height,
-            color: widget.color,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                  begin: Alignment.topRight,
+                  end: Alignment.bottomLeft,
+                  stops: [0.2, 0.4, 0.6, 0.8],
+                  colors: widget.colors),
+            ),
           ),
         );
       },

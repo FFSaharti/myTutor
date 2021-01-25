@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:mytutor/components/animated_materials_widget.dart';
 import 'package:mytutor/components/animated_resume_widget.dart';
+import 'package:mytutor/components/animated_solveproblem_widget.dart';
 import 'package:mytutor/components/ez_button.dart';
 import 'package:mytutor/utilities/constants.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import 'package:mytutor/components/animated_solveproblem_widget.dart';
-import 'package:mytutor/components/animated_materials_widget.dart';
 
 class TourScreen extends StatefulWidget {
   static String id = 'tour_screen';
@@ -34,12 +34,12 @@ class _TourScreenState extends State<TourScreen> {
             child: PageView(
               controller: _pageController,
               children: <Widget>[
-                TourPages(AnimatedResumeWidget(), "Build your resume",
+                TourPages(AnimatedResumeWidget(), "Build your résumé",
                     "Fill your profile with a list of your experiences, favorite topics and more!"),
                 TourPages(AnimatedSolveProblemWidget(), "Solve your problems",
-                    "Explain your problem, and find solution responses from other tutors!"),
+                    "Explain your problem, and find solution responses from other Tutors!"),
                 TourPages(AnimatedmMaterialsWidget(), "Find Materials",
-                    "View materials posted by others users that could really assist you!"),
+                    "View materials posted by Tutors that could really assist you."),
                 // TourPages("images/myTutorLogo.png", "Find Materials",
                 //     "View materials posted by other users that could really assist you."),
               ],
@@ -51,7 +51,7 @@ class _TourScreenState extends State<TourScreen> {
               buttonColor: null,
               textColor: Colors.white,
               isGradient: true,
-              colors: [kBlueScheme[1], kBlueScheme[0]],
+              colors: [kColorScheme[1], kColorScheme[0]],
               buttonText: 'Get Started',
               hasBorder: false,
               borderColor: null,
@@ -71,7 +71,7 @@ class _TourScreenState extends State<TourScreen> {
               count: 3,
               effect: JumpingDotEffect(
                   dotColor: kGreyish,
-                  activeDotColor: kBlueScheme[2]), // your preferred effect
+                  activeDotColor: kColorScheme[2]), // your preferred effect
               onDotClicked: (index) {}),
         ],
       ),

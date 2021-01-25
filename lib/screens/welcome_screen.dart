@@ -18,114 +18,117 @@ class WelcomeScreen extends StatelessWidget {
     width = mediaQueryData.size.width;
     height = mediaQueryData.size.height;
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: Stack(
-        children: <Widget>[
-          Stack(
-            children: [
-              Container(
-                height: height - height * 0.2,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topRight,
-                    end: Alignment.bottomLeft,
-                    stops: [0.2, 0.4, 0.6, 0.8],
-                    colors: [
-                      kBlueScheme[0],
-                      kBlueScheme[1],
-                      kBlueScheme[2],
-                      kBlueScheme[3]
-                    ],
-                  ),
+      backgroundColor: Colors.transparent,
+      body: Container(
+        // color: Colors.white,
+        child: Stack(
+          children: <Widget>[
+            Container(
+              height: height - height * 0.1,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topRight,
+                  end: Alignment.bottomLeft,
+                  stops: [0.2, 0.4, 0.6, 0.8],
+                  colors: [
+                    kColorScheme[0],
+                    kColorScheme[1],
+                    kColorScheme[2],
+                    kColorScheme[3]
+                  ],
                 ),
+              ),
+              child: Column(
+                children: <Widget>[
+                  SizedBox(
+                    height: height * 0.1,
+                  ),
+                  Hero(
+                    tag: 'logo',
+                    child: Image.asset(
+                      'images/myTutorLogoWhite.png',
+                      width: 150,
+                    ),
+                  ),
+                  Text(
+                    'My Tutor',
+                    style: GoogleFonts.secularOne(
+                        textStyle: TextStyle(
+                            fontSize: 50,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white)),
+                  ),
+                  SizedBox(
+                    height: 1,
+                  ),
+                  Text(
+                    'Your Tutor, right in your pocket',
+                    style: GoogleFonts.secularOne(
+                        textStyle:
+                            TextStyle(fontSize: 15, color: Colors.white)),
+                  ),
+                ],
+              ),
+            ),
+            WaveWidget(
+              size: mediaQueryData.size,
+              yOffset: height / 1.8,
+              colors: [Colors.white, Colors.white, Colors.white, Colors.white],
+            ),
+            SizedBox(
+              height: 50,
+            ),
+            Padding(
+              padding: EdgeInsets.all(50),
+              child: Center(
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: <Widget>[
+                    EZButton(
+                      width: width,
+                      buttonColor: Colors.white,
+                      textColor: Colors.white,
+                      isGradient: true,
+                      colors: [
+                        kColorScheme[0],
+                        kColorScheme[1],
+                        kColorScheme[2],
+                        kColorScheme[3]
+                      ],
+                      buttonText: 'Get Started',
+                      hasBorder: false,
+                      borderColor: kColorScheme[3],
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => TourScreen()),
+                        );
+                      },
+                    ),
                     SizedBox(
-                      height: height * 0.1,
+                      height: 15,
                     ),
-                    Hero(
-                      tag: 'logo',
-                      child: Image.asset(
-                        'images/myTutorLogoWhite.png',
-                        width: 150,
-                      ),
-                    ),
-                    Text(
-                      'My Tutor',
-                      style: GoogleFonts.secularOne(
-                          textStyle: TextStyle(
-                              fontSize: 50,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white)),
+                    EZButton(
+                      width: width,
+                      buttonColor: Colors.white,
+                      textColor: kColorScheme[2],
+                      isGradient: false,
+                      colors: null,
+                      buttonText: 'Login',
+                      hasBorder: true,
+                      borderColor: kColorScheme[3],
+                      onPressed: () {},
                     ),
                     SizedBox(
-                      height: 1,
-                    ),
-                    Text(
-                      'Your Tutor, right in your pocket',
-                      style: GoogleFonts.secularOne(
-                          textStyle:
-                              TextStyle(fontSize: 15, color: Colors.white70)),
+                      height: 40,
                     ),
                   ],
                 ),
               ),
-              WaveWidget(
-                size: mediaQueryData.size,
-                yOffset: height / 1.8,
-                color: Colors.white,
-              ),
-              Padding(
-                padding: EdgeInsets.all(50),
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      EZButton(
-                        width: width,
-                        buttonColor: null,
-                        textColor: Colors.white,
-                        isGradient: true,
-                        colors: [
-                          kBlueScheme[2],
-                          kBlueScheme[0],
-                        ],
-                        buttonText: 'Get Started',
-                        hasBorder: false,
-                        borderColor: null,
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => TourScreen()),
-                          );
-                        },
-                      ),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      EZButton(
-                        width: width,
-                        buttonColor: Colors.white,
-                        textColor: Color(0xFF3F6CF4),
-                        isGradient: false,
-                        colors: [Color(0xFF59A1FF), Color(0xFF3F6CF4)],
-                        buttonText: 'Login',
-                        hasBorder: true,
-                        borderColor: Color(0xFF59A1FF),
-                        onPressed: () {},
-                      ),
-                      SizedBox(
-                        height: 40,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ],
+            ),
+          ],
+        ),
       ),
     );
   }
