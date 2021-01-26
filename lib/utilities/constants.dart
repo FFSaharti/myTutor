@@ -9,3 +9,5 @@ const List<Color> kColorScheme = [
 
 const Color kBlackish = Color(0xFF070707);
 const Color kGreyish = Color(0xFFb5b5b5);
+
+const List validEmail = ['test@gmail.com'];
