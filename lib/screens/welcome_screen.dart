@@ -32,10 +32,10 @@ class WelcomeScreen extends StatelessWidget {
                   end: Alignment.bottomLeft,
                   stops: [0.2, 0.4, 0.6, 0.8],
                   colors: [
-                    kColorScheme[0],
                     kColorScheme[1],
                     kColorScheme[2],
-                    kColorScheme[3]
+                    kColorScheme[3],
+                    kColorScheme[4],
                   ],
                 ),
               ),

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mytutor/screens/login_page.dart';
+import 'package:mytutor/screens/login_screen.dart';
 import 'package:mytutor/screens/tour_screen.dart';
 import 'package:mytutor/screens/welcome_screen.dart';
 
@@ -19,7 +19,7 @@ class TutorApp extends StatelessWidget {
         SplashScreen.id: (context) => SplashScreen(),
         WelcomeScreen.id: (context) => WelcomeScreen(),
         TourScreen.id: (context) => TourScreen(),
-        LoginPage.id: (context) => LoginPage(),
+        LoginScreen.id: (context) => LoginScreen(),
       },
     );
   }

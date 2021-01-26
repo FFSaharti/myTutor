@@ -5,4 +5,10 @@ class Validator {
 
     return emailReg.hasMatch(input);
   }
+
+  static bool isValidName(String input) {
+    RegExp emailReg = RegExp(r'^[a-zA-Z]{1,25}$');
+
+    return emailReg.hasMatch(input);
+  }
 }
