@@ -4,10 +4,10 @@ import 'package:mytutor/components/animated_materials_widget.dart';
 import 'package:mytutor/components/animated_resume_widget.dart';
 import 'package:mytutor/components/animated_solveproblem_widget.dart';
 import 'package:mytutor/components/ez_button.dart';
-import 'package:mytutor/screens/login_screen.dart';
+import 'package:mytutor/screens/signup_screen.dart';
 import 'package:mytutor/utilities/constants.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import 'package:mytutor/screens/signup_screen.dart';
+
 class TourScreen extends StatefulWidget {
   static String id = 'tour_screen';
   @override
@@ -57,10 +57,7 @@ class _TourScreenState extends State<TourScreen> {
               hasBorder: false,
               borderColor: null,
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => SignupScreen()),
-                );
+                Navigator.pushNamed(context, SignupScreen.id);
               },
             ),
           ),

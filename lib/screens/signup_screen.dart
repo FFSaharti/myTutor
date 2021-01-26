@@ -1,9 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:mytutor/components/ez_button.dart';
-import 'package:mytutor/utilities/regEx.dart';
-import 'package:mytutor/utilities/constants.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:mytutor/components/ez_button.dart';
+import 'package:mytutor/screens/specify_role_screen.dart';
+import 'package:mytutor/utilities/constants.dart';
+import 'package:mytutor/utilities/regEx.dart';
 
 class SignupScreen extends StatefulWidget {
   static String id = 'signup_screen';
@@ -29,9 +30,10 @@ class _SignupScreenState extends State<SignupScreen> {
           padding: const EdgeInsets.all(30.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-
             children: <Widget>[
-              SizedBox(height: 110,),
+              SizedBox(
+                height: 50,
+              ),
               Hero(
                 tag: 'logo',
                 child: Image.asset(
@@ -54,18 +56,18 @@ class _SignupScreenState extends State<SignupScreen> {
               Text(
                 'Fill up your information',
                 style: GoogleFonts.secularOne(
-                    textStyle:
-                    TextStyle(fontSize: 15, color: Colors.grey)),
+                    textStyle: TextStyle(fontSize: 15, color: Colors.grey)),
               ),
               SizedBox(
                 height: 50,
-              ),TextFieldWidget(
-                hintText: 'name',
+              ),
+              TextFieldWidget(
+                hintText: 'Full Name',
                 obscureText: false,
                 prefixIconData: Icons.person,
                 colorScheme: kColorScheme[4],
                 suffixIconData:
-                Validator.isValidName(name) ? Icons.check : null,
+                    Validator.isValidName(name) ? Icons.check : null,
                 onChanged: (value) {
                   setState(() {
                     name = value;
@@ -82,7 +84,7 @@ class _SignupScreenState extends State<SignupScreen> {
                 prefixIconData: Icons.mail_outline,
                 colorScheme: kColorScheme[4],
                 suffixIconData:
-                Validator.isValidEmail(email) ? Icons.check : null,
+                    Validator.isValidEmail(email) ? Icons.check : null,
                 onChanged: (value) {
                   setState(() {
                     email = value;
@@ -123,8 +125,9 @@ class _SignupScreenState extends State<SignupScreen> {
                   buttonText: "Next",
                   hasBorder: false,
                   borderColor: null,
-                  onPressed: null),
-
+                  onPressed: () {
+                    Navigator.pushNamed(context, SpecifyRoleScreen.id);
+                  }),
             ],
           ),
         ),

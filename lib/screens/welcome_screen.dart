@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mytutor/components/ez_button.dart';
 import 'package:mytutor/components/wave_widget.dart';
+import 'package:mytutor/screens/login_screen.dart';
+import 'package:mytutor/screens/tour_screen.dart';
 import 'package:mytutor/utilities/constants.dart';
-
-import 'tour_screen.dart';
 
 class WelcomeScreen extends StatelessWidget {
   double width;
@@ -100,10 +100,7 @@ class WelcomeScreen extends StatelessWidget {
                       hasBorder: false,
                       borderColor: kColorScheme[3],
                       onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => TourScreen()),
-                        );
+                        Navigator.pushNamed(context, TourScreen.id);
                       },
                     ),
                     SizedBox(
@@ -118,7 +115,9 @@ class WelcomeScreen extends StatelessWidget {
                       buttonText: 'Login',
                       hasBorder: true,
                       borderColor: kColorScheme[3],
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.pushNamed(context, LoginScreen.id);
+                      },
                     ),
                     SizedBox(
                       height: 40,
