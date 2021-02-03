@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mytutor/components/ez_button.dart';
+import 'package:mytutor/screens/interests_screen.dart';
 import 'package:mytutor/utilities/constants.dart';
 
 class SpecifyRoleScreen extends StatefulWidget {
@@ -143,7 +144,12 @@ class _SpecifyRoleScreenState extends State<SpecifyRoleScreen> {
                 hasBorder: false,
                 borderColor: null,
                 onPressed: () {
-                  Navigator.pushNamed(context, SpecifyRoleScreen.id);
+                  if (selectedWidget == studentWidget) {
+                    // Navigator.pushNamed(context, SpecifyRoleScreen.id);
+                  } else {
+                    // Chosen Tutor
+                    Navigator.pushNamed(context, InterestsScreen.id);
+                  }
                 }),
             SizedBox(
               height: 70,

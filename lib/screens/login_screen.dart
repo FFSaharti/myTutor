@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:mytutor/components/ez_button.dart';
-import 'package:mytutor/utilities/regEx.dart';
-import 'package:mytutor/utilities/constants.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:mytutor/components/ez_button.dart';
+import 'package:mytutor/utilities/constants.dart';
+import 'package:mytutor/utilities/regEx.dart';
 
 class LoginScreen extends StatefulWidget {
   static String id = 'login_screen';
@@ -28,9 +28,10 @@ class _LoginScreenState extends State<LoginScreen> {
           padding: const EdgeInsets.all(30.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-
             children: <Widget>[
-              SizedBox(height: 110,),
+              SizedBox(
+                height: 110,
+              ),
               Hero(
                 tag: 'logo',
                 child: Image.asset(
@@ -53,8 +54,7 @@ class _LoginScreenState extends State<LoginScreen> {
               Text(
                 'Fill up your information',
                 style: GoogleFonts.secularOne(
-                    textStyle:
-                    TextStyle(fontSize: 15, color: Colors.grey)),
+                    textStyle: TextStyle(fontSize: 15, color: Colors.grey)),
               ),
               SizedBox(
                 height: 50,
@@ -96,7 +96,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     'forget your password?',
                     style: GoogleFonts.secularOne(
                         textStyle:
-                        TextStyle(fontSize: 13, color: kColorScheme[3])),
+                            TextStyle(fontSize: 13, color: kColorScheme[3])),
                   ),
                 ],
               ),
@@ -118,7 +118,6 @@ class _LoginScreenState extends State<LoginScreen> {
                   hasBorder: false,
                   borderColor: null,
                   onPressed: null),
-
             ],
           ),
         ),
