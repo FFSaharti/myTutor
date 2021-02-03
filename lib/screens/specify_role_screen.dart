@@ -96,37 +96,42 @@ class _SpecifyRoleScreenState extends State<SpecifyRoleScreen> {
             SizedBox(
               height: 25,
             ),
-            Expanded(
-              child: CupertinoPicker(
-                backgroundColor: Colors.white,
-                itemExtent: 38,
-                onSelectedItemChanged: (selectedIndex) {
-                  setState(() {
-                    if (selectedIndex == 0) {
-                      selectedWidget = tutorWidget;
-                    } else {
-                      selectedWidget = studentWidget;
-                    }
-                  });
-                },
-                children: [
-                  Text(
-                    'Tutor',
-                    style: GoogleFonts.secularOne(
-                        textStyle: TextStyle(
-                            fontSize: 25,
-                            fontWeight: FontWeight.normal,
-                            color: kBlackish)),
-                  ),
-                  Text(
-                    'Student',
-                    style: GoogleFonts.secularOne(
-                        textStyle: TextStyle(
-                            fontSize: 25,
-                            fontWeight: FontWeight.normal,
-                            color: kBlackish)),
-                  ),
-                ],
+            NotificationListener<OverscrollIndicatorNotification>(
+              onNotification: (overscroll) {
+                overscroll.disallowGlow();
+              },
+              child: Expanded(
+                child: CupertinoPicker(
+                  backgroundColor: Colors.white,
+                  itemExtent: 38,
+                  onSelectedItemChanged: (selectedIndex) {
+                    setState(() {
+                      if (selectedIndex == 0) {
+                        selectedWidget = tutorWidget;
+                      } else {
+                        selectedWidget = studentWidget;
+                      }
+                    });
+                  },
+                  children: [
+                    Text(
+                      'Tutor',
+                      style: GoogleFonts.secularOne(
+                          textStyle: TextStyle(
+                              fontSize: 25,
+                              fontWeight: FontWeight.normal,
+                              color: kBlackish)),
+                    ),
+                    Text(
+                      'Student',
+                      style: GoogleFonts.secularOne(
+                          textStyle: TextStyle(
+                              fontSize: 25,
+                              fontWeight: FontWeight.normal,
+                              color: kBlackish)),
+                    ),
+                  ],
+                ),
               ),
             ),
             EZButton(
