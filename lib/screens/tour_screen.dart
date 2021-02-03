@@ -32,18 +32,23 @@ class _TourScreenState extends State<TourScreen> {
           Container(
             height: height - height * 0.23,
             width: double.infinity,
-            child: PageView(
-              controller: _pageController,
-              children: <Widget>[
-                TourPages(AnimatedResumeWidget(), "Build your résumé",
-                    "Fill your profile with a list of your experiences, favorite topics and more!"),
-                TourPages(AnimatedSolveProblemWidget(), "Solve your problems",
-                    "Explain your problem, and find solution responses from other Tutors!"),
-                TourPages(AnimatedmMaterialsWidget(), "Find Materials",
-                    "View materials posted by Tutors that could really assist you."),
-                // TourPages("images/myTutorLogo.png", "Find Materials",
-                //     "View materials posted by other users that could really assist you."),
-              ],
+            child:  NotificationListener<OverscrollIndicatorNotification>(
+              onNotification: (overscroll) {
+                overscroll.disallowGlow();
+              },
+              child: PageView(
+                controller: _pageController,
+                children: <Widget>[
+                  TourPages(AnimatedResumeWidget(), "Build your résumé",
+                      "Fill your profile with a list of your experiences, favorite topics and more!"),
+                  TourPages(AnimatedSolveProblemWidget(), "Solve your problems",
+                      "Explain your problem, and find solution responses from other Tutors!"),
+                  TourPages(AnimatedmMaterialsWidget(), "Find Materials",
+                      "View materials posted by Tutors that could really assist you."),
+                  // TourPages("images/myTutorLogo.png", "Find Materials",
+                  //     "View materials posted by other users that could really assist you."),
+                ],
+              ),
             ),
           ),
           Container(
