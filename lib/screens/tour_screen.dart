@@ -29,10 +29,24 @@ class _TourScreenState extends State<TourScreen> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
+          SizedBox(
+            height: height * 0.05,
+          ),
+          Hero(
+            tag: 'logo',
+            child: Image.asset(
+              'images/myTutorLogoColored.png',
+              height: 50,
+              width: 50,
+            ),
+          ),
+          SizedBox(
+            height: height * 0.04,
+          ),
           Container(
-            height: height - height * 0.23,
+            height: height - height * 0.4,
             width: double.infinity,
-            child:  NotificationListener<OverscrollIndicatorNotification>(
+            child: NotificationListener<OverscrollIndicatorNotification>(
               onNotification: (overscroll) {
                 overscroll.disallowGlow();
               },
@@ -76,6 +90,23 @@ class _TourScreenState extends State<TourScreen> {
                   dotColor: kGreyish,
                   activeDotColor: kColorScheme[2]), // your preferred effect
               onDotClicked: (index) {}),
+          SizedBox(
+            height: 30,
+          ),
+          Expanded(
+            child: Container(
+              child: SizedBox(
+                height: 3,
+              ),
+              width: double.infinity,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(
+                    topRight: Radius.circular(45),
+                    topLeft: Radius.circular(45)),
+                color: Colors.white,
+              ),
+            ),
+          ),
         ],
       ),
     );
@@ -90,11 +121,11 @@ class _TourScreenState extends State<TourScreen> {
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         SizedBox(
-          height: height * 0.10,
+          height: height * 0.01,
         ),
         animatedWidget,
         SizedBox(
-          height: height * 0.03,
+          height: height * 0.005,
         ),
         Text(
           title,
@@ -103,7 +134,7 @@ class _TourScreenState extends State<TourScreen> {
                   fontSize: 30, fontWeight: FontWeight.bold, color: kBlackish)),
         ),
         SizedBox(
-          height: height * 0.02,
+          height: height * 0.001,
         ),
         Padding(
           padding: const EdgeInsets.fromLTRB(13.0, 0, 13.0, 0.0),

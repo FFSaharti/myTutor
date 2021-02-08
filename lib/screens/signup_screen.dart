@@ -48,7 +48,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     textStyle: TextStyle(
                         fontSize: 50,
                         fontWeight: FontWeight.bold,
-                        color: kColorScheme[0])),
+                        color: kColorScheme[2])),
               ),
               SizedBox(
                 height: 10,

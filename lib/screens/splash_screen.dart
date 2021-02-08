@@ -13,13 +13,20 @@ class _SplashScreenState extends State<SplashScreen>
   AnimationController _controller;
   Animation<double> _animation;
 
-  static Widget logo = Image.asset('images/myTutorLogoWhite.png', height: 150);
+  AnimationController _controllerLogo;
+  Animation<double> _animationLogo;
+
+  static Widget logo = Image.asset(
+    'images/myTutorLogoWhite.png',
+    height: 150,
+    width: 150,
+  );
 
   @override
   void initState() {
     super.initState();
     _controller = AnimationController(
-      duration: const Duration(seconds: 2),
+      duration: const Duration(milliseconds: 760),
       vsync: this,
     )..repeat(reverse: true);
     _animation = CurvedAnimation(
@@ -52,19 +59,52 @@ class _SplashScreenState extends State<SplashScreen>
       ),
       child: Scaffold(
         backgroundColor: Colors.transparent,
-        body: Center(
-          child: ScaleTransition(
-            scale: _animation,
-            child: Padding(
-              padding: EdgeInsets.all(8.0),
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.pushNamed(context, WelcomeScreen.id);
-                },
-                child: Hero(tag: 'logo', child: logo),
+        body: Stack(
+          alignment: Alignment.center,
+          children: [
+            Center(
+              child: ScaleTransition(
+                scale: _animation,
+                child: Container(
+                  height: 140,
+                  width: 140,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(90),
+                    color: Colors.white24,
+                  ),
+                ),
               ),
             ),
-          ),
+            GestureDetector(
+              onTap: () {
+                Navigator.pushNamed(context, WelcomeScreen.id);
+              },
+              child: Hero(
+                tag: 'logo',
+                child: logo,
+              ),
+            ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Hero(
+                  tag: 'Container',
+                  child: Container(
+                    child: SizedBox(
+                      height: 0,
+                    ),
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                          topRight: Radius.circular(45),
+                          topLeft: Radius.circular(45)),
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
         ),
       ),
     );
