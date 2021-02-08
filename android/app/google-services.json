@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "838715702477",
+    "project_id": "mytutor-7e48e",
+    "storage_bucket": "mytutor-7e48e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:838715702477:android:4ab30c0a91226158b6bd84",
+        "android_client_info": {
+          "package_name": "com.faisalsaharti.mytutor"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "838715702477-ss873gum7s4nm34voqovqiq0tftiaier.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDLczpaPal5HfzFNmvdT1u3kEUva9lvLNU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "838715702477-ss873gum7s4nm34voqovqiq0tftiaier.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

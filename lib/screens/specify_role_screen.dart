@@ -4,10 +4,16 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:mytutor/components/ez_button.dart';
 import 'package:mytutor/screens/interests_screen.dart';
 import 'package:mytutor/utilities/constants.dart';
-
+import 'package:mytutor/classes/DatabaseHelper.dart';
 class SpecifyRoleScreen extends StatefulWidget {
   static String id = 'specify_role_screen';
+  final String name;
+  final String pass;
+  final String email;
+
   static bool passwordVisible = true;
+
+  const SpecifyRoleScreen({ this.name, this.pass, this.email});
 
   @override
   _SpecifyRoleScreenState createState() => _SpecifyRoleScreenState();
@@ -15,8 +21,8 @@ class SpecifyRoleScreen extends StatefulWidget {
 
 class _SpecifyRoleScreenState extends State<SpecifyRoleScreen> {
   double width;
-  String email = '';
-  String name = '';
+  // String email = '';
+  // String name = '';
   String tutorRolePath = 'images/Roles/Tutor.png';
   String studentRolePath = 'images/Roles/Student.png';
 
@@ -60,6 +66,7 @@ class _SpecifyRoleScreenState extends State<SpecifyRoleScreen> {
 
   @override
   Widget build(BuildContext context) {
+
     MediaQueryData mediaQueryData = MediaQuery.of(context);
     width = mediaQueryData.size.width;
     return Scaffold(
@@ -150,6 +157,7 @@ class _SpecifyRoleScreenState extends State<SpecifyRoleScreen> {
                 borderColor: null,
                 onPressed: () {
                   if (selectedWidget == studentWidget) {
+                    DatabaseHelper().createUser();
                     // Navigator.pushNamed(context, SpecifyRoleScreen.id);
                   } else {
                     // Chosen Tutor

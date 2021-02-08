@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mytutor/classes/Subject.dart';
 import 'package:mytutor/components/ez_button.dart';
-import 'package:mytutor/screens/homepage_screen.dart';
+import 'package:mytutor/screens/homepage_screen_student.dart';
 import 'package:mytutor/utilities/constants.dart';
 
 class InterestsScreen extends StatefulWidget {
   static String id = 'interests_screen';
+
   @override
   _InterestsScreenState createState() => _InterestsScreenState();
 }
@@ -84,7 +85,13 @@ class _InterestsScreenState extends State<InterestsScreen> {
               SizedBox(
                 width: 15,
               ),
-              InterestWidget(subjects[0]),
+              GestureDetector(child: InterestWidget(subjects[0],),
+                onTap: (){
+                setState(() {
+                  selectedInterests.add(subjects[0]);
+                });
+                },
+              ),
             ],
           ),
           SizedBox(
@@ -129,7 +136,7 @@ class _InterestsScreenState extends State<InterestsScreen> {
               hasBorder: false,
               borderColor: null,
               onPressed: () {
-                Navigator.pushNamed(context, HomepageScreen.id);
+                Navigator.pushNamed(context, HomepageScreenStudent.id);
               }),
         ],
       ),

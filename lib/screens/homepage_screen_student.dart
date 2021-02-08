@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:mytutor/classes/DatabaseHelper.dart';
 import 'package:mytutor/utilities/constants.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class HomepageScreen extends StatefulWidget {
+class HomepageScreenStudent extends StatefulWidget {
   static String id = 'homepage_screen';
 
   @override
-  _HomepageScreenState createState() => _HomepageScreenState();
+  _HomepageScreenStudentState createState() => _HomepageScreenStudentState();
 }
 
-class _HomepageScreenState extends State<HomepageScreen> {
+class _HomepageScreenStudentState extends State<HomepageScreenStudent> {
    List<Widget> widgets = <Widget>[
      HomePage(),
     Text("2"),
@@ -72,7 +73,7 @@ class HomePage extends StatelessWidget {
               child: RichText(
                 text: TextSpan(children: [
                   TextSpan(
-                    text: "welcome,\nTutor ",
+                    text: "welcome,\nStudent ",
                     style: GoogleFonts.sarabun(
                         textStyle: TextStyle(
                             fontSize: 36,
@@ -80,7 +81,7 @@ class HomePage extends StatelessWidget {
                             color: Colors.black)),
                   ),
                   TextSpan(
-                    text: "Faisal",
+                    text: DatabaseHelper.stu.name,
                     style: GoogleFonts.sarabun(
                         textStyle: TextStyle(
                             fontSize: 36,

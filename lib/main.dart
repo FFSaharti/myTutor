@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mytutor/screens/homepage_screen.dart';
+import 'package:mytutor/screens/homepage_screen_student.dart';
 import 'package:mytutor/screens/interests_screen.dart';
 import 'package:mytutor/screens/login_screen.dart';
 import 'package:mytutor/screens/signup_screen.dart';
@@ -8,8 +8,10 @@ import 'package:mytutor/screens/welcome_screen.dart';
 
 import 'screens/specify_role_screen.dart';
 import 'screens/splash_screen.dart';
-
-void main() {
+import 'package:firebase_core/firebase_core.dart';
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(TutorApp());
 }
 
@@ -27,7 +29,7 @@ class TutorApp extends StatelessWidget {
         SignupScreen.id: (context) => SignupScreen(),
         SpecifyRoleScreen.id: (context) => SpecifyRoleScreen(),
         InterestsScreen.id: (context) => InterestsScreen(),
-        HomepageScreen.id: (context) => HomepageScreen(),
+        HomepageScreenStudent.id: (context) => HomepageScreenStudent(),
       },
     );
   }

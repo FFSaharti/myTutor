@@ -1,9 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:mytutor/classes/DatabaseHelper.dart';
 import 'package:mytutor/components/ez_button.dart';
 import 'package:mytutor/utilities/constants.dart';
 import 'package:mytutor/utilities/regEx.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:mytutor/screens/homepage_screen_student.dart';
 
 class LoginScreen extends StatefulWidget {
   static String id = 'login_screen';
@@ -16,6 +19,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   double width;
   String email = '';
+  String password = '';
 
   @override
   Widget build(BuildContext context) {
@@ -84,6 +88,11 @@ class _LoginScreenState extends State<LoginScreen> {
                     ? Icons.visibility
                     : Icons.visibility_off,
                 colorScheme: kColorScheme[4],
+                onChanged: (value) {
+                  setState(() {
+                    password = value;
+                  });
+                },
                 // isVisible: passwordVisible,
               ),
               SizedBox(
@@ -103,21 +112,45 @@ class _LoginScreenState extends State<LoginScreen> {
               SizedBox(
                 height: 40,
               ),
-              EZButton(
-                  width: width,
-                  buttonColor: kColorScheme[1],
-                  textColor: Colors.white,
-                  isGradient: true,
-                  colors: [
-                    kColorScheme[1],
-                    kColorScheme[2],
-                    kColorScheme[3],
-                    kColorScheme[4],
-                  ],
-                  buttonText: "log in",
-                  hasBorder: false,
-                  borderColor: null,
-                  onPressed: null),
+              Builder(builder: (context) {
+                return EZButton(
+                    width: width,
+                    buttonColor: kColorScheme[1],
+                    textColor: Colors.white,
+                    isGradient: true,
+                    colors: [
+                      kColorScheme[1],
+                      kColorScheme[2],
+                      kColorScheme[3],
+                      kColorScheme[4],
+                    ],
+                    buttonText: "log in",
+                    hasBorder: false,
+                    borderColor: null,
+                    onPressed: () {
+                      DatabaseHelper db = DatabaseHelper();
+                      DatabaseHelper()
+                          .userLogin(email, password)
+                          .then((value) => {
+                                if (value == "signin")
+                                  {
+                                    Scaffold.of(context).showSnackBar(SnackBar(
+                                        content: new Text("welcome"),
+                                        duration:
+                                            const Duration(milliseconds: 500))),
+                                    Navigator.pushNamed(
+                                        context, HomepageScreenStudent.id)
+                                  }
+                                else
+                                  {
+                                    Scaffold.of(context).showSnackBar(SnackBar(
+                                        content: new Text(value),
+                                        duration:
+                                            const Duration(milliseconds: 500)))
+                                  }
+                              });
+                    });
+              }),
             ],
           ),
         ),

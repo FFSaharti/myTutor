@@ -1,10 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:mytutor/classes/Student.dart';
 import 'package:mytutor/components/ez_button.dart';
 import 'package:mytutor/screens/specify_role_screen.dart';
 import 'package:mytutor/utilities/constants.dart';
 import 'package:mytutor/utilities/regEx.dart';
+import 'package:mytutor/classes/DatabaseHelper.dart';
+
 
 class SignupScreen extends StatefulWidget {
   static String id = 'signup_screen';
@@ -18,6 +21,7 @@ class _SignupScreenState extends State<SignupScreen> {
   double width;
   String email = '';
   String name = '';
+  String password = '';
 
   @override
   Widget build(BuildContext context) {
@@ -96,6 +100,9 @@ class _SignupScreenState extends State<SignupScreen> {
                 height: 10,
               ),
               TextFieldWidget(
+                onChanged: (value){
+                  password = value;
+                },
                 hintText: 'Password',
                 obscureText: SignupScreen.passwordVisible,
                 prefixIconData: Icons.lock,
@@ -126,6 +133,9 @@ class _SignupScreenState extends State<SignupScreen> {
                   hasBorder: false,
                   borderColor: null,
                   onPressed: () {
+                DatabaseHelper.stu.name = name;
+                DatabaseHelper.stu.pass = password;
+                DatabaseHelper.stu.email = email;
                     Navigator.pushNamed(context, SpecifyRoleScreen.id);
                   }),
             ],
