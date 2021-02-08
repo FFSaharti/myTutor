@@ -1,6 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mytutor/classes/DatabaseHelper.dart';
+import 'package:mytutor/classes/Session.dart';
+import 'package:mytutor/screens/messages_screen.dart';
 import 'package:mytutor/utilities/constants.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -106,10 +109,35 @@ class HomePage extends StatelessWidget {
                       color: kGreyish)),
             ),
           ),
-          SizedBox(
-            height: height * 0.003,
+
+          StreamBuilder<QuerySnapshot>(
+            stream: DatabaseHelper().fetchSessionData(),
+            builder: (context,snapshot){
+              // List to fill up with all the session the user has.
+              List<SessionWidget> UserSessions = [];
+              if(snapshot.hasData){
+                List<QueryDocumentSnapshot> Sessions = snapshot.data.docs;
+               for(var session in Sessions){
+                  final Sessiontutor = session.data()["tutor"];
+                  final Sessionstudent = session.data()["student"];
+                  final Sessiontitle = session.data()["title"];
+                  final singlesession = SessionWidget(height: height, session: Session(Sessiontitle, Sessiontutor, Sessionstudent, session.id) ,);
+                  UserSessions.add(singlesession);
+               }
+              }
+              return Expanded(
+                child: ListView(
+                  reverse: true,
+                  padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 20.0),
+                  children: UserSessions,
+                ),
+              );
+            },
           ),
-          SessionWidget(height: height),
+          SizedBox(
+            height: height*0.05,
+          ),
+          //SessionWidget(height: height),
         ],
       ),
     );
@@ -119,89 +147,99 @@ class HomePage extends StatelessWidget {
 class SessionWidget extends StatelessWidget {
   const SessionWidget({
     Key key,
-    @required this.height,
+    @required this.height, this.session,
   }) : super(key: key);
-
+  final Session session;
   final double height;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(15.0),
-      child: Container(
-        height: height * 0.17,
-        decoration: new BoxDecoration(
-          color: Color(0xFFefefef),
-          shape: BoxShape.rectangle,
-          borderRadius: new BorderRadius.circular(11.0),
-          // boxShadow: <BoxShadow>[
-          //   new BoxShadow(
-          //     color: Colors.black26,
-          //     blurRadius: 10.0,
-          //     offset: new Offset(0.0, 10.0),
-          //   ),
-          // ],
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset(
-              "images/Sub-Icons/Java.png",
-              height: 60,
-            ),
+      child: GestureDetector(
+        onTap: (){
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) =>  messagesScreen(currentsession: session,),
+          ));
+        },
+        child: Container(
+          height: height * 0.17,
+          decoration: new BoxDecoration(
+            color: Color(0xFFefefef),
+            shape: BoxShape.rectangle,
+            borderRadius: new BorderRadius.circular(11.0),
+            // boxShadow: <BoxShadow>[
+            //   new BoxShadow(
+            //     color: Colors.black26,
+            //     blurRadius: 10.0,
+            //     offset: new Offset(0.0, 10.0),
+            //   ),
+            // ],
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(
+                "images/Sub-Icons/Java.png",
+                height: 60,
+              ),
 
-            Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 11.0, right: 11.0),
-                    child: Text(
-                      "Array in java",
-                      style: GoogleFonts.sarabun(
-                        textStyle: TextStyle(
-                            fontSize: 21,
-                            fontWeight: FontWeight.normal,
-                            color: Colors.black),
-                      ),
-                    ),
-                  ),
-                  Container(
-                    decoration: new BoxDecoration(
-                      color: kColorScheme[2],
-                      borderRadius: new BorderRadius.circular(50.0),
-                    ),
-                    child: Padding(
+              Padding(
+                padding: const EdgeInsets.all(15.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
                       padding: const EdgeInsets.only(left: 11.0, right: 11.0),
                       child: Text(
-                        "Tomorrow at 4:50pm",
+                        session.title,
                         style: GoogleFonts.sarabun(
                           textStyle: TextStyle(
                               fontSize: 21,
                               fontWeight: FontWeight.normal,
-                              color: Colors.white),
+                              color: Colors.black),
                         ),
                       ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 11.0, right: 11.0),
-                    child: Text(
-                      "abdulrhman alahmadi",
-                      style: GoogleFonts.sarabun(
-                        textStyle: TextStyle(
-                            fontSize: 21,
-                            fontWeight: FontWeight.normal,
-                            color: Colors.grey),
+                    Container(
+                      decoration: new BoxDecoration(
+                        color: kColorScheme[2],
+                        borderRadius: new BorderRadius.circular(50.0),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 11.0, right: 11.0),
+                        child: Text(
+                          "Tomorrow at 4:50pm",
+                          style: GoogleFonts.sarabun(
+                            textStyle: TextStyle(
+                                fontSize: 21,
+                                fontWeight: FontWeight.normal,
+                                color: Colors.white),
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-            )
-          ],
+                    Padding(
+                      padding: const EdgeInsets.only(left: 11.0, right: 11.0),
+                      child: Text(
+                        //TODO: adjuest the over flow problem with long names
+                        "abdulrhman alahmadi",
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.sarabun(
+                          textStyle: TextStyle(
+                              fontSize: 21,
+                              fontWeight: FontWeight.normal,
+                              color: Colors.grey),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );

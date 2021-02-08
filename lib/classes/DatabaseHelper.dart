@@ -53,5 +53,24 @@ class DatabaseHelper {
   }
 
 
+   Stream<QuerySnapshot> fetchSessionData(){
+    return _firestore.collection("session").where("student", isEqualTo: stu.email).snapshots();
+  }
+
+   Stream<QuerySnapshot> fetchSessionMessages(String sessionid){
+     return _firestore.collection('session').doc(sessionid).collection("messages").orderBy("time", descending: true).snapshots();
+   }
+
+
+   void saveNewMessage(String sessionid , String msg , String sender){
+    _firestore.collection("session").doc(sessionid).collection("messages").add({
+      'text': msg,
+      'sender': sender,
+      'time': DateTime.now(),
+    });
+  }
+
+
+
 
 }

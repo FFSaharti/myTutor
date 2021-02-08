@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mytutor/components/ez_button.dart';
+import 'package:mytutor/screens/homepage_screen_student.dart';
 import 'package:mytutor/screens/interests_screen.dart';
 import 'package:mytutor/utilities/constants.dart';
 import 'package:mytutor/classes/DatabaseHelper.dart';
@@ -158,7 +159,7 @@ class _SpecifyRoleScreenState extends State<SpecifyRoleScreen> {
                 onPressed: () {
                   if (selectedWidget == studentWidget) {
                     DatabaseHelper().createUser();
-                    // Navigator.pushNamed(context, SpecifyRoleScreen.id);
+                    Navigator.pushNamed(context, HomepageScreenStudent.id);
                   } else {
                     // Chosen Tutor
                     Navigator.pushNamed(context, InterestsScreen.id);
