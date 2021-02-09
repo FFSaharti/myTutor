@@ -6,17 +6,18 @@ import 'package:mytutor/classes/session.dart';
 import 'package:mytutor/screens/messages_screen.dart';
 import 'package:mytutor/utilities/constants.dart';
 import 'package:mytutor/utilities/database_api.dart';
+import 'package:mytutor/utilities/session_manager.dart';
 
-class HomepageScreenStudent extends StatefulWidget {
-  static String id = 'homepage_screen_student';
+class HomepageScreenTutor extends StatefulWidget {
+  static String id = 'homepage_screen_tutor';
 
   @override
-  _HomepageScreenStudentState createState() => _HomepageScreenStudentState();
+  _HomepageScreenTutorState createState() => _HomepageScreenTutorState();
 }
 
-class _HomepageScreenStudentState extends State<HomepageScreenStudent> {
+class _HomepageScreenTutorState extends State<HomepageScreenTutor> {
   List<Widget> widgets = <Widget>[
-    HomePageStudent(),
+    HomePageTutor(),
     Text("2"),
   ];
   double width;
@@ -53,7 +54,7 @@ class _HomepageScreenStudentState extends State<HomepageScreenStudent> {
   }
 }
 
-class HomePageStudent extends StatelessWidget {
+class HomePageTutor extends StatelessWidget {
   double height;
   double width;
   @override
@@ -75,7 +76,7 @@ class HomePageStudent extends StatelessWidget {
               child: RichText(
                 text: TextSpan(children: [
                   TextSpan(
-                    text: "Welcome,\nStudent ",
+                    text: "Welcome,\nTutor ",
                     style: GoogleFonts.sarabun(
                         textStyle: TextStyle(
                             fontSize: 36,
@@ -83,7 +84,7 @@ class HomePageStudent extends StatelessWidget {
                             color: Colors.black)),
                   ),
                   TextSpan(
-                    text: DatabaseAPI.tempUser.name,
+                    text: SessionManager.loggedInUser.name,
                     style: GoogleFonts.sarabun(
                         textStyle: TextStyle(
                             fontSize: 36,

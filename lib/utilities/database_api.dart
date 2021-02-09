@@ -1,8 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:mytutor/classes/Student.dart';
+import 'package:mytutor/classes/student.dart';
 import 'package:mytutor/classes/tutor.dart';
 import 'package:mytutor/classes/user.dart';
+import 'package:mytutor/utilities/session_manager.dart';
 
 // Creating the DB Instance...
 FirebaseAuth _auth = FirebaseAuth.instance;
@@ -58,8 +59,9 @@ class DatabaseAPI {
       UserCredential userlogin =
           await _auth.signInWithEmailAndPassword(email: email, password: pass);
     } on FirebaseAuthException catch (e) {
-      return e.message + " MISMATCH";
+      //  return e.message + " MISMATCH";
     }
+
     try {
       await _firestore
           .collection("Student")
@@ -67,9 +69,10 @@ class DatabaseAPI {
           .get()
           .then((value) => tempUser =
               Student(value.docs.single.data()['name'], email, pass, ""));
-      return "Success";
+      SessionManager.loggedInUser = tempUser;
+      return "Student Login";
     } on FirebaseAuthException catch (e) {
-      print(e.message);
+      // print(e.message);
     }
 
     try {
@@ -79,7 +82,8 @@ class DatabaseAPI {
           .get()
           .then((value) => tempUser =
               Tutor(value.docs.single.data()['name'], email, pass, ""));
-      return "Success";
+      SessionManager.loggedInUser = tempUser;
+      return "Tutor Login";
     } on FirebaseAuthException catch (e) {
       return e.message;
     }
@@ -88,7 +92,7 @@ class DatabaseAPI {
   static Stream<QuerySnapshot> fetchSessionData() {
     return _firestore
         .collection("session")
-        .where("student", isEqualTo: _tempUser.email)
+        .where("student", isEqualTo: SessionManager.loggedInUser.email)
         .snapshots();
   }
 

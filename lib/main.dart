@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:mytutor/screens/homepage_screen_student.dart';
+import 'package:mytutor/screens/homepage_screen_tutor.dart';
 import 'package:mytutor/screens/interests_screen.dart';
 import 'package:mytutor/screens/login_screen.dart';
 import 'package:mytutor/screens/signup_screen.dart';
@@ -31,6 +32,7 @@ class TutorApp extends StatelessWidget {
         SpecifyRoleScreen.id: (context) => SpecifyRoleScreen(),
         InterestsScreen.id: (context) => InterestsScreen(),
         HomepageScreenStudent.id: (context) => HomepageScreenStudent(),
+        HomepageScreenTutor.id: (context) => HomepageScreenTutor(),
       },
     );
   }

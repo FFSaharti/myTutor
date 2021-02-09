@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mytutor/classes/subject.dart';
 import 'package:mytutor/components/ez_button.dart';
-import 'package:mytutor/screens/homepage_screen_student.dart';
 import 'package:mytutor/utilities/constants.dart';
+import 'package:mytutor/utilities/database_api.dart';
+
+import 'homepage_screen_tutor.dart';
 
 class InterestsScreen extends StatefulWidget {
   static String id = 'interests_screen';
@@ -141,7 +143,20 @@ class _InterestsScreenState extends State<InterestsScreen> {
               borderColor: null,
               onPressed: () {
                 //TODO: Add selected topics to tutor
-                Navigator.pushNamed(context, HomepageScreenStudent.id);
+                DatabaseAPI.userLogin(
+                        DatabaseAPI.tempUser.email, DatabaseAPI.tempUser.pass)
+                    .then((value) => {
+                          if (value == "Tutor Login")
+                            {
+                              print("PRINTING VALUE ... " + value),
+                              Scaffold.of(context).showSnackBar(SnackBar(
+                                  content: new Text("Welcome"),
+                                  backgroundColor: kColorScheme[2],
+                                  duration: const Duration(milliseconds: 500))),
+                              Navigator.pushNamed(
+                                  context, HomepageScreenTutor.id)
+                            }
+                        });
               }),
         ],
       ),

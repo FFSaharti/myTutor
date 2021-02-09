@@ -8,6 +8,8 @@ import 'package:mytutor/utilities/constants.dart';
 import 'package:mytutor/utilities/database_api.dart';
 import 'package:mytutor/utilities/regEx.dart';
 
+import 'homepage_screen_tutor.dart';
+
 class LoginScreen extends StatefulWidget {
   static String id = 'login_screen';
   static bool passwordVisible = true;
@@ -124,21 +126,35 @@ class _LoginScreenState extends State<LoginScreen> {
                     borderColor: null,
                     onPressed: () {
                       DatabaseAPI.userLogin(email, password).then((value) => {
-                            if (value == "Success")
+                            if (value == "Student Login")
                               {
                                 Scaffold.of(context).showSnackBar(SnackBar(
                                     content: new Text("Welcome"),
+                                    backgroundColor: kColorScheme[2],
                                     duration:
                                         const Duration(milliseconds: 500))),
                                 Navigator.pushNamed(
                                     context, HomepageScreenStudent.id)
                               }
+                            else if (value == "Tutor Login")
+                              {
+                                Scaffold.of(context).showSnackBar(SnackBar(
+                                    content: new Text("Welcome"),
+                                    backgroundColor: kColorScheme[2],
+                                    duration:
+                                        const Duration(milliseconds: 500))),
+                                Navigator.pushNamed(
+                                    context, HomepageScreenTutor.id)
+                              }
                             else
                               {
                                 Scaffold.of(context).showSnackBar(SnackBar(
-                                    content: new Text(value),
+                                    content: new Text("Invalid Information"),
+                                    backgroundColor: Colors.red,
                                     duration:
-                                        const Duration(milliseconds: 500)))
+                                        const Duration(milliseconds: 500))),
+                                // Navigator.pushNamed(
+                                //     context, HomepageScreenTutor.id)
                               }
                           });
                     });
