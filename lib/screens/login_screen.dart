@@ -1,12 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:mytutor/classes/DatabaseHelper.dart';
+import 'package:mytutor/components/animated_login_widget.dart';
 import 'package:mytutor/components/ez_button.dart';
-import 'package:mytutor/utilities/constants.dart';
-import 'package:mytutor/utilities/regEx.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:mytutor/screens/homepage_screen_student.dart';
+import 'package:mytutor/utilities/constants.dart';
+import 'package:mytutor/utilities/database_api.dart';
+import 'package:mytutor/utilities/regEx.dart';
 
 class LoginScreen extends StatefulWidget {
   static String id = 'login_screen';
@@ -33,30 +33,20 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              SizedBox(
-                height: 110,
-              ),
               Hero(
                 tag: 'logo',
                 child: Image.asset(
                   'images/myTutorLogoColored.png',
                   width: double.infinity,
-                  height: 100,
+                  height: 50,
                 ),
               ),
-              Text(
-                'My Tutor',
-                style: GoogleFonts.secularOne(
-                    textStyle: TextStyle(
-                        fontSize: 50,
-                        fontWeight: FontWeight.bold,
-                        color: kColorScheme[0])),
-              ),
+              AnimatedLoginWidget(),
               SizedBox(
-                height: 10,
+                height: 60,
               ),
               Text(
-                'Fill up your information',
+                'Login to your account',
                 style: GoogleFonts.secularOne(
                     textStyle: TextStyle(fontSize: 15, color: Colors.grey)),
               ),
@@ -93,19 +83,24 @@ class _LoginScreenState extends State<LoginScreen> {
                     password = value;
                   });
                 },
-                // isVisible: passwordVisible,
               ),
               SizedBox(
-                height: 2,
+                height: 5,
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    'forget your password?',
-                    style: GoogleFonts.secularOne(
-                        textStyle:
-                            TextStyle(fontSize: 13, color: kColorScheme[3])),
+                  GestureDetector(
+                    onTap: () {
+                      //TODO : Implement forgetting password action
+                    },
+                    child: Text(
+                      'Forgot your password?',
+                      style: kTitleStyle.copyWith(
+                          fontSize: 13,
+                          color: Colors.lightBlue,
+                          fontWeight: FontWeight.normal),
+                    ),
                   ),
                 ],
               ),
@@ -124,31 +119,28 @@ class _LoginScreenState extends State<LoginScreen> {
                       kColorScheme[3],
                       kColorScheme[4],
                     ],
-                    buttonText: "log in",
+                    buttonText: "Login",
                     hasBorder: false,
                     borderColor: null,
                     onPressed: () {
-                      DatabaseHelper db = DatabaseHelper();
-                      DatabaseHelper()
-                          .userLogin(email, password)
-                          .then((value) => {
-                                if (value == "signin")
-                                  {
-                                    Scaffold.of(context).showSnackBar(SnackBar(
-                                        content: new Text("welcome"),
-                                        duration:
-                                            const Duration(milliseconds: 500))),
-                                    Navigator.pushNamed(
-                                        context, HomepageScreenStudent.id)
-                                  }
-                                else
-                                  {
-                                    Scaffold.of(context).showSnackBar(SnackBar(
-                                        content: new Text(value),
-                                        duration:
-                                            const Duration(milliseconds: 500)))
-                                  }
-                              });
+                      DatabaseAPI.userLogin(email, password).then((value) => {
+                            if (value == "Success")
+                              {
+                                Scaffold.of(context).showSnackBar(SnackBar(
+                                    content: new Text("Welcome"),
+                                    duration:
+                                        const Duration(milliseconds: 500))),
+                                Navigator.pushNamed(
+                                    context, HomepageScreenStudent.id)
+                              }
+                            else
+                              {
+                                Scaffold.of(context).showSnackBar(SnackBar(
+                                    content: new Text(value),
+                                    duration:
+                                        const Duration(milliseconds: 500)))
+                              }
+                          });
                     });
               }),
             ],

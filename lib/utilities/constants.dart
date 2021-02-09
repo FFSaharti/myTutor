@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mytutor/classes/Subject.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:mytutor/classes/subject.dart';
 
 const List<Color> kColorScheme = [
   Color(0xFF9ACA69),
@@ -8,6 +9,17 @@ const List<Color> kColorScheme = [
   Color(0xFF6acc02),
   Color(0xFF4F9900),
 ];
+
+TextStyle kTitleStyle = GoogleFonts.secularOne(
+    textStyle: TextStyle(
+        fontSize: 50, fontWeight: FontWeight.bold, color: Colors.white));
+
+Gradient kBackgroundGradient = LinearGradient(
+  begin: Alignment.topRight,
+  end: Alignment.bottomLeft,
+  stops: [0.2, 0.4, 0.6, 0.8],
+  colors: [kColorScheme[0], kColorScheme[1], kColorScheme[2], kColorScheme[3]],
+);
 
 const Color kBlackish = Color(0xFF070707);
 const Color kGreyish = Color(0xFFb5b5b5);

@@ -13,9 +13,6 @@ class _SplashScreenState extends State<SplashScreen>
   AnimationController _controller;
   Animation<double> _animation;
 
-  AnimationController _controllerLogo;
-  Animation<double> _animationLogo;
-
   static Widget logo = Image.asset(
     'images/myTutorLogoWhite.png',
     height: 150,
@@ -45,17 +42,7 @@ class _SplashScreenState extends State<SplashScreen>
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topRight,
-          end: Alignment.bottomLeft,
-          stops: [0.2, 0.4, 0.6, 0.8],
-          colors: [
-            kColorScheme[0],
-            kColorScheme[1],
-            kColorScheme[2],
-            kColorScheme[3]
-          ],
-        ),
+        gradient: kBackgroundGradient,
       ),
       child: Scaffold(
         backgroundColor: Colors.transparent,
@@ -83,26 +70,6 @@ class _SplashScreenState extends State<SplashScreen>
                 tag: 'logo',
                 child: logo,
               ),
-            ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Hero(
-                  tag: 'Container',
-                  child: Container(
-                    child: SizedBox(
-                      height: 0,
-                    ),
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                          topRight: Radius.circular(45),
-                          topLeft: Radius.circular(45)),
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-              ],
             ),
           ],
         ),

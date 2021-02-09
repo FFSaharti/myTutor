@@ -1,11 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:mytutor/classes/DatabaseHelper.dart';
-import 'package:mytutor/classes/Session.dart';
+import 'package:mytutor/classes/session.dart';
 import 'package:mytutor/screens/messages_screen.dart';
 import 'package:mytutor/utilities/constants.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:mytutor/utilities/database_api.dart';
 
 class HomepageScreenStudent extends StatefulWidget {
   static String id = 'homepage_screen';
@@ -15,24 +15,23 @@ class HomepageScreenStudent extends StatefulWidget {
 }
 
 class _HomepageScreenStudentState extends State<HomepageScreenStudent> {
-   List<Widget> widgets = <Widget>[
-     HomePage(),
+  List<Widget> widgets = <Widget>[
+    HomePage(),
     Text("2"),
   ];
   double width;
   double height;
   int _navindex = 0;
 
-  void changeindex(int index){
+  void changeindex(int index) {
     setState(() {
       _navindex = index;
       print(_navindex);
     });
   }
+
   @override
   Widget build(BuildContext context) {
-
-
     return Scaffold(
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
@@ -40,7 +39,8 @@ class _HomepageScreenStudentState extends State<HomepageScreenStudent> {
         showUnselectedLabels: false,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(icon: Icon(Icons.home), label: "home"),
-          BottomNavigationBarItem(icon: Icon(FontAwesomeIcons.chalkboardTeacher), label: "student"),
+          BottomNavigationBarItem(
+              icon: Icon(FontAwesomeIcons.chalkboardTeacher), label: "student"),
           BottomNavigationBarItem(icon: Icon(Icons.email), label: "messages"),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: "profile"),
         ],
@@ -54,7 +54,6 @@ class _HomepageScreenStudentState extends State<HomepageScreenStudent> {
 }
 
 class HomePage extends StatelessWidget {
-
   double height;
   double width;
   @override
@@ -76,7 +75,7 @@ class HomePage extends StatelessWidget {
               child: RichText(
                 text: TextSpan(children: [
                   TextSpan(
-                    text: "welcome,\nStudent ",
+                    text: "Welcome,\nStudent ",
                     style: GoogleFonts.sarabun(
                         textStyle: TextStyle(
                             fontSize: 36,
@@ -84,7 +83,7 @@ class HomePage extends StatelessWidget {
                             color: Colors.black)),
                   ),
                   TextSpan(
-                    text: DatabaseHelper.stu.name,
+                    text: DatabaseAPI.tempUser.name,
                     style: GoogleFonts.sarabun(
                         textStyle: TextStyle(
                             fontSize: 36,
@@ -111,31 +110,36 @@ class HomePage extends StatelessWidget {
           ),
 
           StreamBuilder<QuerySnapshot>(
-            stream: DatabaseHelper().fetchSessionData(),
-            builder: (context,snapshot){
+            stream: DatabaseAPI.fetchSessionData(),
+            builder: (context, snapshot) {
               // List to fill up with all the session the user has.
               List<SessionWidget> UserSessions = [];
-              if(snapshot.hasData){
+              if (snapshot.hasData) {
                 List<QueryDocumentSnapshot> Sessions = snapshot.data.docs;
-               for(var session in Sessions){
+                for (var session in Sessions) {
                   final Sessiontutor = session.data()["tutor"];
                   final Sessionstudent = session.data()["student"];
                   final Sessiontitle = session.data()["title"];
-                  final singlesession = SessionWidget(height: height, session: Session(Sessiontitle, Sessiontutor, Sessionstudent, session.id) ,);
+                  final singlesession = SessionWidget(
+                    height: height,
+                    session: Session(
+                        Sessiontitle, Sessiontutor, Sessionstudent, session.id),
+                  );
                   UserSessions.add(singlesession);
-               }
+                }
               }
               return Expanded(
                 child: ListView(
                   reverse: true,
-                  padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 20.0),
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 10.0, vertical: 20.0),
                   children: UserSessions,
                 ),
               );
             },
           ),
           SizedBox(
-            height: height*0.05,
+            height: height * 0.05,
           ),
           //SessionWidget(height: height),
         ],
@@ -147,7 +151,8 @@ class HomePage extends StatelessWidget {
 class SessionWidget extends StatelessWidget {
   const SessionWidget({
     Key key,
-    @required this.height, this.session,
+    @required this.height,
+    this.session,
   }) : super(key: key);
   final Session session;
   final double height;
@@ -157,11 +162,14 @@ class SessionWidget extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(15.0),
       child: GestureDetector(
-        onTap: (){
+        onTap: () {
           Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) =>  messagesScreen(currentsession: session,),
-          ));
+              context,
+              MaterialPageRoute(
+                builder: (context) => messagesScreen(
+                  currentsession: session,
+                ),
+              ));
         },
         child: Container(
           height: height * 0.17,
@@ -184,7 +192,6 @@ class SessionWidget extends StatelessWidget {
                 "images/Sub-Icons/Java.png",
                 height: 60,
               ),
-
               Padding(
                 padding: const EdgeInsets.all(15.0),
                 child: Column(

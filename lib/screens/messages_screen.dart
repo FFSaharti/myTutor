@@ -1,14 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:mytutor/classes/DatabaseHelper.dart';
-import 'package:mytutor/classes/Session.dart';
-import 'package:mytutor/utilities/constants.dart';
 import 'package:intl/intl.dart';
+import 'package:mytutor/classes/session.dart';
+import 'package:mytutor/utilities/constants.dart';
+import 'package:mytutor/utilities/database_api.dart';
+
 class messagesScreen extends StatefulWidget {
   final Session currentsession;
 
-  const messagesScreen({this.currentsession}) ;
+  const messagesScreen({this.currentsession});
   @override
   _messagesScreenState createState() => _messagesScreenState();
 }
@@ -22,17 +23,15 @@ class _messagesScreenState extends State<messagesScreen> {
     return Scaffold(
       appBar: AppBar(
         leading: null,
-        elevation : 0,
-          backgroundColor: Color(0x44000000),
-          actions: <Widget>[
+        elevation: 0,
+        backgroundColor: Color(0x44000000),
+        actions: <Widget>[
           IconButton(
               icon: Icon(Icons.close),
               onPressed: () {
                 Navigator.pop(context);
               }),
         ],
-
-
       ),
       extendBodyBehindAppBar: true,
       body: SafeArea(
@@ -40,9 +39,10 @@ class _messagesScreenState extends State<messagesScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            MessagesStream(sessionid: widget.currentsession.session_id,),
+            MessagesStream(
+              sessionid: widget.currentsession.session_id,
+            ),
             Container(
-
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
@@ -53,7 +53,8 @@ class _messagesScreenState extends State<messagesScreen> {
                         newMessage = value;
                       },
                       decoration: InputDecoration(
-                        contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+                        contentPadding: EdgeInsets.symmetric(
+                            vertical: 10.0, horizontal: 20.0),
                         hintText: 'Type....',
                         border: InputBorder.none,
                       ),
@@ -62,12 +63,17 @@ class _messagesScreenState extends State<messagesScreen> {
                   FlatButton(
                     onPressed: () {
                       messageTextController.clear();
-                      DatabaseHelper().saveNewMessage(widget.currentsession.session_id, newMessage,DatabaseHelper.stu.name);
+                      DatabaseAPI.saveNewMessage(
+                          widget.currentsession.session_id,
+                          newMessage,
+                          DatabaseAPI.tempUser.name);
                     },
                     child: Row(
                       children: [
                         Text("send"),
-                        SizedBox(width: 5,),
+                        SizedBox(
+                          width: 5,
+                        ),
                         Icon(Icons.arrow_forward_rounded),
                       ],
                     ),
@@ -80,18 +86,16 @@ class _messagesScreenState extends State<messagesScreen> {
       ),
     );
   }
-
-
 }
 
 class MessagesStream extends StatelessWidget {
   final String sessionid;
 
-  const MessagesStream({this.sessionid}) ;
+  const MessagesStream({this.sessionid});
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-      stream: DatabaseHelper().fetchSessionMessages(sessionid),
+      stream: DatabaseAPI.fetchSessionMessages(sessionid),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return Text("");
@@ -104,12 +108,11 @@ class MessagesStream extends StatelessWidget {
           final messageText = message.data()['text'];
           final messageSender = message.data()['sender'];
 
-         final Timestamp timestamp = message.data()['time'] as Timestamp;
+          final Timestamp timestamp = message.data()['time'] as Timestamp;
           final DateTime dateTime = timestamp.toDate();
           // final dateString =  DateFormat('K:mm:ss').format(dateTime);
           // var sss = DateFormat("yyyy-MM-dd HH:mm:ss").parse(dateString, true).toLocal().toString();
           // String createdDate = dateFormat.format(DateTime.parse(sss));
-
 
           // var dateFormat = DateFormat("dd-MM-yyyy hh:mm aa"); // you can change the format here
           // var utcDate = dateFormat.format(DateTime.parse(dateTime.toString())); // pass the UTC time here
@@ -121,15 +124,15 @@ class MessagesStream extends StatelessWidget {
           var dateUtc = dateTime.toUtc();
           var strToDateTime = DateTime.parse(dateUtc.toString());
           final convertLocal = strToDateTime.toLocal();
-          if(num == 0){
+          if (num == 0) {
             var newFormat = DateFormat("hh:mm");
-             time = newFormat.format(convertLocal);
-          } else{
+            time = newFormat.format(convertLocal);
+          } else {
             var newFormat = DateFormat("yy-MM");
             time = newFormat.format(convertLocal);
           }
           // time
-          final currentUser = DatabaseHelper.stu.name;
+          final currentUser = DatabaseAPI.tempUser.name;
 
           final messageShape = MessageShape(
             time: time,
@@ -150,37 +153,13 @@ class MessagesStream extends StatelessWidget {
       },
     );
   }
+
   int calculateDifference(DateTime date) {
     DateTime now = DateTime.now();
-    return DateTime(date.year, date.month, date.day).difference(DateTime(now.year, now.month, now.day)).inDays;
+    return DateTime(date.year, date.month, date.day)
+        .difference(DateTime(now.year, now.month, now.day))
+        .inDays;
   }
-
-  // String readTimestamp(int timestamp) {
-  //   var now = DateTime.now();
-  //   var format = DateFormat('HH:mm a');
-  //   var date = DateTime.fromMillisecondsSinceEpoch(timestamp * 1000);
-  //   var diff = now.difference(date);
-  //   var time = '';
-  //
-  //   if (diff.inSeconds <= 0  diff.inSeconds > 0 && diff.inMinutes == 0  diff.inMinutes > 0 && diff.inHours == 0 || diff.inHours > 0 && diff.inDays == 0) {
-  //     time = format.format(date);
-  //   } else if (diff.inDays > 0 && diff.inDays < 7) {
-  //     if (diff.inDays == 1) {
-  //       time = diff.inDays.toString() + ' DAY AGO';
-  //     } else {
-  //       time = diff.inDays.toString() + ' DAYS AGO';
-  //     }
-  //   } else {
-  //     if (diff.inDays == 7) {
-  //       time = (diff.inDays / 7).floor().toString() + ' WEEK AGO';
-  //     } else {
-  //
-  //       time = (diff.inDays / 7).floor().toString() + ' WEEKS AGO';
-  //     }
-  //   }
-  //
-  //   return time;
-  // }
 }
 
 class MessageShape extends StatelessWidget {
@@ -196,29 +175,30 @@ class MessageShape extends StatelessWidget {
       padding: EdgeInsets.all(10.0),
       child: Column(
         crossAxisAlignment:
-        SameUser ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+            SameUser ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: <Widget>[
-
           Row(
-            mainAxisAlignment: SameUser ? MainAxisAlignment.end : MainAxisAlignment.start,
+            mainAxisAlignment:
+                SameUser ? MainAxisAlignment.end : MainAxisAlignment.start,
             children: [
               // SameUser ? Align(child: Text(time, style: TextStyle(color: Colors.grey, fontSize: 12),) , alignment: Alignment.topLeft,) : Text(""),
               // SameUser ?  Spacer() : SizedBox(width: 0,),
               Material(
                 borderRadius: SameUser
                     ? BorderRadius.only(
-                    topLeft: Radius.circular(20.0),
-                    bottomLeft: Radius.circular(30.0),
-                    bottomRight: Radius.circular(0.0))
+                        topLeft: Radius.circular(20.0),
+                        bottomLeft: Radius.circular(30.0),
+                        bottomRight: Radius.circular(0.0))
                     : BorderRadius.only(
-                  bottomLeft: Radius.circular(30.0),
-                  bottomRight: Radius.circular(30.0),
-                  topRight: Radius.circular(30.0),
-                ),
+                        bottomLeft: Radius.circular(30.0),
+                        bottomRight: Radius.circular(30.0),
+                        topRight: Radius.circular(30.0),
+                      ),
                 elevation: 3.0,
                 color: SameUser ? kColorScheme[1] : Colors.white,
                 child: Padding(
-                  padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+                  padding:
+                      EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
                   child: Text(
                     text,
                     style: TextStyle(
@@ -230,12 +210,15 @@ class MessageShape extends StatelessWidget {
               ),
               // SameUser ?  SizedBox(width: 0,) : Spacer() ,
               // SameUser ? Text("") : Text(time),
-
             ],
           ),
-      SizedBox(height: 5,),
-      Text(time, style: TextStyle(color: Colors.grey, fontSize: 12),
-      )
+          SizedBox(
+            height: 5,
+          ),
+          Text(
+            time,
+            style: TextStyle(color: Colors.grey, fontSize: 12),
+          )
         ],
       ),
     );
