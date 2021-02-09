@@ -77,6 +77,7 @@ class _InterestsScreenState extends State<InterestsScreen> {
           ),
           Row(
             children: <Widget>[
+              // TODO: Read subjects from DatabaseAPI and display them in ListView
               InterestWidget(subjects[1]),
               SizedBox(
                 width: 15,
@@ -117,7 +118,7 @@ class _InterestsScreenState extends State<InterestsScreen> {
           SizedBox(
             height: 8,
           ),
-          // ListView of Selected Topics...
+          // TODO : Display ListView of Selected Topics...
           Container(
             height: 130,
           ),
@@ -139,6 +140,7 @@ class _InterestsScreenState extends State<InterestsScreen> {
               hasBorder: false,
               borderColor: null,
               onPressed: () {
+                //TODO: Add selected topics to tutor
                 Navigator.pushNamed(context, HomepageScreenStudent.id);
               }),
         ],

@@ -108,4 +108,8 @@ class DatabaseAPI {
       'time': DateTime.now(),
     });
   }
+
+  //TODO: Adding interests to tutor
+  //TODO: fetching interests
+
 }

@@ -110,14 +110,6 @@ class MessagesStream extends StatelessWidget {
 
           final Timestamp timestamp = message.data()['time'] as Timestamp;
           final DateTime dateTime = timestamp.toDate();
-          // final dateString =  DateFormat('K:mm:ss').format(dateTime);
-          // var sss = DateFormat("yyyy-MM-dd HH:mm:ss").parse(dateString, true).toLocal().toString();
-          // String createdDate = dateFormat.format(DateTime.parse(sss));
-
-          // var dateFormat = DateFormat("dd-MM-yyyy hh:mm aa"); // you can change the format here
-          // var utcDate = dateFormat.format(DateTime.parse(dateTime.toString())); // pass the UTC time here
-          // var localDate = dateFormat.parse(utcDate, true).toLocal().toString();
-          // String createdDate = dateFormat.format(DateTime.parse(localDate)); // you will local time
           String time;
           int num = calculateDifference(dateTime);
 
@@ -181,9 +173,8 @@ class MessageShape extends StatelessWidget {
             mainAxisAlignment:
                 SameUser ? MainAxisAlignment.end : MainAxisAlignment.start,
             children: [
-              // SameUser ? Align(child: Text(time, style: TextStyle(color: Colors.grey, fontSize: 12),) , alignment: Alignment.topLeft,) : Text(""),
-              // SameUser ?  Spacer() : SizedBox(width: 0,),
               Material(
+                //TODO: Fix messages shape.
                 borderRadius: SameUser
                     ? BorderRadius.only(
                         topLeft: Radius.circular(20.0),
@@ -208,8 +199,6 @@ class MessageShape extends StatelessWidget {
                   ),
                 ),
               ),
-              // SameUser ?  SizedBox(width: 0,) : Spacer() ,
-              // SameUser ? Text("") : Text(time),
             ],
           ),
           SizedBox(
