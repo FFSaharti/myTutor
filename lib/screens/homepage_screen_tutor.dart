@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mytutor/classes/session.dart';
+import 'package:mytutor/classes/student.dart';
+import 'package:mytutor/classes/user.dart';
 import 'package:mytutor/screens/messages_screen.dart';
 import 'package:mytutor/utilities/constants.dart';
 import 'package:mytutor/utilities/database_api.dart';
@@ -54,9 +56,16 @@ class _HomepageScreenTutorState extends State<HomepageScreenTutor> {
   }
 }
 
-class HomePageTutor extends StatelessWidget {
+class HomePageTutor extends StatefulWidget {
+  @override
+  _HomePageTutorState createState() => _HomePageTutorState();
+}
+
+class _HomePageTutorState extends State<HomePageTutor> {
   double height;
+
   double width;
+
   @override
   Widget build(BuildContext context) {
     MediaQueryData mediaQueryData = MediaQuery.of(context);
@@ -121,10 +130,13 @@ class HomePageTutor extends StatelessWidget {
                   final Sessiontutor = session.data()["tutor"];
                   final Sessionstudent = session.data()["student"];
                   final Sessiontitle = session.data()["title"];
+                  MyUser temp = Student("name", "email", "pass", "aboutMe", "userId");
+                  DatabaseAPI.getUserbyid(Sessionstudent, 1).then((value) => temp = value).whenComplete(() => print(temp.name));
+
                   final singlesession = SessionWidget(
                     height: height,
                     session: Session(
-                        Sessiontitle, Sessiontutor, Sessionstudent, session.id),
+                        Sessiontitle, Sessiontutor, Student("name", "email", "pass", "aboutMe", "userId"), session.id),
                   );
                   UserSessions.add(singlesession);
                 }

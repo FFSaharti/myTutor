@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mytutor/classes/session.dart';
+import 'package:mytutor/classes/student.dart';
+import 'package:mytutor/classes/user.dart';
 import 'package:mytutor/screens/messages_screen.dart';
 import 'package:mytutor/utilities/constants.dart';
 import 'package:mytutor/utilities/database_api.dart';
@@ -53,9 +55,16 @@ class _HomepageScreenStudentState extends State<HomepageScreenStudent> {
   }
 }
 
-class HomePageStudent extends StatelessWidget {
+class HomePageStudent extends StatefulWidget {
+  @override
+  _HomePageStudentState createState() => _HomePageStudentState();
+}
+
+class _HomePageStudentState extends State<HomePageStudent> {
   double height;
+
   double width;
+
   @override
   Widget build(BuildContext context) {
     MediaQueryData mediaQueryData = MediaQuery.of(context);
@@ -118,14 +127,14 @@ class HomePageStudent extends StatelessWidget {
                 List<QueryDocumentSnapshot> Sessions = snapshot.data.docs;
                 for (var session in Sessions) {
                   final Sessiontutor = session.data()["tutor"];
-                  final Sessionstudent = session.data()["student"];
+                  final Sessionstudentid = session.data()["student"];
                   final Sessiontitle = session.data()["title"];
-                  final singlesession = SessionWidget(
+                  UserSessions.add(SessionWidget(
                     height: height,
                     session: Session(
-                        Sessiontitle, Sessiontutor, Sessionstudent, session.id),
-                  );
-                  UserSessions.add(singlesession);
+                        Sessiontitle, Sessiontutor, DatabaseAPI.tempUser, session.id),
+                  ));
+
                 }
               }
               return Expanded(
@@ -177,13 +186,6 @@ class SessionWidget extends StatelessWidget {
             color: Color(0xFFefefef),
             shape: BoxShape.rectangle,
             borderRadius: new BorderRadius.circular(11.0),
-            // boxShadow: <BoxShadow>[
-            //   new BoxShadow(
-            //     color: Colors.black26,
-            //     blurRadius: 10.0,
-            //     offset: new Offset(0.0, 10.0),
-            //   ),
-            // ],
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,

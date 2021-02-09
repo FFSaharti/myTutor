@@ -5,9 +5,10 @@ class MyUser {
   String _email;
   String _password;
   String _aboutMe;
+  String _userId;
 
   MyUser(@required this._name, @required this._email, @required this._password,
-      this._aboutMe);
+      this._aboutMe,@required this._userId);
 
   String get name => _name;
 
@@ -16,6 +17,13 @@ class MyUser {
   String get aboutMe => _aboutMe;
 
   String get pass => _password;
+
+
+  String get userId => _userId;
+
+  set userId(String value) {
+    _userId = value;
+  }
 
   set aboutMe(String value) {
     _aboutMe = value;

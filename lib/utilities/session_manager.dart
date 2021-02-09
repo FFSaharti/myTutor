@@ -1,7 +1,7 @@
 import 'package:mytutor/classes/user.dart';
 
 class SessionManager {
-  static MyUser _loggedInUser = MyUser("", "", "", "");
+  static MyUser _loggedInUser = MyUser("", "", "", "","");
 
   static MyUser get loggedInUser => _loggedInUser;
 
@@ -12,6 +12,6 @@ class SessionManager {
 // TODO: Implement sign in user (assigning loggedInUser to a student or tutor object)
 
   static void signOut() {
-    _loggedInUser = MyUser("", "", "", "");
+    _loggedInUser = MyUser("", "", "", "","");
   }
 }

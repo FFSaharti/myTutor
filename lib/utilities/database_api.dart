@@ -10,7 +10,7 @@ FirebaseAuth _auth = FirebaseAuth.instance;
 FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
 class DatabaseAPI {
-  static MyUser _tempUser = MyUser("", "", "", "");
+  static MyUser _tempUser = MyUser("", "", "", "","");
   String _errorcode = '';
 
   String get errorcode => _errorcode;
@@ -68,7 +68,7 @@ class DatabaseAPI {
           .where("email", isEqualTo: email)
           .get()
           .then((value) => tempUser =
-              Student(value.docs.single.data()['name'], email, pass, ""));
+              Student(value.docs.single.data()['name'], email, pass, "",value.docs.single.id));
       SessionManager.loggedInUser = tempUser;
       return "Student Login";
     } on FirebaseAuthException catch (e) {
@@ -81,7 +81,7 @@ class DatabaseAPI {
           .where("email", isEqualTo: email)
           .get()
           .then((value) => tempUser =
-              Tutor(value.docs.single.data()['name'], email, pass, ""));
+              Tutor(value.docs.single.data()['name'], email, pass, "", value.docs.single.id));
       SessionManager.loggedInUser = tempUser;
       return "Tutor Login";
     } on FirebaseAuthException catch (e) {
@@ -92,7 +92,7 @@ class DatabaseAPI {
   static Stream<QuerySnapshot> fetchSessionData() {
     return _firestore
         .collection("session")
-        .where("student", isEqualTo: SessionManager.loggedInUser.email)
+        .where("student", isEqualTo: SessionManager.loggedInUser.userId)
         .snapshots();
   }
 
@@ -111,6 +111,19 @@ class DatabaseAPI {
       'sender': sender,
       'time': DateTime.now(),
     });
+  }
+
+  //TODO: need adjustment after adding tutors to firebase.
+  static Future<MyUser> getUserbyid(String Sessionstudentid, int type) async{
+    MyUser temp;
+    if (type == 1){
+      // the stream builder needs in homepage needs to wait?
+      await _firestore.collection('Student').doc(Sessionstudentid).get().then((value) => temp = Student(value.data()["name"], value.data()["email"], value.data()["pass"], "aboutMe", Sessionstudentid));
+
+    } else{
+     return await _firestore.collection('Tutor').doc(Sessionstudentid).get().then((value) => temp = Tutor(value.data()["name"], value.data()["email"], value.data()["pass"], "aboutMe", Sessionstudentid));
+    }
+
   }
 
   //TODO: Adding interests to tutor
