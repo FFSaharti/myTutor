@@ -23,6 +23,7 @@ Gradient kBackgroundGradient = LinearGradient(
 
 const Color kBlackish = Color(0xFF070707);
 const Color kGreyish = Color(0xFFb5b5b5);
+const Color kGreyerish = Color(0xff7B7B7B);
 
 const List validEmail = ['test@gmail.com'];
 

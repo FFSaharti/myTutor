@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mytutor/classes/session.dart';
-import 'package:mytutor/classes/student.dart';
-import 'package:mytutor/classes/user.dart';
+import 'package:mytutor/classes/subject.dart';
 import 'package:mytutor/screens/messages_screen.dart';
 import 'package:mytutor/utilities/constants.dart';
 import 'package:mytutor/utilities/database_api.dart';
@@ -21,6 +21,8 @@ class _HomepageScreenTutorState extends State<HomepageScreenTutor> {
   List<Widget> widgets = <Widget>[
     HomePageTutor(),
     Text("2"),
+    Text("3"),
+    ProfileTutor(),
   ];
   double width;
   double height;
@@ -93,7 +95,7 @@ class _HomePageTutorState extends State<HomePageTutor> {
                             color: Colors.black)),
                   ),
                   TextSpan(
-                    text: SessionManager.loggedInUser.name,
+                    text: SessionManager.loggedInTutor.name,
                     style: GoogleFonts.sarabun(
                         textStyle: TextStyle(
                             fontSize: 36,
@@ -119,7 +121,7 @@ class _HomePageTutorState extends State<HomePageTutor> {
                           fontWeight: FontWeight.normal,
                           color: kGreyish)),
                 ),
-
+                //
               ],
             ),
           ),
@@ -138,11 +140,8 @@ class _HomePageTutorState extends State<HomePageTutor> {
 
                   final singlesession = SessionWidget(
                     height: height,
-                    session: Session(
-                        Sessiontitle,
-                        DatabaseAPI.tempUser.userId,
-                        Sessionstudent,
-                        session.id),
+                    session: Session(Sessiontitle, DatabaseAPI.tempUser.userId,
+                        Sessionstudent, session.id),
                   );
                   UserSessions.add(singlesession);
                 }
@@ -266,6 +265,259 @@ class SessionWidget extends StatelessWidget {
               )
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class ProfileTutor extends StatefulWidget {
+  @override
+  _ProfileTutorState createState() => _ProfileTutorState();
+}
+
+class _ProfileTutorState extends State<ProfileTutor> {
+  double height;
+  double width;
+
+  @override
+  Widget build(BuildContext context) {
+    MediaQueryData mediaQueryData = MediaQuery.of(context);
+    width = mediaQueryData.size.width;
+    height = mediaQueryData.size.height;
+    return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        backgroundColor: Colors.white70,
+        title: Center(
+          child: Text(
+            "Profile",
+            style: TextStyle(color: Colors.black),
+          ),
+        ),
+      ),
+      body: SafeArea(
+        child: Center(
+          child: Container(
+            width: width * 0.91,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                SizedBox(
+                  height: 20,
+                ),
+                Center(
+                  child: Container(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(100),
+                        color: Colors.white70),
+                    child: Icon(
+                      Icons.person,
+                      size: 130,
+                    ),
+                  ),
+                ),
+                Text(
+                  DatabaseAPI.tempTutor.name,
+                  style: kTitleStyle.copyWith(color: kBlackish, fontSize: 30),
+                ),
+                Center(
+                  child: Container(
+                    width: 80,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(50),
+                      color: kColorScheme[3],
+                    ),
+                    child: Text(
+                      "Tutor",
+                      textAlign: TextAlign.center,
+                      style: kTitleStyle.copyWith(
+                          fontSize: 20, fontWeight: FontWeight.normal),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 9,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ProfileInfoWidget("Sessions", 69.toString()),
+                    SizedBox(
+                      width: 5,
+                    ),
+                    ProfileInfoWidget("Rating", 4.5.toString()),
+                    SizedBox(
+                      width: 5,
+                    ),
+                    ProfileInfoWidget("Reviews", 69.toString()),
+                  ],
+                ),
+                Divider(
+                  color: kGreyish,
+                ),
+                SizedBox(
+                  height: 5,
+                ),
+                Column(
+                  children: [
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.info_outline_rounded,
+                          size: 18,
+                        ),
+                        SizedBox(
+                          width: 5,
+                        ),
+                        Text(
+                          "About Me",
+                          style: TextStyle(fontSize: 18),
+                        )
+                      ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(5.0),
+                      child: Text(
+                        //TODO: Create & Fetch About me from a tutor.
+                        "I’m a guy who loves programming and would love to share my knowledge with any fellow students, interested in almost all programming languages.",
+                        style: TextStyle(fontSize: 16.5, color: kGreyerish),
+                      ),
+                    )
+                  ],
+                ),
+                Divider(
+                  color: kGreyish,
+                ),
+                SizedBox(
+                  height: 5,
+                ),
+                Column(
+                  children: [
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.school_outlined,
+                          size: 18,
+                        ),
+                        SizedBox(
+                          width: 5,
+                        ),
+                        Text(
+                          "Experiences",
+                          style: TextStyle(fontSize: 18),
+                        )
+                      ],
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Container(
+                      height: 50,
+                      // child: Text(SessionManager.loggedInTutor.experiences[0]
+                      //     .toString()),
+                      child: ListView(
+                        scrollDirection: Axis.horizontal,
+                        children: getExperiences(),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  List<Widget> getExperiences() {
+    List<Widget> widgets = [];
+    List<Subject> experiences = [];
+
+    for (int i = 0; i < SessionManager.loggedInTutor.experiences.length; i++) {
+      for (int j = 0; j < subjects.length; j++) {
+        if (SessionManager.loggedInTutor.experiences[i] == subjects[j].id) {
+          experiences.add(subjects[j]);
+        }
+      }
+    }
+
+    for (int i = 0; i < experiences.length; i++) {
+      widgets.add(SubjectWidget(experiences[i]));
+      widgets.add(SizedBox(width: 9));
+    }
+
+    return widgets;
+  }
+}
+
+class ProfileInfoWidget extends StatelessWidget {
+  ProfileInfoWidget(this.infoTitle, this.infoNum);
+
+  String infoTitle = "";
+  String infoNum = "";
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 85,
+      height: 53,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        color: Color(0xffF5F5F5),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(5.0),
+        child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                infoTitle,
+                style: TextStyle(color: kGreyerish, fontSize: 18),
+              ),
+              Text(
+                infoNum,
+                style: TextStyle(color: kBlackish, fontSize: 18),
+              ),
+            ]),
+      ),
+    );
+  }
+}
+
+class SubjectWidget extends StatefulWidget {
+  Subject subject;
+
+  SubjectWidget(this.subject);
+
+  @override
+  _SubjectWidgetState createState() => _SubjectWidgetState();
+}
+
+class _SubjectWidgetState extends State<SubjectWidget> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 50,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.1),
+            spreadRadius: 1,
+            blurRadius: 15,
+            offset: Offset(0, 6), // changes position of shadow
+          ),
+        ],
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Image.asset(
+          widget.subject.path,
+          width: 40,
         ),
       ),
     );

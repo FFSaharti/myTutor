@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:mytutor/classes/student.dart';
 import 'package:mytutor/classes/tutor.dart';
 import 'package:mytutor/classes/user.dart';
 import 'package:mytutor/utilities/session_manager.dart';
@@ -13,7 +12,7 @@ FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
 class DatabaseAPI {
   static MyUser _tempUser = MyUser("", "", "", "", "");
-  static Tutor _tempTutor = Tutor("", "", "", "","", []);
+  static Tutor _tempTutor = Tutor("", "", "", "", "", []);
   String _errorcode = '';
 
   String get errorcode => _errorcode;
@@ -62,54 +61,57 @@ class DatabaseAPI {
       //  return e.message + " MISMATCH";
     }
 
-    try {
-      await _firestore
-          .collection("Student")
-          .where("email", isEqualTo: email)
-          .get()
-          .then((value) => tempUser = Student(value.docs.single.data()['name'],
-              email, pass, "", value.docs.single.id));
-      SessionManager.loggedInUser = tempUser;
-      return "Student Login";
-    } on FirebaseAuthException catch (e) {
-      // print(e.message);
-    }
-
     // try {
     //   await _firestore
-    //       .collection("Tutor")
+    //       .collection("Student")
     //       .where("email", isEqualTo: email)
     //       .get()
-    //
-    //       .then((value) => _tempTutor = Tutor(value.docs.single.data()['name'], email, pass, "aboutme", value.docs.single.id, value.docs.single.data()['experiences']));
-    //   SessionManager.loggedInUser = _tempTutor;
-    //   return "Tutor Login";
+    //       .then((value) => tempUser = Student(value.docs.single.data()['name'],
+    //           email, pass, "", value.docs.single.id));
+    //   SessionManager.loggedInUser = tempUser;
+    //   return "Student Login";
     // } on FirebaseAuthException catch (e) {
-    //   return e.message;
+    //   // print(e.message);
     // }
+
+    try {
+      await _firestore
+          .collection("Tutor")
+          .where("email", isEqualTo: email)
+          .get()
+          .then((value) => {
+                _tempTutor = Tutor(value.docs.single.data()['name'], email,
+                    pass, "", value.docs.single.id, []),
+                List.from(value.docs.single.data()['experiences'])
+                    .forEach((element) {
+                  print("ELEMENT PRINTING ... " + element.toString());
+                  _tempTutor.addExperience(element);
+                })
+              });
+
+      SessionManager.loggedInTutor = _tempTutor;
+      return "Tutor Login";
+    } on FirebaseAuthException catch (e) {
+      return e.message;
+    }
   }
 
   static Stream<QuerySnapshot> fetchSessionData(int type) {
-
     print(SessionManager.loggedInUser.userId);
-    if (type ==1 ){
+    if (type == 1) {
       // tutor
       return _firestore
           .collection("session")
           .where("tutor", isEqualTo: SessionManager.loggedInUser.userId)
           .snapshots();
-
-    } else{
+    } else {
       //student
       return _firestore
           .collection("session")
           .where("student", isEqualTo: SessionManager.loggedInUser.userId)
           .snapshots();
     }
-
   }
-
-
 
   static Stream<QuerySnapshot> fetchSessionMessages(String sessionid) {
     return _firestore
@@ -162,6 +164,9 @@ class DatabaseAPI {
             "name": tempUser.name,
             "experiences": subjectIDs
           });
+          _tempTutor = Tutor(
+              tempUser.name, tempUser.email, tempUser.pass, "", "", subjectIDs);
+          SessionManager.loggedInTutor = _tempTutor;
           return "Success";
         } on FirebaseAuthException catch (e) {
           return e.message;
