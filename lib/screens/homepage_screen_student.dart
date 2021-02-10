@@ -8,6 +8,7 @@ import 'package:mytutor/classes/user.dart';
 import 'package:mytutor/screens/messages_screen.dart';
 import 'package:mytutor/utilities/constants.dart';
 import 'package:mytutor/utilities/database_api.dart';
+import 'package:mytutor/utilities/session_manager.dart';
 
 class HomepageScreenStudent extends StatefulWidget {
   static String id = 'homepage_screen_student';
@@ -117,9 +118,8 @@ class _HomePageStudentState extends State<HomePageStudent> {
                       color: kGreyish)),
             ),
           ),
-
           StreamBuilder<QuerySnapshot>(
-            stream: DatabaseAPI.fetchSessionData(),
+            stream: DatabaseAPI.fetchSessionData(0),
             builder: (context, snapshot) {
               // List to fill up with all the session the user has.
               List<SessionWidget> UserSessions = [];
@@ -132,7 +132,7 @@ class _HomePageStudentState extends State<HomePageStudent> {
                   UserSessions.add(SessionWidget(
                     height: height,
                     session: Session(
-                        Sessiontitle, Sessiontutor, DatabaseAPI.tempUser, session.id),
+                        Sessiontitle, Sessiontutor, SessionManager.loggedInUser.userId, session.id),
                   ));
 
                 }

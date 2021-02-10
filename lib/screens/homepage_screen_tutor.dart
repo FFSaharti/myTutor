@@ -8,6 +8,7 @@ import 'package:mytutor/classes/user.dart';
 import 'package:mytutor/screens/messages_screen.dart';
 import 'package:mytutor/utilities/constants.dart';
 import 'package:mytutor/utilities/database_api.dart';
+import 'package:mytutor/utilities/session_manager.dart';
 
 class HomepageScreenTutor extends StatefulWidget {
   static String id = 'homepage_screen_tutor';
@@ -92,7 +93,7 @@ class _HomePageTutorState extends State<HomePageTutor> {
                             color: Colors.black)),
                   ),
                   TextSpan(
-                    text: DatabaseAPI.tempUser.name,
+                    text: SessionManager.loggedInUser.name,
                     style: GoogleFonts.sarabun(
                         textStyle: TextStyle(
                             fontSize: 36,
@@ -118,21 +119,13 @@ class _HomePageTutorState extends State<HomePageTutor> {
                           fontWeight: FontWeight.normal,
                           color: kGreyish)),
                 ),
-                Text(
-                  // subjects[DatabaseAPI.tempTutor.experiences[0]].title,
-                  'hI',
-                  style: GoogleFonts.sarabun(
-                      textStyle: TextStyle(
-                          fontSize: 21,
-                          fontWeight: FontWeight.normal,
-                          color: kGreyish)),
-                ),
+
               ],
             ),
           ),
 
           StreamBuilder<QuerySnapshot>(
-            stream: DatabaseAPI.fetchSessionData(),
+            stream: DatabaseAPI.fetchSessionData(1),
             builder: (context, snapshot) {
               // List to fill up with all the session the user has.
               List<SessionWidget> UserSessions = [];
@@ -142,18 +135,13 @@ class _HomePageTutorState extends State<HomePageTutor> {
                   final Sessiontutor = session.data()["tutor"];
                   final Sessionstudent = session.data()["student"];
                   final Sessiontitle = session.data()["title"];
-                  MyUser temp =
-                      Student("name", "email", "pass", "aboutMe", "userId");
-                  DatabaseAPI.getUserbyid(Sessionstudent, 1)
-                      .then((value) => temp = value)
-                      .whenComplete(() => print(temp.name));
 
                   final singlesession = SessionWidget(
                     height: height,
                     session: Session(
                         Sessiontitle,
-                        Sessiontutor,
-                        Student("name", "email", "pass", "aboutMe", "userId"),
+                        DatabaseAPI.tempUser.userId,
+                        Sessionstudent,
                         session.id),
                   );
                   UserSessions.add(singlesession);

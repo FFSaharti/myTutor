@@ -5,9 +5,9 @@ class Tutor extends MyUser {
   // List<Material> bookmarkedMaterials
   // List<Session> sessions;
 
-  Tutor(String name, String email, String pass, String aboutMe,
+  Tutor(String name, String email, String pass, String aboutMe, String userid,
       List<dynamic> experiences)
-      : super(name, email, pass, aboutMe, "");
+      : super(name, email, pass, aboutMe, userid);
 
   List<dynamic> get experiences => _experiences;
 

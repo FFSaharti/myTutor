@@ -8,7 +8,7 @@ class Session{
 
   String _title;
   String _tutor;
-  MyUser _student;
+  String _student;
   String _session_id;
 
 
@@ -19,9 +19,9 @@ class Session{
     _title = value;
   }
 
-  MyUser get student => _student;
+  String get student => _student;
 
-  set student(MyUser value) {
+  set student(String value) {
     _student = value;
   }
 

@@ -13,7 +13,7 @@ FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
 class DatabaseAPI {
   static MyUser _tempUser = MyUser("", "", "", "", "");
-  static Tutor _tempTutor = Tutor("", "", "", "", []);
+  static Tutor _tempTutor = Tutor("", "", "", "","", []);
   String _errorcode = '';
 
   String get errorcode => _errorcode;
@@ -62,39 +62,54 @@ class DatabaseAPI {
       //  return e.message + " MISMATCH";
     }
 
-    // try {
-    //   await _firestore
-    //       .collection("Student")
-    //       .where("email", isEqualTo: email)
-    //       .get()
-    //       .then((value) => tempUser = Student(value.docs.single.data()['name'],
-    //           email, pass, "", value.docs.single.id));
-    //   SessionManager.loggedInUser = tempUser;
-    //   return "Student Login";
-    // } on FirebaseAuthException catch (e) {
-    //   // print(e.message);
-    // }
-
     try {
       await _firestore
-          .collection("Tutor")
+          .collection("Student")
           .where("email", isEqualTo: email)
           .get()
-          .then((value) => _tempTutor = Tutor(value.docs.single.data()['name'],
-              email, pass, "", value.docs.single.data()['experiences']));
-      SessionManager.loggedInUser = _tempTutor;
-      return "Tutor Login";
+          .then((value) => tempUser = Student(value.docs.single.data()['name'],
+              email, pass, "", value.docs.single.id));
+      SessionManager.loggedInUser = tempUser;
+      return "Student Login";
     } on FirebaseAuthException catch (e) {
-      return e.message;
+      // print(e.message);
     }
+
+    // try {
+    //   await _firestore
+    //       .collection("Tutor")
+    //       .where("email", isEqualTo: email)
+    //       .get()
+    //
+    //       .then((value) => _tempTutor = Tutor(value.docs.single.data()['name'], email, pass, "aboutme", value.docs.single.id, value.docs.single.data()['experiences']));
+    //   SessionManager.loggedInUser = _tempTutor;
+    //   return "Tutor Login";
+    // } on FirebaseAuthException catch (e) {
+    //   return e.message;
+    // }
   }
 
-  static Stream<QuerySnapshot> fetchSessionData() {
-    return _firestore
-        .collection("session")
-        .where("student", isEqualTo: SessionManager.loggedInUser.userId)
-        .snapshots();
+  static Stream<QuerySnapshot> fetchSessionData(int type) {
+
+    print(SessionManager.loggedInUser.userId);
+    if (type ==1 ){
+      // tutor
+      return _firestore
+          .collection("session")
+          .where("tutor", isEqualTo: SessionManager.loggedInUser.userId)
+          .snapshots();
+
+    } else{
+      //student
+      return _firestore
+          .collection("session")
+          .where("student", isEqualTo: SessionManager.loggedInUser.userId)
+          .snapshots();
+    }
+
   }
+
+
 
   static Stream<QuerySnapshot> fetchSessionMessages(String sessionid) {
     return _firestore
@@ -114,22 +129,22 @@ class DatabaseAPI {
   }
 
   //TODO: need adjustment after adding tutors to firebase.
-  static Future<MyUser> getUserbyid(String Sessionstudentid, int type) async {
-    MyUser temp;
-    if (type == 1) {
-      // the stream builder needs in homepage needs to wait?
-      await _firestore.collection('Student').doc(Sessionstudentid).get().then(
-          (value) => temp = Student(value.data()["name"], value.data()["email"],
-              value.data()["pass"], "aboutMe", Sessionstudentid));
-    } else {
-      return await _firestore
-          .collection('Tutor')
-          .doc(Sessionstudentid)
-          .get()
-          .then((value) => temp = Tutor(value.data()["name"],
-              value.data()["email"], value.data()["pass"], "aboutMe", []));
-    }
-  }
+  // static Future<MyUser> getUserbyid(String Sessionstudentid, int type) async {
+  //   MyUser temp;
+  //   if (type == 1) {
+  //     // the stream builder needs in homepage needs to wait?
+  //     await _firestore.collection('Student').doc(Sessionstudentid).get().then(
+  //         (value) => temp = Student(value.data()["name"], value.data()["email"],
+  //             value.data()["pass"], "aboutMe", Sessionstudentid));
+  //   } else {
+  //     return await _firestore
+  //         .collection('Tutor')
+  //         .doc(Sessionstudentid)
+  //         .get()
+  //         .then((value) => temp = Tutor(value.data()["name"],
+  //             value.data()["email"], value.data()["pass"], "aboutMe", []));
+  //   }
+  // }
 
   static Future<String> createTutor(tutorEmail) async {
     List<int> subjectIDs = getSubjects();
