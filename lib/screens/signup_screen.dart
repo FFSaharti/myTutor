@@ -26,6 +26,7 @@ class _SignupScreenState extends State<SignupScreen> {
     MediaQueryData mediaQueryData = MediaQuery.of(context);
     width = mediaQueryData.size.width;
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Padding(

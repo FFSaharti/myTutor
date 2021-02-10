@@ -27,7 +27,12 @@ const Color kGreyish = Color(0xFFb5b5b5);
 const List validEmail = ['test@gmail.com'];
 
 List<Subject> subjects = [
-  Subject(0, 'JAVA', 'images/Sub-Icons/Java.png'),
-  Subject(1, 'HTML', 'images/Sub-Icons/HTML.png'),
-  Subject(2, 'C#', 'images/Sub-Icons/C#.png'),
+  Subject(0, 'JAVA', 'images/Sub-Icons/Java.png', ['Object-Oriented', 'JAVA'],
+      false),
+  Subject(1, 'HTML', 'images/Sub-Icons/HTML.png', ['Web Development', 'HTML'],
+      false),
+  Subject(2, 'C#', 'images/Sub-Icons/C#.png',
+      ['C#', 'C Sharp', 'Game Development'], false),
+  Subject(3, 'Unity', 'images/Sub-Icons/Unity.png',
+      ['Unity', 'Game Development'], false),
 ];

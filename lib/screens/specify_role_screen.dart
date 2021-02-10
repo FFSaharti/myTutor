@@ -148,11 +148,10 @@ class _SpecifyRoleScreenState extends State<SpecifyRoleScreen> {
                 borderColor: null,
                 onPressed: () {
                   if (selectedWidget == studentWidget) {
-                    DatabaseAPI.createUser(1);
+                    DatabaseAPI.createStudent();
                     Navigator.pushNamed(context, HomepageScreenStudent.id);
                   } else {
                     // Chosen Tutor
-                    DatabaseAPI.createUser(0);
                     Navigator.pushNamed(context, InterestsScreen.id);
                   }
                 }),

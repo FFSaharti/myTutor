@@ -1,10 +1,17 @@
 import 'package:mytutor/classes/user.dart';
 
 class Tutor extends MyUser {
-  // List<Subject> _experiences;
+  List<dynamic> _experiences;
+  // List<Material> bookmarkedMaterials
+  // List<Session> sessions;
 
-  Tutor(String name, String email, String pass, String aboutMe, String userId)
-      : super(name, email, pass, aboutMe,userId);
+  Tutor(String name, String email, String pass, String aboutMe,
+      List<dynamic> experiences)
+      : super(name, email, pass, aboutMe, "");
 
-  // List<Subject> get experiences => _experiences;
+  List<dynamic> get experiences => _experiences;
+
+  set experiences(List<int> value) {
+    _experiences = value;
+  }
 }
