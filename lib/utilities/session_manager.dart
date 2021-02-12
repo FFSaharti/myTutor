@@ -1,9 +1,11 @@
+import 'package:mytutor/classes/student.dart';
 import 'package:mytutor/classes/tutor.dart';
 import 'package:mytutor/classes/user.dart';
 
 class SessionManager {
   static MyUser _loggedInUser = MyUser("", "", "", "", "");
   static Tutor _loggedInTutor = Tutor("", "", "", "", "", []);
+  static Student _loggedInStudent = Student("", "", "", "", "", []);
 
   static MyUser get loggedInUser => _loggedInUser;
 
@@ -19,5 +21,11 @@ class SessionManager {
 
   static void signOut() {
     _loggedInUser = MyUser("", "", "", "", "");
+  }
+
+  static Student get loggedInStudent => _loggedInStudent;
+
+  static set loggedInStudent(Student value) {
+    _loggedInStudent = value;
   }
 }

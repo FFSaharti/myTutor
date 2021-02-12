@@ -1,5 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:mytutor/classes/answer.dart';
+import 'package:mytutor/classes/question.dart';
+import 'package:mytutor/classes/student.dart';
 import 'package:mytutor/classes/tutor.dart';
 import 'package:mytutor/classes/user.dart';
 import 'package:mytutor/utilities/session_manager.dart';
@@ -13,6 +16,7 @@ FirebaseFirestore _firestore = FirebaseFirestore.instance;
 class DatabaseAPI {
   static MyUser _tempUser = MyUser("", "", "", "", "");
   static Tutor _tempTutor = Tutor("", "", "", "", "", []);
+  static Student _tempStudent = Student("", "", "", "", "", []);
   String _errorcode = '';
 
   String get errorcode => _errorcode;
@@ -50,6 +54,7 @@ class DatabaseAPI {
       "email": tempUser.email,
       "pass": tempUser.pass,
       "name": tempUser.name,
+      "questions": []
     });
   }
 
@@ -61,18 +66,27 @@ class DatabaseAPI {
       //  return e.message + " MISMATCH";
     }
 
-    // try {
-    //   await _firestore
-    //       .collection("Student")
-    //       .where("email", isEqualTo: email)
-    //       .get()
-    //       .then((value) => tempUser = Student(value.docs.single.data()['name'],
-    //           email, pass, "", value.docs.single.id));
-    //   SessionManager.loggedInUser = tempUser;
-    //   return "Student Login";
-    // } on FirebaseAuthException catch (e) {
-    //   // print(e.message);
-    // }
+    try {
+      await _firestore
+          .collection("Student")
+          .where("email", isEqualTo: email)
+          .get()
+          .then((value) => {
+                tempStudent = Student(value.docs.single.data()['name'], email,
+                    pass, "", value.docs.single.id, []),
+                List.from(value.docs.single.data()['questions'])
+                    .forEach((element) {
+                  print("QUESTION PRINTING ... " + element.toString());
+                  buildQuestion(element.toString(), tempStudent);
+                })
+              });
+
+      SessionManager.loggedInUser = tempUser;
+      SessionManager.loggedInStudent = tempStudent;
+      return "Student Login";
+    } on FirebaseAuthException catch (e) {
+      // print(e.message);
+    }
 
     try {
       await _firestore
@@ -84,7 +98,7 @@ class DatabaseAPI {
                     pass, "", value.docs.single.id, []),
                 List.from(value.docs.single.data()['experiences'])
                     .forEach((element) {
-                  print("ELEMENT PRINTING ... " + element.toString());
+                  print("Subject PRINTING ... " + element.toString());
                   _tempTutor.addExperience(element);
                 })
               });
@@ -186,5 +200,103 @@ class DatabaseAPI {
     }
 
     return IDs;
+  }
+
+  static void addQuestionToStudent(Student student, List<Question> questions) {
+    // Add Question to Student in the database...
+  }
+
+  static Student get tempStudent => _tempStudent;
+
+  static set tempStudent(Student value) {
+    _tempStudent = value;
+  }
+
+  static void buildQuestion(String questionDocID, Student tempStudent) async {
+    Question tempQuestion = Question("", "", "", "", _tempStudent, [], "", "");
+    print("Build Question ... questiondocId is ---> " +
+        questionDocID.substring(27, questionDocID.length - 1));
+
+    questionDocID = questionDocID.substring(27, questionDocID.length - 1);
+
+    await _firestore
+        .collection("Question")
+        .where("doc_id", isEqualTo: questionDocID)
+        .get()
+        .then((value) => {
+              tempQuestion = Question(
+                  value.docs.single.data()['title'],
+                  value.docs.single.id,
+                  value.docs.single.data()['description'],
+                  value.docs.single.data()['dateOfSubmission'],
+                  _tempStudent,
+                  [],
+                  value.docs.single.data()['subject'],
+                  value.docs.single.data()['state']),
+
+              print("QUESTION TITLE ... " + tempQuestion.title),
+
+              List.from(value.docs.single.data()['answers']).forEach((element) {
+                print("ANSWER PRINTING ... " +
+                    element
+                        .toString()
+                        .substring(25, element.toString().length - 1));
+                buildAnswers(
+                    element
+                        .toString()
+                        .substring(25, element.toString().length - 1),
+                    tempQuestion);
+              })
+
+              // _tempTutor = Tutor(value.docs.single.data()['name'], email,
+              //     pass, "", value.docs.single.id, []),
+              // List.from(value.docs.single.data()['experiences'])
+              //     .forEach((element) {
+              //   print("ELEMENT PRINTING ... " + element.toString());
+              //   _tempTutor.addExperience(element);
+              // })
+            });
+
+    _tempStudent.addQuestion(tempQuestion);
+  }
+
+  static void buildAnswers(String answerID, Question tempQuestion) async {
+    Answer tempAnswer =
+        Answer("", Tutor("TEST-BABA", "", "pass", "aboutMe", "userid", []));
+    String answer = '';
+    String tutorID = '';
+    await _firestore
+        .collection("Answer")
+        .where("doc_id", isEqualTo: answerID)
+        .get()
+        .then((value) => {
+              print("ANSWER PRINTING..." + value.docs.single.data()['answer']),
+              print("TUTOR ID is  --> " +
+                  value.docs.single.data()['Tutor'].toString().substring(24,
+                      value.docs.single.data()['Tutor'].toString().length - 1)),
+              answer = value.docs.single.data()['answer'],
+              tutorID = value.docs.single.data()['Tutor'].toString().substring(
+                  24, value.docs.single.data()['Tutor'].toString().length - 1),
+              buildTutor(tutorID).then((value) => {
+                    tempTutor = value,
+                    tempAnswer = Answer(answer, tempTutor),
+                    tempQuestion.addAnswer(tempAnswer),
+                  }),
+            });
+  }
+
+  static Future<Tutor> buildTutor(String tutorID) async {
+    await _firestore.collection("Tutor").doc(tutorID).get().then((value) => {
+          print("TUTOR IS ....... " + value.data()['name']),
+          tempTutor = Tutor(value.data()['name'], value.data()['email'],
+              value.data()['pass'], "", value.id, []),
+          List.from(value.data()['experiences']).forEach((element) {
+            print(
+                "EXPERIENCES OF TUTOR ARE PRINTING ... " + element.toString());
+            tempTutor.addExperience(element);
+          }),
+        });
+
+    return tempTutor;
   }
 }
