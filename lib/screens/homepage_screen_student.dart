@@ -3,11 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mytutor/classes/session.dart';
+import 'package:mytutor/components/session_card_widget.dart';
 import 'package:mytutor/screens/ask_screen_student.dart';
 import 'package:mytutor/screens/messages_screen.dart';
+import 'package:mytutor/screens/request_tutor_screen.dart';
 import 'package:mytutor/utilities/constants.dart';
 import 'package:mytutor/utilities/database_api.dart';
 import 'package:mytutor/utilities/session_manager.dart';
+
+import 'homepage_screen_tutor.dart';
 
 class HomepageScreenStudent extends StatefulWidget {
   static String id = 'homepage_screen_student';
@@ -132,17 +136,25 @@ class _HomePageStudentState extends State<HomePageStudent> {
               stream: DatabaseAPI.fetchSessionData(0),
               builder: (context, snapshot) {
                 // List to fill up with all the session the user has.
-                List<SessionWidget> UserSessions = [];
+                List<SessionCardWidget> UserSessions = [];
                 if (snapshot.hasData) {
                   List<QueryDocumentSnapshot> Sessions = snapshot.data.docs;
                   for (var session in Sessions) {
+                    String SessionStatus = session.data()["status"];
+                    if(SessionStatus == "pending"){
+                      print(SessionStatus);
+                      continue;
+                    }
                     final Sessiontutor = session.data()["tutor"];
                     final Sessionstudentid = session.data()["student"];
                     final Sessiontitle = session.data()["title"];
-                    UserSessions.add(SessionWidget(
+                    final Sessiontime = session.data()["time"];
+                    final SessionDate = session.data()["date"];
+                    UserSessions.add(SessionCardWidget(
+                      isStudent: true,
                       height: height,
-                      session: Session(Sessiontitle, Sessiontutor,
-                          SessionManager.loggedInUser.userId, session.id),
+                      session: Session(Sessiontitle, Sessiontutor, SessionManager.loggedInUser.userId, session.id,Sessiontime,SessionDate,),
+
                     ));
                   }
                 }
@@ -150,7 +162,7 @@ class _HomePageStudentState extends State<HomePageStudent> {
                   child: ListView(
                     reverse: true,
                     padding:
-                        EdgeInsets.symmetric(horizontal: 10.0, vertical: 20.0),
+                    EdgeInsets.symmetric(horizontal: 10.0, vertical: 20.0),
                     children: UserSessions,
                   ),
                 );
@@ -167,103 +179,7 @@ class _HomePageStudentState extends State<HomePageStudent> {
   }
 }
 
-class SessionWidget extends StatelessWidget {
-  const SessionWidget({
-    Key key,
-    @required this.height,
-    this.session,
-  }) : super(key: key);
-  final Session session;
-  final double height;
 
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(15.0),
-      child: GestureDetector(
-        onTap: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => messagesScreen(
-                  currentsession: session,
-                ),
-              ));
-        },
-        child: Container(
-          height: height * 0.17,
-          decoration: new BoxDecoration(
-            color: Color(0xFFefefef),
-            shape: BoxShape.rectangle,
-            borderRadius: new BorderRadius.circular(11.0),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image.asset(
-                "images/Sub-Icons/Java.png",
-                height: 60,
-              ),
-              Padding(
-                padding: const EdgeInsets.all(15.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 11.0, right: 11.0),
-                      child: Text(
-                        session.title,
-                        style: GoogleFonts.sarabun(
-                          textStyle: TextStyle(
-                              fontSize: 21,
-                              fontWeight: FontWeight.normal,
-                              color: Colors.black),
-                        ),
-                      ),
-                    ),
-                    Container(
-                      decoration: new BoxDecoration(
-                        color: kColorScheme[2],
-                        borderRadius: new BorderRadius.circular(50.0),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 11.0, right: 11.0),
-                        child: Text(
-                          "Tomorrow at 4:50pm",
-                          style: GoogleFonts.sarabun(
-                            textStyle: TextStyle(
-                                fontSize: 21,
-                                fontWeight: FontWeight.normal,
-                                color: Colors.white),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 11.0, right: 11.0),
-                      child: Text(
-                        //TODO: adjuest the over flow problem with long names
-                        "abdulrhman alahmadi",
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.sarabun(
-                          textStyle: TextStyle(
-                              fontSize: 21,
-                              fontWeight: FontWeight.normal,
-                              color: Colors.grey),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              )
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
 
 class StudentSection extends StatefulWidget {
   double height;
@@ -321,9 +237,10 @@ class _StudentSectionState extends State<StudentSection> {
                   height: 20,
                 ),
                 StudentSectionWidget(
-                  widget: widget,
+                widget: widget,
                   onClick: () {
                     print("clicked REQUEST");
+                    Navigator.pushNamed(context, RequestTutorScreen.id);
                   },
                   imgPath: "images/Student_Section/Request_Logo.png",
                   title: "Request",

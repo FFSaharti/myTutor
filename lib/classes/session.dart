@@ -10,9 +10,16 @@ class Session{
   String _tutor;
   String _student;
   String _session_id;
+  String _time;
+  String _date;
 
+  String get time => _time;
 
-  Session(this._title, this._tutor, this._student,this._session_id);
+  set time(String value) {
+    _time = value;
+  }
+
+  Session(this._title, this._tutor, this._student,this._session_id,this._time,this._date);
   String get title => _title;
 
   set title(String value) {
@@ -37,5 +44,11 @@ class Session{
 
   set tutor(String value) {
     _tutor = value;
+  }
+
+  String get date => _date;
+
+  set date(String value) {
+    _date = value;
   }
 }

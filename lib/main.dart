@@ -5,6 +5,8 @@ import 'package:mytutor/screens/homepage_screen_student.dart';
 import 'package:mytutor/screens/homepage_screen_tutor.dart';
 import 'package:mytutor/screens/interests_screen.dart';
 import 'package:mytutor/screens/login_screen.dart';
+import 'package:mytutor/screens/request_tutor_screen.dart';
+import 'package:mytutor/screens/respond_screen_tutor.dart';
 import 'package:mytutor/screens/signup_screen.dart';
 import 'package:mytutor/screens/tour_screen.dart';
 import 'package:mytutor/screens/welcome_screen.dart';
@@ -35,6 +37,8 @@ class TutorApp extends StatelessWidget {
         HomepageScreenStudent.id: (context) => HomepageScreenStudent(),
         HomepageScreenTutor.id: (context) => HomepageScreenTutor(),
         AskScreenStudent.id: (context) => AskScreenStudent(),
+        RequestTutorScreen.id : (context) => RequestTutorScreen(),
+        RespondScreenTutor.id : (context) => RespondScreenTutor(),
       },
     );
   }

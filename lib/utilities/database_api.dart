@@ -66,27 +66,27 @@ class DatabaseAPI {
       //  return e.message + " MISMATCH";
     }
 
-    try {
-      await _firestore
-          .collection("Student")
-          .where("email", isEqualTo: email)
-          .get()
-          .then((value) => {
-                tempStudent = Student(value.docs.single.data()['name'], email,
-                    pass, "", value.docs.single.id, []),
-                List.from(value.docs.single.data()['questions'])
-                    .forEach((element) {
-                  print("QUESTION PRINTING ... " + element.toString());
-                  buildQuestion(element.toString(), tempStudent);
-                })
-              });
-
-      SessionManager.loggedInUser = tempUser;
-      SessionManager.loggedInStudent = tempStudent;
-      return "Student Login";
-    } on FirebaseAuthException catch (e) {
-      // print(e.message);
-    }
+    // try {
+    //   await _firestore
+    //       .collection("Student")
+    //       .where("email", isEqualTo: email)
+    //       .get()
+    //       .then((value) => {
+    //             tempStudent = Student(value.docs.single.data()['name'], email,
+    //                 pass, "", value.docs.single.id, []),
+    //             List.from(value.docs.single.data()['questions'])
+    //                 .forEach((element) {
+    //               print("QUESTION PRINTING ... " + element.toString());
+    //               buildQuestion(element.toString(), tempStudent);
+    //             })
+    //           });
+    //
+    //   SessionManager.loggedInUser = tempUser;
+    //   SessionManager.loggedInStudent = tempStudent;
+    //   return "Student Login";
+    // } on FirebaseAuthException catch (e) {
+    //   // print(e.message);
+    // }
 
     try {
       await _firestore
@@ -110,19 +110,38 @@ class DatabaseAPI {
     }
   }
 
+  // session related
+
+
+  static Future<QuerySnapshot> getTutors() async{
+
+    return await _firestore
+        .collection("Tutor").get();
+  }
+  static void createNewSession(String title, String problemDesc, String prefDate,MyUser tutor, String time)async {
+    await _firestore.collection("session").add({
+      'student': DatabaseAPI._tempStudent.userId,
+      'title': title,
+      'tutor': tutor.userId,
+      'date' : prefDate,
+      'time' : time,
+      'status': "pending",
+    });
+  }
+
   static Stream<QuerySnapshot> fetchSessionData(int type) {
     print(SessionManager.loggedInUser.userId);
     if (type == 1) {
       // tutor
       return _firestore
           .collection("session")
-          .where("tutor", isEqualTo: SessionManager.loggedInUser.userId)
+          .where("tutor", isEqualTo: SessionManager.loggedInTutor.userId)
           .snapshots();
     } else {
       //student
       return _firestore
           .collection("session")
-          .where("student", isEqualTo: SessionManager.loggedInUser.userId)
+          .where("student", isEqualTo: DatabaseAPI.tempStudent.userId)
           .snapshots();
     }
   }
@@ -144,23 +163,22 @@ class DatabaseAPI {
     });
   }
 
-  //TODO: need adjustment after adding tutors to firebase.
-  // static Future<MyUser> getUserbyid(String Sessionstudentid, int type) async {
-  //   MyUser temp;
-  //   if (type == 1) {
-  //     // the stream builder needs in homepage needs to wait?
-  //     await _firestore.collection('Student').doc(Sessionstudentid).get().then(
-  //         (value) => temp = Student(value.data()["name"], value.data()["email"],
-  //             value.data()["pass"], "aboutMe", Sessionstudentid));
-  //   } else {
-  //     return await _firestore
-  //         .collection('Tutor')
-  //         .doc(Sessionstudentid)
-  //         .get()
-  //         .then((value) => temp = Tutor(value.data()["name"],
-  //             value.data()["email"], value.data()["pass"], "aboutMe", []));
-  //   }
-  // }
+
+  static Future<DocumentSnapshot> getUserbyid(String userID, int type) async {
+
+    if (type == 1) {
+      // student
+      return await _firestore.collection('Student').doc(userID).get();
+
+    } else {
+      // tutor
+      return await _firestore
+          .collection('Tutor')
+          .doc(userID)
+          .get();
+    }
+
+  }
 
   static Future<String> createTutor(tutorEmail) async {
     List<int> subjectIDs = getSubjects();
