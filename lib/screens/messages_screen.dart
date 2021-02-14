@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:mytutor/classes/session.dart';
 import 'package:mytutor/utilities/constants.dart';
 import 'package:mytutor/utilities/database_api.dart';
+import 'package:mytutor/utilities/session_manager.dart';
 
 class messagesScreen extends StatefulWidget {
   final Session currentsession;
@@ -66,7 +67,7 @@ class _messagesScreenState extends State<messagesScreen> {
                       DatabaseAPI.saveNewMessage(
                           widget.currentsession.session_id,
                           newMessage,
-                          DatabaseAPI.tempUser.name);
+                          SessionManager.loggedInUser.name);
                     },
                     child: Row(
                       children: [
@@ -124,8 +125,7 @@ class MessagesStream extends StatelessWidget {
             time = newFormat.format(convertLocal);
           }
           // time
-          final currentUser = DatabaseAPI.tempUser.name;
-
+          final currentUser = SessionManager.loggedInUser;
           final messageShape = MessageShape(
             time: time,
             sender: messageSender,
