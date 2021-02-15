@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:mytutor/components/ez_button.dart';
 import 'package:mytutor/screens/specify_role_screen.dart';
 import 'package:mytutor/utilities/constants.dart';
 import 'package:mytutor/utilities/database_api.dart';
 import 'package:mytutor/utilities/regEx.dart';
+import 'package:mytutor/utilities/screen_size.dart';
 
 class SignupScreen extends StatefulWidget {
   static String id = 'signup_screen';
@@ -16,15 +16,12 @@ class SignupScreen extends StatefulWidget {
 }
 
 class _SignupScreenState extends State<SignupScreen> {
-  double width;
   String email = '';
   String name = '';
   String password = '';
 
   @override
   Widget build(BuildContext context) {
-    MediaQueryData mediaQueryData = MediaQuery.of(context);
-    width = mediaQueryData.size.width;
     return Scaffold(
       resizeToAvoidBottomInset: true,
       backgroundColor: Colors.white,
@@ -45,21 +42,17 @@ class _SignupScreenState extends State<SignupScreen> {
                   height: 100,
                 ),
               ),
-              Text(
-                'My Tutor',
-                style: GoogleFonts.secularOne(
-                    textStyle: TextStyle(
-                        fontSize: 50,
-                        fontWeight: FontWeight.bold,
-                        color: kColorScheme[2])),
-              ),
+              Text('My Tutor',
+                  style: kTitleStyle.copyWith(color: kColorScheme[2])),
               SizedBox(
                 height: 10,
               ),
               Text(
                 'Fill up your information',
-                style: GoogleFonts.secularOne(
-                    textStyle: TextStyle(fontSize: 15, color: Colors.grey)),
+                style: kTitleStyle.copyWith(
+                    color: Colors.grey,
+                    fontSize: 15,
+                    fontWeight: FontWeight.normal),
               ),
               SizedBox(
                 height: 50,
@@ -115,13 +108,10 @@ class _SignupScreenState extends State<SignupScreen> {
                 // isVisible: passwordVisible,
               ),
               SizedBox(
-                height: 2,
-              ),
-              SizedBox(
-                height: 40,
+                height: 42,
               ),
               EZButton(
-                  width: width,
+                  width: ScreenSize.width,
                   buttonColor: kColorScheme[1],
                   textColor: Colors.white,
                   isGradient: true,

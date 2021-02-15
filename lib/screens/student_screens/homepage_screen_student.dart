@@ -4,14 +4,13 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mytutor/classes/session.dart';
 import 'package:mytutor/components/session_card_widget.dart';
-import 'package:mytutor/screens/ask_screen_student.dart';
-import 'package:mytutor/screens/messages_screen.dart';
-import 'package:mytutor/screens/request_tutor_screen.dart';
 import 'package:mytutor/utilities/constants.dart';
 import 'package:mytutor/utilities/database_api.dart';
+import 'package:mytutor/utilities/screen_size.dart';
 import 'package:mytutor/utilities/session_manager.dart';
 
-import 'homepage_screen_tutor.dart';
+import 'file:///C:/Users/faisa/Desktop/Developer/AndroidStudioProjects/mytutor/lib/screens/student_screens/ask_screen_student.dart';
+import 'file:///C:/Users/faisa/Desktop/Developer/AndroidStudioProjects/mytutor/lib/screens/student_screens/request_tutor_screen.dart';
 
 class HomepageScreenStudent extends StatefulWidget {
   static String id = 'homepage_screen_student';
@@ -65,15 +64,8 @@ class HomePageStudent extends StatefulWidget {
 }
 
 class _HomePageStudentState extends State<HomePageStudent> {
-  double height;
-
-  double width;
-
   @override
   Widget build(BuildContext context) {
-    MediaQueryData mediaQueryData = MediaQuery.of(context);
-    width = mediaQueryData.size.width;
-    height = mediaQueryData.size.height;
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -90,7 +82,7 @@ class _HomePageStudentState extends State<HomePageStudent> {
         child: Column(
           children: [
             SizedBox(
-              height: height * 0.03,
+              height: ScreenSize.height * 0.03,
             ),
             Padding(
               padding: const EdgeInsets.only(left: 13.0),
@@ -119,7 +111,7 @@ class _HomePageStudentState extends State<HomePageStudent> {
               ),
             ),
             SizedBox(
-              height: height * 0.04,
+              height: ScreenSize.height * 0.04,
             ),
             Align(
               alignment: Alignment.centerLeft,
@@ -141,7 +133,7 @@ class _HomePageStudentState extends State<HomePageStudent> {
                   List<QueryDocumentSnapshot> Sessions = snapshot.data.docs;
                   for (var session in Sessions) {
                     String SessionStatus = session.data()["status"];
-                    if(SessionStatus == "pending"){
+                    if (SessionStatus == "pending") {
                       print(SessionStatus);
                       continue;
                     }
@@ -152,24 +144,30 @@ class _HomePageStudentState extends State<HomePageStudent> {
                     final SessionDate = session.data()["date"];
                     UserSessions.add(SessionCardWidget(
                       isStudent: true,
-                      height: height,
-                      session: Session(Sessiontitle, Sessiontutor, SessionManager.loggedInUser.userId, session.id,Sessiontime,SessionDate,),
-
+                      height: ScreenSize.height,
+                      session: Session(
+                        Sessiontitle,
+                        Sessiontutor,
+                        SessionManager.loggedInUser.userId,
+                        session.id,
+                        Sessiontime,
+                        SessionDate,
+                      ),
                     ));
                   }
                 }
                 return Expanded(
                   child: ListView(
-                    reverse: true,
+                    reverse: false,
                     padding:
-                    EdgeInsets.symmetric(horizontal: 10.0, vertical: 20.0),
+                        EdgeInsets.symmetric(horizontal: 10.0, vertical: 20.0),
                     children: UserSessions,
                   ),
                 );
               },
             ),
             SizedBox(
-              height: height * 0.05,
+              height: ScreenSize.height * 0.05,
             ),
             //SessionWidget(height: height),
           ],
@@ -178,8 +176,6 @@ class _HomePageStudentState extends State<HomePageStudent> {
     );
   }
 }
-
-
 
 class StudentSection extends StatefulWidget {
   double height;
@@ -237,7 +233,7 @@ class _StudentSectionState extends State<StudentSection> {
                   height: 20,
                 ),
                 StudentSectionWidget(
-                widget: widget,
+                  widget: widget,
                   onClick: () {
                     print("clicked REQUEST");
                     Navigator.pushNamed(context, RequestTutorScreen.id);

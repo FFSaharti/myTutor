@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:mytutor/classes/answer.dart';
 import 'package:mytutor/classes/question.dart';
 import 'package:mytutor/utilities/constants.dart';
+import 'package:mytutor/utilities/screen_size.dart';
 
 class QuestionAnswersScreenStudent extends StatefulWidget {
   static String id = 'question_answers_page_screen_student';
-  double height;
-  double width;
   final Question question;
 
   QuestionAnswersScreenStudent(this.question);
@@ -24,9 +23,6 @@ class _QuestionAnswersScreenStudentState
 
   @override
   Widget build(BuildContext context) {
-    MediaQueryData mediaQueryData = MediaQuery.of(context);
-    widget.width = mediaQueryData.size.width;
-    widget.height = mediaQueryData.size.height;
     return Scaffold(
       appBar: AppBar(
         iconTheme: IconThemeData(
@@ -100,8 +96,8 @@ class AnswerWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: widget.width * 0.7,
-      height: widget.height * 0.2,
+      width: ScreenSize.width * 0.7,
+      height: ScreenSize.width * 0.2,
       decoration: BoxDecoration(
           color: kWhiteish, borderRadius: BorderRadius.circular(15)),
       child: Column(

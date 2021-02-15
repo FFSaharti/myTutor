@@ -1,11 +1,4 @@
-import 'package:mytutor/classes/user.dart';
-
-class Session{
-
-
-  //Todo: change the tutor into objects.
-  //Todo: convert and add time.
-
+class Session {
   String _title;
   String _tutor;
   String _student;
@@ -19,7 +12,8 @@ class Session{
     _time = value;
   }
 
-  Session(this._title, this._tutor, this._student,this._session_id,this._time,this._date);
+  Session(this._title, this._tutor, this._student, this._session_id, this._time,
+      this._date);
   String get title => _title;
 
   set title(String value) {
@@ -39,8 +33,6 @@ class Session{
   }
 
   String get tutor => _tutor;
-
-
 
   set tutor(String value) {
     _tutor = value;

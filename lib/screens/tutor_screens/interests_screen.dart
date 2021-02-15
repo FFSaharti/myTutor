@@ -3,9 +3,11 @@ import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mytutor/classes/subject.dart';
 import 'package:mytutor/components/ez_button.dart';
-import 'package:mytutor/screens/homepage_screen_tutor.dart';
 import 'package:mytutor/utilities/constants.dart';
 import 'package:mytutor/utilities/database_api.dart';
+import 'package:mytutor/utilities/screen_size.dart';
+
+import 'file:///C:/Users/faisa/Desktop/Developer/AndroidStudioProjects/mytutor/lib/screens/tutor_screens/homepage_screen_tutor.dart';
 
 class InterestsScreen extends StatefulWidget {
   static String id = 'interests_screen';
@@ -16,14 +18,11 @@ class InterestsScreen extends StatefulWidget {
 
 class _InterestsScreenState extends State<InterestsScreen> {
   List<Widget> selectedInterests = [];
-  double width;
   List<Widget> searchResults = [];
   String searchBox = '';
 
   @override
   Widget build(BuildContext context) {
-    MediaQueryData mediaQueryData = MediaQuery.of(context);
-    width = mediaQueryData.size.width;
     return Scaffold(
         resizeToAvoidBottomInset: false,
         body: Padding(
@@ -90,7 +89,6 @@ class _InterestsScreenState extends State<InterestsScreen> {
                 width: double.infinity,
                 decoration: BoxDecoration(
                   color: Colors.transparent,
-                  // TODO: Remove shadow from listView
                 ),
                 height: 50,
                 child: GestureDetector(
@@ -130,7 +128,6 @@ class _InterestsScreenState extends State<InterestsScreen> {
                 width: double.infinity,
                 decoration: BoxDecoration(
                   color: Colors.transparent,
-                  // TODO: Remove shadow from listView
                 ),
                 height: 50,
                 child: ListView(
@@ -160,7 +157,7 @@ class _InterestsScreenState extends State<InterestsScreen> {
               //     }),
               Builder(builder: (context) {
                 return EZButton(
-                    width: width,
+                    width: ScreenSize.width,
                     buttonColor: kColorScheme[1],
                     textColor: Colors.white,
                     isGradient: true,
@@ -174,7 +171,6 @@ class _InterestsScreenState extends State<InterestsScreen> {
                     hasBorder: false,
                     borderColor: null,
                     onPressed: () {
-                      //TODO: Add selected topics to tutor
                       DatabaseAPI.createTutor(DatabaseAPI.tempUser.email)
                           .then((value) => {
                                 if (value == "Success")

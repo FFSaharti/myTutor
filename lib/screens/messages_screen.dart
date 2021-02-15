@@ -125,7 +125,7 @@ class MessagesStream extends StatelessWidget {
             time = newFormat.format(convertLocal);
           }
           // time
-          final currentUser = SessionManager.loggedInUser;
+          final currentUser = SessionManager.loggedInUser.name;
           final messageShape = MessageShape(
             time: time,
             sender: messageSender,

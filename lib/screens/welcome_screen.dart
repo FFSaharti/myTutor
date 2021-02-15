@@ -3,20 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:mytutor/components/ez_button.dart';
 import 'package:mytutor/screens/tour_screen.dart';
 import 'package:mytutor/utilities/constants.dart';
+import 'package:mytutor/utilities/screen_size.dart';
 
 import 'login_screen.dart';
 
 // ignore: must_be_immutable
 class WelcomeScreen extends StatelessWidget {
-  double width;
-  double height;
-
   static String id = 'welcome_screen';
   @override
   Widget build(BuildContext context) {
-    MediaQueryData mediaQueryData = MediaQuery.of(context);
-    width = mediaQueryData.size.width;
-    height = mediaQueryData.size.height;
+    ScreenSize.createScreen(context);
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: Container(
@@ -28,7 +24,7 @@ class WelcomeScreen extends StatelessWidget {
         child: Column(
           children: [
             SizedBox(
-              height: height * 0.1,
+              height: ScreenSize.height * 0.1,
             ),
             Hero(
               tag: 'logo',
@@ -53,11 +49,12 @@ class WelcomeScreen extends StatelessWidget {
               opacity: 0.8,
               child: Text(
                 'Your Tutor, right in your pocket',
-                style: kTitleStyle.copyWith(fontSize: 18),
+                style: kTitleStyle.copyWith(
+                    fontSize: 18, fontWeight: FontWeight.normal),
               ),
             ),
             SizedBox(
-              height: height * 0.1,
+              height: ScreenSize.height * 0.1,
             ),
             Expanded(
               child: Container(
@@ -68,7 +65,7 @@ class WelcomeScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: <Widget>[
                         EZButton(
-                          width: width,
+                          width: ScreenSize.width,
                           buttonColor: Colors.white,
                           textColor: Colors.white,
                           isGradient: true,
@@ -89,7 +86,7 @@ class WelcomeScreen extends StatelessWidget {
                           height: 15,
                         ),
                         EZButton(
-                          width: width,
+                          width: ScreenSize.width,
                           buttonColor: Colors.white,
                           textColor: kColorScheme[3],
                           isGradient: false,

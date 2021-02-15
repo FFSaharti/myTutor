@@ -6,10 +6,10 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:mytutor/classes/session.dart';
 import 'package:mytutor/classes/subject.dart';
 import 'package:mytutor/components/session_card_widget.dart';
-import 'package:mytutor/screens/messages_screen.dart';
-import 'package:mytutor/screens/respond_screen_tutor.dart';
+import 'package:mytutor/screens/tutor_screens/respond_screen_tutor.dart';
 import 'package:mytutor/utilities/constants.dart';
 import 'package:mytutor/utilities/database_api.dart';
+import 'package:mytutor/utilities/screen_size.dart';
 import 'package:mytutor/utilities/session_manager.dart';
 
 class HomepageScreenTutor extends StatefulWidget {
@@ -26,8 +26,6 @@ class _HomepageScreenTutorState extends State<HomepageScreenTutor> {
     Text("3"),
     ProfileTutor(),
   ];
-  double width;
-  double height;
   int _navindex = 0;
 
   void changeindex(int index) {
@@ -66,21 +64,14 @@ class HomePageTutor extends StatefulWidget {
 }
 
 class _HomePageTutorState extends State<HomePageTutor> {
-  double height;
-  // Tutor tempTutor = DatabaseAPI.tempUser;
-  double width;
-
   @override
   Widget build(BuildContext context) {
-    MediaQueryData mediaQueryData = MediaQuery.of(context);
-    width = mediaQueryData.size.width;
-    height = mediaQueryData.size.height;
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
         children: [
           SizedBox(
-            height: height * 0.10,
+            height: ScreenSize.height * 0.10,
           ),
           Padding(
             padding: const EdgeInsets.only(left: 13.0),
@@ -109,7 +100,7 @@ class _HomePageTutorState extends State<HomePageTutor> {
             ),
           ),
           SizedBox(
-            height: height * 0.04,
+            height: ScreenSize.height * 0.04,
           ),
           Align(
             alignment: Alignment.centerLeft,
@@ -134,11 +125,11 @@ class _HomePageTutorState extends State<HomePageTutor> {
               // List to fill up with all the session the user has.
               List<SessionCardWidget> UserSessions = [];
               if (snapshot.hasData) {
-              print(snapshot.data.size.toString());
+                print(snapshot.data.size.toString());
                 List<QueryDocumentSnapshot> Sessions = snapshot.data.docs;
                 for (var session in Sessions) {
                   String SessionStatus = session.data()["status"];
-                  if(SessionStatus == "pending"){
+                  if (SessionStatus == "pending") {
                     print(SessionStatus);
                     continue;
                   }
@@ -149,9 +140,14 @@ class _HomePageTutorState extends State<HomePageTutor> {
                   final SessionDate = session.data()["date"];
                   UserSessions.add(SessionCardWidget(
                     isStudent: false,
-                    height: height,
+                    height: ScreenSize.height,
                     session: Session(
-                        Sessiontitle, SessionManager.loggedInTutor.userId, Sessionstudentid, session.id,Sessiontime,SessionDate),
+                        Sessiontitle,
+                        SessionManager.loggedInTutor.userId,
+                        Sessionstudentid,
+                        session.id,
+                        Sessiontime,
+                        SessionDate),
                   ));
                 }
               }
@@ -159,14 +155,14 @@ class _HomePageTutorState extends State<HomePageTutor> {
                 child: ListView(
                   reverse: true,
                   padding:
-                  EdgeInsets.symmetric(horizontal: 10.0, vertical: 20.0),
+                      EdgeInsets.symmetric(horizontal: 10.0, vertical: 20.0),
                   children: UserSessions,
                 ),
               );
             },
           ),
           SizedBox(
-            height: height * 0.05,
+            height: ScreenSize.height * 0.05,
           ),
           //SessionWidget(height: height),
         ],
@@ -175,21 +171,14 @@ class _HomePageTutorState extends State<HomePageTutor> {
   }
 }
 
-
 class ProfileTutor extends StatefulWidget {
   @override
   _ProfileTutorState createState() => _ProfileTutorState();
 }
 
 class _ProfileTutorState extends State<ProfileTutor> {
-  double height;
-  double width;
-
   @override
   Widget build(BuildContext context) {
-    MediaQueryData mediaQueryData = MediaQuery.of(context);
-    width = mediaQueryData.size.width;
-    height = mediaQueryData.size.height;
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -204,7 +193,7 @@ class _ProfileTutorState extends State<ProfileTutor> {
       body: SafeArea(
         child: Center(
           child: Container(
-            width: width * 0.91,
+            width: ScreenSize.width * 0.91,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
@@ -474,12 +463,12 @@ class _TutorSectionState extends State<TutorSection> {
                   widget: widget,
                   onClick: () {
                     print("clicked answer");
-                   // Navigator.pushNamed(context, AskScreenStudent.id);
+                    // Navigator.pushNamed(context, AskScreenStudent.id);
                   },
                   imgPath: "images/Tutor_Section/Answer_Logo.png",
                   title: "Answer",
                   description:
-                  "Answer questions that are posted by \nStudents.",
+                      "Answer questions that are posted by \nStudents.",
                 ),
                 SizedBox(
                   height: 20,
@@ -493,7 +482,7 @@ class _TutorSectionState extends State<TutorSection> {
                   imgPath: "images/Tutor_Section/Respond_Logo.png",
                   title: "Respond",
                   description:
-                  "Respond to request send by \nStudents for creating a session \nwith you!!",
+                      "Respond to request send by \nStudents for creating a session \nwith you!!",
                 ),
                 SizedBox(
                   height: 20,
@@ -506,7 +495,7 @@ class _TutorSectionState extends State<TutorSection> {
                   imgPath: "images/Tutor_Section/Subject_Logo.png",
                   title: "Create Materials",
                   description:
-                  "Share Materials & Create \nQuizzes with Students that can \nbe bookmarked & taken.",
+                      "Share Materials & Create \nQuizzes with Students that can \nbe bookmarked & taken.",
                 )
               ],
             ),
@@ -520,10 +509,10 @@ class _TutorSectionState extends State<TutorSection> {
 class TutorSectionWidget extends StatelessWidget {
   TutorSectionWidget(
       {@required this.widget,
-        @required this.onClick,
-        @required this.imgPath,
-        @required this.title,
-        @required this.description});
+      @required this.onClick,
+      @required this.imgPath,
+      @required this.title,
+      @required this.description});
 
   final TutorSection widget;
   final Function onClick;

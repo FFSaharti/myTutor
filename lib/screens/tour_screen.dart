@@ -6,6 +6,7 @@ import 'package:mytutor/components/animated_solveproblem_widget.dart';
 import 'package:mytutor/components/ez_button.dart';
 import 'package:mytutor/screens/signup_screen.dart';
 import 'package:mytutor/utilities/constants.dart';
+import 'package:mytutor/utilities/screen_size.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class TourScreen extends StatefulWidget {
@@ -16,21 +17,15 @@ class TourScreen extends StatefulWidget {
 
 class _TourScreenState extends State<TourScreen> {
   PageController _pageController = PageController();
-  MediaQueryData qDate;
-  double width;
-  double height;
 
   @override
   Widget build(BuildContext context) {
-    qDate = MediaQuery.of(context);
-    width = qDate.size.width;
-    height = qDate.size.height;
     return Scaffold(
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           SizedBox(
-            height: height * 0.05,
+            height: ScreenSize.height * 0.05,
           ),
           Hero(
             tag: 'logo',
@@ -41,10 +36,10 @@ class _TourScreenState extends State<TourScreen> {
             ),
           ),
           SizedBox(
-            height: height * 0.04,
+            height: ScreenSize.height * 0.04,
           ),
           Container(
-            height: height - height * 0.4,
+            height: ScreenSize.height * 0.6,
             width: double.infinity,
             child: NotificationListener<OverscrollIndicatorNotification>(
               onNotification: (overscroll) {
@@ -67,7 +62,7 @@ class _TourScreenState extends State<TourScreen> {
           ),
           Container(
             child: EZButton(
-              width: width,
+              width: ScreenSize.width,
               buttonColor: null,
               textColor: Colors.white,
               isGradient: true,
@@ -81,7 +76,7 @@ class _TourScreenState extends State<TourScreen> {
             ),
           ),
           SizedBox(
-            height: height * 0.06,
+            height: ScreenSize.height * 0.06,
           ),
           SmoothPageIndicator(
               controller: _pageController, // PageController
@@ -121,11 +116,11 @@ class _TourScreenState extends State<TourScreen> {
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         SizedBox(
-          height: height * 0.01,
+          height: ScreenSize.height * 0.01,
         ),
         animatedWidget,
         SizedBox(
-          height: height * 0.005,
+          height: ScreenSize.height * 0.005,
         ),
         Text(
           title,
@@ -134,7 +129,7 @@ class _TourScreenState extends State<TourScreen> {
                   fontSize: 30, fontWeight: FontWeight.bold, color: kBlackish)),
         ),
         SizedBox(
-          height: height * 0.001,
+          height: ScreenSize.height * 0.001,
         ),
         Padding(
           padding: const EdgeInsets.fromLTRB(13.0, 0, 13.0, 0.0),

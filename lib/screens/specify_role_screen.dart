@@ -2,10 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mytutor/components/ez_button.dart';
-import 'package:mytutor/screens/homepage_screen_student.dart';
-import 'package:mytutor/screens/interests_screen.dart';
 import 'package:mytutor/utilities/constants.dart';
 import 'package:mytutor/utilities/database_api.dart';
+import 'package:mytutor/utilities/screen_size.dart';
+
+import 'file:///C:/Users/faisa/Desktop/Developer/AndroidStudioProjects/mytutor/lib/screens/student_screens/homepage_screen_student.dart';
+import 'file:///C:/Users/faisa/Desktop/Developer/AndroidStudioProjects/mytutor/lib/screens/tutor_screens/interests_screen.dart';
 
 class SpecifyRoleScreen extends StatefulWidget {
   static String id = 'specify_role_screen';
@@ -16,7 +18,6 @@ class SpecifyRoleScreen extends StatefulWidget {
 }
 
 class _SpecifyRoleScreenState extends State<SpecifyRoleScreen> {
-  double width;
   String tutorRolePath = 'images/Roles/Tutor.png';
   String studentRolePath = 'images/Roles/Student.png';
 
@@ -58,8 +59,6 @@ class _SpecifyRoleScreenState extends State<SpecifyRoleScreen> {
 
   @override
   Widget build(BuildContext context) {
-    MediaQueryData mediaQueryData = MediaQuery.of(context);
-    width = mediaQueryData.size.width;
     return Scaffold(
       backgroundColor: Colors.white,
       body: Center(
@@ -71,11 +70,7 @@ class _SpecifyRoleScreenState extends State<SpecifyRoleScreen> {
             ),
             Text(
               'Specify Role',
-              style: GoogleFonts.secularOne(
-                  textStyle: TextStyle(
-                      fontSize: 30,
-                      fontWeight: FontWeight.bold,
-                      color: kBlackish)),
+              style: kTitleStyle.copyWith(color: kGreyerish, fontSize: 30),
             ),
             SizedBox(
               height: 25,
@@ -112,28 +107,25 @@ class _SpecifyRoleScreenState extends State<SpecifyRoleScreen> {
                     });
                   },
                   children: [
-                    Text(
-                      'Tutor',
-                      style: GoogleFonts.secularOne(
-                          textStyle: TextStyle(
-                              fontSize: 25,
-                              fontWeight: FontWeight.normal,
-                              color: kBlackish)),
-                    ),
+                    Text('Tutor',
+                        style: kTitleStyle.copyWith(
+                            fontSize: 25,
+                            fontWeight: FontWeight.normal,
+                            color: Colors.black)),
                     Text(
                       'Student',
                       style: GoogleFonts.secularOne(
-                          textStyle: TextStyle(
+                          textStyle: kTitleStyle.copyWith(
                               fontSize: 25,
                               fontWeight: FontWeight.normal,
-                              color: kBlackish)),
+                              color: Colors.black)),
                     ),
                   ],
                 ),
               ),
             ),
             EZButton(
-                width: width,
+                width: ScreenSize.width,
                 buttonColor: kColorScheme[1],
                 textColor: Colors.white,
                 isGradient: true,

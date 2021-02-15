@@ -9,7 +9,8 @@ class SessionCardWidget extends StatefulWidget {
   const SessionCardWidget({
     Key key,
     @required this.height,
-    this.session, this.isStudent,
+    this.session,
+    this.isStudent,
   }) : super(key: key);
   final Session session;
   final double height;
@@ -22,7 +23,6 @@ class SessionCardWidget extends StatefulWidget {
 class _SessionCardWidgetState extends State<SessionCardWidget> {
   String helperName = "";
   bool finish = false;
-
 
   void initState() {
     // get the tutor name.
@@ -43,7 +43,6 @@ class _SessionCardWidgetState extends State<SessionCardWidget> {
       });
     }
 
-
     super.initState();
   }
 
@@ -56,14 +55,13 @@ class _SessionCardWidgetState extends State<SessionCardWidget> {
           Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) =>
-                    messagesScreen(
-                      currentsession: widget.session,
-                    ),
+                builder: (context) => messagesScreen(
+                  currentsession: widget.session,
+                ),
               ));
         },
         child: Container(
-          height: widget.height * 0.17,
+          height: widget.height * 0.18,
           decoration: new BoxDecoration(
             color: Color(0xFFefefef),
             shape: BoxShape.rectangle,
@@ -119,16 +117,19 @@ class _SessionCardWidgetState extends State<SessionCardWidget> {
                       height: 4,
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(left: 11.0, right: 11.0),
-                      child: Text(
-                        //TODO: adjuest the over flow problem with long names
-                        finish ? helperName : "loading..",
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.sarabun(
-                          textStyle: TextStyle(
-                              fontSize: 21,
-                              fontWeight: FontWeight.normal,
-                              color: Colors.grey),
+                      padding: const EdgeInsets.only(left: 11, right: 11),
+                      child: SizedBox(
+                        width: 220,
+                        child: Text(
+                          finish ? helperName : "loading..",
+                          overflow: TextOverflow.ellipsis,
+                          softWrap: false,
+                          style: GoogleFonts.sarabun(
+                            textStyle: TextStyle(
+                                fontSize: 21,
+                                fontWeight: FontWeight.normal,
+                                color: Colors.grey),
+                          ),
                         ),
                       ),
                     ),

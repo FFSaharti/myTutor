@@ -4,18 +4,14 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:mytutor/classes/session.dart';
 import 'package:mytutor/utilities/constants.dart';
 import 'package:mytutor/utilities/database_api.dart';
+import 'package:mytutor/utilities/screen_size.dart';
 import 'package:mytutor/utilities/session_manager.dart';
 
 class RespondScreenTutor extends StatelessWidget {
   static String id = 'respond_screen_tutor';
-  double height;
-  double width;
 
   @override
   Widget build(BuildContext context) {
-    MediaQueryData mediaQueryData = MediaQuery.of(context);
-    width = mediaQueryData.size.width;
-    height = mediaQueryData.size.height;
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -44,13 +40,13 @@ class RespondScreenTutor extends StatelessWidget {
                         SessionStatus.toLowerCase() == "decline") {
                       continue;
                     }
-                    final Sessiontutor = session.data()["tutor"];
+                    // final Sessiontutor = session.data()["tutor"];
                     final Sessionstudentid = session.data()["student"];
                     final Sessiontitle = session.data()["title"];
                     final Sessiontime = session.data()["time"];
                     final SessionDate = session.data()["date"];
                     UserSessions.add(RespondSessionWidget(
-                      height: height,
+                      height: ScreenSize.height,
                       session: Session(
                           Sessiontitle,
                           SessionManager.loggedInTutor.userId,
@@ -72,7 +68,7 @@ class RespondScreenTutor extends StatelessWidget {
               },
             ),
             SizedBox(
-              height: height * 0.05,
+              height: ScreenSize.height * 0.05,
             ),
             //SessionWidget(height: height),
           ],
@@ -128,7 +124,7 @@ class _RespondSessionWidgetState extends State<RespondSessionWidget> {
               //TODO : ModelBottomSheet
             },
             child: Container(
-              height: widget.height * 0.23,
+              height: widget.height * 0.24,
               decoration: new BoxDecoration(
                 color: Color(0xFFefefef),
                 shape: BoxShape.rectangle,
@@ -190,15 +186,17 @@ class _RespondSessionWidgetState extends State<RespondSessionWidget> {
                         Padding(
                           padding:
                               const EdgeInsets.only(left: 11.0, right: 11.0),
-                          child: Text(
-                            //TODO: adjuest the over flow problem with long names
-                            finishLoad ? student_name : "loading..",
-                            overflow: TextOverflow.ellipsis,
-                            style: GoogleFonts.sarabun(
-                              textStyle: TextStyle(
-                                  fontSize: 21,
-                                  fontWeight: FontWeight.normal,
-                                  color: Colors.grey),
+                          child: SizedBox(
+                            width: 220,
+                            child: Text(
+                              finishLoad ? student_name : "loading..",
+                              overflow: TextOverflow.ellipsis,
+                              style: GoogleFonts.sarabun(
+                                textStyle: TextStyle(
+                                    fontSize: 21,
+                                    fontWeight: FontWeight.normal,
+                                    color: Colors.grey),
+                              ),
                             ),
                           ),
                         ),
