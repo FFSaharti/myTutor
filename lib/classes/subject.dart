@@ -32,8 +32,12 @@ class Subject {
   }
 
   bool searchKeyword(String searchBox) {
+    if (searchBox == '' || searchBox == null) {
+      return false;
+    }
+
     for (int i = 0; i < keywords.length; i++) {
-      if (searchBox == keywords[i]) {
+      if (keywords[i].contains(searchBox)) {
         return true;
       }
     }

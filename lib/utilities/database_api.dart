@@ -1,12 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:intl/intl.dart';
 import 'package:mytutor/classes/answer.dart';
 import 'package:mytutor/classes/question.dart';
 import 'package:mytutor/classes/student.dart';
 import 'package:mytutor/classes/tutor.dart';
 import 'package:mytutor/classes/user.dart';
 import 'package:mytutor/utilities/session_manager.dart';
-import 'package:intl/intl.dart';
 
 import 'constants.dart';
 
@@ -136,10 +136,6 @@ class DatabaseAPI {
     return IDs;
   }
 
-  static void addQuestionToStudent(Student student, List<Question> questions) {
-    // Add Question to Student in the database...
-  }
-
   static void buildQuestion(String questionDocID, Student tempStudent) async {
     Question tempQuestion = Question("", "", "", "", _tempStudent, [], "", "");
     print("Build Question ... questiondocId is ---> " +
@@ -149,22 +145,22 @@ class DatabaseAPI {
 
     await _firestore
         .collection("Question")
-        .where("doc_id", isEqualTo: questionDocID)
+        .doc(questionDocID)
         .get()
         .then((value) => {
               tempQuestion = Question(
-                  value.docs.single.data()['title'],
-                  value.docs.single.id,
-                  value.docs.single.data()['description'],
-                  value.docs.single.data()['dateOfSubmission'],
+                  value.data()['title'],
+                  value.id,
+                  value.data()['description'],
+                  value.data()['dateOfSubmission'],
                   _tempStudent,
                   [],
-                  value.docs.single.data()['subject'],
-                  value.docs.single.data()['state']),
+                  value.data()['subject'],
+                  value.data()['state']),
 
               print("QUESTION TITLE ... " + tempQuestion.title),
 
-              List.from(value.docs.single.data()['answers']).forEach((element) {
+              List.from(value.data()['answers']).forEach((element) {
                 print("ANSWER PRINTING ... " +
                     element
                         .toString()
@@ -193,24 +189,24 @@ class DatabaseAPI {
         Answer("", Tutor("TEST-BABA", "", "pass", "aboutMe", "userid", []));
     String answer = '';
     String tutorID = '';
-    await _firestore
-        .collection("Answer")
-        .where("doc_id", isEqualTo: answerID)
-        .get()
-        .then((value) => {
-              print("ANSWER PRINTING..." + value.docs.single.data()['answer']),
-              print("TUTOR ID is  --> " +
-                  value.docs.single.data()['Tutor'].toString().substring(24,
-                      value.docs.single.data()['Tutor'].toString().length - 1)),
-              answer = value.docs.single.data()['answer'],
-              tutorID = value.docs.single.data()['Tutor'].toString().substring(
-                  24, value.docs.single.data()['Tutor'].toString().length - 1),
-              buildTutor(tutorID).then((value) => {
-                    tempTutor = value,
-                    tempAnswer = Answer(answer, tempTutor),
-                    tempQuestion.addAnswer(tempAnswer),
-                  }),
-            });
+    await _firestore.collection("Answer").doc(answerID).get().then((value) => {
+          print("ANSWER PRINTING..." + value.data()['answer']),
+          print("TUTOR ID is  --> " +
+              value
+                  .data()['Tutor']
+                  .toString()
+                  .substring(24, value.data()['Tutor'].toString().length - 1)),
+          answer = value.data()['answer'],
+          tutorID = value
+              .data()['Tutor']
+              .toString()
+              .substring(24, value.data()['Tutor'].toString().length - 1),
+          buildTutor(tutorID).then((value) => {
+                tempTutor = value,
+                tempAnswer = Answer(answer, tempTutor),
+                tempQuestion.addAnswer(tempAnswer),
+              }),
+        });
   }
 
   static Future<Tutor> buildTutor(String tutorID) async {
@@ -268,7 +264,7 @@ class DatabaseAPI {
     DateTime tempDate = new DateFormat("yyyy-MM-dd").parse(prefDate);
     await _firestore.collection("session").add({
       'student': DatabaseAPI._tempStudent.userId,
-      'description' : problemDesc,
+      'description': problemDesc,
       'title': title,
       'tutor': tutor.userId,
       'date': tempDate,
@@ -276,10 +272,11 @@ class DatabaseAPI {
       'status': "pending",
     });
   }
-  static Stream<QuerySnapshot> fetchSessionData(int type , bool checkexpire) {
+
+  static Stream<QuerySnapshot> fetchSessionData(int type, bool checkexpire) {
     // check the session that expired.
 
-    if (checkexpire == true){
+    if (checkexpire == true) {
       checkAndUpdateExpiredSession();
     }
     if (type == 1) {
@@ -297,20 +294,20 @@ class DatabaseAPI {
     }
   }
 
-  static Future<Stream<QuerySnapshot>> checkAndUpdateExpiredSession() async{
+  static Future<Stream<QuerySnapshot>> checkAndUpdateExpiredSession() async {
     // check the session that expired.
     await _firestore
         .collection("session")
-        .where("date",isLessThan:  DateTime.now()).get().then((QuerySnapshot querySnapshot) =>
-        querySnapshot.docs.forEach((doc) {
-          Timestamp t = doc["date"];
-          // change the status
-          changeSessionsStatus("expired",doc.id);
-        })
-
-    );
-
+        .where("date", isLessThan: DateTime.now())
+        .get()
+        .then(
+            (QuerySnapshot querySnapshot) => querySnapshot.docs.forEach((doc) {
+                  Timestamp t = doc["date"];
+                  // change the status
+                  changeSessionsStatus("expired", doc.id);
+                }));
   }
+
   static Stream<QuerySnapshot> fetchSessionMessages(String sessionid) {
     return _firestore
         .collection('session')
@@ -355,12 +352,60 @@ class DatabaseAPI {
           .doc(sessionid)
           .update({'status': 'decline'});
       return "decline";
-    } else if (status.toLowerCase() == "expired"){
+    } else if (status.toLowerCase() == "expired") {
       await _firestore
           .collection("session")
           .doc(sessionid)
           .update({'status': 'expired'});
       return "expired";
     }
+  }
+
+  static Future<String> addQuestionToStudent(String questionTitle,
+      String questionDesc, Student loggedInStudent, int chosenSubject) async {
+    DateTime now = DateTime.now();
+    DateFormat formatter = DateFormat('yyyy-MM-dd');
+    String formatted = formatter.format(now);
+
+    String questionID = '';
+
+    await _firestore
+        .collection("Student")
+        .where("email", isEqualTo: loggedInStudent.email)
+        .get()
+        .then((value) async => {
+              print("PRINTED STUDENT IS ---> " + value.docs.single.id),
+              await _firestore.collection("Question").add({
+                "title": questionTitle,
+                "subject": chosenSubject,
+                "state": 'Active',
+                "issuer": '/Student/' + value.docs.single.id,
+                "description": questionDesc,
+                "dateOfSubmission": formatted,
+                "answers": []
+              }).then((value) => {
+                    questionID = value
+                        .toString()
+                        .substring(27, value.toString().length - 1),
+                    print("QUESTION ID IS --> " + questionID),
+                  }),
+              loggedInStudent.addQuestion(Question(
+                  questionTitle,
+                  "",
+                  questionDesc,
+                  formatted,
+                  loggedInStudent,
+                  [],
+                  chosenSubject.toString(),
+                  "Active")),
+              await _firestore
+                  .collection("Student")
+                  .doc(value.docs.single.id)
+                  .update({
+                'questions': FieldValue.arrayUnion(['/Question/' + questionID])
+              })
+            });
+
+    return "Success";
   }
 }

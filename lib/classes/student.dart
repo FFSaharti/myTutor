@@ -1,6 +1,5 @@
 import 'package:mytutor/classes/question.dart';
 import 'package:mytutor/classes/user.dart';
-import 'package:mytutor/utilities/database_api.dart';
 
 class Student extends MyUser {
   List<Question> _questions = [];
@@ -19,6 +18,5 @@ class Student extends MyUser {
 
   void addQuestion(Question question) {
     questions.add(question);
-    DatabaseAPI.addQuestionToStudent(this, questions);
   }
 }
