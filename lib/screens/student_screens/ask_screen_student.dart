@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mytutor/classes/question.dart';
 import 'package:mytutor/classes/subject.dart';
+import 'package:mytutor/components/question_stream_widget.dart';
 import 'package:mytutor/screens/student_screens/question_answers_page_screen_student.dart';
 import 'package:mytutor/utilities/constants.dart';
 import 'package:mytutor/utilities/database_api.dart';
 import 'package:mytutor/utilities/screen_size.dart';
 import 'package:mytutor/utilities/session_manager.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class AskScreenStudent extends StatefulWidget {
   static String id = 'ask_screen_student';
@@ -15,6 +17,7 @@ class AskScreenStudent extends StatefulWidget {
 }
 
 class _AskScreenStudentState extends State<AskScreenStudent> {
+  PageController _pageController = PageController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,31 +56,65 @@ class _AskScreenStudentState extends State<AskScreenStudent> {
                   SizedBox(
                     height: 30,
                   ),
-                  Text("List Of Questions --> "),
-                  SizedBox(
-                    height: 30,
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        // Update Questions
-                        print("updating questions");
-                      });
-                    },
-                    child: Container(
-                      height: ScreenSize.height * 0.65,
-                      width: ScreenSize.width * 0.8,
-                      child: ListView(
-                        children: getQuestions(),
+                  Container(
+                    height: ScreenSize.height * 0.68,
+                    child:
+                        NotificationListener<OverscrollIndicatorNotification>(
+                      // ignore: missing_return
+                      onNotification: (overscroll) {
+                        overscroll.disallowGlow();
+                      },
+                      child: PageView(
+                        controller: _pageController,
+                        children: [
+                          mainScreenPage(
+                              QuestionStream(
+                                status: "Active",
+                              ),
+                              "Active Questions"),
+                          mainScreenPage(
+                              QuestionStream(
+                                status: "Closed",
+                              ),
+                              "Closed Questions"),
+                        ],
                       ),
                     ),
-                  )
+                  ),
+                  SmoothPageIndicator(
+                    effect: WormEffect(
+                        dotColor: kGreyish, activeDotColor: kColorScheme[2]),
+                    controller: _pageController, // PageController
+                    count: 2,
+                  ),
                 ],
               ),
             ),
           ),
         ),
       ),
+    );
+  }
+
+  mainScreenPage(Widget StreamWidget, String title) {
+    return Column(
+      children: [
+        Align(
+          alignment: Alignment.center,
+          child: Text(
+            title,
+            style: GoogleFonts.sarabun(
+                textStyle: TextStyle(
+                    fontSize: 21,
+                    fontWeight: FontWeight.normal,
+                    color: kGreyish)),
+          ),
+        ),
+        StreamWidget,
+        SizedBox(
+          height: ScreenSize.height * 0.05,
+        ),
+      ],
     );
   }
 
@@ -96,7 +133,6 @@ class _AskScreenStudentState extends State<AskScreenStudent> {
           );
         },
         child: QuestionWidget(
-            widget: widget,
             question: SessionManager.loggedInStudent.questions[i]),
       ));
       widgets.add(SizedBox(
@@ -110,11 +146,9 @@ class _AskScreenStudentState extends State<AskScreenStudent> {
 
 class QuestionWidget extends StatelessWidget {
   const QuestionWidget({
-    @required this.widget,
     @required this.question,
   });
 
-  final AskScreenStudent widget;
   final Question question;
 
   @override
@@ -308,106 +342,6 @@ void showAddQuestion() {
                               SizedBox(
                                 height: 10,
                               ),
-                              // !showSearchBar
-                              //     ? Container(
-                              //         child: chosenSubject == -1
-                              //             ? Align(
-                              //                 alignment: Alignment.topLeft,
-                              //                 child: Container(
-                              //                   width: 50,
-                              //                   decoration: BoxDecoration(
-                              //                     borderRadius:
-                              //                         BorderRadius.circular(10),
-                              //                     color:
-                              //                         kGreyish.withOpacity(0.3),
-                              //                     boxShadow: [
-                              //                       BoxShadow(
-                              //                         color: Colors.grey
-                              //                             .withOpacity(0.1),
-                              //                         spreadRadius: 1,
-                              //                         blurRadius: 15,
-                              //                         offset: Offset(0,
-                              //                             6), // changes position of shadow
-                              //                       ),
-                              //                     ],
-                              //                   ),
-                              //                   child: GestureDetector(
-                              //                     onTap: () {
-                              //                       setModalState(() {
-                              //                         showSearchBar = true;
-                              //                       });
-                              //                       print(
-                              //                           "clicked search subjects setState --> ShowSearchBar is --> " +
-                              //                               showSearchBar
-                              //                                   .toString());
-                              //                     },
-                              //                     child: Padding(
-                              //                         padding:
-                              //                             const EdgeInsets.all(
-                              //                                 8.0),
-                              //                         child: Icon(Icons.add)),
-                              //                   ),
-                              //                 ),
-                              //               )
-                              //             : Row(
-                              //                 children: [
-                              //                   Align(
-                              //                     alignment: Alignment.topLeft,
-                              //                     child: Container(
-                              //                       width: 50,
-                              //                       decoration: BoxDecoration(
-                              //                         borderRadius:
-                              //                             BorderRadius.circular(
-                              //                                 10),
-                              //                         color: kGreyish
-                              //                             .withOpacity(0.3),
-                              //                         boxShadow: [
-                              //                           BoxShadow(
-                              //                             color: Colors.grey
-                              //                                 .withOpacity(0.1),
-                              //                             spreadRadius: 1,
-                              //                             blurRadius: 15,
-                              //                             offset: Offset(0,
-                              //                                 6), // changes position of shadow
-                              //                           ),
-                              //                         ],
-                              //                       ),
-                              //                       child: GestureDetector(
-                              //                         onTap: () {
-                              //                           print("subject");
-                              //                         },
-                              //                         child: Padding(
-                              //                             padding:
-                              //                                 const EdgeInsets
-                              //                                     .all(8.0),
-                              //                             child:
-                              //                                 Icon(Icons.add)),
-                              //                       ),
-                              //                     ),
-                              //                   ),
-                              //                   SizedBox(
-                              //                     width:
-                              //                         ScreenSize.width * 0.71,
-                              //                   ),
-                              //                   GestureDetector(
-                              //                     onTap: () {
-                              //                       setModalState(() {
-                              //                         chosenSubject = -1;
-                              //                       });
-                              //                       print(
-                              //                           "remove chosen subject --> ChosenSubject is --> " +
-                              //                               chosenSubject
-                              //                                   .toString());
-                              //                     },
-                              //                     child: Icon(
-                              //                       Icons.remove,
-                              //                       color: Colors.black,
-                              //                     ),
-                              //                   ),
-                              //                 ],
-                              //               ),
-                              //       )
-                              //     :
                               Column(
                                 children: [
                                   TextField(

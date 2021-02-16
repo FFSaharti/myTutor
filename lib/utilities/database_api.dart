@@ -419,4 +419,53 @@ class DatabaseAPI {
 
     return "Success";
   }
+
+  static Stream<QuerySnapshot> fetchQuestionData(String status) {
+    return _firestore
+        .collection("Question")
+        .where("issuer", isEqualTo: SessionManager.loggedInStudent.userId)
+        .snapshots();
+  }
+
+  static Future<List<Answer>> getAnswers(List<dynamic> data) async {
+    List<Answer> answers = [];
+    String tempAnswer = '';
+    for (int i = 0; i < data.length; i++) {
+      await _firestore
+          .collection("Answer")
+          .doc(data[i].toString())
+          .get()
+          .then((value) => {
+                tempAnswer = value.data()["Answer"],
+                buildTutor(value.data()["Tutor"]).then((value) => {
+                      tempTutor = value,
+                      answers.add(Answer(tempAnswer, tempTutor)),
+                    }),
+              });
+    }
+
+    return answers;
+    //
+    //
+  }
+
+  static Future<List<Answer>> getAnswer(var data) async {
+    List<Answer> answers = [];
+    String tempAnswer = '';
+    await _firestore
+        .collection("Answer")
+        .doc(data.toString())
+        .get()
+        .then((value) => {
+              tempAnswer = value.data()["Answer"],
+              buildTutor(value.data()["Tutor"]).then((value) => {
+                    tempTutor = value,
+                    answers.add(Answer(tempAnswer, tempTutor)),
+                  }),
+            });
+
+    return answers;
+    //
+    //
+  }
 }

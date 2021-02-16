@@ -1,15 +1,11 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:mytutor/classes/session.dart';
-import 'package:mytutor/components/session_card_widget.dart';
 import 'package:mytutor/components/session_stream_widget.dart';
 import 'package:mytutor/screens/student_screens/request_tutor_screen.dart';
 import 'package:mytutor/utilities/constants.dart';
 import 'package:mytutor/utilities/database_api.dart';
 import 'package:mytutor/utilities/screen_size.dart';
-import 'package:mytutor/utilities/session_manager.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import 'ask_screen_student.dart';
@@ -84,7 +80,6 @@ class _HomePageStudentState extends State<HomePageStudent> {
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
-
             SizedBox(
               height: ScreenSize.height * 0.03,
             ),
@@ -115,11 +110,10 @@ class _HomePageStudentState extends State<HomePageStudent> {
               ),
             ),
             SizedBox(
-              height: ScreenSize.height * 0.01,
+              height: ScreenSize.height * 0.02,
             ),
-
             Container(
-              height: ScreenSize.height * 0.6,
+              height: ScreenSize.height * 0.55,
               child: NotificationListener<OverscrollIndicatorNotification>(
                 // ignore: missing_return
                 onNotification: (overscroll) {
@@ -128,17 +122,40 @@ class _HomePageStudentState extends State<HomePageStudent> {
                 child: PageView(
                   controller: _pageController,
                   children: [
-                    mainScreenPage(SessionStream(status: "active", type: 0, checkexpire: false, isStudent: true,expiredSessionView: false,),"Upcoming Sessions"),
-                    mainScreenPage(SessionStream(status: "pending", type: 0, checkexpire: false, isStudent: true,expiredSessionView: false,),"Pending Sessions"),
-                    mainScreenPage(SessionStream(status: "expired", type: 0, checkexpire: false, isStudent: true, expiredSessionView: true,),"Closed Sessions"),
+                    mainScreenPage(
+                        SessionStream(
+                          status: "active",
+                          type: 0,
+                          checkexpire: false,
+                          isStudent: true,
+                          expiredSessionView: false,
+                        ),
+                        "Upcoming Sessions"),
+                    mainScreenPage(
+                        SessionStream(
+                          status: "pending",
+                          type: 0,
+                          checkexpire: false,
+                          isStudent: true,
+                          expiredSessionView: false,
+                        ),
+                        "Pending Sessions"),
+                    mainScreenPage(
+                        SessionStream(
+                          status: "expired",
+                          type: 0,
+                          checkexpire: false,
+                          isStudent: true,
+                          expiredSessionView: true,
+                        ),
+                        "Closed Sessions"),
                   ],
                 ),
               ),
             ),
             SmoothPageIndicator(
               effect: WormEffect(
-                  dotColor: kGreyish,
-                  activeDotColor: kColorScheme[2]),
+                  dotColor: kGreyish, activeDotColor: kColorScheme[2]),
               controller: _pageController, // PageController
               count: 3,
             ),
@@ -148,13 +165,13 @@ class _HomePageStudentState extends State<HomePageStudent> {
     );
   }
 
-  mainScreenPage(Widget StreamWidget , String title){
+  mainScreenPage(Widget StreamWidget, String title) {
     return Column(
       children: [
         Align(
           alignment: Alignment.centerLeft,
           child: Text(
-            "    "+title,
+            "    " + title,
             style: GoogleFonts.sarabun(
                 textStyle: TextStyle(
                     fontSize: 21,
@@ -166,8 +183,6 @@ class _HomePageStudentState extends State<HomePageStudent> {
         SizedBox(
           height: ScreenSize.height * 0.05,
         ),
-
-
       ],
     );
   }

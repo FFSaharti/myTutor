@@ -4,10 +4,8 @@ import 'package:mytutor/classes/session.dart';
 import 'package:mytutor/components/session_card_widget.dart';
 import 'package:mytutor/utilities/database_api.dart';
 import 'package:mytutor/utilities/screen_size.dart';
-import 'package:mytutor/utilities/session_manager.dart';
 
 class SessionStream extends StatelessWidget {
-
   // "check expire" to update the old sessions. "expiredSessionView" to disable send function and textfeld
   final String status;
   final int type;
@@ -15,21 +13,23 @@ class SessionStream extends StatelessWidget {
   final bool checkexpire;
   final bool expiredSessionView;
 
-  const SessionStream({ @required this.status, this.type, this.isStudent, this.checkexpire, @required this.expiredSessionView}) ;
-
+  const SessionStream(
+      {@required this.status,
+      this.type,
+      this.isStudent,
+      this.checkexpire,
+      @required this.expiredSessionView});
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-      stream: DatabaseAPI.fetchSessionData(type,checkexpire),
+      stream: DatabaseAPI.fetchSessionData(type, checkexpire),
       builder: (context, snapshot) {
         // List to fill up with all the session the user has.
         List<SessionCardWidget> UserSessions = [];
         if (snapshot.hasData) {
-
           List<QueryDocumentSnapshot> Sessions = snapshot.data.docs;
           for (var session in Sessions) {
-
             String SessionStatus = session.data()["status"];
 
             if (SessionStatus.toLowerCase() == status.toLowerCase()) {
@@ -44,29 +44,25 @@ class SessionStream extends StatelessWidget {
               Timestamp stamp = SessionDate;
               print(Sessiontitle);
               UserSessions.add(SessionCardWidget(
-
                 isStudent: isStudent,
                 height: ScreenSize.height,
                 session: Session(
-                  Sessiontitle,
-                  Sessiontutor,
-                  Sessionstudentid,
-                  session.id,
-                  Sessiontime,
-                  stamp.toDate(),
-                  SessionDesc,
-                    SessionStatus
-                ),
+                    Sessiontitle,
+                    Sessiontutor,
+                    Sessionstudentid,
+                    session.id,
+                    Sessiontime,
+                    stamp.toDate(),
+                    SessionDesc,
+                    SessionStatus),
               ));
             }
-
           }
         }
         return Expanded(
           child: ListView(
             reverse: false,
-            padding:
-            EdgeInsets.symmetric(horizontal: 10.0, vertical: 20.0),
+            padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5),
             children: UserSessions,
           ),
         );
