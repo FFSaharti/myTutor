@@ -141,21 +141,32 @@ class DatabaseAPI {
     print("Build Question ... questiondocId is ---> " +
         questionDocID.substring(27, questionDocID.length - 1));
 
-    questionDocID = questionDocID.substring(27, questionDocID.length - 1);
+    if (questionDocID.length > 20) {
+      if (questionDocID.length > 30) {
+        questionDocID = questionDocID.substring(27, questionDocID.length - 1);
+      } else {
+        questionDocID = questionDocID.substring(10);
+        print("ELSE PRINTING..." + questionDocID);
+      }
+    }
+
+    print("QUESTION DOC ID ... " + questionDocID);
 
     await _firestore
         .collection("Question")
         .doc(questionDocID)
         .get()
         .then((value) => {
+              print("QUESTION VALUE ... --> " + value.data().toString()),
+
               tempQuestion = Question(
-                  value.data()['title'],
+                  value.data()["title"],
                   value.id,
-                  value.data()['description'],
+                  value.data()["description"],
                   value.data()['dateOfSubmission'],
                   _tempStudent,
                   [],
-                  value.data()['subject'],
+                  value.data()['subject'].toString(),
                   value.data()['state']),
 
               print("QUESTION TITLE ... " + tempQuestion.title),
