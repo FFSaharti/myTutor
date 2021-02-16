@@ -6,6 +6,7 @@ import 'package:mytutor/classes/student.dart';
 import 'package:mytutor/classes/tutor.dart';
 import 'package:mytutor/classes/user.dart';
 import 'package:mytutor/utilities/session_manager.dart';
+import 'package:intl/intl.dart';
 
 import 'constants.dart';
 
@@ -264,17 +265,23 @@ class DatabaseAPI {
 
   static void createNewSession(String title, String problemDesc,
       String prefDate, MyUser tutor, String time) async {
+    DateTime tempDate = new DateFormat("yyyy-MM-dd").parse(prefDate);
     await _firestore.collection("session").add({
       'student': DatabaseAPI._tempStudent.userId,
+      'description' : problemDesc,
       'title': title,
       'tutor': tutor.userId,
-      'date': prefDate,
+      'date': tempDate,
       'time': time,
       'status': "pending",
     });
   }
+  static Stream<QuerySnapshot> fetchSessionData(int type , bool checkexpire) {
+    // check the session that expired.
 
-  static Stream<QuerySnapshot> fetchSessionData(int type) {
+    if (checkexpire == true){
+      checkAndUpdateExpiredSession();
+    }
     if (type == 1) {
       // tutor
       return _firestore
@@ -290,6 +297,20 @@ class DatabaseAPI {
     }
   }
 
+  static Future<Stream<QuerySnapshot>> checkAndUpdateExpiredSession() async{
+    // check the session that expired.
+    await _firestore
+        .collection("session")
+        .where("date",isLessThan:  DateTime.now()).get().then((QuerySnapshot querySnapshot) =>
+        querySnapshot.docs.forEach((doc) {
+          Timestamp t = doc["date"];
+          // change the status
+          changeSessionsStatus("expired",doc.id);
+        })
+
+    );
+
+  }
   static Stream<QuerySnapshot> fetchSessionMessages(String sessionid) {
     return _firestore
         .collection('session')
@@ -319,6 +340,7 @@ class DatabaseAPI {
 
   static Future<String> changeSessionsStatus(
       String status, String sessionid) async {
+    // code can be improved and remove all the queries into one and send the 'status' string.
     if (status.toLowerCase() == "accept") {
       // accpet the session change status to active.
       await _firestore
@@ -326,14 +348,19 @@ class DatabaseAPI {
           .doc(sessionid)
           .update({'status': 'active'});
       return "active";
-    } else {
+    } else if (status.toLowerCase() == "rejected") {
       // Decline the session.
       await _firestore
           .collection("session")
           .doc(sessionid)
           .update({'status': 'decline'});
-
       return "decline";
+    } else if (status.toLowerCase() == "expired"){
+      await _firestore
+          .collection("session")
+          .doc(sessionid)
+          .update({'status': 'expired'});
+      return "expired";
     }
   }
 }

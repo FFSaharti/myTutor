@@ -4,16 +4,26 @@ class Session {
   String _student;
   String _session_id;
   String _time;
-  String _date;
+  DateTime _date;
+  String _desc;
+
+
+
 
   String get time => _time;
+
+  String get desc => _desc;
+
+  set desc(String value) {
+    _desc = value;
+  }
 
   set time(String value) {
     _time = value;
   }
 
   Session(this._title, this._tutor, this._student, this._session_id, this._time,
-      this._date);
+      this._date , this._desc,);
   String get title => _title;
 
   set title(String value) {
@@ -38,9 +48,9 @@ class Session {
     _tutor = value;
   }
 
-  String get date => _date;
+  DateTime get date => _date;
 
-  set date(String value) {
+  set date(DateTime value) {
     _date = value;
   }
 }

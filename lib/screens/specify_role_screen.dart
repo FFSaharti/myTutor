@@ -2,12 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mytutor/components/ez_button.dart';
+import 'package:mytutor/screens/student_screens/homepage_screen_student.dart';
+import 'package:mytutor/screens/tutor_screens/interests_screen.dart';
 import 'package:mytutor/utilities/constants.dart';
 import 'package:mytutor/utilities/database_api.dart';
 import 'package:mytutor/utilities/screen_size.dart';
-
-import 'file:///C:/Users/faisa/Desktop/Developer/AndroidStudioProjects/mytutor/lib/screens/student_screens/homepage_screen_student.dart';
-import 'file:///C:/Users/faisa/Desktop/Developer/AndroidStudioProjects/mytutor/lib/screens/tutor_screens/interests_screen.dart';
 
 class SpecifyRoleScreen extends StatefulWidget {
   static String id = 'specify_role_screen';

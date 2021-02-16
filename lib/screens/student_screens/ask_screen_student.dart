@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mytutor/classes/question.dart';
+import 'package:mytutor/screens/student_screens/question_answers_page_screen_student.dart';
 import 'package:mytutor/utilities/constants.dart';
 import 'package:mytutor/utilities/screen_size.dart';
 import 'package:mytutor/utilities/session_manager.dart';
 
-import 'file:///C:/Users/faisa/Desktop/Developer/AndroidStudioProjects/mytutor/lib/screens/student_screens/question_answers_page_screen_student.dart';
 
 class AskScreenStudent extends StatefulWidget {
   static String id = 'ask_screen_student';

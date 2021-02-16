@@ -269,6 +269,7 @@ class _TutorWidgetState extends State<TutorWidget> {
                                         dateController.text,
                                         tutor,
                                         timeController.text);
+                                    Navigator.of(context).pop();
                                   }
                                 }),
                           ],

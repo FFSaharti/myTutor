@@ -4,13 +4,13 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mytutor/classes/session.dart';
 import 'package:mytutor/components/session_card_widget.dart';
+import 'package:mytutor/screens/student_screens/request_tutor_screen.dart';
 import 'package:mytutor/utilities/constants.dart';
 import 'package:mytutor/utilities/database_api.dart';
 import 'package:mytutor/utilities/screen_size.dart';
 import 'package:mytutor/utilities/session_manager.dart';
 
-import 'file:///C:/Users/faisa/Desktop/Developer/AndroidStudioProjects/mytutor/lib/screens/student_screens/ask_screen_student.dart';
-import 'file:///C:/Users/faisa/Desktop/Developer/AndroidStudioProjects/mytutor/lib/screens/student_screens/request_tutor_screen.dart';
+import 'ask_screen_student.dart';
 
 class HomepageScreenStudent extends StatefulWidget {
   static String id = 'homepage_screen_student';
@@ -125,7 +125,7 @@ class _HomePageStudentState extends State<HomePageStudent> {
               ),
             ),
             StreamBuilder<QuerySnapshot>(
-              stream: DatabaseAPI.fetchSessionData(0),
+              stream: DatabaseAPI.fetchSessionData(0,false),
               builder: (context, snapshot) {
                 // List to fill up with all the session the user has.
                 List<SessionCardWidget> UserSessions = [];
@@ -142,17 +142,21 @@ class _HomePageStudentState extends State<HomePageStudent> {
                     final Sessiontitle = session.data()["title"];
                     final Sessiontime = session.data()["time"];
                     final SessionDate = session.data()["date"];
+                    final SessionDesc = session.data()["description"];
+                    // convert the date we got from firebase into timestamp. to change it later to datetime.
+                    Timestamp stamp = SessionDate;
                     UserSessions.add(SessionCardWidget(
                       isStudent: true,
                       height: ScreenSize.height,
                       session: Session(
-                        Sessiontitle,
-                        Sessiontutor,
-                        SessionManager.loggedInUser.userId,
-                        session.id,
-                        Sessiontime,
-                        SessionDate,
-                      ),
+                          Sessiontitle,
+                          Sessiontutor,
+                          SessionManager.loggedInUser.userId,
+                          session.id,
+                          Sessiontime,
+                          stamp.toDate(),
+                          SessionDesc,
+                     ),
                     ));
                   }
                 }

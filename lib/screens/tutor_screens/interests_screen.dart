@@ -7,7 +7,8 @@ import 'package:mytutor/utilities/constants.dart';
 import 'package:mytutor/utilities/database_api.dart';
 import 'package:mytutor/utilities/screen_size.dart';
 
-import 'file:///C:/Users/faisa/Desktop/Developer/AndroidStudioProjects/mytutor/lib/screens/tutor_screens/homepage_screen_tutor.dart';
+import 'homepage_screen_tutor.dart';
+
 
 class InterestsScreen extends StatefulWidget {
   static String id = 'interests_screen';

@@ -2,15 +2,14 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:mytutor/screens/login_screen.dart';
 import 'package:mytutor/screens/signup_screen.dart';
+import 'package:mytutor/screens/student_screens/ask_screen_student.dart';
+import 'package:mytutor/screens/student_screens/homepage_screen_student.dart';
+import 'package:mytutor/screens/student_screens/request_tutor_screen.dart';
 import 'package:mytutor/screens/tour_screen.dart';
+import 'package:mytutor/screens/tutor_screens/homepage_screen_tutor.dart';
+import 'package:mytutor/screens/tutor_screens/interests_screen.dart';
 import 'package:mytutor/screens/tutor_screens/respond_screen_tutor.dart';
 import 'package:mytutor/screens/welcome_screen.dart';
-
-import 'file:///C:/Users/faisa/Desktop/Developer/AndroidStudioProjects/mytutor/lib/screens/student_screens/ask_screen_student.dart';
-import 'file:///C:/Users/faisa/Desktop/Developer/AndroidStudioProjects/mytutor/lib/screens/student_screens/homepage_screen_student.dart';
-import 'file:///C:/Users/faisa/Desktop/Developer/AndroidStudioProjects/mytutor/lib/screens/student_screens/request_tutor_screen.dart';
-import 'file:///C:/Users/faisa/Desktop/Developer/AndroidStudioProjects/mytutor/lib/screens/tutor_screens/homepage_screen_tutor.dart';
-import 'file:///C:/Users/faisa/Desktop/Developer/AndroidStudioProjects/mytutor/lib/screens/tutor_screens/interests_screen.dart';
 
 import 'screens/specify_role_screen.dart';
 import 'screens/splash_screen.dart';

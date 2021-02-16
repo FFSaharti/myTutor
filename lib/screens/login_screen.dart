@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mytutor/components/animated_login_widget.dart';
 import 'package:mytutor/components/ez_button.dart';
+import 'package:mytutor/screens/student_screens/homepage_screen_student.dart';
 import 'package:mytutor/utilities/constants.dart';
 import 'package:mytutor/utilities/database_api.dart';
 import 'package:mytutor/utilities/regEx.dart';
 import 'package:mytutor/utilities/screen_size.dart';
 
-import 'file:///C:/Users/faisa/Desktop/Developer/AndroidStudioProjects/mytutor/lib/screens/student_screens/homepage_screen_student.dart';
 
 import 'tutor_screens/homepage_screen_tutor.dart';
 

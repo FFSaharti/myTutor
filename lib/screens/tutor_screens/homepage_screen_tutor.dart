@@ -120,7 +120,7 @@ class _HomePageTutorState extends State<HomePageTutor> {
           ),
 
           StreamBuilder<QuerySnapshot>(
-            stream: DatabaseAPI.fetchSessionData(1),
+            stream: DatabaseAPI.fetchSessionData(1,false),
             builder: (context, snapshot) {
               // List to fill up with all the session the user has.
               List<SessionCardWidget> UserSessions = [];
@@ -129,31 +129,36 @@ class _HomePageTutorState extends State<HomePageTutor> {
                 List<QueryDocumentSnapshot> Sessions = snapshot.data.docs;
                 for (var session in Sessions) {
                   String SessionStatus = session.data()["status"];
-                  if (SessionStatus == "pending") {
-                    print(SessionStatus);
-                    continue;
+                  if (SessionStatus.toLowerCase() == "active") {
+
+                    final Sessiontutor = session.data()["tutor"];
+                    final Sessionstudentid = session.data()["student"];
+                    final Sessiontitle = session.data()["title"];
+                    final Sessiontime = session.data()["time"];
+                    final SessionDate = session.data()["date"];
+                    final SessionDesc = session.data()["description"];
+                    // convert the date we got from firebase into timestamp. to change it later to datetime.
+                    Timestamp stamp = SessionDate;
+                    UserSessions.add(SessionCardWidget(
+                      isStudent: false,
+                      height: ScreenSize.height,
+                      session: Session(
+                          Sessiontitle,
+                          SessionManager.loggedInTutor.userId,
+                          Sessionstudentid,
+                          session.id,
+                          Sessiontime,
+                          stamp.toDate(),
+                          SessionDesc,
+                          ),
+                    ));
                   }
-                  final Sessiontutor = session.data()["tutor"];
-                  final Sessionstudentid = session.data()["student"];
-                  final Sessiontitle = session.data()["title"];
-                  final Sessiontime = session.data()["time"];
-                  final SessionDate = session.data()["date"];
-                  UserSessions.add(SessionCardWidget(
-                    isStudent: false,
-                    height: ScreenSize.height,
-                    session: Session(
-                        Sessiontitle,
-                        SessionManager.loggedInTutor.userId,
-                        Sessionstudentid,
-                        session.id,
-                        Sessiontime,
-                        SessionDate),
-                  ));
+
                 }
               }
               return Expanded(
                 child: ListView(
-                  reverse: true,
+                  reverse: false,
                   padding:
                       EdgeInsets.symmetric(horizontal: 10.0, vertical: 20.0),
                   children: UserSessions,

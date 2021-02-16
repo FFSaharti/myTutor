@@ -4,6 +4,7 @@ import 'package:mytutor/classes/session.dart';
 import 'package:mytutor/screens/messages_screen.dart';
 import 'package:mytutor/utilities/constants.dart';
 import 'package:mytutor/utilities/database_api.dart';
+import 'package:intl/intl.dart';
 
 class SessionCardWidget extends StatefulWidget {
   const SessionCardWidget({
@@ -103,7 +104,7 @@ class _SessionCardWidgetState extends State<SessionCardWidget> {
                       child: Padding(
                         padding: const EdgeInsets.only(left: 11.0, right: 11.0),
                         child: Text(
-                          widget.session.date + " at " + widget.session.time,
+                          DateFormat('yyyy-MM-dd').format(widget.session.date) + " at " + widget.session.time,
                           style: GoogleFonts.sarabun(
                             textStyle: TextStyle(
                                 fontSize: 21,
