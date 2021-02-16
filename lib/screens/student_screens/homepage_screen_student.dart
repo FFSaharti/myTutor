@@ -84,6 +84,7 @@ class _HomePageStudentState extends State<HomePageStudent> {
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
+
             SizedBox(
               height: ScreenSize.height * 0.03,
             ),
