@@ -9,7 +9,6 @@ import 'package:mytutor/utilities/database_api.dart';
 import 'package:mytutor/utilities/regEx.dart';
 import 'package:mytutor/utilities/screen_size.dart';
 
-
 import 'tutor_screens/homepage_screen_tutor.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -124,6 +123,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     hasBorder: false,
                     borderColor: null,
                     onPressed: () {
+                      // TODO: Implement progress bar...
                       DatabaseAPI.userLogin(email, password).then((value) => {
                             if (value == "Student Login")
                               {

@@ -124,8 +124,9 @@ class _HomePageStudentState extends State<HomePageStudent> {
                         color: kGreyish)),
               ),
             ),
+            //TODO: Implement loading bar/indicator before loading data to avoid null ex
             StreamBuilder<QuerySnapshot>(
-              stream: DatabaseAPI.fetchSessionData(0,false),
+              stream: DatabaseAPI.fetchSessionData(0, false),
               builder: (context, snapshot) {
                 // List to fill up with all the session the user has.
                 List<SessionCardWidget> UserSessions = [];
@@ -149,14 +150,14 @@ class _HomePageStudentState extends State<HomePageStudent> {
                       isStudent: true,
                       height: ScreenSize.height,
                       session: Session(
-                          Sessiontitle,
-                          Sessiontutor,
-                          SessionManager.loggedInUser.userId,
-                          session.id,
-                          Sessiontime,
-                          stamp.toDate(),
-                          SessionDesc,
-                     ),
+                        Sessiontitle,
+                        Sessiontutor,
+                        SessionManager.loggedInUser.userId,
+                        session.id,
+                        Sessiontime,
+                        stamp.toDate(),
+                        SessionDesc,
+                      ),
                     ));
                   }
                 }

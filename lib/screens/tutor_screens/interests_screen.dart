@@ -9,7 +9,6 @@ import 'package:mytutor/utilities/screen_size.dart';
 
 import 'homepage_screen_tutor.dart';
 
-
 class InterestsScreen extends StatefulWidget {
   static String id = 'interests_screen';
 
@@ -158,42 +157,45 @@ class _InterestsScreenState extends State<InterestsScreen> {
               //     }),
               Builder(builder: (context) {
                 return EZButton(
-                    width: ScreenSize.width,
-                    buttonColor: kColorScheme[1],
-                    textColor: Colors.white,
-                    isGradient: true,
-                    colors: [
-                      kColorScheme[1],
-                      kColorScheme[2],
-                      kColorScheme[3],
-                      kColorScheme[4],
-                    ],
-                    buttonText: "Complete Sign Up",
-                    hasBorder: false,
-                    borderColor: null,
-                    onPressed: () {
-                      DatabaseAPI.createTutor(DatabaseAPI.tempUser.email)
-                          .then((value) => {
-                                if (value == "Success")
-                                  {
-                                    Scaffold.of(context).showSnackBar(SnackBar(
-                                        content: new Text("Welcome"),
-                                        backgroundColor: Colors.red,
-                                        duration:
-                                            const Duration(milliseconds: 500))),
-                                    Navigator.pushNamed(
-                                        context, HomepageScreenTutor.id)
-                                  }
-                                else
-                                  {
-                                    Scaffold.of(context).showSnackBar(SnackBar(
-                                        content: new Text(value),
-                                        backgroundColor: Colors.red,
-                                        duration:
-                                            const Duration(milliseconds: 500))),
-                                  }
-                              });
-                    });
+                  width: ScreenSize.width,
+                  buttonColor: kColorScheme[1],
+                  textColor: Colors.white,
+                  isGradient: true,
+                  colors: [
+                    kColorScheme[1],
+                    kColorScheme[2],
+                    kColorScheme[3],
+                    kColorScheme[4],
+                  ],
+                  buttonText: "Complete Sign Up",
+                  hasBorder: false,
+                  borderColor: null,
+                  onPressed: () {
+                    DatabaseAPI.createTutor(DatabaseAPI.tempUser.email)
+                        .then((value) => {
+                              if (value == "Success")
+                                {
+                                  Scaffold.of(context).showSnackBar(SnackBar(
+                                      content: new Text("Welcome"),
+                                      backgroundColor: Colors.red,
+                                      duration:
+                                          const Duration(milliseconds: 500))),
+                                  Navigator.pushNamed(
+                                      context, HomepageScreenTutor.id)
+                                }
+                              else
+                                {
+                                  Scaffold.of(context).showSnackBar(SnackBar(
+                                      content: new Text(value),
+                                      backgroundColor: Colors.red,
+                                      duration:
+                                          const Duration(milliseconds: 500))),
+                                }
+                            });
+
+                    resetInterests();
+                  },
+                );
               })
             ],
           ),
@@ -228,6 +230,12 @@ class _InterestsScreenState extends State<InterestsScreen> {
         ));
         print(subjects[i].title + " was added to selected interests");
       }
+    }
+  }
+
+  void resetInterests() {
+    for (int i = 0; i < subjects.length; i++) {
+      subjects[i].chosen = false;
     }
   }
 }

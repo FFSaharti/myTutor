@@ -186,6 +186,7 @@ class _TutorWidgetState extends State<TutorWidget> {
           ),
           GestureDetector(
             onTap: () {
+              print("SHOW BUTTON");
               showbutton(widget.Tutor);
             },
             child: Container(
@@ -234,10 +235,11 @@ class _TutorWidgetState extends State<TutorWidget> {
                 //     padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
                 height: height * 0.60,
                 decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                      topRight: Radius.circular(80),
-                      topLeft: Radius.circular(45),
-                    ),
+                    borderRadius: BorderRadius.circular(50)
+                    //   topRight: Radius.circular(100),
+                    //   topLeft: Radius.circular(100),
+                    // )
+                    ,
                     color: Colors.white),
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
