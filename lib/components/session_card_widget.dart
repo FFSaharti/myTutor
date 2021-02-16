@@ -35,10 +35,12 @@ class _SessionCardWidgetState extends State<SessionCardWidget> {
           finish = true;
         });
       });
-    } else {
+    } else if (widget.isStudent == true) {
       DatabaseAPI.getUserbyid(widget.session.tutor, 0).then((data) {
         setState(() {
+
           helperName = data.data()["name"];
+          print(helperName);
           finish = true;
         });
       });
@@ -52,7 +54,7 @@ class _SessionCardWidgetState extends State<SessionCardWidget> {
     return Padding(
       padding: const EdgeInsets.all(15.0),
       child: GestureDetector(
-        onTap: () {
+        onTap: widget.session.status == "pending" ?  null :() {
           Navigator.push(
               context,
               MaterialPageRoute(

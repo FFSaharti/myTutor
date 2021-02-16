@@ -42,6 +42,7 @@ class _TourScreenState extends State<TourScreen> {
             height: ScreenSize.height * 0.6,
             width: double.infinity,
             child: NotificationListener<OverscrollIndicatorNotification>(
+              // ignore: missing_return
               onNotification: (overscroll) {
                 overscroll.disallowGlow();
               },

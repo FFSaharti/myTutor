@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:mytutor/classes/session.dart';
 import 'package:mytutor/classes/subject.dart';
 import 'package:mytutor/components/session_card_widget.dart';
+import 'package:mytutor/components/session_stream_widget.dart';
 import 'package:mytutor/screens/tutor_screens/respond_screen_tutor.dart';
 import 'package:mytutor/utilities/constants.dart';
 import 'package:mytutor/utilities/database_api.dart';
@@ -107,7 +108,7 @@ class _HomePageTutorState extends State<HomePageTutor> {
             child: Column(
               children: [
                 Text(
-                  "    Upcoming Sessions",
+                  "    Active/Upcoming Sessions",
                   style: GoogleFonts.sarabun(
                       textStyle: TextStyle(
                           fontSize: 21,
@@ -119,53 +120,7 @@ class _HomePageTutorState extends State<HomePageTutor> {
             ),
           ),
 
-          StreamBuilder<QuerySnapshot>(
-            stream: DatabaseAPI.fetchSessionData(1,false),
-            builder: (context, snapshot) {
-              // List to fill up with all the session the user has.
-              List<SessionCardWidget> UserSessions = [];
-              if (snapshot.hasData) {
-                print(snapshot.data.size.toString());
-                List<QueryDocumentSnapshot> Sessions = snapshot.data.docs;
-                for (var session in Sessions) {
-                  String SessionStatus = session.data()["status"];
-                  if (SessionStatus.toLowerCase() == "active") {
-
-                    final Sessiontutor = session.data()["tutor"];
-                    final Sessionstudentid = session.data()["student"];
-                    final Sessiontitle = session.data()["title"];
-                    final Sessiontime = session.data()["time"];
-                    final SessionDate = session.data()["date"];
-                    final SessionDesc = session.data()["description"];
-                    // convert the date we got from firebase into timestamp. to change it later to datetime.
-                    Timestamp stamp = SessionDate;
-                    UserSessions.add(SessionCardWidget(
-                      isStudent: false,
-                      height: ScreenSize.height,
-                      session: Session(
-                          Sessiontitle,
-                          SessionManager.loggedInTutor.userId,
-                          Sessionstudentid,
-                          session.id,
-                          Sessiontime,
-                          stamp.toDate(),
-                          SessionDesc,
-                          ),
-                    ));
-                  }
-
-                }
-              }
-              return Expanded(
-                child: ListView(
-                  reverse: false,
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 10.0, vertical: 20.0),
-                  children: UserSessions,
-                ),
-              );
-            },
-          ),
+          SessionStream(status: "active",isStudent: false,type: 1,checkexpire: false,expiredSessionView: false,),
           SizedBox(
             height: ScreenSize.height * 0.05,
           ),
@@ -175,6 +130,8 @@ class _HomePageTutorState extends State<HomePageTutor> {
     );
   }
 }
+
+
 
 class ProfileTutor extends StatefulWidget {
   @override

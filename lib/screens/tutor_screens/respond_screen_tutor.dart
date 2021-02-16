@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mytutor/classes/session.dart';
+import 'package:mytutor/components/session_stream_widget.dart';
 import 'package:mytutor/utilities/constants.dart';
 import 'package:mytutor/utilities/database_api.dart';
 import 'package:mytutor/utilities/screen_size.dart';
@@ -58,6 +59,7 @@ class RespondScreenTutor extends StatelessWidget {
                             Sessiontime,
                             stamp.toDate(),
                             SessionDesc,
+                            SessionStatus
                         ),
                       ));
                     }

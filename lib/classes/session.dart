@@ -6,9 +6,14 @@ class Session {
   String _time;
   DateTime _date;
   String _desc;
+  String _status;
 
 
+  String get status => _status;
 
+  set status(String value) {
+    _status = value;
+  }
 
   String get time => _time;
 
@@ -23,7 +28,7 @@ class Session {
   }
 
   Session(this._title, this._tutor, this._student, this._session_id, this._time,
-      this._date , this._desc,);
+      this._date , this._desc, this._status);
   String get title => _title;
 
   set title(String value) {

@@ -49,6 +49,7 @@ class _messagesScreenState extends State<messagesScreen> {
                 children: <Widget>[
                   Expanded(
                     child: TextField(
+                      readOnly: widget.currentsession.status == "expired" ? true : false,
                       controller: messageTextController,
                       onChanged: (value) {
                         newMessage = value;
@@ -56,26 +57,28 @@ class _messagesScreenState extends State<messagesScreen> {
                       decoration: InputDecoration(
                         contentPadding: EdgeInsets.symmetric(
                             vertical: 10.0, horizontal: 20.0),
-                        hintText: 'Type....',
+                        hintText: widget.currentsession.status == "expired" ? 'the session is ended. its in view Mode only':'Type....',
                         border: InputBorder.none,
                       ),
                     ),
                   ),
                   FlatButton(
-                    onPressed: () {
+
+                    onPressed: widget.currentsession.status == "expired" ? null : () {
                       messageTextController.clear();
                       DatabaseAPI.saveNewMessage(
                           widget.currentsession.session_id,
                           newMessage,
                           SessionManager.loggedInUser.name);
                     },
+
                     child: Row(
                       children: [
                         Text("send"),
                         SizedBox(
                           width: 5,
                         ),
-                        Icon(Icons.arrow_forward_rounded),
+                        Icon(Icons.arrow_forward_rounded ,),
                       ],
                     ),
                   ),
