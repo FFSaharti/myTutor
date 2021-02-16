@@ -4,11 +4,13 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mytutor/classes/session.dart';
 import 'package:mytutor/components/session_card_widget.dart';
+import 'package:mytutor/components/session_stream_widget.dart';
 import 'package:mytutor/screens/student_screens/request_tutor_screen.dart';
 import 'package:mytutor/utilities/constants.dart';
 import 'package:mytutor/utilities/database_api.dart';
 import 'package:mytutor/utilities/screen_size.dart';
 import 'package:mytutor/utilities/session_manager.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import 'ask_screen_student.dart';
 
@@ -64,6 +66,7 @@ class HomePageStudent extends StatefulWidget {
 }
 
 class _HomePageStudentState extends State<HomePageStudent> {
+  PageController _pageController = PageController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -111,73 +114,60 @@ class _HomePageStudentState extends State<HomePageStudent> {
               ),
             ),
             SizedBox(
-              height: ScreenSize.height * 0.04,
+              height: ScreenSize.height * 0.01,
             ),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                "    Upcoming Sessions",
-                style: GoogleFonts.sarabun(
-                    textStyle: TextStyle(
-                        fontSize: 21,
-                        fontWeight: FontWeight.normal,
-                        color: kGreyish)),
+
+            Container(
+              height: ScreenSize.height * 0.6,
+              child: NotificationListener<OverscrollIndicatorNotification>(
+                // ignore: missing_return
+                onNotification: (overscroll) {
+                  overscroll.disallowGlow();
+                },
+                child: PageView(
+                  controller: _pageController,
+                  children: [
+                    mainScreenPage(SessionStream(status: "active", type: 0, checkexpire: false, isStudent: true,expiredSessionView: false,),"Upcoming Sessions"),
+                    mainScreenPage(SessionStream(status: "pending", type: 0, checkexpire: false, isStudent: true,expiredSessionView: false,),"Pending Sessions"),
+                    mainScreenPage(SessionStream(status: "expired", type: 0, checkexpire: false, isStudent: true, expiredSessionView: true,),"Closed Sessions"),
+                  ],
+                ),
               ),
             ),
-            //TODO: Implement loading bar/indicator before loading data to avoid null ex
-            StreamBuilder<QuerySnapshot>(
-              stream: DatabaseAPI.fetchSessionData(0, false),
-              builder: (context, snapshot) {
-                // List to fill up with all the session the user has.
-                List<SessionCardWidget> UserSessions = [];
-                if (snapshot.hasData) {
-                  List<QueryDocumentSnapshot> Sessions = snapshot.data.docs;
-                  for (var session in Sessions) {
-                    String SessionStatus = session.data()["status"];
-                    if (SessionStatus == "pending") {
-                      print(SessionStatus);
-                      continue;
-                    }
-                    final Sessiontutor = session.data()["tutor"];
-                    final Sessionstudentid = session.data()["student"];
-                    final Sessiontitle = session.data()["title"];
-                    final Sessiontime = session.data()["time"];
-                    final SessionDate = session.data()["date"];
-                    final SessionDesc = session.data()["description"];
-                    // convert the date we got from firebase into timestamp. to change it later to datetime.
-                    Timestamp stamp = SessionDate;
-                    UserSessions.add(SessionCardWidget(
-                      isStudent: true,
-                      height: ScreenSize.height,
-                      session: Session(
-                        Sessiontitle,
-                        Sessiontutor,
-                        SessionManager.loggedInUser.userId,
-                        session.id,
-                        Sessiontime,
-                        stamp.toDate(),
-                        SessionDesc,
-                      ),
-                    ));
-                  }
-                }
-                return Expanded(
-                  child: ListView(
-                    reverse: false,
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 10.0, vertical: 20.0),
-                    children: UserSessions,
-                  ),
-                );
-              },
+            SmoothPageIndicator(
+              effect: WormEffect(
+                  dotColor: kGreyish,
+                  activeDotColor: kColorScheme[2]),
+              controller: _pageController, // PageController
+              count: 3,
             ),
-            SizedBox(
-              height: ScreenSize.height * 0.05,
-            ),
-            //SessionWidget(height: height),
           ],
         ),
       ),
+    );
+  }
+
+  mainScreenPage(Widget StreamWidget , String title){
+    return Column(
+      children: [
+        Align(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            "    "+title,
+            style: GoogleFonts.sarabun(
+                textStyle: TextStyle(
+                    fontSize: 21,
+                    fontWeight: FontWeight.normal,
+                    color: kGreyish)),
+          ),
+        ),
+        StreamWidget,
+        SizedBox(
+          height: ScreenSize.height * 0.05,
+        ),
+
+
+      ],
     );
   }
 }
