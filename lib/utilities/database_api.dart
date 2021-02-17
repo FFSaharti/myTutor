@@ -337,10 +337,12 @@ class DatabaseAPI {
   }
 
   static Future<DocumentSnapshot> getUserbyid(String userID, int type) async {
+
+    // type 1 = student , type 0 = tutor
     if (type == 1) {
       // student
       return await _firestore.collection('Student').doc(userID).get();
-    } else {
+    } else if (type == 0){
       // tutor
       return await _firestore.collection('Tutor').doc(userID).get();
     }
@@ -370,6 +372,15 @@ class DatabaseAPI {
           .update({'status': 'expired'});
       return "expired";
     }
+  }
+  
+  // chat screen related.
+  
+  static Future<QuerySnapshot> getLastMessage(String sessionId) async{
+
+   return _firestore.collection("session").doc(sessionId).collection("messages").orderBy("time", descending:  true).limit(1).get();
+    
+    
   }
 
   static Future<String> addQuestionToStudent(String questionTitle,

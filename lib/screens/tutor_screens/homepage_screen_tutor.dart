@@ -13,6 +13,8 @@ import 'package:mytutor/utilities/database_api.dart';
 import 'package:mytutor/utilities/screen_size.dart';
 import 'package:mytutor/utilities/session_manager.dart';
 
+import '../message_screen.dart';
+
 class HomepageScreenTutor extends StatefulWidget {
   static String id = 'homepage_screen_tutor';
 
@@ -24,7 +26,7 @@ class _HomepageScreenTutorState extends State<HomepageScreenTutor> {
   List<Widget> widgets = <Widget>[
     HomePageTutor(),
     TutorSection(),
-    Text("3"),
+    MessageScreen(),
     ProfileTutor(),
   ];
   int _navindex = 0;

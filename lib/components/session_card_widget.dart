@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:mytutor/classes/session.dart';
-import 'package:mytutor/screens/messages_screen.dart';
+import 'package:mytutor/screens/chat_screen.dart';
 import 'package:mytutor/utilities/constants.dart';
 import 'package:mytutor/utilities/database_api.dart';
 
@@ -27,6 +27,7 @@ class _SessionCardWidgetState extends State<SessionCardWidget> {
 
   void initState() {
     // get the tutor name.
+
     if (widget.isStudent == false) {
       // means that the current user is not student, so get the student name
       DatabaseAPI.getUserbyid(widget.session.student, 1).then((data) {

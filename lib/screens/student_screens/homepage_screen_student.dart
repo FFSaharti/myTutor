@@ -8,6 +8,7 @@ import 'package:mytutor/utilities/database_api.dart';
 import 'package:mytutor/utilities/screen_size.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
+import '../message_screen.dart';
 import 'ask_screen_student.dart';
 
 class HomepageScreenStudent extends StatefulWidget {
@@ -21,6 +22,7 @@ class _HomepageScreenStudentState extends State<HomepageScreenStudent> {
   List<Widget> widgets = <Widget>[
     HomePageStudent(),
     StudentSection(),
+    MessageScreen(),
   ];
   double width;
   double height;
@@ -113,7 +115,7 @@ class _HomePageStudentState extends State<HomePageStudent> {
               height: ScreenSize.height * 0.02,
             ),
             Container(
-              height: ScreenSize.height * 0.55,
+              height: ScreenSize.height * 0.54,
               child: NotificationListener<OverscrollIndicatorNotification>(
                 // ignore: missing_return
                 onNotification: (overscroll) {
