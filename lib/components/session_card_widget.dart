@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:mytutor/classes/session.dart';
 import 'package:mytutor/screens/messages_screen.dart';
 import 'package:mytutor/utilities/constants.dart';
 import 'package:mytutor/utilities/database_api.dart';
-import 'package:intl/intl.dart';
 
 class SessionCardWidget extends StatefulWidget {
   const SessionCardWidget({
@@ -38,7 +38,6 @@ class _SessionCardWidgetState extends State<SessionCardWidget> {
     } else if (widget.isStudent == true) {
       DatabaseAPI.getUserbyid(widget.session.tutor, 0).then((data) {
         setState(() {
-
           helperName = data.data()["name"];
           print(helperName);
           finish = true;
@@ -54,15 +53,17 @@ class _SessionCardWidgetState extends State<SessionCardWidget> {
     return Padding(
       padding: const EdgeInsets.all(15.0),
       child: GestureDetector(
-        onTap: widget.session.status == "pending" ?  null :() {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => messagesScreen(
-                  currentsession: widget.session,
-                ),
-              ));
-        },
+        onTap: widget.session.status == "pending"
+            ? null
+            : () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => messagesScreen(
+                        currentsession: widget.session,
+                      ),
+                    ));
+              },
         child: Container(
           height: widget.height * 0.18,
           decoration: new BoxDecoration(
@@ -106,7 +107,9 @@ class _SessionCardWidgetState extends State<SessionCardWidget> {
                       child: Padding(
                         padding: const EdgeInsets.only(left: 11.0, right: 11.0),
                         child: Text(
-                          DateFormat('yyyy-MM-dd').format(widget.session.date) + " at " + widget.session.time,
+                          DateFormat('yyyy-MM-dd').format(widget.session.date) +
+                              " at " +
+                              widget.session.time,
                           style: GoogleFonts.sarabun(
                             textStyle: TextStyle(
                                 fontSize: 21,

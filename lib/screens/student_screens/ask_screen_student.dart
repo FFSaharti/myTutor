@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mytutor/classes/subject.dart';
 import 'package:mytutor/components/question_stream_widget.dart';
-import 'package:mytutor/components/question_widget.dart';
-import 'package:mytutor/screens/student_screens/question_answers_page_screen_student.dart';
 import 'package:mytutor/utilities/constants.dart';
 import 'package:mytutor/utilities/database_api.dart';
 import 'package:mytutor/utilities/screen_size.dart';
@@ -118,30 +116,29 @@ class _AskScreenStudentState extends State<AskScreenStudent> {
     );
   }
 
-  List<Widget> getQuestions() {
-    List<Widget> widgets = [];
-
-    for (int i = 0; i < SessionManager.loggedInStudent.questions.length; i++) {
-      widgets.add(GestureDetector(
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => QuestionAnswersScreenStudent(
-                  SessionManager.loggedInStudent.questions[i]),
-            ),
-          );
-        },
-        child: QuestionWidget(
-            question: SessionManager.loggedInStudent.questions[i]),
-      ));
-      widgets.add(SizedBox(
-        height: 5,
-      ));
-    }
-
-    return widgets;
-  }
+  // List<Widget> getQuestions() {
+  //   List<Widget> widgets = [];
+  //
+  //   for (int i = 0; i < SessionManager.loggedInStudent.questions.length; i++) {
+  //     widgets.add(GestureDetector(
+  //       onTap: () {
+  //         Navigator.push(
+  //           context,
+  //           MaterialPageRoute(
+  //               builder: (context) => QuestionAnswersScreenStudent(
+  //                   SessionManager.loggedInStudent.questions[i])),
+  //         );
+  //       },
+  //       child: QuestionWidget(
+  //           question: SessionManager.loggedInStudent.questions[i]),
+  //     ));
+  //     widgets.add(SizedBox(
+  //       height: 5,
+  //     ));
+  //   }
+  //
+  //   return widgets;
+  // }
 }
 
 void showAddQuestion() {

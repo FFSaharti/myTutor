@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:mytutor/classes/answer.dart';
 import 'package:mytutor/classes/question.dart';
 import 'package:mytutor/components/question_widget.dart';
+import 'package:mytutor/screens/student_screens/question_answers_page_screen_student.dart';
 import 'package:mytutor/utilities/database_api.dart';
 import 'package:mytutor/utilities/session_manager.dart';
 
@@ -17,7 +18,7 @@ class QuestionStream extends StatelessWidget {
       stream: DatabaseAPI.fetchQuestionData(status),
       builder: (context, snapshot) {
         // List to fill up with all the session the user has.
-        List<QuestionWidget> UserQuestions = [];
+        List<Widget> UserQuestions = [];
         if (snapshot.hasData) {
           List<QueryDocumentSnapshot> questions = snapshot.data.docs;
           for (var question in questions) {
@@ -30,6 +31,7 @@ class QuestionStream extends StatelessWidget {
               final qIssuer = SessionManager.loggedInStudent;
               final qDesc = question.data()["description"];
               final qDOS = question.data()["dateOfSubmission"];
+              final qID = question.data()['doc_id'];
 
               List<Answer> qAnswers = [];
 
@@ -42,9 +44,20 @@ class QuestionStream extends StatelessWidget {
 
               print(qTitle.toString());
               UserQuestions.add(
-                QuestionWidget(
-                    question: Question(qTitle, question.id, qDesc, qDOS,
-                        qIssuer, qAnswers, qSubject, qState)),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => QuestionAnswersScreenStudent(
+                              Question(qTitle, question.id, qDesc, qDOS,
+                                  qIssuer, qAnswers, qSubject, qState))),
+                    );
+                  },
+                  child: QuestionWidget(
+                      question: Question(qTitle, question.id, qDesc, qDOS,
+                          qIssuer, qAnswers, qSubject, qState)),
+                ),
               );
             }
           }
@@ -60,12 +73,12 @@ class QuestionStream extends StatelessWidget {
     );
   }
 
-  List<Answer> getAnswers(List<dynamic> data) {
-    print("ANSWERS IS --> " + data.toString());
-    List<Answer> answers = [];
-
-    DatabaseAPI.getAnswers(data).then((value) => {answers = value});
-
-    return answers;
-  }
+  // List<Answer> getAnswers(List<dynamic> data) {
+  //   print("ANSWERS IS --> " + data.toString());
+  //   List<Answer> answers = [];
+  //
+  //   DatabaseAPI.getAnswers(data).then((value) => {answers = value});
+  //
+  //   return answers;
+  // }
 }

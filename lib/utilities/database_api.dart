@@ -394,7 +394,11 @@ class DatabaseAPI {
                 "description": questionDesc,
                 "dateOfSubmission": formatted,
                 "answers": []
-              }).then((value) => {
+              }).then((value) async => {
+                    await _firestore
+                        .collection("Question")
+                        .doc(value.id)
+                        .update({"doc_id": value.id}),
                     questionID = value
                         .toString()
                         .substring(27, value.toString().length - 1),
@@ -427,45 +431,64 @@ class DatabaseAPI {
         .snapshots();
   }
 
-  static Future<List<Answer>> getAnswers(List<dynamic> data) async {
-    List<Answer> answers = [];
+  static Future<DocumentSnapshot> getQuestion(Question question) async {
+    List<Answer> answers = [
+      Answer("", Tutor("TEST-BABA", "", "pass", "aboutMe", "userid", []))
+    ];
     String tempAnswer = '';
-    for (int i = 0; i < data.length; i++) {
+
+    return await _firestore.collection("Question").doc(question.id).get();
+
+    // await _firestore.collection("Question").doc(question.id).get().then(
+    //       (value) => {
+    //         print("question value from get answers is --> " +
+    //             value.data()["title"]),
+    //         List.from(value.data()["answers"]).forEach((element) async {
+    //           print("element from answer --> " + element.toString());
+    //
+    //           await _firestore
+    //               .collection("Answer")
+    //               .doc(element.toString())
+    //               .get()
+    //               .then((value) => {
+    //                     tempAnswer = value.data()["Answer"],
+    //                     buildTutor(value.data()["Tutor"]).then((value) => {
+    //                           tempTutor = value,
+    //                           answers.add(Answer(tempAnswer, tempTutor)),
+    //                         }),
+    //                   });
+    //         }),
+    //       },
+    //     );
+
+    print("answers is --> " + answers.toString());
+  }
+
+  static Future<DocumentSnapshot> getAnswer(var data) async {
+    return await _firestore.collection("Answer").doc(data.toString()).get();
+  }
+
+  static Future<List<Answer>> getAnswers(data) {
+    List<Answer> answers = [
+      Answer("", Tutor("TEST-BABA", "", "pass", "aboutMe", "userid", []))
+    ];
+    String tempAnswer = '';
+
+    answers.clear();
+    List.from(data).forEach((element) async {
+      print("element from answer --> " + element.toString());
+
       await _firestore
           .collection("Answer")
-          .doc(data[i].toString())
+          .doc(element.toString())
           .get()
           .then((value) => {
                 tempAnswer = value.data()["Answer"],
-                buildTutor(value.data()["Tutor"]).then((value) => {
-                      tempTutor = value,
-                      answers.add(Answer(tempAnswer, tempTutor)),
-                    }),
+                // buildTutor(value.data()["Tutor"]).then((value) => {
+                //       tempTutor = value,
+                answers.add(Answer(tempAnswer, tempTutor)),
+                //     }),
               });
-    }
-
-    return answers;
-    //
-    //
-  }
-
-  static Future<List<Answer>> getAnswer(var data) async {
-    List<Answer> answers = [];
-    String tempAnswer = '';
-    await _firestore
-        .collection("Answer")
-        .doc(data.toString())
-        .get()
-        .then((value) => {
-              tempAnswer = value.data()["Answer"],
-              buildTutor(value.data()["Tutor"]).then((value) => {
-                    tempTutor = value,
-                    answers.add(Answer(tempAnswer, tempTutor)),
-                  }),
-            });
-
-    return answers;
-    //
-    //
+    });
   }
 }
