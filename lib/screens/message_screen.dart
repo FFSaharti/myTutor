@@ -1,14 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:mytutor/classes/session.dart';
+import 'package:mytutor/classes/tutor.dart';
 import 'package:mytutor/utilities/constants.dart';
 import 'package:mytutor/utilities/database_api.dart';
 import 'package:mytutor/utilities/screen_size.dart';
 import 'package:mytutor/utilities/session_manager.dart';
-import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-
 import 'chat_screen.dart';
+
+//TODO: implement search by (name) , fix last message update problem
 
 class MessageScreen extends StatefulWidget {
   @override
@@ -16,6 +17,32 @@ class MessageScreen extends StatefulWidget {
 }
 
 class _MessageScreenState extends State<MessageScreen> {
+
+  List<MessageListTile> holder = [];
+  bool search = false;
+  List<Session> searchedChat = [];
+
+  List<MessageListTile> Searchtest = [];
+
+  TextEditingController searchController = TextEditingController();
+
+
+
+  void initState() {
+
+    super.initState();
+  }
+
+  _filterSession(String title) {
+    if (this.mounted) {
+      setState(() {
+        Searchtest = holder
+            .where((element) => element.session.title.contains(title))
+            .toList();
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,10 +52,23 @@ class _MessageScreenState extends State<MessageScreen> {
           child: Column(
             children: [
               TextField(
+                controller: searchController,
                 onChanged: (value) {
-                  setState(() {
-                    // getSelectedSubjects(selectedInterests);
-                  });
+                  if (this.mounted) {
+                    setState(() {
+                      if (searchController.text.isEmpty) {
+                        Searchtest = [];
+                        search = false;
+                        //   stream = SessionManager.loggedInTutor.userId == ""
+                        //       ? DatabaseAPI.fetchSessionData(0, false)
+                        //       : DatabaseAPI.fetchSessionData(1, false);
+                      }
+                      search = true;
+                      Searchtest = holder;
+                      //_filterTutors(value);
+                      _filterSession(value);
+                    });
+                  }
                 },
                 style: TextStyle(
                   color: kBlackish,
@@ -52,52 +92,73 @@ class _MessageScreenState extends State<MessageScreen> {
               ),
               Divider(),
               //MessageListTile(),
+              search == false
+                  ? StreamBuilder(
+                      //TODO: need to create signout function and clear the objects in SessionManager class.
+                      stream: SessionManager.loggedInTutor.userId == ""
+                          ? DatabaseAPI.getSessionForMessageScreen(0)
+                          : DatabaseAPI.getSessionForMessageScreen(1),
+                      builder: (context, snapshot) {
+                        // List to fill up with all the session the user has.
+                        List<MessageListTile> userMessages = [];
+                        if (snapshot.hasData) {
+                          List<QueryDocumentSnapshot> Sessions =
+                              snapshot.data.docs;
+                          for (var session in Sessions) {
+                            Session temp;
+                            String SessionStatus = session.data()["status"];
+                            if (SessionStatus.toLowerCase() == "active") {
+                              final Sessiontutor = session.data()["tutor"];
+                              final Sessionstudentid =
+                                  session.data()["student"];
+                              final Sessiontitle = session.data()["title"];
+                              final Sessiontime = session.data()["time"];
+                              final SessionDate = session.data()["date"];
+                              final SessionDesc = session.data()["description"];
 
-              StreamBuilder(
-                //TODO: need to create signout function and clear the objects in SessionManager class.
-                stream: SessionManager.loggedInTutor.userId == "" ? DatabaseAPI.fetchSessionData(0, false) : DatabaseAPI.fetchSessionData(1, false),
-                builder: (context, snapshot) {
-                  // List to fill up with all the session the user has.
-                  List<MessageListTile> userMessages = [];
-                  if (snapshot.hasData) {
-                    List<QueryDocumentSnapshot> Sessions = snapshot.data.docs;
-                    for (var session in Sessions) {
-                      String SessionStatus = session.data()["status"];
-                      if (SessionStatus.toLowerCase() == "active") {
-                        final Sessiontutor = session.data()["tutor"];
-                        final Sessionstudentid = session.data()["student"];
-                        final Sessiontitle = session.data()["title"];
-                        final Sessiontime = session.data()["time"];
-                        final SessionDate = session.data()["date"];
-                        final SessionDesc = session.data()["description"];
-
-                        // convert the date we got from firebase into timestamp. to change it later to datetime.
-                        Timestamp stamp = SessionDate;
-
-                        userMessages.add(MessageListTile(
-                          session: Session(
-                              Sessiontitle,
-                              Sessiontutor,
-                              Sessionstudentid,
-                              session.id,
-                              Sessiontime,
-                              stamp.toDate(),
-                              SessionDesc,
-                              SessionStatus),
-                        ));
-                      }
-                    }
-                  }
-                  return Expanded(
-                    child: ListView(
-                      reverse: false,
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 10.0, vertical: 5),
-                      children: userMessages,
+                              // convert the date we got from firebase into timestamp. to change it later to datetime.
+                              Timestamp stamp = SessionDate;
+                              temp = Session(
+                                  Sessiontitle,
+                                  Sessiontutor,
+                                  Sessionstudentid,
+                                  session.id,
+                                  Sessiontime,
+                                  stamp.toDate(),
+                                  SessionDesc,
+                                  SessionStatus);
+                              userMessages.add(MessageListTile(
+                                session: Session(
+                                    Sessiontitle,
+                                    Sessiontutor,
+                                    Sessionstudentid,
+                                    session.id,
+                                    Sessiontime,
+                                    stamp.toDate(),
+                                    SessionDesc,
+                                    SessionStatus),
+                              ));
+                            }
+                          }
+                          holder = userMessages;
+                        }
+                        return Expanded(
+                          child: ListView(
+                            reverse: false,
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 10.0, vertical: 5),
+                            children: userMessages,
+                          ),
+                        );
+                      },
+                    )
+                  : Expanded(
+                      child: ListView(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 10.0, vertical: 5),
+                        children: Searchtest,
+                      ),
                     ),
-                  );
-                },
-              ),
             ],
           ),
         ),
@@ -123,74 +184,87 @@ class _MessageListTileState extends State<MessageListTile> {
   bool finishedLoadingname = false;
   bool finishedLoadingLastMsg = false;
 
+  void dispose() {
+    super.dispose();
+  }
+
   void initState() {
-    // get the last message
-    getLastMsg();
-    // determine if the user is student or tutor
-    if (SessionManager.loggedInTutor.userId == "") {
-      // the user is Student , we need to get the tutor name.
-      DatabaseAPI.getUserbyid(widget.session.tutor, 0).then(
-        (value) => setState(() {
-          nameHelper = value.data()["name"];
-          finishedLoadingname = true;
-          createAvtar();
-        }),
-      );
-    } else {
-      // get the tutor name
-      DatabaseAPI.getUserbyid(widget.session.student, 1).then(
-        (value) => setState(() {
-          nameHelper = value.data()["name"];
-          finishedLoadingname = true;
-          createAvtar();
-        }),
-      );
+    //determine if the user is student or tutor
+    if (this.mounted) {
+      getLastMsg();
+      if (SessionManager.loggedInTutor.userId == "") {
+        // the user is Student , we need to get the tutor name.
+        DatabaseAPI.getUserbyid(widget.session.tutor, 0).then((value) => {
+              if (this.mounted)
+                {
+                  setState(() {
+                    nameHelper = value.data()["name"];
+                    finishedLoadingname = true;
+                    createAvtar();
+                  }),
+                }
+            });
+      } else {
+        // get the tutor name
+        if (this.mounted) {
+          DatabaseAPI.getUserbyid(widget.session.student, 1).then((value) => {
+                if (this.mounted)
+                  {
+                    setState(() {
+                      nameHelper = value.data()["name"];
+                      finishedLoadingname = true;
+                      createAvtar();
+                    }),
+                  }
+              });
+        }
+      }
     }
 
     super.initState();
   }
 
   void getLastMsg() {
-
-    DatabaseAPI.getLastMessage(widget.session.session_id).then(
-      (value) => setState(() {
-        if (value.docs.isNotEmpty) {
-
-          lastMsg = value.docs.single.data()["text"];
-          time = calTime(value.docs.single.data()["time"]);
-          finishedLoadingLastMsg = true;
-        } else {
-          lastMsg = "the lasg msg will display here";
-          time = "none";
-          finishedLoadingLastMsg = true;
-        }
-      }),
-    );
+    if (this.mounted) {
+      DatabaseAPI.getLastMessage(widget.session.session_id).then((value) => {
+            if (this.mounted)
+              {
+                setState(() {
+                  if (value.docs.isNotEmpty) {
+                    lastMsg = value.docs.single.data()["text"];
+                    time = calTime(value.docs.single.data()["time"]);
+                    finishedLoadingLastMsg = true;
+                  } else {
+                    lastMsg = "the lasg msg will display here";
+                    time = "none";
+                    finishedLoadingLastMsg = true;
+                  }
+                }),
+              }
+          });
+    }
   }
 
-  void createAvtar(){
-
+  void createAvtar() {
     List<String> nameSplit = nameHelper.split(" ");
-
-    if( nameSplit.isNotEmpty){
-      if(nameSplit.length > 1){
-
+    if (nameSplit.isNotEmpty) {
+      if (nameSplit.length > 1) {
         // two case name
-        setState(() {
-          avtar = nameSplit.elementAt(0)[0]+nameSplit.elementAt(1)[0];
-
-        });
-
-    }
-      else{
-        setState(() {
-          avtar = nameSplit.elementAt(0)[0];
-
-        });
+        if (this.mounted) {
+          setState(() {
+            avtar = nameSplit.elementAt(0)[0] + nameSplit.elementAt(1)[0];
+          });
+        }
+      } else {
+        if (this.mounted) {
+          setState(() {
+            avtar = nameSplit.elementAt(0)[0];
+          });
+        }
       }
     }
-
   }
+
   //TODO: redundant code can be improve
   String calTime(Timestamp timestamp) {
     final DateTime dateTime = timestamp.toDate();
@@ -221,7 +295,7 @@ class _MessageListTileState extends State<MessageListTile> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: (){
+      onTap: () {
         Navigator.push(
             context,
             MaterialPageRoute(

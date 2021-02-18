@@ -1,3 +1,5 @@
+import 'package:mytutor/classes/tutor.dart';
+
 class Session {
   String _title;
   String _tutor;
@@ -7,7 +9,14 @@ class Session {
   DateTime _date;
   String _desc;
   String _status;
+  Tutor _tutorobj;
 
+
+  Tutor get tutorobj => _tutorobj;
+
+  set tutorobj(Tutor value) {
+    _tutorobj = value;
+  }
 
   String get status => _status;
 

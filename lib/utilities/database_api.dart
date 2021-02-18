@@ -284,6 +284,15 @@ class DatabaseAPI {
     });
   }
 
+  static Stream<QuerySnapshot> getSessionForMessageScreen(int type) {
+    // type 1 current user that login in is tutor , type 0 current user that login in is student
+
+    if(type == 1)
+      return  _firestore.collection("session").where("tutor", isEqualTo: SessionManager.loggedInTutor.userId).where("status", isEqualTo: "active").snapshots();
+    else
+      return _firestore.collection("session").where("student", isEqualTo: SessionManager.loggedInStudent.userId).where("status", isEqualTo: "active").snapshots();
+
+  }
   static Stream<QuerySnapshot> fetchSessionData(int type, bool checkexpire) {
     // check the session that expired.
 
