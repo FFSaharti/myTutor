@@ -197,9 +197,10 @@ class DatabaseAPI {
 
   static void buildAnswers(String answerID, Question tempQuestion) async {
     Answer tempAnswer =
-        Answer("", Tutor("TEST-BABA", "", "pass", "aboutMe", "userid", []));
+        Answer("", Tutor("TEST-BABA", "", "pass", "aboutMe", "userid", []), "");
     String answer = '';
     String tutorID = '';
+    String date = '';
     await _firestore.collection("Answer").doc(answerID).get().then((value) => {
           print("ANSWER PRINTING..." + value.data()['answer']),
           print("TUTOR ID is  --> " +
@@ -208,13 +209,14 @@ class DatabaseAPI {
                   .toString()
                   .substring(24, value.data()['Tutor'].toString().length - 1)),
           answer = value.data()['answer'],
+          date = value.data()['date'],
           tutorID = value
               .data()['Tutor']
               .toString()
               .substring(24, value.data()['Tutor'].toString().length - 1),
           buildTutor(tutorID).then((value) => {
                 tempTutor = value,
-                tempAnswer = Answer(answer, tempTutor),
+                tempAnswer = Answer(answer, tempTutor, date),
                 tempQuestion.addAnswer(tempAnswer),
               }),
         });
@@ -287,12 +289,20 @@ class DatabaseAPI {
   static Stream<QuerySnapshot> getSessionForMessageScreen(int type) {
     // type 1 current user that login in is tutor , type 0 current user that login in is student
 
-    if(type == 1)
-      return  _firestore.collection("session").where("tutor", isEqualTo: SessionManager.loggedInTutor.userId).where("status", isEqualTo: "active").snapshots();
+    if (type == 1)
+      return _firestore
+          .collection("session")
+          .where("tutor", isEqualTo: SessionManager.loggedInTutor.userId)
+          .where("status", isEqualTo: "active")
+          .snapshots();
     else
-      return _firestore.collection("session").where("student", isEqualTo: SessionManager.loggedInStudent.userId).where("status", isEqualTo: "active").snapshots();
-
+      return _firestore
+          .collection("session")
+          .where("student", isEqualTo: SessionManager.loggedInStudent.userId)
+          .where("status", isEqualTo: "active")
+          .snapshots();
   }
+
   static Stream<QuerySnapshot> fetchSessionData(int type, bool checkexpire) {
     // check the session that expired.
 
@@ -346,12 +356,11 @@ class DatabaseAPI {
   }
 
   static Future<DocumentSnapshot> getUserbyid(String userID, int type) async {
-
     // type 1 = student , type 0 = tutor
     if (type == 1) {
       // student
       return await _firestore.collection('Student').doc(userID).get();
-    } else if (type == 0){
+    } else if (type == 0) {
       // tutor
       return await _firestore.collection('Tutor').doc(userID).get();
     }
@@ -382,14 +391,17 @@ class DatabaseAPI {
       return "expired";
     }
   }
-  
-  // chat screen related.
-  
-  static Future<QuerySnapshot> getLastMessage(String sessionId) async{
 
-   return _firestore.collection("session").doc(sessionId).collection("messages").orderBy("time", descending:  true).limit(1).get();
-    
-    
+  // chat screen related.
+
+  static Future<QuerySnapshot> getLastMessage(String sessionId) async {
+    return _firestore
+        .collection("session")
+        .doc(sessionId)
+        .collection("messages")
+        .orderBy("time", descending: true)
+        .limit(1)
+        .get();
   }
 
   static Future<String> addQuestionToStudent(String questionTitle,
@@ -461,12 +473,19 @@ class DatabaseAPI {
 
   static Stream<DocumentSnapshot> getAnswers(var data) {
     List<Answer> answers = [
-      Answer("", Tutor("TEST-BABA", "", "pass", "aboutMe", "userid", []))
+      Answer("", Tutor("TEST-BABA", "", "pass", "aboutMe", "userid", []), "")
     ];
     String tempAnswer = '';
   }
 
   static Future<DocumentSnapshot> getTutor(String tutorID) {
     return _firestore.collection("Tutor").doc(tutorID).get();
+  }
+
+  static void closeQuestion(Question question) async {
+    await _firestore
+        .collection("Question")
+        .doc(question.id)
+        .update({"state": "Closed"});
   }
 }

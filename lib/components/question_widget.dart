@@ -24,6 +24,9 @@ class _QuestionWidgetState extends State<QuestionWidget> {
   void initState() {
     // get the tutor name.
     // means that the current user is not student, so get the student name
+    String tempAnswer;
+    Tutor tempTutor = Tutor("TEST-BABA", "", "pass", "aboutMe", "id", []);
+    String tempDate;
     widget.question.answers.clear();
     DatabaseAPI.getQuestion(widget.question).then((data) {
       print("question inside question widget --> " + data.data()["title"]);
@@ -39,14 +42,27 @@ class _QuestionWidgetState extends State<QuestionWidget> {
           print("element inside list is --> " + element.toString());
           DatabaseAPI.getAnswer(element).then((value) => {
                 //TODO: Fetch tutor to add to answer instead of tempTutor
-                widget.question.addAnswer(Answer(
-                    value.data()["answer"],
-                    //TODO: Build Tutor from answer query.
-                    Tutor("TEST-BABA", "", "pass", "aboutMe",
-                        value.data()["Tutor"].toString(), []))),
-                setState(() {
-                  finish = true;
-                })
+
+                // print("before building tutor answer is --> " + tempAnswer),
+                DatabaseAPI.getTutor(value.data()["Tutor"]).then((tutor) => {
+                      tempTutor = Tutor(
+                          tutor.data()["name"],
+                          tutor.data()["email"],
+                          "encrypted password",
+                          "aboutMe",
+                          tutor.id, []),
+                      List.from(tutor.data()["experiences"]).forEach((element) {
+                        tempTutor.addExperience(element);
+                      }),
+                      tempAnswer = value.data()["answer"],
+                      tempDate = value.data()["date"],
+                      print("After building tutor answer is --> " + tempAnswer),
+                      widget.question
+                          .addAnswer(Answer(tempAnswer, tempTutor, tempDate)),
+                      setState(() {
+                        finish = true;
+                      }),
+                    }),
               });
         });
       }

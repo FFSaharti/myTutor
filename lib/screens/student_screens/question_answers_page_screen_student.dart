@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:mytutor/classes/answer.dart';
 import 'package:mytutor/classes/question.dart';
 import 'package:mytutor/classes/tutor.dart';
+import 'package:mytutor/screens/student_screens/view_answer_screen.dart';
 import 'package:mytutor/utilities/constants.dart';
 import 'package:mytutor/utilities/screen_size.dart';
 
@@ -49,22 +51,11 @@ class _QuestionAnswersScreenStudentState
                 SizedBox(
                   height: 30,
                 ),
-                Text("Answers --> "),
-                SizedBox(
-                  height: 30,
-                ),
                 Container(
                   child: Column(
                     children: getAnswers(question.answers),
                   ),
                 ),
-                // Column(
-                //   children: [
-                //     SizedBox(
-                //       height: 15,
-                //     ),
-                //   ],
-                // )
               ],
             ),
           ),
@@ -77,12 +68,17 @@ class _QuestionAnswersScreenStudentState
     List<Widget> widgets = [];
 
     for (int i = 0; i < answers.length; i++) {
-      widgets.add(AnswerWidget(widget: widget, answer: answers[i]));
-      widgets.add(
-        SizedBox(
-          height: 15,
-        ),
-      );
+      widgets.add(GestureDetector(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    ViewAnswerScreen(answers[i], this.widget)),
+          );
+        },
+        child: AnswerWidget(widget: widget, answer: answers[i]),
+      ));
     }
 
     return widgets;
@@ -104,32 +100,77 @@ class AnswerWidget extends StatefulWidget {
 }
 
 class _AnswerWidgetState extends State<AnswerWidget> {
-  bool finish = false;
-
-  void initState() {
-    setState(() {
-      finish = true;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: ScreenSize.width * 0.7,
-      height: ScreenSize.width * 0.2,
-      decoration: BoxDecoration(
-          color: kWhiteish, borderRadius: BorderRadius.circular(15)),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          !finish
-              ? Text("Loading Tutor...")
-              : Text("Answered By : " + widget.answer.tutor.name),
-          SizedBox(
-            height: 30,
+    return Padding(
+      padding: const EdgeInsets.all(15.0),
+      child: Container(
+        height: ScreenSize.height * 0.15,
+        width: ScreenSize.width * 0.9,
+        decoration: BoxDecoration(
+          color: kWhiteish,
+          borderRadius: BorderRadius.circular(10),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.3),
+              spreadRadius: 1,
+              blurRadius: 15,
+              offset: Offset(0, 6), // changes position of shadow
+            ),
+          ],
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(15.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Icon(
+                Icons.person,
+                size: 80,
+              ),
+              SizedBox(
+                width: 10,
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    height: ScreenSize.height * 0.05,
+                    child: Text(
+                      widget.answer.tutor.name,
+                      style: GoogleFonts.sarala(fontSize: 25, color: kBlackish),
+                    ),
+                  ),
+                  Container(
+                    height: ScreenSize.height * 0.027,
+                    child: Text(
+                      widget.answer.answer,
+                      overflow: TextOverflow.ellipsis,
+                      softWrap: false,
+                      style:
+                          GoogleFonts.sarala(fontSize: 14, color: kGreyerish),
+                    ),
+                  ),
+                  Container(
+                    height: ScreenSize.height * 0.024,
+                    child: Row(
+                      children: [
+                        SizedBox(
+                          width: ScreenSize.width * 0.42,
+                        ),
+                        Text(
+                          widget.answer.date,
+                          style: GoogleFonts.sarala(
+                              fontSize: 13, color: kColorScheme[4]),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ],
           ),
-          Text("Answer : " + widget.answer.answer),
-        ],
+        ),
       ),
     );
   }
