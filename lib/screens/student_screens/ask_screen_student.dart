@@ -55,7 +55,7 @@ class _AskScreenStudentState extends State<AskScreenStudent> {
                     height: 30,
                   ),
                   Container(
-                    height: ScreenSize.height * 0.68,
+                    height: ScreenSize.height * 0.69,
                     child:
                         NotificationListener<OverscrollIndicatorNotification>(
                       // ignore: missing_return
@@ -252,6 +252,8 @@ void showAddQuestion() {
                               ),
                               TextField(
                                 controller: problemController,
+                                keyboardType: TextInputType.multiline,
+                                maxLines: null,
                                 decoration: InputDecoration(
                                   hintText: 'Type something...',
                                   hintStyle: TextStyle(
@@ -390,7 +392,7 @@ class _InterestWidgetState extends State<InterestWidget> {
             : Colors.white,
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
+            color: Colors.grey.withOpacity(0.5),
             spreadRadius: 1,
             blurRadius: 15,
             offset: Offset(0, 6), // changes position of shadow

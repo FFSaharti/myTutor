@@ -3,7 +3,6 @@ import 'package:mytutor/classes/tutor.dart';
 class Answer {
   String _answer;
   Tutor _tutor;
-
   Answer(this._answer, this._tutor);
 
   String get answer => _answer;

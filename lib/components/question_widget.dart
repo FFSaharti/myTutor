@@ -24,6 +24,7 @@ class _QuestionWidgetState extends State<QuestionWidget> {
   void initState() {
     // get the tutor name.
     // means that the current user is not student, so get the student name
+    widget.question.answers.clear();
     DatabaseAPI.getQuestion(widget.question).then((data) {
       print("question inside question widget --> " + data.data()["title"]);
       print("answers inside question widget --> " +
@@ -38,8 +39,11 @@ class _QuestionWidgetState extends State<QuestionWidget> {
           print("element inside list is --> " + element.toString());
           DatabaseAPI.getAnswer(element).then((value) => {
                 //TODO: Fetch tutor to add to answer instead of tempTutor
-                widget.question.addAnswer(Answer(value.data()["answer"],
-                    Tutor("TEST-BABA", "", "pass", "aboutMe", "userid", []))),
+                widget.question.addAnswer(Answer(
+                    value.data()["answer"],
+                    //TODO: Build Tutor from answer query.
+                    Tutor("TEST-BABA", "", "pass", "aboutMe",
+                        value.data()["Tutor"].toString(), []))),
                 setState(() {
                   finish = true;
                 })
@@ -66,7 +70,7 @@ class _QuestionWidgetState extends State<QuestionWidget> {
           borderRadius: BorderRadius.circular(10),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05),
+              color: Colors.grey.withOpacity(0.4),
               spreadRadius: 1,
               blurRadius: 15,
               offset: Offset(0, 6), // changes position of shadow

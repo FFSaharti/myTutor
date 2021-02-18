@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:mytutor/classes/answer.dart';
 import 'package:mytutor/classes/question.dart';
+import 'package:mytutor/classes/tutor.dart';
 import 'package:mytutor/utilities/constants.dart';
 import 'package:mytutor/utilities/screen_size.dart';
 
 class QuestionAnswersScreenStudent extends StatefulWidget {
   static String id = 'question_answers_page_screen_student';
   final Question question;
+  String tutorID = '';
 
   QuestionAnswersScreenStudent(this.question);
 
@@ -17,8 +19,12 @@ class QuestionAnswersScreenStudent extends StatefulWidget {
 
 class _QuestionAnswersScreenStudentState
     extends State<QuestionAnswersScreenStudent> {
+  List<Tutor> tutorsAnswers = [];
+  bool finish = false;
+
   _QuestionAnswersScreenStudentState(this.question);
 
+  @override
   final Question question;
 
   @override
@@ -83,7 +89,7 @@ class _QuestionAnswersScreenStudentState
   }
 }
 
-class AnswerWidget extends StatelessWidget {
+class AnswerWidget extends StatefulWidget {
   const AnswerWidget({
     Key key,
     @required this.widget,
@@ -92,6 +98,19 @@ class AnswerWidget extends StatelessWidget {
 
   final QuestionAnswersScreenStudent widget;
   final Answer answer;
+
+  @override
+  _AnswerWidgetState createState() => _AnswerWidgetState();
+}
+
+class _AnswerWidgetState extends State<AnswerWidget> {
+  bool finish = false;
+
+  void initState() {
+    setState(() {
+      finish = true;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -103,11 +122,13 @@ class AnswerWidget extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text("Answered By : " + answer.tutor.name),
+          !finish
+              ? Text("Loading Tutor...")
+              : Text("Answered By : " + widget.answer.tutor.name),
           SizedBox(
             height: 30,
           ),
-          Text("Answer : " + answer.answer),
+          Text("Answer : " + widget.answer.answer),
         ],
       ),
     );

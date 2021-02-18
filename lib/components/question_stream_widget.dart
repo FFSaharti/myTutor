@@ -50,8 +50,9 @@ class QuestionStream extends StatelessWidget {
                       context,
                       MaterialPageRoute(
                           builder: (context) => QuestionAnswersScreenStudent(
-                              Question(qTitle, question.id, qDesc, qDOS,
-                                  qIssuer, qAnswers, qSubject, qState))),
+                                Question(qTitle, question.id, qDesc, qDOS,
+                                    qIssuer, qAnswers, qSubject, qState),
+                              )),
                     );
                   },
                   child: QuestionWidget(
