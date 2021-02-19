@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl/intl.dart';
 import 'package:mytutor/classes/answer.dart';
 import 'package:mytutor/classes/question.dart';
+import 'package:mytutor/classes/rate.dart';
 import 'package:mytutor/classes/student.dart';
 import 'package:mytutor/classes/tutor.dart';
 import 'package:mytutor/classes/user.dart';
@@ -381,28 +382,13 @@ class DatabaseAPI {
 
   static Future<String> changeSessionsStatus(
       String status, String sessionid) async {
-    // code can be improved and remove all the queries into one and send the 'status' string.
-    if (status.toLowerCase() == "accept") {
-      // accpet the session change status to active.
-      await _firestore
-          .collection("session")
-          .doc(sessionid)
-          .update({'status': 'active'});
-      return "active";
-    } else if (status.toLowerCase() == "rejected") {
-      // Decline the session.
-      await _firestore
-          .collection("session")
-          .doc(sessionid)
-          .update({'status': 'decline'});
-      return "decline";
-    } else if (status.toLowerCase() == "expired") {
-      await _firestore
-          .collection("session")
-          .doc(sessionid)
-          .update({'status': 'expired'});
-      return "expired";
-    }
+    // main status (pending-expired-active-closed-decline)
+    await _firestore
+        .collection("session")
+        .doc(sessionid)
+        .update({'status': status});
+
+
   }
 
   // chat screen related.
@@ -416,6 +402,18 @@ class DatabaseAPI {
         .limit(1)
         .get();
   }
+
+  static void rateTutor (Rate rate, String tutorId){
+
+    _firestore.collection("Tutor").doc(tutorId).collection("rate").add({
+      'teachingSkills': rate.teachingSkills,
+      'Communication': rate.communicationSkills,
+      'friendliness': rate.friendliness,
+      'creativity': rate.creativity,
+      'review': rate.review,
+    });
+  }
+
 
   static Future<String> addQuestionToStudent(String questionTitle,
       String questionDesc, Student loggedInStudent, int chosenSubject) async {

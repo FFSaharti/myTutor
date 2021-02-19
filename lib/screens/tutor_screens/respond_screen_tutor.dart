@@ -217,7 +217,7 @@ class _RespondSessionWidgetState extends State<RespondSessionWidget> {
                                   height: widget.height * 0.04,
                                   child: RaisedButton(
                                     onPressed: () {
-                                      DatabaseAPI.changeSessionsStatus("accept",
+                                      DatabaseAPI.changeSessionsStatus("active",
                                           widget.session.session_id)
                                           .then((value) => print(value));
                                     },
@@ -303,7 +303,7 @@ class _RespondSessionWidgetState extends State<RespondSessionWidget> {
                     style: TextStyle(fontSize: 20),
                   ),
                   IconButton(icon: Icon(Icons.check), onPressed: () {
-                  DatabaseAPI.changeSessionsStatus("accept", session.session_id).then((value) => AwesomeDialog(
+                  DatabaseAPI.changeSessionsStatus("active", session.session_id).then((value) => AwesomeDialog(
                     context: context,
                     animType: AnimType.SCALE,
                     dialogType: DialogType.SUCCES,

@@ -147,7 +147,7 @@ class _HomePageStudentState extends State<HomePageStudent> {
                         "Pending Sessions"),
                     mainScreenPage(
                         SessionStream(
-                          status: "expired",
+                          status: "closed",
                           type: 0,
                           checkexpire: false,
                           isStudent: true,
