@@ -9,14 +9,15 @@ class Session {
   DateTime _date;
   String _desc;
   String _status;
-  Tutor _tutorobj;
+  String _lastMessage;
 
+  String get lastMessage => _lastMessage;
 
-  Tutor get tutorobj => _tutorobj;
-
-  set tutorobj(Tutor value) {
-    _tutorobj = value;
+  set lastMessage(String value) {
+    _lastMessage = value;
   }
+
+  String _timeOfLastMessage;
 
   String get status => _status;
 
@@ -37,7 +38,8 @@ class Session {
   }
 
   Session(this._title, this._tutor, this._student, this._session_id, this._time,
-      this._date , this._desc, this._status);
+      this._date, this._desc, this._status);
+
   String get title => _title;
 
   set title(String value) {
@@ -66,5 +68,11 @@ class Session {
 
   set date(DateTime value) {
     _date = value;
+  }
+
+  String get timeOfLastMessage => _timeOfLastMessage;
+
+  set timeOfLastMessage(String value) {
+    _timeOfLastMessage = value;
   }
 }

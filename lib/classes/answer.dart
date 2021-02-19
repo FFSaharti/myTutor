@@ -3,8 +3,9 @@ import 'package:mytutor/classes/tutor.dart';
 class Answer {
   String _answer;
   Tutor _tutor;
-  Answer(this._answer, this._tutor, this._date);
   String _date;
+  Answer(this._answer, this._tutor, this._date);
+
 
   String get answer => _answer;
 

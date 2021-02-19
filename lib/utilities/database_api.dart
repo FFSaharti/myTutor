@@ -287,6 +287,9 @@ class DatabaseAPI {
       'date': tempDate,
       'time': time,
       'status': "pending",
+      'lastMessage': "Start texting here...",
+      'timeOfLastMessage': DateTime.now(),
+
     });
   }
 
@@ -297,13 +300,13 @@ class DatabaseAPI {
       return _firestore
           .collection("session")
           .where("tutor", isEqualTo: SessionManager.loggedInTutor.userId)
-          .where("status", isEqualTo: "active")
+          .where("status", isEqualTo: "active").orderBy("timeOfLastMessage",descending: true)
           .snapshots();
     else
       return _firestore
           .collection("session")
           .where("student", isEqualTo: SessionManager.loggedInStudent.userId)
-          .where("status", isEqualTo: "active")
+          .where("status", isEqualTo: "active").orderBy("timeOfLastMessage",descending: true)
           .snapshots();
   }
 
@@ -352,11 +355,17 @@ class DatabaseAPI {
   }
 
   static void saveNewMessage(String sessionid, String msg, String sender) {
+
     _firestore.collection("session").doc(sessionid).collection("messages").add({
       'text': msg,
       'sender': sender,
       'time': DateTime.now(),
     });
+    _firestore.collection("session").doc(sessionid).update({
+      'lastMessage': msg,
+      'timeOfLastMessage': DateTime.now(),
+    });
+
   }
 
   static Future<DocumentSnapshot> getUserbyid(String userID, int type) async {
