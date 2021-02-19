@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:mytutor/components/ez_button.dart';
 import 'package:mytutor/components/session_stream_widget.dart';
 import 'package:mytutor/screens/student_screens/request_tutor_screen.dart';
 import 'package:mytutor/utilities/constants.dart';
 import 'package:mytutor/utilities/database_api.dart';
 import 'package:mytutor/utilities/screen_size.dart';
+import 'package:mytutor/utilities/session_manager.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../message_screen.dart';
@@ -23,6 +25,7 @@ class _HomepageScreenStudentState extends State<HomepageScreenStudent> {
     HomePageStudent(),
     StudentSection(),
     MessageScreen(),
+    ProfileStudent()
   ];
   double width;
   double height;
@@ -340,5 +343,278 @@ class StudentSectionWidget extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class ProfileStudent extends StatefulWidget {
+  @override
+  _ProfileStudentState createState() => _ProfileStudentState();
+}
+
+class _ProfileStudentState extends State<ProfileStudent> {
+  Function setParentState(String aboutMe) {
+    setState(() {
+      SessionManager.loggedInStudent.aboutMe = aboutMe;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        backgroundColor: Colors.white70,
+        title: Center(
+          child: Text(
+            "Profile",
+            style: TextStyle(color: Colors.black),
+          ),
+        ),
+      ),
+      body: SafeArea(
+        child: Center(
+          child: Container(
+            width: ScreenSize.width * 0.91,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                SizedBox(
+                  height: 20,
+                ),
+                Center(
+                  child: Container(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(100),
+                        color: Colors.white70),
+                    child: Icon(
+                      Icons.person,
+                      size: 130,
+                    ),
+                  ),
+                ),
+                Text(
+                  SessionManager.loggedInStudent.name,
+                  style: kTitleStyle.copyWith(color: kBlackish, fontSize: 30),
+                ),
+                Center(
+                  child: Container(
+                    width: 90,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(50),
+                      color: kColorScheme[3],
+                    ),
+                    child: Text(
+                      "Student",
+                      textAlign: TextAlign.center,
+                      style: kTitleStyle.copyWith(
+                          fontSize: 20, fontWeight: FontWeight.normal),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 9,
+                ),
+                Divider(
+                  color: kGreyish,
+                ),
+                SizedBox(
+                  height: 5,
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.info_outline_rounded,
+                          size: 18,
+                        ),
+                        SizedBox(
+                          width: 5,
+                        ),
+                        Text(
+                          "About Me",
+                          style: TextStyle(fontSize: 18),
+                        )
+                      ],
+                    ),
+                    !(SessionManager.loggedInStudent.aboutMe == '')
+                        ? Padding(
+                            padding: const EdgeInsets.all(3.0),
+                            child: Text(
+                              //TODO: Create & Fetch About me from a student.
+                              SessionManager.loggedInStudent.aboutMe,
+                              style:
+                                  TextStyle(fontSize: 16.5, color: kGreyerish),
+                            ),
+                          )
+                        : Container(
+                            height: ScreenSize.height * 0.17,
+                            child: Column(
+                              children: [
+                                SizedBox(
+                                  height: 20,
+                                ),
+                                Center(
+                                  child: Text(
+                                    //TODO: Create & Fetch About me from a student.
+                                    "No \"About me\" :( ",
+                                    style: TextStyle(
+                                        fontSize: 16.5, color: kGreyerish),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 20,
+                                ),
+                                EZButton(
+                                    width: ScreenSize.width * 0.5,
+                                    buttonColor: null,
+                                    textColor: Colors.white,
+                                    isGradient: true,
+                                    colors: [kColorScheme[0], kColorScheme[3]],
+                                    buttonText: "Set An About Me",
+                                    hasBorder: false,
+                                    borderColor: null,
+                                    onPressed: () {
+                                      print("pressed set about me");
+                                      showAddQuestion(setParentState);
+                                      // setState(() {});
+                                    })
+                              ],
+                            ),
+                          ),
+                  ],
+                ),
+                Divider(
+                  color: kGreyish,
+                ),
+                SizedBox(
+                  height: 5,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  void showAddQuestion(Function setParentState) {
+    TextEditingController aboutMeController = TextEditingController();
+    showModalBottomSheet(
+        shape: RoundedRectangleBorder(
+            // borderRadius: BorderRadius.vertical(top: Radius.circular(2.0))
+            ),
+        backgroundColor: Colors.transparent,
+        enableDrag: true,
+        isScrollControlled: true,
+        context: ScreenSize.context,
+        builder: (context) {
+          return StatefulBuilder(
+              builder: (BuildContext context, StateSetter setModalState) {
+            return Container(
+              height: ScreenSize.height * 0.50,
+              child: Scaffold(
+                body: Container(
+                  //     padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                  height: ScreenSize.height * 0.50,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(50)
+                      //   topRight: Radius.circular(100),
+                      //   topLeft: Radius.circular(100),
+                      // )
+                      ,
+                      color: Colors.white),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              IconButton(
+                                  icon: Icon(Icons.cancel),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  }),
+                              Text(
+                                "About Me",
+                                style: TextStyle(fontSize: 20),
+                              ),
+                              // TODO : Add edit button to edit about me anytime...
+                              IconButton(
+                                icon: Icon(Icons.check),
+                                onPressed: () {
+                                  // ADD NEW QUESTION
+                                  if (aboutMeController.text.isNotEmpty) {
+                                    // ADD ABOUT ME TO STUDENT...
+                                    DatabaseAPI.addAboutMeToStudent(
+                                            SessionManager.loggedInStudent,
+                                            aboutMeController.text)
+                                        .then((value) => {
+                                              if (value == "Success")
+                                                {
+                                                  SessionManager.loggedInStudent
+                                                          .aboutMe =
+                                                      aboutMeController.text,
+                                                  setParentState(
+                                                      aboutMeController.text),
+                                                  Navigator.pop(context),
+                                                },
+                                              print(value.toString()),
+                                            });
+                                    print("POP...");
+                                  } else {
+                                    print("empty parameters");
+                                    //TODO: Show error message cannot leave empty...
+                                  }
+                                },
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 15,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              children: [
+                                Align(
+                                  alignment: Alignment.topLeft,
+                                  child: Text(
+                                    "About Me",
+                                    style: GoogleFonts.secularOne(
+                                        textStyle: TextStyle(
+                                            fontSize: 17,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.black)),
+                                  ),
+                                ),
+                                TextField(
+                                  controller: aboutMeController,
+                                  keyboardType: TextInputType.multiline,
+                                  maxLines: null,
+                                  decoration: InputDecoration(
+                                    hintText: 'Describe yourself briefly...',
+                                    hintStyle: TextStyle(
+                                        fontSize: 17.0, color: Colors.grey),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 20,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            );
+          });
+        });
   }
 }

@@ -82,8 +82,12 @@ class DatabaseAPI {
           .then((value) async => {
                 if (value.docs.isNotEmpty)
                   {
-                    tempStudent = Student(value.docs.single.data()['name'],
-                        email, pass, "", value.docs.single.id, []),
+                    tempStudent = Student(
+                        value.docs.single.data()['name'],
+                        email,
+                        pass,
+                        value.docs.single.data()['aboutMe'],
+                        value.docs.single.id, []),
                     List.from(value.docs.single.data()['questions'])
                         .forEach((element) {
                       print("QUESTION PRINTING ... " + element.toString());
@@ -487,5 +491,16 @@ class DatabaseAPI {
         .collection("Question")
         .doc(question.id)
         .update({"state": "Closed"});
+  }
+
+  static Future<String> addAboutMeToStudent(
+      Student loggedInStudent, String aboutMe) async {
+    String status = 'Fail';
+    await _firestore
+        .collection("Student")
+        .doc(loggedInStudent.userId)
+        .update({"aboutMe": aboutMe}).then((value) => {status = "Success"});
+
+    return status;
   }
 }
