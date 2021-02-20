@@ -1,12 +1,10 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:mytutor/classes/session.dart';
 import 'package:mytutor/classes/subject.dart';
-import 'package:mytutor/components/session_card_widget.dart';
 import 'package:mytutor/components/session_stream_widget.dart';
+import 'package:mytutor/screens/tutor_screens/answer_screen_tutor.dart';
 import 'package:mytutor/screens/tutor_screens/respond_screen_tutor.dart';
 import 'package:mytutor/utilities/constants.dart';
 import 'package:mytutor/utilities/database_api.dart';
@@ -122,7 +120,13 @@ class _HomePageTutorState extends State<HomePageTutor> {
             ),
           ),
 
-          SessionStream(status: "active",isStudent: false,type: 1,checkexpire: false,expiredSessionView: false,),
+          SessionStream(
+            status: "active",
+            isStudent: false,
+            type: 1,
+            checkexpire: false,
+            expiredSessionView: false,
+          ),
           SizedBox(
             height: ScreenSize.height * 0.05,
           ),
@@ -132,8 +136,6 @@ class _HomePageTutorState extends State<HomePageTutor> {
     );
   }
 }
-
-
 
 class ProfileTutor extends StatefulWidget {
   @override
@@ -427,7 +429,7 @@ class _TutorSectionState extends State<TutorSection> {
                   widget: widget,
                   onClick: () {
                     print("clicked answer");
-                    // Navigator.pushNamed(context, AskScreenStudent.id);
+                    Navigator.pushNamed(context, AnswerScreenTutor.id);
                   },
                   imgPath: "images/Tutor_Section/Answer_Logo.png",
                   title: "Answer",

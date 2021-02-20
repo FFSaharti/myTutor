@@ -290,7 +290,6 @@ class DatabaseAPI {
       'status': "pending",
       'lastMessage': "Start texting here...",
       'timeOfLastMessage': DateTime.now(),
-
     });
   }
 
@@ -301,13 +300,15 @@ class DatabaseAPI {
       return _firestore
           .collection("session")
           .where("tutor", isEqualTo: SessionManager.loggedInTutor.userId)
-          .where("status", isEqualTo: "active").orderBy("timeOfLastMessage",descending: true)
+          .where("status", isEqualTo: "active")
+          .orderBy("timeOfLastMessage", descending: true)
           .snapshots();
     else
       return _firestore
           .collection("session")
           .where("student", isEqualTo: SessionManager.loggedInStudent.userId)
-          .where("status", isEqualTo: "active").orderBy("timeOfLastMessage",descending: true)
+          .where("status", isEqualTo: "active")
+          .orderBy("timeOfLastMessage", descending: true)
           .snapshots();
   }
 
@@ -356,7 +357,6 @@ class DatabaseAPI {
   }
 
   static void saveNewMessage(String sessionid, String msg, String sender) {
-
     _firestore.collection("session").doc(sessionid).collection("messages").add({
       'text': msg,
       'sender': sender,
@@ -366,7 +366,6 @@ class DatabaseAPI {
       'lastMessage': msg,
       'timeOfLastMessage': DateTime.now(),
     });
-
   }
 
   static Future<DocumentSnapshot> getUserbyid(String userID, int type) async {
@@ -387,8 +386,6 @@ class DatabaseAPI {
         .collection("session")
         .doc(sessionid)
         .update({'status': status});
-
-
   }
 
   // chat screen related.
@@ -403,8 +400,7 @@ class DatabaseAPI {
         .get();
   }
 
-  static void rateTutor (Rate rate, String tutorId){
-
+  static void rateTutor(Rate rate, String tutorId) {
     _firestore.collection("Tutor").doc(tutorId).collection("rate").add({
       'teachingSkills': rate.teachingSkills,
       'Communication': rate.communicationSkills,
@@ -413,7 +409,6 @@ class DatabaseAPI {
       'review': rate.review,
     });
   }
-
 
   static Future<String> addQuestionToStudent(String questionTitle,
       String questionDesc, Student loggedInStudent, int chosenSubject) async {
@@ -509,5 +504,32 @@ class DatabaseAPI {
         .update({"aboutMe": aboutMe}).then((value) => {status = "Success"});
 
     return status;
+  }
+
+  static Stream<QuerySnapshot> fetchQuestionsForTutor() {
+    return _firestore.collection("Question").snapshots();
+  }
+
+  static Future<void> answerQuestion(Question question, String text) async {
+    DateTime now = DateTime.now();
+    DateFormat formatter = DateFormat('yyyy-MM-dd');
+    String formatted = formatter.format(now);
+    String answerID;
+
+    await _firestore.collection("Answer").add({
+      "Tutor": SessionManager.loggedInTutor.userId,
+      "answer": text,
+      "date": formatted,
+    }).then((value) => {
+          answerID = value.id,
+          _firestore
+              .collection("Answer")
+              .doc(value.id.toString())
+              .update({"doc_id": value.id.toString()}).then((value) => {
+                    _firestore.collection("Question").doc(question.id).update({
+                      'answers': FieldValue.arrayUnion([answerID.toString()])
+                    }),
+                  })
+        });
   }
 }
