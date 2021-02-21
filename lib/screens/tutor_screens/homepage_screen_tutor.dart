@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:mytutor/classes/subject.dart';
 import 'package:mytutor/components/session_stream_widget.dart';
 import 'package:mytutor/screens/tutor_screens/answer_screen_tutor.dart';
+import 'package:mytutor/screens/tutor_screens/create_materials_screen.dart';
 import 'package:mytutor/screens/tutor_screens/respond_screen_tutor.dart';
 import 'package:mytutor/utilities/constants.dart';
 import 'package:mytutor/utilities/database_api.dart';
@@ -39,6 +40,7 @@ class _HomepageScreenTutorState extends State<HomepageScreenTutor> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         showSelectedLabels: false,
@@ -456,7 +458,7 @@ class _TutorSectionState extends State<TutorSection> {
                 TutorSectionWidget(
                   widget: widget,
                   onClick: () {
-                    print("clicked MATERIALS");
+                    Navigator.pushNamed(context, CreateMaterialsScreen.id);
                   },
                   imgPath: "images/Tutor_Section/Subject_Logo.png",
                   title: "Create Materials",

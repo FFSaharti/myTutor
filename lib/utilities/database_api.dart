@@ -1,14 +1,17 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl/intl.dart';
 import 'package:mytutor/classes/answer.dart';
+import 'package:mytutor/classes/document.dart';
 import 'package:mytutor/classes/question.dart';
 import 'package:mytutor/classes/rate.dart';
 import 'package:mytutor/classes/student.dart';
 import 'package:mytutor/classes/tutor.dart';
 import 'package:mytutor/classes/user.dart';
 import 'package:mytutor/utilities/session_manager.dart';
-
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'constants.dart';
 
 // Creating the DB Instance...
@@ -408,6 +411,41 @@ class DatabaseAPI {
       'creativity': rate.creativity,
       'review': rate.review,
     });
+  }
+
+  // document related
+
+  static void uplodeDocumentToTutorCollection(Document document) async {
+    await _firestore
+        .collection("Tutor")
+        .doc(SessionManager.loggedInTutor.userId)
+        .collection("Materials")
+        .add({
+      "title": document.title,
+      "description": document.description,
+      "type": document.type,
+      "subjcetid": document.subject.id,
+      "url": document.url,
+    });
+  }
+
+  static Future<String> uplodeFileToStorage(Document document) async {
+
+    try{
+      firebase_storage.UploadTask uploadTask;
+      firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance
+          .ref().child(document.title);
+      uploadTask = ref.putData(document.file.readAsBytesSync());
+      String url = await (await uploadTask.then((value) =>
+          value.ref.getDownloadURL()));
+      document.url = url;
+      await uplodeDocumentToTutorCollection(document);
+      return "done";
+
+    } on FirebaseException  catch (e) {
+      return "error";
+    }
+
   }
 
   static Future<String> addQuestionToStudent(String questionTitle,
