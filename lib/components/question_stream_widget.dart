@@ -27,7 +27,7 @@ class QuestionStream extends StatelessWidget {
             if (SessionStatus.toLowerCase() == status.toLowerCase()) {
               final qTitle = question.data()["title"];
               final qSubject = question.data()["subject"].toString();
-              final qState = question.data()["date"];
+              final qState = question.data()["state"];
               final qIssuer = SessionManager.loggedInStudent;
               final qDesc = question.data()["description"];
               final qDOS = question.data()["dateOfSubmission"];

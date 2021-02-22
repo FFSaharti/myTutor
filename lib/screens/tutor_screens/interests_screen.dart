@@ -21,6 +21,12 @@ class _InterestsScreenState extends State<InterestsScreen> {
   List<Widget> searchResults = [];
   String searchBox = '';
 
+  void setParentState() {
+    setState(() {
+      getSelectedSubjects();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -207,7 +213,7 @@ class _InterestsScreenState extends State<InterestsScreen> {
     for (int i = 0; i < subjects.length; i++) {
       if (subjects[i].searchKeyword(searchBox)) {
         searchResults.add(
-          InterestWidget(subjects[i]),
+          InterestWidget(subjects[i], setParentState),
         );
         searchResults.add(SizedBox(
           width: 15,
@@ -223,7 +229,7 @@ class _InterestsScreenState extends State<InterestsScreen> {
       if (subjects[i].chosen) {
         print(subjects[i].title + ' is chosen! ');
         selectedInterests.add(
-          InterestWidget(subjects[i]),
+          InterestWidget(subjects[i], setParentState),
         );
         selectedInterests.add(SizedBox(
           width: 15,
@@ -243,8 +249,9 @@ class _InterestsScreenState extends State<InterestsScreen> {
 class InterestWidget extends StatefulWidget {
   Subject subject;
   bool chosen = false;
+  Function setParentState;
 
-  InterestWidget(this.subject);
+  InterestWidget(this.subject, this.setParentState);
 
   @override
   _InterestWidgetState createState() => _InterestWidgetState();
@@ -274,6 +281,8 @@ class _InterestWidgetState extends State<InterestWidget> {
           setState(() {
             widget.chosen = !widget.chosen;
             widget.subject.toggleChosen();
+            widget.setParentState();
+            widget.setParentState;
           });
         },
         child: Padding(

@@ -1,17 +1,18 @@
-import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:intl/intl.dart';
 import 'package:mytutor/classes/answer.dart';
 import 'package:mytutor/classes/document.dart';
 import 'package:mytutor/classes/question.dart';
+import 'package:mytutor/classes/quiz.dart';
 import 'package:mytutor/classes/rate.dart';
 import 'package:mytutor/classes/student.dart';
+import 'package:mytutor/classes/subject.dart';
 import 'package:mytutor/classes/tutor.dart';
 import 'package:mytutor/classes/user.dart';
 import 'package:mytutor/utilities/session_manager.dart';
-import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+
 import 'constants.dart';
 
 // Creating the DB Instance...
@@ -430,22 +431,19 @@ class DatabaseAPI {
   }
 
   static Future<String> uplodeFileToStorage(Document document) async {
-
-    try{
+    try {
       firebase_storage.UploadTask uploadTask;
-      firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance
-          .ref().child(document.title);
+      firebase_storage.Reference ref =
+          firebase_storage.FirebaseStorage.instance.ref().child(document.title);
       uploadTask = ref.putData(document.file.readAsBytesSync());
-      String url = await (await uploadTask.then((value) =>
-          value.ref.getDownloadURL()));
+      String url =
+          await (await uploadTask.then((value) => value.ref.getDownloadURL()));
       document.url = url;
       await uplodeDocumentToTutorCollection(document);
       return "done";
-
-    } on FirebaseException  catch (e) {
+    } on FirebaseException catch (e) {
       return "error";
     }
-
   }
 
   static Future<String> addQuestionToStudent(String questionTitle,
@@ -569,5 +567,43 @@ class DatabaseAPI {
                     }),
                   })
         });
+  }
+
+  static Future<String> createAndUploadQuiz(
+      String quizTitle,
+      Subject subjectIndex,
+      String userId,
+      String quizDesc,
+      Quiz tempQuiz) async {
+    try {
+      _firestore.collection("Quiz").add({
+        'quizTitle': quizTitle,
+        'quizDesc': quizDesc,
+        'subject': subjectIndex.id
+      }).then((quiz) => {
+            // do here
+            List.from(tempQuiz.questions).forEach((question) {
+              _firestore.collection("QuizQuestion").add({
+                'questionTitle': question.question,
+                'correctAnswerIndex': question.correctAnswerIndex,
+                'answers': question.answers
+              }).then((questionBack) => {
+                    _firestore.collection("Quiz").doc(quiz.id).update({
+                      'listOfQuestions':
+                          FieldValue.arrayUnion([questionBack.id.toString()])
+                    })
+                  });
+            }),
+
+            _firestore
+                .collection("Tutor")
+                .doc(userId)
+                .collection("Materials")
+                .add({'type': 2, 'quizId': quiz.id})
+          });
+      return "done";
+    } on FirebaseException catch (e) {
+      return "error";
+    }
   }
 }

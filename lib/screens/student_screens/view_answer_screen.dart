@@ -113,21 +113,23 @@ class ViewAnswerScreen extends StatelessWidget {
                 ),
               ),
             ),
-            EZButton(
-                width: ScreenSize.width * 0.5,
-                buttonColor: kColorScheme[2],
-                textColor: Colors.white,
-                isGradient: true,
-                colors: [kColorScheme[0], kColorScheme[3]],
-                buttonText: "Close Question",
-                hasBorder: false,
-                borderColor: null,
-                onPressed: () {
-                  print("Pressed Close");
-                  DatabaseAPI.closeQuestion(this.question.question);
-                  Navigator.pop(context);
-                  Navigator.pop(context);
-                })
+            (this.question.question.state == "Active")
+                ? EZButton(
+                    width: ScreenSize.width * 0.5,
+                    buttonColor: kColorScheme[2],
+                    textColor: Colors.white,
+                    isGradient: true,
+                    colors: [kColorScheme[0], kColorScheme[3]],
+                    buttonText: "Close Question",
+                    hasBorder: false,
+                    borderColor: null,
+                    onPressed: () {
+                      print("Pressed Close");
+                      DatabaseAPI.closeQuestion(this.question.question);
+                      Navigator.pop(context);
+                      Navigator.pop(context);
+                    })
+                : Container()
           ],
         ),
       ),
