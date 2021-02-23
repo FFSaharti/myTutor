@@ -401,7 +401,6 @@ class _CreateMaterialsScreenState extends State<CreateMaterialsScreen> {
         value: i,
       ));
     }
-
     return items;
   }
 
@@ -474,63 +473,94 @@ class _CreateMaterialsScreenState extends State<CreateMaterialsScreen> {
   }
 
   void createMaterials() {
+    print(_file.path.split('/').last.split('.').last);
+      String filetype = _file.path.split('/').last.split('.').last;
+
+
+
     if (_descController.text.isNotEmpty &&
         _titleController.text.isNotEmpty &&
         _file != null) {
-      DatabaseAPI.uplodeFileToStorage(Document(
-              _titleController.text,
-              1,
-              null,
-              subjects.elementAt(_dropDownMenuController),
-              SessionManager.loggedInTutor.userId,
-              _file,
-              _descController.text))
-          .then((value) => {
-                value == "done"
-                    ? AwesomeDialog(
-                        context: context,
-                        animType: AnimType.SCALE,
-                        dialogType: DialogType.SUCCES,
-                        body: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Center(
-                            child: Text(
-                              'file uploaded',
-                              style: kTitleStyle.copyWith(
-                                  color: kBlackish,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.normal),
-                            ),
-                          ),
-                        ),
-                        btnOkOnPress: () {
-                          int count = 0;
-                          Navigator.popUntil(context, (route) {
-                            return count++ == 1;
-                          });
-                        },
-                      ).show()
-                    : AwesomeDialog(
-                        context: context,
-                        animType: AnimType.SCALE,
-                        dialogType: DialogType.ERROR,
-                        body: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Center(
-                            child: Text(
-                              'ERROR ',
-                              style: kTitleStyle.copyWith(
-                                  color: kBlackish,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.normal),
-                            ),
-                          ),
-                        ),
-                        btnOkOnPress: () {
-                          Navigator.pop(context);
-                        },
-                      ).show(),
+
+      if(filetype == "pdf" || filetype == "pptx"){
+        // uplode the file
+        DatabaseAPI.uploadFileToStorage(Document(
+            _titleController.text,
+            1,
+            null,
+            subjects.elementAt(_dropDownMenuController),
+            SessionManager.loggedInTutor.userId,
+            _file,
+            _descController.text,
+            filetype))
+            .then((value) => {
+          value == "done"
+              ? AwesomeDialog(
+            context: context,
+            animType: AnimType.SCALE,
+            dialogType: DialogType.SUCCES,
+            body: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Center(
+                child: Text(
+                  'file uploaded',
+                  style: kTitleStyle.copyWith(
+                      color: kBlackish,
+                      fontSize: 14,
+                      fontWeight: FontWeight.normal),
+                ),
+              ),
+            ),
+            btnOkOnPress: () {
+              int count = 0;
+              Navigator.popUntil(context, (route) {
+                return count++ == 1;
               });
+            },
+          ).show()
+              : AwesomeDialog(
+            context: context,
+            animType: AnimType.SCALE,
+            dialogType: DialogType.ERROR,
+            body: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Center(
+                child: Text(
+                  'ERROR ',
+                  style: kTitleStyle.copyWith(
+                      color: kBlackish,
+                      fontSize: 14,
+                      fontWeight: FontWeight.normal),
+                ),
+              ),
+            ),
+            btnOkOnPress: () {
+              Navigator.pop(context);
+            },
+          ).show(),
+        });
+      }
+      else{
+        AwesomeDialog(
+          context: context,
+          animType: AnimType.SCALE,
+          dialogType: DialogType.ERROR,
+          body: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Center(
+              child: Text(
+                'the file type is not supported. you can upload document of type (pdf,pptx) only ',
+                style: kTitleStyle.copyWith(
+                    color: kBlackish,
+                    fontSize: 14,
+                    fontWeight: FontWeight.normal),
+              ),
+            ),
+          ),
+
+        ).show();
+      }
+
     }
   }
 

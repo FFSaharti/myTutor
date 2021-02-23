@@ -26,6 +26,8 @@ dependencies:
   smooth_star_rating: ^1.1.1
   firebase_storage: ^7.0.0
   file_picker: ^2.1.0
+  advance_pdf_viewer: ^1.2.2
+  url_launcher: ^5.7.10
 
 dev_dependencies:
   flutter_test:

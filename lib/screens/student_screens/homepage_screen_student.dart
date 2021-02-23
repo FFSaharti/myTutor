@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:mytutor/components/ez_button.dart';
 import 'package:mytutor/components/session_stream_widget.dart';
 import 'package:mytutor/screens/student_screens/request_tutor_screen.dart';
+import 'package:mytutor/screens/student_screens/view_materials_screen.dart';
 import 'package:mytutor/utilities/constants.dart';
 import 'package:mytutor/utilities/database_api.dart';
 import 'package:mytutor/utilities/screen_size.dart';
@@ -266,6 +267,7 @@ class _StudentSectionState extends State<StudentSection> {
                   widget: widget,
                   onClick: () {
                     print("clicked MATERIALS");
+                    Navigator.pushNamed(context, ViewMaterialsScreen.id);
                   },
                   imgPath: "images/Student_Section/Materials_Logo.png",
                   title: "Materials",

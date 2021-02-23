@@ -418,19 +418,19 @@ class DatabaseAPI {
 
   static void uplodeDocumentToTutorCollection(Document document) async {
     await _firestore
-        .collection("Tutor")
-        .doc(SessionManager.loggedInTutor.userId)
-        .collection("Materials")
+        .collection("Document")
         .add({
       "title": document.title,
       "description": document.description,
       "type": document.type,
       "subjcetid": document.subject.id,
       "url": document.url,
+      "issuerId": document.issuer,
+      "fileType" : document.fileType,
     });
   }
 
-  static Future<String> uplodeFileToStorage(Document document) async {
+  static Future<String> uploadFileToStorage(Document document) async {
     try {
       firebase_storage.UploadTask uploadTask;
       firebase_storage.Reference ref =
@@ -444,6 +444,10 @@ class DatabaseAPI {
     } on FirebaseException catch (e) {
       return "error";
     }
+  }
+
+  static Future<QuerySnapshot> fetchDocument() {
+    return  _firestore.collection("Document").get();
   }
 
   static Future<String> addQuestionToStudent(String questionTitle,

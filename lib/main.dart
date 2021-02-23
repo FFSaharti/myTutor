@@ -5,6 +5,7 @@ import 'package:mytutor/screens/signup_screen.dart';
 import 'package:mytutor/screens/student_screens/ask_screen_student.dart';
 import 'package:mytutor/screens/student_screens/homepage_screen_student.dart';
 import 'package:mytutor/screens/student_screens/request_tutor_screen.dart';
+import 'package:mytutor/screens/student_screens/view_materials_screen.dart';
 import 'package:mytutor/screens/tour_screen.dart';
 import 'package:mytutor/screens/tutor_screens/answer_screen_tutor.dart';
 import 'package:mytutor/screens/tutor_screens/create_materials_screen.dart';
@@ -43,7 +44,7 @@ class TutorApp extends StatelessWidget {
         RespondScreenTutor.id: (context) => RespondScreenTutor(),
         AnswerScreenTutor.id: (context) => AnswerScreenTutor(),
         CreateMaterialsScreen.id : (context) => CreateMaterialsScreen(),
-
+        ViewMaterialsScreen.id : (context) => ViewMaterialsScreen(),
       },
     );
   }
