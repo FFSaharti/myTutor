@@ -113,7 +113,7 @@ class DatabaseAPI {
                                   value.docs.single.data()['name'],
                                   email,
                                   pass,
-                                  "",
+                                  value.docs.single.data()['aboutMe'],
                                   value.docs.single.id, []),
                               List.from(value.docs.single.data()['experiences'])
                                   .forEach((element) {
@@ -417,16 +417,14 @@ class DatabaseAPI {
   // document related
 
   static void uplodeDocumentToTutorCollection(Document document) async {
-    await _firestore
-        .collection("Document")
-        .add({
+    await _firestore.collection("Document").add({
       "title": document.title,
       "description": document.description,
       "type": document.type,
-      "subjcetid": document.subject.id,
+      "subject": document.subject.id,
       "url": document.url,
       "issuerId": document.issuer,
-      "fileType" : document.fileType,
+      "fileType": document.fileType,
     });
   }
 
@@ -447,7 +445,7 @@ class DatabaseAPI {
   }
 
   static Future<QuerySnapshot> fetchDocument() {
-    return  _firestore.collection("Document").get();
+    return _firestore.collection("Document").get();
   }
 
   static Future<String> addQuestionToStudent(String questionTitle,
@@ -583,7 +581,9 @@ class DatabaseAPI {
       _firestore.collection("Quiz").add({
         'quizTitle': quizTitle,
         'quizDesc': quizDesc,
-        'subject': subjectIndex.id
+        'subject': subjectIndex.id,
+        'type': 2,
+        'issuerId': SessionManager.loggedInTutor.userId
       }).then((quiz) => {
             // do here
             List.from(tempQuiz.questions).forEach((question) {
@@ -599,15 +599,31 @@ class DatabaseAPI {
                   });
             }),
 
-            _firestore
-                .collection("Tutor")
-                .doc(userId)
-                .collection("Materials")
-                .add({'type': 2, 'quizId': quiz.id})
+            // _firestore
+            //     .collection("Tutor")
+            //     .doc(userId)
+            //     .collection("Materials")
+            //     .add({'type': 2, 'quizId': quiz.id})
           });
       return "done";
     } on FirebaseException catch (e) {
       return "error";
     }
+  }
+
+  static Future<String> addAboutMeToTutor(
+      Tutor loggedInTutor, String aboutMe) async {
+    String status = 'Fail';
+    await _firestore
+        .collection("Tutor")
+        .doc(loggedInTutor.userId)
+        .update({"aboutMe": aboutMe}).then((value) => {status = "Success"});
+
+    return status;
+  }
+
+  static Stream<QuerySnapshot> fetchAllMaterialsData() {
+    // return _firestore.collection("Quiz").snapshots();
+    return _firestore.collection("Material").snapshots();
   }
 }

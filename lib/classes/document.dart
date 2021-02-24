@@ -1,12 +1,9 @@
-
-
 import 'dart:io';
 
+import 'package:mytutor/classes/material.dart';
 import 'package:mytutor/classes/subject.dart';
-import 'package:mytutor/classes/tutor.dart';
 
-class Document{
-
+class Document extends MyMaterial {
   String _title;
   String _fileType;
   int _type;
@@ -16,16 +13,15 @@ class Document{
   String _issuerId;
   File _file;
 
-
   String get fileType => _fileType;
 
   set fileType(String value) {
     _fileType = value;
   }
 
-  Document(this._title, this._type, this._url, this._subject,
-      this._issuerId,this._file,this._description, this._fileType);
-
+  Document(this._title, this._type, this._url, this._subject, this._issuerId,
+      this._file, this._description, this._fileType)
+      : super(_issuerId, _type, _subject.id, _title, _description);
 
   String get description => _description;
 
@@ -44,7 +40,6 @@ class Document{
   set title(String value) {
     _title = value;
   }
-
 
   int get type => _type;
 

@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mytutor/classes/subject.dart';
+import 'package:mytutor/components/ez_button.dart';
+import 'package:mytutor/components/material_stream_widget.dart';
 import 'package:mytutor/components/session_stream_widget.dart';
 import 'package:mytutor/screens/tutor_screens/answer_screen_tutor.dart';
 import 'package:mytutor/screens/tutor_screens/create_materials_screen.dart';
@@ -145,6 +147,12 @@ class ProfileTutor extends StatefulWidget {
 }
 
 class _ProfileTutorState extends State<ProfileTutor> {
+  Function setParentState(String aboutMe) {
+    setState(() {
+      SessionManager.loggedInStudent.aboutMe = aboutMe;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -162,8 +170,8 @@ class _ProfileTutorState extends State<ProfileTutor> {
         child: Center(
           child: Container(
             width: ScreenSize.width * 0.91,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
+            height: ScreenSize.height * 0.9,
+            child: ListView(
               children: [
                 SizedBox(
                   height: 20,
@@ -179,9 +187,11 @@ class _ProfileTutorState extends State<ProfileTutor> {
                     ),
                   ),
                 ),
-                Text(
-                  DatabaseAPI.tempTutor.name,
-                  style: kTitleStyle.copyWith(color: kBlackish, fontSize: 30),
+                Center(
+                  child: Text(
+                    DatabaseAPI.tempTutor.name,
+                    style: kTitleStyle.copyWith(color: kBlackish, fontSize: 30),
+                  ),
                 ),
                 Center(
                   child: Container(
@@ -238,14 +248,49 @@ class _ProfileTutorState extends State<ProfileTutor> {
                         )
                       ],
                     ),
-                    Padding(
-                      padding: const EdgeInsets.all(5.0),
-                      child: Text(
-                        //TODO: Create & Fetch About me from a tutor.
-                        "I’m a guy who loves programming and would love to share my knowledge with any fellow students, interested in almost all programming languages.",
-                        style: TextStyle(fontSize: 16.5, color: kGreyerish),
-                      ),
-                    )
+                    !(SessionManager.loggedInTutor.aboutMe == '')
+                        ? Padding(
+                            padding: const EdgeInsets.all(3.0),
+                            child: Text(
+                              SessionManager.loggedInTutor.aboutMe,
+                              style:
+                                  TextStyle(fontSize: 16.5, color: kGreyerish),
+                            ),
+                          )
+                        : Container(
+                            height: ScreenSize.height * 0.17,
+                            child: Column(
+                              children: [
+                                SizedBox(
+                                  height: 20,
+                                ),
+                                Center(
+                                  child: Text(
+                                    "No \"About me\" :( ",
+                                    style: TextStyle(
+                                        fontSize: 16.5, color: kGreyerish),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 20,
+                                ),
+                                EZButton(
+                                    width: ScreenSize.width * 0.5,
+                                    buttonColor: null,
+                                    textColor: Colors.white,
+                                    isGradient: true,
+                                    colors: [kColorScheme[0], kColorScheme[3]],
+                                    buttonText: "Set An About Me",
+                                    hasBorder: false,
+                                    borderColor: null,
+                                    onPressed: () {
+                                      print("pressed set about me");
+                                      showAboutMe(setParentState);
+                                      // setState(() {});
+                                    })
+                              ],
+                            ),
+                          ),
                   ],
                 ),
                 Divider(
@@ -285,6 +330,35 @@ class _ProfileTutorState extends State<ProfileTutor> {
                     ),
                   ],
                 ),
+                Divider(
+                  color: kGreyish,
+                ),
+                Container(
+                  height: ScreenSize.height * 0.5,
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.local_library_outlined,
+                            size: 18,
+                          ),
+                          SizedBox(
+                            width: 5,
+                          ),
+                          Text(
+                            "Materials",
+                            style: TextStyle(fontSize: 18),
+                          )
+                        ],
+                      ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      MaterialStreamTutor(),
+                    ],
+                  ),
+                ),
               ],
             ),
           ),
@@ -311,6 +385,125 @@ class _ProfileTutorState extends State<ProfileTutor> {
     }
 
     return widgets;
+  }
+
+  void showAboutMe(Function setParentState) {
+    TextEditingController aboutMeController = TextEditingController();
+    showModalBottomSheet(
+        shape: RoundedRectangleBorder(
+            // borderRadius: BorderRadius.vertical(top: Radius.circular(2.0))
+            ),
+        backgroundColor: Colors.transparent,
+        enableDrag: true,
+        isScrollControlled: true,
+        context: ScreenSize.context,
+        builder: (context) {
+          return StatefulBuilder(
+              builder: (BuildContext context, StateSetter setModalState) {
+            return Container(
+              height: ScreenSize.height * 0.50,
+              child: Scaffold(
+                body: Container(
+                  //     padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                  height: ScreenSize.height * 0.50,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(50)
+                      //   topRight: Radius.circular(100),
+                      //   topLeft: Radius.circular(100),
+                      // )
+                      ,
+                      color: Colors.white),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              IconButton(
+                                  icon: Icon(Icons.cancel),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  }),
+                              Text(
+                                "About Me",
+                                style: TextStyle(fontSize: 20),
+                              ),
+                              // TODO : Add edit button to edit about me anytime...
+                              IconButton(
+                                icon: Icon(Icons.check),
+                                onPressed: () {
+                                  // ADD NEW QUESTION
+                                  if (aboutMeController.text.isNotEmpty) {
+                                    // ADD ABOUT ME TO STUDENT...
+                                    DatabaseAPI.addAboutMeToTutor(
+                                            SessionManager.loggedInTutor,
+                                            aboutMeController.text)
+                                        .then((value) => {
+                                              if (value == "Success")
+                                                {
+                                                  SessionManager.loggedInTutor
+                                                          .aboutMe =
+                                                      aboutMeController.text,
+                                                  setParentState(
+                                                      aboutMeController.text),
+                                                  Navigator.pop(context),
+                                                },
+                                              print(value.toString()),
+                                            });
+                                    print("POP...");
+                                  } else {
+                                    print("empty parameters");
+                                    //TODO: Show error message cannot leave empty...
+                                  }
+                                },
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 15,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              children: [
+                                Align(
+                                  alignment: Alignment.topLeft,
+                                  child: Text(
+                                    "About Me",
+                                    style: GoogleFonts.secularOne(
+                                        textStyle: TextStyle(
+                                            fontSize: 17,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.black)),
+                                  ),
+                                ),
+                                TextField(
+                                  controller: aboutMeController,
+                                  keyboardType: TextInputType.multiline,
+                                  maxLines: null,
+                                  decoration: InputDecoration(
+                                    hintText: 'Describe yourself briefly...',
+                                    hintStyle: TextStyle(
+                                        fontSize: 17.0, color: Colors.grey),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 20,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            );
+          });
+        });
   }
 }
 

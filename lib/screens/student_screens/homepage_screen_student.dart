@@ -444,7 +444,6 @@ class _ProfileStudentState extends State<ProfileStudent> {
                         ? Padding(
                             padding: const EdgeInsets.all(3.0),
                             child: Text(
-                              //TODO: Create & Fetch About me from a student.
                               SessionManager.loggedInStudent.aboutMe,
                               style:
                                   TextStyle(fontSize: 16.5, color: kGreyerish),
@@ -459,7 +458,6 @@ class _ProfileStudentState extends State<ProfileStudent> {
                                 ),
                                 Center(
                                   child: Text(
-                                    //TODO: Create & Fetch About me from a student.
                                     "No \"About me\" :( ",
                                     style: TextStyle(
                                         fontSize: 16.5, color: kGreyerish),
@@ -479,7 +477,7 @@ class _ProfileStudentState extends State<ProfileStudent> {
                                     borderColor: null,
                                     onPressed: () {
                                       print("pressed set about me");
-                                      showAddQuestion(setParentState);
+                                      showAboutMe(setParentState);
                                       // setState(() {});
                                     })
                               ],
@@ -501,7 +499,7 @@ class _ProfileStudentState extends State<ProfileStudent> {
     );
   }
 
-  void showAddQuestion(Function setParentState) {
+  void showAboutMe(Function setParentState) {
     TextEditingController aboutMeController = TextEditingController();
     showModalBottomSheet(
         shape: RoundedRectangleBorder(
