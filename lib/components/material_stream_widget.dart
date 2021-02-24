@@ -40,13 +40,13 @@ class MaterialStreamTutor extends StatelessWidget {
                     },
                     child: MaterialWidget(
                       material: Document(
-                          material.data()['title'],
+                          material.data()['documentTitle'],
                           material.data()['type'],
-                          material.data()['url'],
+                          material.data()['documentUrl'],
                           subjects[material.data()['subject']],
                           material.data()['issuerId'],
                           null,
-                          material.data()['description'],
+                          material.data()['documentDesc'],
                           material.data()['fileType']),
                       matID: material.id,
                     ),

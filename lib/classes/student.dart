@@ -7,8 +7,8 @@ class Student extends MyUser {
   // List<Material> bookmarkedMaterials;
 
   Student(String name, String email, String pass, String aboutMe, String userId,
-      List<Question> _questions)
-      : super(name, email, pass, aboutMe, userId);
+      List<Question> _questions,Profileimg)
+      : super(name, email, pass, aboutMe, userId,Profileimg);
 
   List<Question> get questions => _questions;
 

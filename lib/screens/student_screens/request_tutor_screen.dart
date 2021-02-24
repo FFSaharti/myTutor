@@ -36,7 +36,7 @@ class _RequestTutorScreenState extends State<RequestTutorScreen> {
       setState(() {
         for (var tutor in data.docs) {
           Tutors.add(MyUser(tutor.data()["name"], tutor.data()["email"],
-              tutor.data()["pass"], "_aboutMe", tutor.id));
+              tutor.data()["pass"], "_aboutMe", tutor.id,tutor.data()["profileImg"]));
         }
       });
     });

@@ -6,9 +6,10 @@ class MyUser {
   String _password;
   String _aboutMe;
   String _userId;
+  String _profileImg;
 
   MyUser(@required this._name, @required this._email, @required this._password,
-      this._aboutMe,@required this._userId);
+      this._aboutMe, @required this._userId, this._profileImg);
 
   String get name => _name;
 
@@ -18,8 +19,13 @@ class MyUser {
 
   String get pass => _password;
 
+  String get profileImag => _profileImg;
 
   String get userId => _userId;
+
+  set profileImag(String value) {
+    _profileImg = value;
+  }
 
   set userId(String value) {
     _userId = value;

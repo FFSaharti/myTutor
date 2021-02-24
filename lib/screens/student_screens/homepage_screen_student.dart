@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -354,6 +357,7 @@ class ProfileStudent extends StatefulWidget {
 }
 
 class _ProfileStudentState extends State<ProfileStudent> {
+  String _userImage = SessionManager.loggedInStudent.profileImag;
   Function setParentState(String aboutMe) {
     setState(() {
       SessionManager.loggedInStudent.aboutMe = aboutMe;
@@ -362,6 +366,8 @@ class _ProfileStudentState extends State<ProfileStudent> {
 
   @override
   Widget build(BuildContext context) {
+
+    print("here"+SessionManager.loggedInStudent.profileImag);
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -384,14 +390,47 @@ class _ProfileStudentState extends State<ProfileStudent> {
                   height: 20,
                 ),
                 Center(
-                  child: Container(
+                  child: SessionManager.loggedInStudent.profileImag == ""
+                      ? Container(
+                    width: ScreenSize.width * 0.30,
+                    height: ScreenSize.height * 0.21,
                     decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(100),
-                        color: Colors.white70),
-                    child: Icon(
-                      Icons.person,
-                      size: 130,
+                      shape: BoxShape.circle,
                     ),
+                    child: GestureDetector(
+                      onTap: () async{
+                        FilePickerResult file =
+                        await FilePicker.platform.pickFiles(type: FileType.image);
+                        file == null ? null :  DatabaseAPI.updateUserProfileImage(File(file.files.single.path));
+                      },
+                      child: Icon(
+                        Icons.account_circle_sharp,
+                        size: 120,
+                      ),
+                    ),
+                  )
+                      : Container(
+                    width: ScreenSize.width * 0.30,
+                    height: ScreenSize.height * 0.21,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      image: DecorationImage(
+                          image: NetworkImage(SessionManager.loggedInStudent.profileImag),
+                          fit: BoxFit.fill),
+                    ),
+                    child: GestureDetector(
+                        onTap: () async{
+                          FilePickerResult file =
+                          await FilePicker.platform.pickFiles(type: FileType.image);
+                          file == null ? null :  DatabaseAPI.updateUserProfileImage(File(file.files.single.path));
+                          setState(() {
+
+                          });
+                        },
+                        child: Align(
+                          child: Icon(Icons.edit),
+                          alignment: Alignment.bottomRight,
+                        )),
                   ),
                 ),
                 Text(

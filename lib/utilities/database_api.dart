@@ -1,3 +1,5 @@
+import 'dart:io';
+import 'package:path/path.dart' as Path;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
@@ -18,11 +20,21 @@ import 'constants.dart';
 // Creating the DB Instance...
 FirebaseAuth _auth = FirebaseAuth.instance;
 FirebaseFirestore _firestore = FirebaseFirestore.instance;
+firebase_storage.UploadTask uploadTask;
+firebase_storage.Reference ref;
 
 class DatabaseAPI {
-  static MyUser _tempUser = MyUser("", "", "", "", "");
-  static Tutor _tempTutor = Tutor("", "", "", "", "", []);
-  static Student _tempStudent = Student("", "", "", "", "", []);
+  static MyUser _tempUser = MyUser("", "", "", "", "", "");
+  static Tutor _tempTutor = Tutor("", "", "", "", "", [], "");
+  static Student _tempStudent = Student("", "", "", "", "", [], "");
+  static File _tempFile;
+
+  static File get tempFile => _tempFile;
+
+  static set tempFile(File value) {
+    _tempFile = value;
+  }
+
   String _errorcode = '';
 
   String get errorcode => _errorcode;
@@ -47,6 +59,8 @@ class DatabaseAPI {
 
   // user log/sign up
   static Future<String> createStudent() async {
+
+
     //TODO:catch.
     try {
       UserCredential user = await _auth
@@ -54,7 +68,22 @@ class DatabaseAPI {
               email: tempUser.email, password: tempUser.pass)
           .then((value) => value);
       if (user != null) {
-        uploadUser();
+        if (tempFile == null){
+          // the user didn't pick any image
+          tempUser.profileImag = "";
+          uploadUser();
+          _tempStudent = Student(tempUser.name, tempUser.email, tempUser.pass, "",
+              "", [], tempUser.profileImag);
+          SessionManager.loggedInStudent = _tempStudent;
+        } else{
+          await uploadUserProfileImage();
+          uploadUser();
+          _tempStudent = Student(tempUser.name, tempUser.email, tempUser.pass, "",
+              "", [], tempUser.profileImag);
+          SessionManager.loggedInStudent = _tempStudent;
+
+        }
+
         return "Success";
       }
     } on FirebaseAuthException catch (e) {
@@ -67,8 +96,51 @@ class DatabaseAPI {
       "email": tempUser.email,
       "pass": tempUser.pass,
       "name": tempUser.name,
-      "questions": []
+      "questions": [],
+      "aboutMe": "",
+      "profileImg" : tempUser.profileImag,
     });
+  }
+
+  // user profile image methods
+  static Future<String> uploadUserProfileImage() async{
+    try {
+       ref =
+      firebase_storage.FirebaseStorage.instance.ref().child(tempUser.name);
+      uploadTask = ref.putData(tempFile.readAsBytesSync());
+      String url =
+      await (await uploadTask.then((value) => value.ref.getDownloadURL()));
+      tempUser.profileImag = url;
+   // await uplodeDocumentToTutorCollection(document);
+    return "done";
+    } on FirebaseException catch (e) {
+    return "error";
+    }
+
+
+
+  }
+
+  static void updateUserProfileImage(File newImage) async{
+    ref = firebase_storage.FirebaseStorage.instance.ref().child(SessionManager.loggedInUser.name);
+    uploadTask = ref.putData(newImage.readAsBytesSync());
+    String url =
+    await (await uploadTask.then((value) => value.ref.getDownloadURL()));
+
+    // change the url on the user table
+    if (SessionManager.loggedInTutor.userId == ""){
+      SessionManager.loggedInStudent.profileImag = url;
+    await _firestore
+        .collection("Student")
+        .doc(SessionManager.loggedInUser.userId)
+        .update({"profileImg": url});
+    } else{
+      SessionManager.loggedInTutor.profileImag = url;
+      await _firestore
+          .collection("Tutor")
+          .doc(SessionManager.loggedInUser.userId)
+          .update({"profileImg": url});
+    }
   }
 
   static Future<String> userLogin(String email, String pass) async {
@@ -92,7 +164,9 @@ class DatabaseAPI {
                         email,
                         pass,
                         value.docs.single.data()['aboutMe'],
-                        value.docs.single.id, []),
+                        value.docs.single.id,
+                        [],
+                        value.docs.single.data()['profileImg']),
                     List.from(value.docs.single.data()['questions'])
                         .forEach((element) {
                       print("QUESTION PRINTING ... " + element.toString());
@@ -114,7 +188,9 @@ class DatabaseAPI {
                                   email,
                                   pass,
                                   value.docs.single.data()['aboutMe'],
-                                  value.docs.single.id, []),
+                                  value.docs.single.id,
+                                  [],
+                                  value.docs.single.data()['profileImg']),
                               List.from(value.docs.single.data()['experiences'])
                                   .forEach((element) {
                                 print("Subject PRINTING ... " +
@@ -205,8 +281,11 @@ class DatabaseAPI {
   }
 
   static void buildAnswers(String answerID, Question tempQuestion) async {
-    Answer tempAnswer =
-        Answer("", Tutor("TEST-BABA", "", "pass", "aboutMe", "userid", []), "");
+    Answer tempAnswer = Answer(
+      "",
+      Tutor("TEST-BABA", "", "pass", "aboutMe", "userid", [], ""),
+      "",
+    );
     String answer = '';
     String tutorID = '';
     String date = '';
@@ -234,8 +313,14 @@ class DatabaseAPI {
   static Future<Tutor> buildTutor(String tutorID) async {
     await _firestore.collection("Tutor").doc(tutorID).get().then((value) => {
           print("TUTOR IS ....... " + value.data()['name']),
-          tempTutor = Tutor(value.data()['name'], value.data()['email'],
-              value.data()['pass'], "", value.id, []),
+          tempTutor = Tutor(
+              value.data()['name'],
+              value.data()['email'],
+              value.data()['pass'],
+              "",
+              value.id,
+              [],
+              value.data()["profileImg"]),
           List.from(value.data()['experiences']).forEach((element) {
             print(
                 "EXPERIENCES OF TUTOR ARE PRINTING ... " + element.toString());
@@ -249,6 +334,12 @@ class DatabaseAPI {
   static Future<String> createTutor(tutorEmail) async {
     List<int> subjectIDs = getSubjects();
 
+    // check the file
+    if(tempFile == null)
+      tempUser.profileImag == "";
+    else {
+      uploadUserProfileImage();
+    }
     try {
       UserCredential user = await _auth
           .createUserWithEmailAndPassword(
@@ -260,10 +351,12 @@ class DatabaseAPI {
             "email": tempUser.email,
             "pass": tempUser.pass,
             "name": tempUser.name,
-            "experiences": subjectIDs
+            "experiences": subjectIDs,
+            "profileImg": tempUser.profileImag,
+            "aboutMe" : "",
           });
-          _tempTutor = Tutor(
-              tempUser.name, tempUser.email, tempUser.pass, "", "", subjectIDs);
+          _tempTutor = Tutor(tempUser.name, tempUser.email, tempUser.pass, "",
+              "", subjectIDs, tempUser.profileImag);
           SessionManager.loggedInTutor = _tempTutor;
           return "Success";
         } on FirebaseAuthException catch (e) {
@@ -417,12 +510,12 @@ class DatabaseAPI {
   // document related
 
   static void uplodeDocumentToTutorCollection(Document document) async {
-    await _firestore.collection("Document").add({
-      "title": document.title,
-      "description": document.description,
-      "type": document.type,
+    await _firestore.collection("Material").add({
+      "documentTitle": document.title,
+      "documentDesc": document.description,
+      "type": 1,
       "subject": document.subject.id,
-      "url": document.url,
+      "documentUrl": document.url,
       "issuerId": document.issuer,
       "fileType": document.fileType,
     });
@@ -517,7 +610,8 @@ class DatabaseAPI {
 
   static Stream<DocumentSnapshot> getAnswers(var data) {
     List<Answer> answers = [
-      Answer("", Tutor("TEST-BABA", "", "pass", "aboutMe", "userid", []), "")
+      Answer(
+          "", Tutor("TEST-BABA", "", "pass", "aboutMe", "userid", [], ""), "")
     ];
     String tempAnswer = '';
   }

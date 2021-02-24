@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mytutor/components/ez_button.dart';
@@ -6,6 +9,7 @@ import 'package:mytutor/utilities/constants.dart';
 import 'package:mytutor/utilities/database_api.dart';
 import 'package:mytutor/utilities/regEx.dart';
 import 'package:mytutor/utilities/screen_size.dart';
+import 'package:image_picker/image_picker.dart';
 
 class SignupScreen extends StatefulWidget {
   static String id = 'signup_screen';
@@ -16,6 +20,8 @@ class SignupScreen extends StatefulWidget {
 }
 
 class _SignupScreenState extends State<SignupScreen> {
+  File _file;
+  final picker = ImagePicker();
   String email = '';
   String name = '';
   String password = '';
@@ -121,7 +127,32 @@ class _SignupScreenState extends State<SignupScreen> {
                     kColorScheme[3],
                     kColorScheme[4],
                   ],
-                  buttonText: "Next",
+                  buttonText: "Upload your profile picture",
+                  hasBorder: false,
+                  borderColor: null,
+                  onPressed: () async {
+                    //TODO : implement FileHelper class.....
+                      FilePickerResult file =
+                      await FilePicker.platform.pickFiles(type: FileType.image);
+                      file == null ? null : _file = File(file.files.single.path);
+                      DatabaseAPI.tempFile = _file;
+
+                  }),
+              SizedBox(
+                height: 11,
+              ),
+              EZButton(
+                  width: ScreenSize.width,
+                  buttonColor: kColorScheme[1],
+                  textColor: Colors.white,
+                  isGradient: true,
+                  colors: [
+                    kColorScheme[1],
+                    kColorScheme[2],
+                    kColorScheme[3],
+                    kColorScheme[4],
+                  ],
+                  buttonText: "Skip",
                   hasBorder: false,
                   borderColor: null,
                   onPressed: () {
@@ -133,7 +164,10 @@ class _SignupScreenState extends State<SignupScreen> {
       ),
     );
   }
+
+
 }
+
 
 class TextFieldWidget extends StatefulWidget {
   final String hintText;

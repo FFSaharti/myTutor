@@ -6,8 +6,8 @@ class Tutor extends MyUser {
   // List<Session> sessions;
 
   Tutor(String name, String email, String pass, String aboutMe, String userid,
-      List<int> experiences)
-      : super(name, email, pass, aboutMe, userid);
+      List<int> experiences,Profileimg)
+      : super(name, email, pass, aboutMe, userid,Profileimg);
 
   List<dynamic> get experiences => _experiences;
 

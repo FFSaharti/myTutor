@@ -473,9 +473,8 @@ class _CreateMaterialsScreenState extends State<CreateMaterialsScreen> {
   }
 
   void createMaterials() {
-    print(_file.path.split('/').last.split('.').last);
-    String filetype = _file.path.split('/').last.split('.').last;
 
+    String filetype = _file.path.split('/').last.split('.').last;
     if (_descController.text.isNotEmpty &&
         _titleController.text.isNotEmpty &&
         _file != null) {

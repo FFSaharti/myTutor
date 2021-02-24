@@ -58,7 +58,7 @@ class _MaterialWidgetState extends State<MaterialWidget> {
                     child: Container(
                       width: ScreenSize.width * 0.56,
                       child: Text(
-                        widget.material.title,
+                        "hello",
                         overflow: TextOverflow.ellipsis,
                         softWrap: false,
                         style: GoogleFonts.sarabun(
