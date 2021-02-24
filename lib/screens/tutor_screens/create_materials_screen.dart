@@ -473,7 +473,6 @@ class _CreateMaterialsScreenState extends State<CreateMaterialsScreen> {
   }
 
   void createMaterials() {
-
     String filetype = _file.path.split('/').last.split('.').last;
     if (_descController.text.isNotEmpty &&
         _titleController.text.isNotEmpty &&
@@ -720,7 +719,8 @@ class _CreateMaterialsScreenState extends State<CreateMaterialsScreen> {
                                           ),
                                         ],
                                       )
-                                    : (showAddAnswer[0])
+                                    : (showAddAnswer[
+                                            0]) // TODO: Create widget for creatingQuizQuestionWidget
                                         ? Container(
                                             child: Column(
                                               children: [

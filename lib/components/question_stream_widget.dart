@@ -35,13 +35,6 @@ class QuestionStream extends StatelessWidget {
 
               List<Answer> qAnswers = [];
 
-              //TODO: Get Answers for each question...
-              // List.from(question.data()['answers']).forEach((element) {
-              //   print("Answer list from --> " + element.toString());
-              //   DatabaseAPI.getAnswer(element)
-              //       .then((value) => {qAnswers = value});
-              // });
-
               print(qTitle.toString());
               UserQuestions.add(
                 GestureDetector(
@@ -73,13 +66,4 @@ class QuestionStream extends StatelessWidget {
       },
     );
   }
-
-  // List<Answer> getAnswers(List<dynamic> data) {
-  //   print("ANSWERS IS --> " + data.toString());
-  //   List<Answer> answers = [];
-  //
-  //   DatabaseAPI.getAnswers(data).then((value) => {answers = value});
-  //
-  //   return answers;
-  // }
 }

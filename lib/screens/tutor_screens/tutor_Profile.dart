@@ -29,6 +29,7 @@ class _tutorProfileState extends State<tutorProfile> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         backgroundColor: Colors.white70,
+        //TODO: Implement sign out button (that clears session manager objects)
         title: Center(
           child: Text(
             "Profile",
@@ -55,10 +56,13 @@ class _tutorProfileState extends State<tutorProfile> {
                             shape: BoxShape.circle,
                           ),
                           child: GestureDetector(
-                            onTap: () async{
-                              FilePickerResult file =
-                              await FilePicker.platform.pickFiles(type: FileType.image);
-                              file == null ? null :  DatabaseAPI.updateUserProfileImage(File(file.files.single.path));
+                            onTap: () async {
+                              FilePickerResult file = await FilePicker.platform
+                                  .pickFiles(type: FileType.image);
+                              file == null
+                                  ? null
+                                  : DatabaseAPI.updateUserProfileImage(
+                                      File(file.files.single.path));
                             },
                             child: Icon(
                               Icons.account_circle_sharp,
@@ -67,26 +71,30 @@ class _tutorProfileState extends State<tutorProfile> {
                           ),
                         )
                       : Container(
-                        width: ScreenSize.width * 0.30,
-                        height: ScreenSize.height * 0.21,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          image: DecorationImage(
-                              image: NetworkImage(SessionManager
-                                  .loggedInTutor.profileImag),
-                              fit: BoxFit.fill),
+                          width: ScreenSize.width * 0.30,
+                          height: ScreenSize.height * 0.21,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            image: DecorationImage(
+                                image: NetworkImage(
+                                    SessionManager.loggedInTutor.profileImag),
+                                fit: BoxFit.fill),
+                          ),
+                          child: GestureDetector(
+                              onTap: () async {
+                                FilePickerResult file = await FilePicker
+                                    .platform
+                                    .pickFiles(type: FileType.image);
+                                file == null
+                                    ? null
+                                    : DatabaseAPI.updateUserProfileImage(
+                                        File(file.files.single.path));
+                              },
+                              child: Align(
+                                child: Icon(Icons.edit),
+                                alignment: Alignment.bottomRight,
+                              )),
                         ),
-                        child: GestureDetector(
-                          onTap: () async{
-                            FilePickerResult file =
-                                await FilePicker.platform.pickFiles(type: FileType.image);
-                            file == null ? null :  DatabaseAPI.updateUserProfileImage(File(file.files.single.path));
-                            },
-                            child: Align(
-                          child: Icon(Icons.edit),
-                          alignment: Alignment.bottomRight,
-                        )),
-                      ),
                 ),
                 Center(
                   child: Text(
@@ -115,14 +123,17 @@ class _tutorProfileState extends State<tutorProfile> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    //TODO: Fetch information about tutor and view it
                     ProfileInfoWidget("Sessions", 69.toString()),
                     SizedBox(
                       width: 5,
                     ),
+                    //TODO: Clickable rating that shows all the criteria and their rating
                     ProfileInfoWidget("Rating", 4.5.toString()),
                     SizedBox(
                       width: 5,
                     ),
+                    //TODO: Clickable reviews tab that shows all the tutor reviews
                     ProfileInfoWidget("Reviews", 69.toString()),
                   ],
                 ),
@@ -151,6 +162,7 @@ class _tutorProfileState extends State<tutorProfile> {
                     ),
                     !(SessionManager.loggedInTutor.aboutMe == '')
                         ? Padding(
+                            //TODO: Add edit about me button
                             padding: const EdgeInsets.all(3.0),
                             child: Text(
                               SessionManager.loggedInTutor.aboutMe,
@@ -256,6 +268,7 @@ class _tutorProfileState extends State<tutorProfile> {
                       SizedBox(
                         height: 5,
                       ),
+                      // TODO: Add ability for tutor to preview his own materials (open file, edit quiz)
                       MaterialStreamTutor(),
                     ],
                   ),

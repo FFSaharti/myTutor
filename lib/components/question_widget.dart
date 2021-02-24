@@ -25,7 +25,8 @@ class _QuestionWidgetState extends State<QuestionWidget> {
     // get the tutor name.
     // means that the current user is not student, so get the student name
     String tempAnswer;
-    Tutor tempTutor = Tutor("TEST-BABA", "", "pass", "aboutMe", "id", [],"img");
+    Tutor tempTutor =
+        Tutor("TEST-BABA", "", "pass", "aboutMe", "id", [], "img");
     String tempDate;
     widget.question.answers.clear();
     DatabaseAPI.getQuestion(widget.question).then((data) {
@@ -41,16 +42,15 @@ class _QuestionWidgetState extends State<QuestionWidget> {
         List.from(data.data()["answers"]).forEach((element) {
           print("element inside list is --> " + element.toString());
           DatabaseAPI.getAnswer(element).then((value) => {
-                //TODO: Fetch tutor to add to answer instead of tempTutor
-
-                // print("before building tutor answer is --> " + tempAnswer),
                 DatabaseAPI.getTutor(value.data()["Tutor"]).then((tutor) => {
                       tempTutor = Tutor(
                           tutor.data()["name"],
                           tutor.data()["email"],
                           "encrypted password",
                           "aboutMe",
-                          tutor.id, [],tutor.data()["profileImg"]),
+                          tutor.id,
+                          [],
+                          tutor.data()["profileImg"]),
                       List.from(tutor.data()["experiences"]).forEach((element) {
                         tempTutor.addExperience(element);
                       }),

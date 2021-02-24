@@ -54,7 +54,6 @@ class _InterestsScreenState extends State<InterestsScreen> {
                   setState(() {
                     searchBox = value;
                     getSubjects(searchBox);
-                    // getSelectedSubjects(selectedInterests);
                   });
                 },
                 style: TextStyle(
@@ -147,20 +146,6 @@ class _InterestsScreenState extends State<InterestsScreen> {
               SizedBox(
                 height: 8,
               ),
-              // EZButton(
-              //     width: width,
-              //     buttonColor: Colors.red,
-              //     textColor: Colors.white,
-              //     isGradient: false,
-              //     colors: null,
-              //     buttonText: "Update",
-              //     hasBorder: false,
-              //     borderColor: null,
-              //     onPressed: () {
-              //       setState(() {
-              //         getSelectedSubjects(selectedInterests);
-              //       });
-              //     }),
               Builder(builder: (context) {
                 return EZButton(
                   width: ScreenSize.width,

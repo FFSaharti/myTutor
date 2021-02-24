@@ -35,8 +35,13 @@ class _RequestTutorScreenState extends State<RequestTutorScreen> {
     getTutorsFromApi().then((data) {
       setState(() {
         for (var tutor in data.docs) {
-          Tutors.add(MyUser(tutor.data()["name"], tutor.data()["email"],
-              tutor.data()["pass"], "_aboutMe", tutor.id,tutor.data()["profileImg"]));
+          Tutors.add(MyUser(
+              tutor.data()["name"],
+              tutor.data()["email"],
+              tutor.data()["pass"],
+              "_aboutMe",
+              tutor.id,
+              tutor.data()["profileImg"]));
         }
       });
     });
@@ -55,6 +60,7 @@ class _RequestTutorScreenState extends State<RequestTutorScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                //TODO: Implement filter options for searching for tutor
                 TextField(
                   controller: searchController,
                   onChanged: (value) {

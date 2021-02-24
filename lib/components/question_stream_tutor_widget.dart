@@ -44,8 +44,8 @@ class QuestionStreamTutor extends StatelessWidget {
                                     qDesc,
                                     qDOS,
                                     // TODO: Fetch Student from DB
-                                    Student(
-                                        "", "", "", "", qIssuer.toString(), [],""),
+                                    Student("", "", "", "", qIssuer.toString(),
+                                        [], ""),
                                     [],
                                     qSubject.toString(),
                                     qState),
@@ -57,7 +57,7 @@ class QuestionStreamTutor extends StatelessWidget {
                       question.id,
                       qDesc,
                       qDOS,
-                      Student("", "", "", "", qIssuer.toString(), [],""),
+                      Student("", "", "", "", qIssuer.toString(), [], ""),
                       [],
                       qSubject.toString(),
                       qState)),

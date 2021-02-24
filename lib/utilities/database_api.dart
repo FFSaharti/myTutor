@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:path/path.dart' as Path;
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
@@ -59,29 +59,25 @@ class DatabaseAPI {
 
   // user log/sign up
   static Future<String> createStudent() async {
-
-
-    //TODO:catch.
     try {
       UserCredential user = await _auth
           .createUserWithEmailAndPassword(
               email: tempUser.email, password: tempUser.pass)
           .then((value) => value);
       if (user != null) {
-        if (tempFile == null){
+        if (tempFile == null) {
           // the user didn't pick any image
           tempUser.profileImag = "";
           uploadUser();
-          _tempStudent = Student(tempUser.name, tempUser.email, tempUser.pass, "",
-              "", [], tempUser.profileImag);
+          _tempStudent = Student(tempUser.name, tempUser.email, tempUser.pass,
+              "", "", [], tempUser.profileImag);
           SessionManager.loggedInStudent = _tempStudent;
-        } else{
+        } else {
           await uploadUserProfileImage();
           uploadUser();
-          _tempStudent = Student(tempUser.name, tempUser.email, tempUser.pass, "",
-              "", [], tempUser.profileImag);
+          _tempStudent = Student(tempUser.name, tempUser.email, tempUser.pass,
+              "", "", [], tempUser.profileImag);
           SessionManager.loggedInStudent = _tempStudent;
-
         }
 
         return "Success";
@@ -98,43 +94,42 @@ class DatabaseAPI {
       "name": tempUser.name,
       "questions": [],
       "aboutMe": "",
-      "profileImg" : tempUser.profileImag,
+      "profileImg": tempUser.profileImag,
     });
   }
 
   // user profile image methods
-  static Future<String> uploadUserProfileImage() async{
+  static Future<String> uploadUserProfileImage() async {
     try {
-       ref =
-      firebase_storage.FirebaseStorage.instance.ref().child(tempUser.name);
+      ref =
+          firebase_storage.FirebaseStorage.instance.ref().child(tempUser.name);
       uploadTask = ref.putData(tempFile.readAsBytesSync());
       String url =
-      await (await uploadTask.then((value) => value.ref.getDownloadURL()));
+          await (await uploadTask.then((value) => value.ref.getDownloadURL()));
       tempUser.profileImag = url;
-   // await uplodeDocumentToTutorCollection(document);
-    return "done";
+      // await uplodeDocumentToTutorCollection(document);
+      return "done";
     } on FirebaseException catch (e) {
-    return "error";
+      return "error";
     }
-
-
-
   }
 
-  static void updateUserProfileImage(File newImage) async{
-    ref = firebase_storage.FirebaseStorage.instance.ref().child(SessionManager.loggedInUser.name);
+  static void updateUserProfileImage(File newImage) async {
+    ref = firebase_storage.FirebaseStorage.instance
+        .ref()
+        .child(SessionManager.loggedInUser.name);
     uploadTask = ref.putData(newImage.readAsBytesSync());
     String url =
-    await (await uploadTask.then((value) => value.ref.getDownloadURL()));
+        await (await uploadTask.then((value) => value.ref.getDownloadURL()));
 
     // change the url on the user table
-    if (SessionManager.loggedInTutor.userId == ""){
+    if (SessionManager.loggedInTutor.userId == "") {
       SessionManager.loggedInStudent.profileImag = url;
-    await _firestore
-        .collection("Student")
-        .doc(SessionManager.loggedInUser.userId)
-        .update({"profileImg": url});
-    } else{
+      await _firestore
+          .collection("Student")
+          .doc(SessionManager.loggedInUser.userId)
+          .update({"profileImg": url});
+    } else {
       SessionManager.loggedInTutor.profileImag = url;
       await _firestore
           .collection("Tutor")
@@ -335,7 +330,7 @@ class DatabaseAPI {
     List<int> subjectIDs = getSubjects();
 
     // check the file
-    if(tempFile == null)
+    if (tempFile == null)
       tempUser.profileImag == "";
     else {
       uploadUserProfileImage();
@@ -353,7 +348,7 @@ class DatabaseAPI {
             "name": tempUser.name,
             "experiences": subjectIDs,
             "profileImg": tempUser.profileImag,
-            "aboutMe" : "",
+            "aboutMe": "",
           });
           _tempTutor = Tutor(tempUser.name, tempUser.email, tempUser.pass, "",
               "", subjectIDs, tempUser.profileImag);
