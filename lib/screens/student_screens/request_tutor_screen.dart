@@ -2,9 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:mytutor/classes/tutor.dart';
 import 'package:mytutor/classes/user.dart';
+import 'package:mytutor/screens/student_screens/view_tutor_profile_screen.dart';
 import 'package:mytutor/utilities/constants.dart';
 import 'package:mytutor/utilities/database_api.dart';
+import 'package:mytutor/utilities/screen_size.dart';
 
 class RequestTutorScreen extends StatefulWidget {
   static String id = 'request_tutor_screen';
@@ -14,7 +17,7 @@ class RequestTutorScreen extends StatefulWidget {
 }
 
 class _RequestTutorScreenState extends State<RequestTutorScreen> {
-  List<MyUser> Tutors = [];
+  List<Tutor> Tutors = [];
   List<MyUser> searchedTutors = [];
   TextEditingController searchController = TextEditingController();
 
@@ -35,13 +38,15 @@ class _RequestTutorScreenState extends State<RequestTutorScreen> {
     getTutorsFromApi().then((data) {
       setState(() {
         for (var tutor in data.docs) {
-          Tutors.add(MyUser(
+          Tutors.add(Tutor(
               tutor.data()["name"],
               tutor.data()["email"],
               tutor.data()["pass"],
-              "_aboutMe",
+              tutor.data()["aboutMe"],
               tutor.id,
+              List.from(tutor.data()["experiences"]),
               tutor.data()["profileImg"]));
+          //TODO: fetch tutor's rate and review, show experiences and mats
         }
       });
     });
@@ -132,7 +137,9 @@ class _RequestTutorScreenState extends State<RequestTutorScreen> {
                       overscroll.disallowGlow();
                     },
                     child: GridView.builder(
+
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        childAspectRatio: 0.80,
                         crossAxisCount: 2,
                         crossAxisSpacing: 10.0,
                         mainAxisSpacing: 10.0,
@@ -144,7 +151,7 @@ class _RequestTutorScreenState extends State<RequestTutorScreen> {
                       itemCount: searchedTutors.length,
                       itemBuilder: (context, index) {
                         return TutorWidget(
-                            Tutor: searchedTutors.elementAt(index));
+                            tutor: searchedTutors.elementAt(index));
                       },
                     ),
                   ),
@@ -161,9 +168,9 @@ class _RequestTutorScreenState extends State<RequestTutorScreen> {
 }
 
 class TutorWidget extends StatefulWidget {
-  final MyUser Tutor;
+  final MyUser tutor;
 
-  const TutorWidget({Key key, this.Tutor}) : super(key: key);
+  const TutorWidget({Key key, this.tutor}) : super(key: key);
 
   @override
   _TutorWidgetState createState() => _TutorWidgetState();
@@ -173,8 +180,6 @@ class _TutorWidgetState extends State<TutorWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 220,
-      width: 140,
       decoration: BoxDecoration(
         color: Colors.white12,
         border: Border.all(color: Colors.grey),
@@ -182,8 +187,47 @@ class _TutorWidgetState extends State<TutorWidget> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          Align(
+            alignment: Alignment.topRight,
+            child: IconButton(
+              icon: Icon(Icons.info_outline),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => ViewTutorProfileScreen(
+                            tutor: widget.tutor,
+                          )),
+                );
+              },
+            ),
+          ),
+          widget.tutor.profileImag == ""
+              ? Container(
+                  width: ScreenSize.width * 0.20,
+                  height: ScreenSize.height * 0.10,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                  ),
+                  child: Center(
+                    child: Icon(
+                      Icons.account_circle_sharp,
+                      size: ScreenSize.height * 0.10,
+                    ),
+                  ),
+                )
+              : Container(
+                  width: ScreenSize.width * 0.20,
+                  height: ScreenSize.height * 0.09,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    image: DecorationImage(
+                        image: NetworkImage(widget.tutor.profileImag),
+                        fit: BoxFit.fill),
+                  ),
+                ),
           Text(
-            widget.Tutor.name,
+            widget.tutor.name,
             style: GoogleFonts.sarabun(
                 textStyle: TextStyle(
                     fontSize: 24,
@@ -193,7 +237,7 @@ class _TutorWidgetState extends State<TutorWidget> {
           GestureDetector(
             onTap: () {
               print("SHOW BUTTON");
-              showbutton(widget.Tutor);
+              showbutton(widget.tutor);
             },
             child: Container(
                 height: 30,
@@ -227,8 +271,7 @@ class _TutorWidgetState extends State<TutorWidget> {
     double height = mediaQueryData.size.height;
     showModalBottomSheet(
         shape: RoundedRectangleBorder(
-            // borderRadius: BorderRadius.vertical(top: Radius.circular(2.0))
-            ),
+            borderRadius: BorderRadius.vertical(top: Radius.circular(25.0))),
         backgroundColor: Colors.transparent,
         enableDrag: true,
         isScrollControlled: true,
@@ -236,180 +279,199 @@ class _TutorWidgetState extends State<TutorWidget> {
         builder: (context) {
           return Container(
             height: height * 0.60,
-            child: Scaffold(
-              body: Container(
-                //     padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-                height: height * 0.60,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(50)
-                    //   topRight: Radius.circular(100),
-                    //   topLeft: Radius.circular(100),
-                    // )
-                    ,
-                    color: Colors.white),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            IconButton(
-                                icon: Icon(Icons.cancel),
-                                onPressed: () {
+            child: Container(
+              padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).viewInsets.bottom),
+              height: height * 0.60,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10), color: Colors.white),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          IconButton(
+                              icon: Icon(Icons.cancel),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              }),
+                          Text(
+                            "Session details",
+                            style: TextStyle(fontSize: 20),
+                          ),
+                          IconButton(
+                              icon: Icon(Icons.check),
+                              onPressed: () {
+                                if (titleController.text.isNotEmpty &&
+                                    dateController.text.isNotEmpty &&
+                                    problemController.text.isNotEmpty &&
+                                    timeController.text.isNotEmpty) {
+                                  DatabaseAPI.createNewSession(
+                                      titleController.text,
+                                      problemController.text,
+                                      dateController.text,
+                                      tutor,
+                                      timeController.text);
                                   Navigator.of(context).pop();
-                                }),
-                            Text(
-                              "Session details",
-                              style: TextStyle(fontSize: 20),
+                                }
+                              }),
+                        ],
+                      ),
+                      Text("Requesting",
+                          style: TextStyle(
+                              fontSize: 22,
+                              fontWeight: FontWeight.normal,
+                              color: Colors.black)),
+                      widget.tutor.profileImag == ""
+                          ? Container(
+                              width: ScreenSize.width * 0.20,
+                              height: ScreenSize.height * 0.12,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                              ),
+                              child: Center(
+                                child: Icon(
+                                  Icons.account_circle_sharp,
+                                  size: ScreenSize.height * 0.10,
+                                ),
+                              ),
+                            )
+                          : Container(
+                              width: ScreenSize.width * 0.20,
+                              height: ScreenSize.height * 0.12,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                image: DecorationImage(
+                                    image:
+                                        NetworkImage(widget.tutor.profileImag),
+                                    fit: BoxFit.fill),
+                              ),
                             ),
-                            IconButton(
-                                icon: Icon(Icons.check),
-                                onPressed: () {
-                                  if (titleController.text.isNotEmpty &&
-                                      dateController.text.isNotEmpty &&
-                                      problemController.text.isNotEmpty &&
-                                      timeController.text.isNotEmpty) {
-                                    DatabaseAPI.createNewSession(
-                                        titleController.text,
-                                        problemController.text,
-                                        dateController.text,
-                                        tutor,
-                                        timeController.text);
-                                    Navigator.of(context).pop();
-                                  }
-                                }),
+                      Text(
+                        widget.tutor.name,
+                        style: GoogleFonts.sarabun(
+                            textStyle: TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.blueGrey)),
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          children: [
+                            Align(
+                              alignment: Alignment.topLeft,
+                              child: Text(
+                                "SessionTitle",
+                                style: GoogleFonts.secularOne(
+                                    textStyle: TextStyle(
+                                        fontSize: 17,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black)),
+                              ),
+                            ),
+                            TextField(
+                              controller: titleController,
+                              decoration: InputDecoration(
+                                hintText: 'Type something...',
+                                hintStyle: TextStyle(
+                                    fontSize: 17.0, color: Colors.grey),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            Align(
+                              alignment: Alignment.topLeft,
+                              child: Text(
+                                "Problem Description",
+                                style: GoogleFonts.secularOne(
+                                    textStyle: TextStyle(
+                                        fontSize: 17,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black)),
+                              ),
+                            ),
+                            TextField(
+                              controller: problemController,
+                              decoration: InputDecoration(
+                                hintText: 'Type something...',
+                                hintStyle: TextStyle(
+                                    fontSize: 17.0, color: Colors.grey),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            Align(
+                              alignment: Alignment.topLeft,
+                              child: Text(
+                                "Preferred Date",
+                                style: GoogleFonts.secularOne(
+                                    textStyle: TextStyle(
+                                        fontSize: 17,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black)),
+                              ),
+                            ),
+                            TextField(
+                              controller: dateController,
+                              decoration: InputDecoration(
+                                suffixIcon: GestureDetector(
+                                  child: Icon(Icons.date_range),
+                                  onTap: () {
+                                    showDatePicker(
+                                            context: context,
+                                            initialDate: _preffredDate == null
+                                                ? DateTime.now()
+                                                : _preffredDate,
+                                            firstDate: DateTime.now(),
+                                            lastDate: DateTime(2022))
+                                        .then((value) => dateController.text =
+                                            value.year.toString() +
+                                                "-" +
+                                                value.month.toString() +
+                                                "-" +
+                                                value.day.toString());
+                                  },
+                                ),
+                                hintText: 'Type something...',
+                                hintStyle: TextStyle(
+                                    fontSize: 17.0, color: Colors.grey),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            Align(
+                              alignment: Alignment.topLeft,
+                              child: Text(
+                                "Preferred Time, am/pm",
+                                style: GoogleFonts.secularOne(
+                                    textStyle: TextStyle(
+                                        fontSize: 17,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black)),
+                              ),
+                            ),
+                            TextField(
+                              controller: timeController,
+                              decoration: InputDecoration(
+                                hintText: 'Type something...',
+                                hintStyle: TextStyle(
+                                    fontSize: 17.0, color: Colors.grey),
+                              ),
+                            ),
                           ],
                         ),
-                        Text("Requesting",
-                            style: TextStyle(
-                                fontSize: 22,
-                                fontWeight: FontWeight.normal,
-                                color: Colors.black)),
-                        Text(
-                          widget.Tutor.name,
-                          style: GoogleFonts.sarabun(
-                              textStyle: TextStyle(
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.blueGrey)),
-                        ),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            children: [
-                              Align(
-                                alignment: Alignment.topLeft,
-                                child: Text(
-                                  "SessionTitle",
-                                  style: GoogleFonts.secularOne(
-                                      textStyle: TextStyle(
-                                          fontSize: 17,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.black)),
-                                ),
-                              ),
-                              TextField(
-                                controller: titleController,
-                                decoration: InputDecoration(
-                                  hintText: 'Type something...',
-                                  hintStyle: TextStyle(
-                                      fontSize: 17.0, color: Colors.grey),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 20,
-                              ),
-                              Align(
-                                alignment: Alignment.topLeft,
-                                child: Text(
-                                  "Problem Description",
-                                  style: GoogleFonts.secularOne(
-                                      textStyle: TextStyle(
-                                          fontSize: 17,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.black)),
-                                ),
-                              ),
-                              TextField(
-                                controller: problemController,
-                                decoration: InputDecoration(
-                                  hintText: 'Type something...',
-                                  hintStyle: TextStyle(
-                                      fontSize: 17.0, color: Colors.grey),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 20,
-                              ),
-                              Align(
-                                alignment: Alignment.topLeft,
-                                child: Text(
-                                  "Preferred Date",
-                                  style: GoogleFonts.secularOne(
-                                      textStyle: TextStyle(
-                                          fontSize: 17,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.black)),
-                                ),
-                              ),
-                              TextField(
-                                controller: dateController,
-                                decoration: InputDecoration(
-                                  suffixIcon: GestureDetector(
-                                    child: Icon(Icons.date_range),
-                                    onTap: () {
-                                      showDatePicker(
-                                              context: context,
-                                              initialDate: _preffredDate == null
-                                                  ? DateTime.now()
-                                                  : _preffredDate,
-                                              firstDate: DateTime.now(),
-                                              lastDate: DateTime(2022))
-                                          .then((value) => dateController.text =
-                                              value.year.toString() +
-                                                  "-" +
-                                                  value.month.toString() +
-                                                  "-" +
-                                                  value.day.toString());
-                                    },
-                                  ),
-                                  hintText: 'Type something...',
-                                  hintStyle: TextStyle(
-                                      fontSize: 17.0, color: Colors.grey),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 20,
-                              ),
-                              Align(
-                                alignment: Alignment.topLeft,
-                                child: Text(
-                                  "Preferred Time, am/pm",
-                                  style: GoogleFonts.secularOne(
-                                      textStyle: TextStyle(
-                                          fontSize: 17,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.black)),
-                                ),
-                              ),
-                              TextField(
-                                controller: timeController,
-                                decoration: InputDecoration(
-                                  hintText: 'Type something...',
-                                  hintStyle: TextStyle(
-                                      fontSize: 17.0, color: Colors.grey),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
               ),

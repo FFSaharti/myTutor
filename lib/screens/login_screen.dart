@@ -93,9 +93,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 children: [
                   GestureDetector(
                     onTap: () {
-                      //TODO : Implement forgetting password action
                       resetPasswordBottomSheet();
-                      //DatabaseAPI.resetUserPassword("11111@");
                     },
                     child: Text(
                       'Forgot your password?',

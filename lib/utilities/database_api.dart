@@ -103,7 +103,6 @@ class DatabaseAPI {
       await _auth.sendPasswordResetEmail(email: email);
       return "success";
     }on FirebaseAuthException catch (e) {
-      print(e.code);
       return e.code;
     }
   }
@@ -373,6 +372,20 @@ class DatabaseAPI {
     } on FirebaseAuthException catch (e) {
       return e.message;
     }
+  }
+  
+  static Future<List<Rate>> getTutorRates(String tutorid) async{
+    
+    List<Rate> tempRate = [];
+     var res =_firestore.collection("Tutor").doc(tutorid).collection("rate").get();
+    res.then((value) => value.docs.forEach((doc) {
+      
+      tempRate.add(Rate(doc.data()["review"], doc.data()["teachSkills"], doc.data()["friendliness"], doc.data()["communication"], doc.data()["creativity"]));
+    }
+
+    ));
+
+    return tempRate;
   }
 
   // session related
