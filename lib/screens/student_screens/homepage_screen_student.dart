@@ -366,8 +366,7 @@ class _ProfileStudentState extends State<ProfileStudent> {
 
   @override
   Widget build(BuildContext context) {
-
-    print("here"+SessionManager.loggedInStudent.profileImag);
+    print("here" + SessionManager.loggedInStudent.profileImag);
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -392,46 +391,52 @@ class _ProfileStudentState extends State<ProfileStudent> {
                 Center(
                   child: SessionManager.loggedInStudent.profileImag == ""
                       ? Container(
-                    width: ScreenSize.width * 0.30,
-                    height: ScreenSize.height * 0.21,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                    ),
-                    child: GestureDetector(
-                      onTap: () async{
-                        FilePickerResult file =
-                        await FilePicker.platform.pickFiles(type: FileType.image);
-                        file == null ? null :  DatabaseAPI.updateUserProfileImage(File(file.files.single.path));
-                      },
-                      child: Icon(
-                        Icons.account_circle_sharp,
-                        size: 120,
-                      ),
-                    ),
-                  )
+                          width: ScreenSize.width * 0.30,
+                          height: ScreenSize.height * 0.21,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                          ),
+                          child: GestureDetector(
+                            onTap: () async {
+                              FilePickerResult file = await FilePicker.platform
+                                  .pickFiles(type: FileType.image);
+                              file == null
+                                  ? null
+                                  : DatabaseAPI.updateUserProfileImage(
+                                      File(file.files.single.path));
+                            },
+                            child: Icon(
+                              Icons.account_circle_sharp,
+                              size: 120,
+                            ),
+                          ),
+                        )
                       : Container(
-                    width: ScreenSize.width * 0.30,
-                    height: ScreenSize.height * 0.21,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      image: DecorationImage(
-                          image: NetworkImage(SessionManager.loggedInStudent.profileImag),
-                          fit: BoxFit.fill),
-                    ),
-                    child: GestureDetector(
-                        onTap: () async{
-                          FilePickerResult file =
-                          await FilePicker.platform.pickFiles(type: FileType.image);
-                          file == null ? null :  DatabaseAPI.updateUserProfileImage(File(file.files.single.path));
-                          setState(() {
-
-                          });
-                        },
-                        child: Align(
-                          child: Icon(Icons.edit),
-                          alignment: Alignment.bottomRight,
-                        )),
-                  ),
+                          width: ScreenSize.width * 0.30,
+                          height: ScreenSize.height * 0.21,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            image: DecorationImage(
+                                image: NetworkImage(
+                                    SessionManager.loggedInStudent.profileImag),
+                                fit: BoxFit.fill),
+                          ),
+                          child: GestureDetector(
+                              onTap: () async {
+                                FilePickerResult file = await FilePicker
+                                    .platform
+                                    .pickFiles(type: FileType.image);
+                                file == null
+                                    ? null
+                                    : DatabaseAPI.updateUserProfileImage(
+                                        File(file.files.single.path));
+                                setState(() {});
+                              },
+                              child: Align(
+                                child: Icon(Icons.edit),
+                                alignment: Alignment.bottomRight,
+                              )),
+                        ),
                 ),
                 Text(
                   SessionManager.loggedInStudent.name,
@@ -480,13 +485,25 @@ class _ProfileStudentState extends State<ProfileStudent> {
                       ],
                     ),
                     !(SessionManager.loggedInStudent.aboutMe == '')
-                        ? Padding(
-                            padding: const EdgeInsets.all(3.0),
-                            child: Text(
-                              SessionManager.loggedInStudent.aboutMe,
-                              style:
-                                  TextStyle(fontSize: 16.5, color: kGreyerish),
-                            ),
+                        ? Row(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(3.0),
+                                child: Text(
+                                  SessionManager.loggedInStudent.aboutMe,
+                                  style: TextStyle(
+                                      fontSize: 16.5, color: kGreyerish),
+                                ),
+                              ),
+                              Spacer(),
+                              IconButton(
+                                icon: Icon(Icons.edit),
+                                iconSize: 20,
+                                onPressed: () {
+                                  showAboutMe(setParentState);
+                                },
+                              ),
+                            ],
                           )
                         : Container(
                             height: ScreenSize.height * 0.17,
@@ -581,7 +598,6 @@ class _ProfileStudentState extends State<ProfileStudent> {
                                 "About Me",
                                 style: TextStyle(fontSize: 20),
                               ),
-                              // TODO : Add edit button to edit about me anytime...
                               IconButton(
                                 icon: Icon(Icons.check),
                                 onPressed: () {
@@ -635,7 +651,14 @@ class _ProfileStudentState extends State<ProfileStudent> {
                                   keyboardType: TextInputType.multiline,
                                   maxLines: null,
                                   decoration: InputDecoration(
-                                    hintText: 'Describe yourself briefly...',
+                                    hintText: !(SessionManager.loggedInStudent
+                                                .aboutMe.isNotEmpty ||
+                                            SessionManager
+                                                    .loggedInStudent.aboutMe ==
+                                                '')
+                                        ? 'Describe yourself briefly...'
+                                        : SessionManager
+                                            .loggedInStudent.aboutMe,
                                     hintStyle: TextStyle(
                                         fontSize: 17.0, color: Colors.grey),
                                   ),

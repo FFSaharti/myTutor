@@ -161,14 +161,26 @@ class _tutorProfileState extends State<tutorProfile> {
                       ],
                     ),
                     !(SessionManager.loggedInTutor.aboutMe == '')
-                        ? Padding(
-                            //TODO: Add edit about me button
-                            padding: const EdgeInsets.all(3.0),
-                            child: Text(
-                              SessionManager.loggedInTutor.aboutMe,
-                              style:
-                                  TextStyle(fontSize: 16.5, color: kGreyerish),
-                            ),
+                        ? Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(3.0),
+                                child: Text(
+                                  SessionManager.loggedInTutor.aboutMe,
+                                  style: TextStyle(
+                                      fontSize: 16.5, color: kGreyerish),
+                                ),
+                              ),
+                              Spacer(),
+                              IconButton(
+                                icon: Icon(Icons.edit),
+                                iconSize: 20,
+                                onPressed: () {
+                                  showAboutMe(setParentState);
+                                },
+                              ),
+                            ],
                           )
                         : Container(
                             height: ScreenSize.height * 0.17,
@@ -397,8 +409,15 @@ class _tutorProfileState extends State<tutorProfile> {
                                   controller: aboutMeController,
                                   keyboardType: TextInputType.multiline,
                                   maxLines: null,
+                                  //
                                   decoration: InputDecoration(
-                                    hintText: 'Describe yourself briefly...',
+                                    hintText: !(SessionManager.loggedInTutor
+                                                .aboutMe.isNotEmpty ||
+                                            SessionManager
+                                                    .loggedInTutor.aboutMe ==
+                                                '')
+                                        ? 'Describe yourself briefly...'
+                                        : SessionManager.loggedInTutor.aboutMe,
                                     hintStyle: TextStyle(
                                         fontSize: 17.0, color: Colors.grey),
                                   ),
