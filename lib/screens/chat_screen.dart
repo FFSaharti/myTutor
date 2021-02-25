@@ -6,7 +6,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:mytutor/classes/rate.dart';
 import 'package:mytutor/classes/session.dart';
-import 'package:mytutor/screens/student_screens/homepage_screen_student.dart';
 import 'package:mytutor/utilities/constants.dart';
 import 'package:mytutor/utilities/database_api.dart';
 import 'package:mytutor/utilities/screen_size.dart';
@@ -37,38 +36,34 @@ class _messagesScreenState extends State<messagesScreen> {
           IconButton(
               icon: Icon(Icons.info_outline),
               onPressed: () {
-
-                if(SessionManager.loggedInTutor.userId == ""){
+                if (SessionManager.loggedInTutor.userId == "") {
                   // current user is student, show him the bottom sheet to give  him the ability to rate the session
                   // check if the session is active, then show the rate bottom sheet, if not show a error pop up.
                   widget.currentsession.status == "active"
                       ? showBottomSheetForStudent()
                       : AwesomeDialog(
-                    context: context,
-                    animType: AnimType.SCALE,
-                    dialogType: DialogType.ERROR,
-                    body: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Center(
-                        child: Text(
-                          'the session is closed. you cant rate it anymore..',
-                          style: kTitleStyle.copyWith(
-                              color: kBlackish,
-                              fontSize: 14,
-                              fontWeight: FontWeight.normal),
-                        ),
-                      ),
-                    ),
-                    btnOkOnPress: () {
-                      Navigator.pop(context);
-                    },
-                  )
-                    .show();
-                }
-                else{
+                          context: context,
+                          animType: AnimType.SCALE,
+                          dialogType: DialogType.ERROR,
+                          body: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Center(
+                              child: Text(
+                                'the session is closed. you cant rate it anymore..',
+                                style: kTitleStyle.copyWith(
+                                    color: kBlackish,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.normal),
+                              ),
+                            ),
+                          ),
+                          btnOkOnPress: () {
+                            Navigator.pop(context);
+                          },
+                        ).show();
+                } else {
                   //TODO: bottom sheet for tutor without rating.
                 }
-
               }),
         ],
       ),
@@ -148,7 +143,7 @@ class _messagesScreenState extends State<messagesScreen> {
         context: context,
         builder: (context) {
           return Container(
-              height: ScreenSize.height * 0.50,
+              height: ScreenSize.height * 0.70,
               child: NotificationListener<OverscrollIndicatorNotification>(
                 // ignore: missing_return
                 onNotification: (overscroll) {
@@ -278,7 +273,6 @@ class _messagesScreenState extends State<messagesScreen> {
                               ),
                               RaisedButton(
                                 onPressed: () {
-
                                   _pageController.animateToPage(
                                     2,
                                     duration: const Duration(milliseconds: 600),
@@ -349,7 +343,6 @@ class _messagesScreenState extends State<messagesScreen> {
                             children: [
                               RaisedButton(
                                 onPressed: () {
-
                                   reviewController.text.isNotEmpty
                                       ? DatabaseAPI.rateTutor(
                                           Rate(
