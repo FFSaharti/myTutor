@@ -29,12 +29,13 @@ class _ViewMaterialsScreenState extends State<ViewMaterialsScreen> {
               document.data()["title"],
               document.data()["type"],
               document.data()["url"],
-              subjects.elementAt(document.data()["subjcetid"]),
+              subjects.elementAt(document.data()["subject"]),
               document.data()["issuerId"],
               null,
               document.data()["description"],
               document.data()["fileType"]));
         }
+        print("length is --> " + documents.length.toString());
       }
     });
 
@@ -42,12 +43,14 @@ class _ViewMaterialsScreenState extends State<ViewMaterialsScreen> {
   }
 
   Future<QuerySnapshot> getFetchDocumentsFromApi() async {
-    var docs = await DatabaseAPI.fetchDocument();
+    var docs;
+    await DatabaseAPI.fetchDocument().then((value) => {docs = value});
     return docs;
   }
 
   void applyFilter() {
     print(_dropDownMenuController);
+    print("Docuemnts length is --> " + documents.length.toString());
     setState(() {
       searchedDocuments = documents
           .where((doc) => doc.subject.id == _dropDownMenuController)

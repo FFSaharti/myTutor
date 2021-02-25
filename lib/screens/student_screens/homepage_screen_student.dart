@@ -366,7 +366,8 @@ class _ProfileStudentState extends State<ProfileStudent> {
 
   @override
   Widget build(BuildContext context) {
-    print("here" + SessionManager.loggedInStudent.profileImag);
+    print("here" +
+        (SessionManager.loggedInStudent.profileImag == null).toString());
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -389,7 +390,7 @@ class _ProfileStudentState extends State<ProfileStudent> {
                   height: 20,
                 ),
                 Center(
-                  child: SessionManager.loggedInStudent.profileImag == ""
+                  child: SessionManager.loggedInStudent.profileImag == null
                       ? Container(
                           width: ScreenSize.width * 0.30,
                           height: ScreenSize.height * 0.21,
