@@ -1,3 +1,4 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -93,6 +94,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   GestureDetector(
                     onTap: () {
                       //TODO : Implement forgetting password action
+                      resetPasswordBottomSheet();
+                      //DatabaseAPI.resetUserPassword("11111@");
                     },
                     child: Text(
                       'Forgot your password?',
@@ -163,6 +166,152 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       ),
     );
+  }
+
+  resetPasswordBottomSheet() {
+
+    TextEditingController EmailController = TextEditingController();
+
+    showModalBottomSheet(
+       isScrollControlled: true,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(top: Radius.circular(25.0))),
+        context: context,
+        builder: (context) {
+          return Padding(
+            padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+            child: Container(
+              height: ScreenSize.height *0.30,
+              child: Column(
+
+                children: [
+                  SizedBox(
+                    height: ScreenSize.height * 0.030,
+                  ),
+                  Text(
+                    "enter your email",
+                    style: kTitleStyle.copyWith(
+                        fontSize: 17,
+                        fontWeight: FontWeight.normal,
+                        color: Colors.black),
+                  ),
+                  SizedBox(
+                    height: ScreenSize.height * 0.0090,
+                  ),
+                  SizedBox(
+                    height: ScreenSize.height * 0.0090,
+                  ),
+                  TextField(
+                    controller: EmailController,
+                    onChanged: (value) {
+
+                    },
+                    decoration: InputDecoration(
+                      contentPadding: EdgeInsets.symmetric(
+                          vertical: 10.0, horizontal: 20.0),
+                      hintText: 'Type Your E-mail here....',
+                      border: InputBorder.none,
+                    ),
+                  ),
+                  SizedBox(
+                    height: ScreenSize.height * 0.020,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      RaisedButton(
+                        onPressed: () async{
+                          if (EmailController.text.isNotEmpty){
+                            String errorCode = await DatabaseAPI.resetUserPassword(EmailController.text);
+                            if (errorCode == "success"){
+                              AwesomeDialog(
+                                context: context,
+                                animType: AnimType.SCALE,
+                                dialogType: DialogType.SUCCES,
+                                body: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Center(
+                                    child: Text(
+                                      'check your email for reset link..',
+                                      style: kTitleStyle.copyWith(
+                                          color: kBlackish,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.normal),
+                                    ),
+                                  ),
+                                ),
+                                btnOkOnPress: () {
+                                   Navigator.pop(context);
+                                },
+                              ).show();
+                            } else if(errorCode == "invalid-email"){
+                              AwesomeDialog(
+                                context: context,
+                                animType: AnimType.SCALE,
+                                dialogType: DialogType.ERROR,
+                                body: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Center(
+                                    child: Text(
+                                      'Invalid email',
+                                      style: kTitleStyle.copyWith(
+                                          color: kBlackish,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.normal),
+                                    ),
+                                  ),
+                                ),
+                                btnOkOnPress: () {
+
+                                },
+                              ).show();
+                            } else if(errorCode == "user-not-found"){
+                              AwesomeDialog(
+                                context: context,
+                                animType: AnimType.SCALE,
+                                dialogType: DialogType.ERROR,
+                                body: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Center(
+                                    child: Text(
+                                      'we dont have a user with that email.',
+                                      style: kTitleStyle.copyWith(
+                                          color: kBlackish,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.normal),
+                                    ),
+                                  ),
+                                ),
+                                btnOkOnPress: () {
+
+                                },
+                              ).show();
+                            }
+                          }
+
+
+                        },
+                        child: Text(
+                          "Submit",
+                          style: GoogleFonts.sarabun(
+                            textStyle: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.normal,
+                                color: Colors.white),
+                          ),
+                        ),
+                        color: kColorScheme[2],
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15.0),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
   }
 }
 

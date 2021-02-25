@@ -98,6 +98,16 @@ class DatabaseAPI {
     });
   }
 
+  static Future<String> resetUserPassword(String email) async{
+    try{
+      await _auth.sendPasswordResetEmail(email: email);
+      return "success";
+    }on FirebaseAuthException catch (e) {
+      print(e.code);
+      return e.code;
+    }
+  }
+
   // user profile image methods
   static Future<String> uploadUserProfileImage() async {
     try {
@@ -497,7 +507,7 @@ class DatabaseAPI {
   static void rateTutor(Rate rate, String tutorId) {
     _firestore.collection("Tutor").doc(tutorId).collection("rate").add({
       'teachingSkills': rate.teachingSkills,
-      'Communication': rate.communicationSkills,
+      'communication': rate.communicationSkills,
       'friendliness': rate.friendliness,
       'creativity': rate.creativity,
       'review': rate.review,
