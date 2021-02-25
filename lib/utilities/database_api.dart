@@ -162,6 +162,8 @@ class DatabaseAPI {
                         value.docs.single.id,
                         [],
                         value.docs.single.data()['profileImg']),
+                    tempStudent.favMats =
+                        value.docs.single.data()['listOfFavMats'],
                     List.from(value.docs.single.data()['questions'])
                         .forEach((element) {
                       print("QUESTION PRINTING ... " + element.toString());
@@ -373,7 +375,7 @@ class DatabaseAPI {
       String prefDate, MyUser tutor, String time) async {
     DateTime tempDate = new DateFormat("yyyy-MM-dd").parse(prefDate);
     await _firestore.collection("session").add({
-      'student': DatabaseAPI._tempStudent.userId,
+      'student': SessionManager.loggedInStudent.userId,
       'description': problemDesc,
       'title': title,
       'tutor': tutor.userId,
@@ -533,7 +535,7 @@ class DatabaseAPI {
   }
 
   static Future<QuerySnapshot> fetchDocument() {
-    return _firestore.collection("Document").get();
+    return _firestore.collection("Material").get();
   }
 
   static Future<String> addQuestionToStudent(String questionTitle,
@@ -715,4 +717,20 @@ class DatabaseAPI {
     // return _firestore.collection("Quiz").snapshots();
     return _firestore.collection("Material").snapshots();
   }
+
+  static Future<String> addMaterialToFavorites(Document doc) async {
+    String status = "done";
+    await _firestore
+        .collection("Student")
+        .doc(SessionManager.loggedInStudent.userId)
+        .update({
+      'listOfFavMats': FieldValue.arrayUnion([doc.docid])
+    });
+
+    return status;
+  }
+
+  // static Future<QuerySnapshot> fetchFavDocs() {
+  //   return _firestore.collection("Material").get();
+  // }
 }

@@ -1,9 +1,11 @@
 import 'dart:io';
 
+import 'package:advance_pdf_viewer/advance_pdf_viewer.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:mytutor/classes/document.dart';
 import 'package:mytutor/components/ez_button.dart';
 import 'package:mytutor/components/session_stream_widget.dart';
 import 'package:mytutor/screens/student_screens/request_tutor_screen.dart';
@@ -364,6 +366,53 @@ class _ProfileStudentState extends State<ProfileStudent> {
     });
   }
 
+  List<Document> favDocs = [];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    DatabaseAPI.fetchDocument().then((data) {
+      if (data.docs.isNotEmpty) {
+        for (var material in data.docs) {
+          if (material.data()['type'] == 1) {
+            // DOCUMENT TYPE
+            if (SessionManager.loggedInStudent.favMats.contains(material.id)) {
+              Document tempDoc = Document(
+                  material.data()["title"],
+                  material.data()["type"],
+                  material.data()["url"],
+                  subjects.elementAt(material.data()["subject"]),
+                  material.data()["issuerId"],
+                  null,
+                  material.data()["description"],
+                  material.data()["fileType"]);
+              tempDoc.docid = material.id;
+              print("tempDoc id is --> " +
+                  tempDoc.docid +
+                  " material id is --> " +
+                  material.id);
+              setState(() {
+                favDocs.add(tempDoc);
+              });
+            }
+          } else {
+            // QUIZ TYPE
+            // materials.add(Quiz(
+            //     material.data()["issuerId"],
+            //     material.data()['type'],
+            //     material.data()['subject'],
+            //     material.data()['quizTitle'],
+            //     material.data()['quizDesc']));
+          }
+        }
+        print("length is --> " + favDocs.length.toString());
+      }
+    });
+    super.initState();
+  }
+
+  PDFDocument doc;
+
   @override
   Widget build(BuildContext context) {
     print("here" +
@@ -548,6 +597,64 @@ class _ProfileStudentState extends State<ProfileStudent> {
                 SizedBox(
                   height: 5,
                 ),
+                Row(
+                  children: [
+                    Icon(
+                      Icons.favorite_outline_sharp,
+                      size: 18,
+                    ),
+                    SizedBox(
+                      width: 5,
+                    ),
+                    Text(
+                      "Bookmarked Materials",
+                      style: TextStyle(fontSize: 18),
+                    )
+                  ],
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: favDocs.length,
+                    itemBuilder: (context, index) {
+                      return Card(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: ListTile(
+                            leading: Image.asset(
+                                (favDocs.elementAt(index)).subject.path),
+                            title: Text(favDocs.elementAt(index).title),
+                            // trailing: Column(
+                            //   mainAxisAlignment: MainAxisAlignment.center,
+                            //   children: [
+                            //     Container(
+                            //       child: GestureDetector(
+                            //         child: Icon(Icons.visibility),
+                            //         onTap: () {
+                            //           // open the file reader if the file is pdf, else let the user download the file
+                            //           (favDocs.elementAt(index)).fileType ==
+                            //                   "pdf"
+                            //               ? PDFDocument.fromURL(
+                            //                       (favDocs.elementAt(index))
+                            //                           .url)
+                            //                   .then((value) => {
+                            //                         doc = value,
+                            //                         readPdf(index),
+                            //                       })
+                            //               : downloadFile(index);
+                            //         },
+                            //       ),
+                            //     ),
+                            //   ],
+                            // ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                )
               ],
             ),
           ),

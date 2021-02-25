@@ -12,6 +12,7 @@ class Document extends MyMaterial {
   Subject _subject;
   String _issuerId;
   File _file;
+  String _docid;
 
   String get fileType => _fileType;
 
@@ -69,5 +70,11 @@ class Document extends MyMaterial {
 
   set issuerId(String value) {
     _issuerId = value;
+  }
+
+  String get docid => _docid;
+
+  set docid(String value) {
+    _docid = value;
   }
 }

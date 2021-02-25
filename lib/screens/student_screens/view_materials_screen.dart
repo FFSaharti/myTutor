@@ -1,7 +1,9 @@
 import 'package:advance_pdf_viewer/advance_pdf_viewer.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:mytutor/classes/document.dart';
+import 'package:mytutor/classes/material.dart';
 import 'package:mytutor/utilities/constants.dart';
 import 'package:mytutor/utilities/database_api.dart';
 import 'package:mytutor/utilities/screen_size.dart';
@@ -16,26 +18,44 @@ class ViewMaterialsScreen extends StatefulWidget {
 
 class _ViewMaterialsScreenState extends State<ViewMaterialsScreen> {
   TextEditingController _searchController = TextEditingController();
-  List<Document> documents = [];
-  List<Document> searchedDocuments = [];
+  List<MyMaterial> materials = [];
+  List<MyMaterial> searchedMaterials = [];
   PDFDocument doc;
   int _dropDownMenuController = 1;
 
   void initState() {
     getFetchDocumentsFromApi().then((data) {
       if (data.docs.isNotEmpty) {
-        for (var document in data.docs) {
-          documents.add(Document(
-              document.data()["title"],
-              document.data()["type"],
-              document.data()["url"],
-              subjects.elementAt(document.data()["subject"]),
-              document.data()["issuerId"],
-              null,
-              document.data()["description"],
-              document.data()["fileType"]));
+        for (var material in data.docs) {
+          if (material.data()['type'] == 1) {
+            // DOCUMENT TYPE
+            Document tempDoc = Document(
+                material.data()["title"],
+                material.data()["type"],
+                material.data()["url"],
+                subjects.elementAt(material.data()["subject"]),
+                material.data()["issuerId"],
+                null,
+                material.data()["description"],
+                material.data()["fileType"]);
+            tempDoc.docid = material.id;
+            print("tempDoc id is --> " +
+                tempDoc.docid +
+                " material id is --> " +
+                material.id);
+            materials.add(tempDoc);
+          } else {
+            //TODO: HANDLE QUIZ FETCHES
+            // QUIZ TYPE
+            // materials.add(Quiz(
+            //     material.data()["issuerId"],
+            //     material.data()['type'],
+            //     material.data()['subject'],
+            //     material.data()['quizTitle'],
+            //     material.data()['quizDesc']));
+          }
         }
-        print("length is --> " + documents.length.toString());
+        print("length is --> " + materials.length.toString());
       }
     });
 
@@ -50,18 +70,19 @@ class _ViewMaterialsScreenState extends State<ViewMaterialsScreen> {
 
   void applyFilter() {
     print(_dropDownMenuController);
-    print("Docuemnts length is --> " + documents.length.toString());
+    print("Docuemnts length is --> " + materials.length.toString());
     setState(() {
-      searchedDocuments = documents
-          .where((doc) => doc.subject.id == _dropDownMenuController)
+      searchedMaterials = materials
+          .where(
+              (mat) => (mat as Document).subject.id == _dropDownMenuController)
           .toList();
     });
   }
 
   void searchFilter(String searchValue) {
     setState(() {
-      searchedDocuments =
-          documents.where((doc) => doc.title.contains(searchValue)).toList();
+      searchedMaterials =
+          materials.where((doc) => doc.title.contains(searchValue)).toList();
     });
   }
 
@@ -88,52 +109,57 @@ class _ViewMaterialsScreenState extends State<ViewMaterialsScreen> {
             borderRadius: BorderRadius.vertical(top: Radius.circular(25.0))),
         context: context,
         builder: (context) {
-          return Container(
-            height: ScreenSize.height * 0.40,
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      IconButton(
-                          icon: Icon(Icons.cancel),
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          }),
-                      Text(
-                        "choose the subjects",
-                        style: kTitleStyle.copyWith(
-                            color: Colors.black, fontSize: 17),
-                      ),
-                      IconButton(
-                          icon: Icon(Icons.check),
-                          onPressed: () {
-                            applyFilter();
-                            Navigator.pop(context);
-                          }),
-                    ],
-                  ),
-                  DropdownButton(
-                    value: _dropDownMenuController,
-                    items: fetchSubjects(),
-                    onChanged: (value) {
-                      setState(() {
-                        _dropDownMenuController = value;
-                      });
-                    },
-                  ),
-                ],
+          return StatefulBuilder(builder: (BuildContext context,
+              StateSetter setModalState /*You can rename this!*/) {
+            return Container(
+              height: ScreenSize.height * 0.40,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        IconButton(
+                            icon: Icon(Icons.cancel),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            }),
+                        Text(
+                          "choose the subjects",
+                          style: kTitleStyle.copyWith(
+                              color: Colors.black, fontSize: 17),
+                        ),
+                        IconButton(
+                            icon: Icon(Icons.check),
+                            onPressed: () {
+                              applyFilter();
+                              Navigator.pop(context);
+                            }),
+                      ],
+                    ),
+                    DropdownButton(
+                      value: _dropDownMenuController,
+                      items: fetchSubjects(),
+                      onChanged: (value) {
+                        setState(() {
+                          setModalState(() {
+                            _dropDownMenuController = value;
+                          });
+                        });
+                      },
+                    ),
+                  ],
+                ),
               ),
-            ),
-          );
+            );
+          });
         });
   }
 
   void downloadFile(int index) async {
-    if (await canLaunch(searchedDocuments.elementAt(index).url)) {
-      await launch(searchedDocuments.elementAt(index).url);
+    if (await canLaunch((searchedMaterials.elementAt(index) as Document).url)) {
+      await launch((searchedMaterials.elementAt(index) as Document).url);
     } else {
       //TODO: handle error while lunch
     }
@@ -152,8 +178,8 @@ class _ViewMaterialsScreenState extends State<ViewMaterialsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    for (int i = 0; i < documents.length; i++) {
-      print(documents.elementAt(i).subject.path);
+    for (int i = 0; i < materials.length; i++) {
+      print((materials.elementAt(i) as Document).subject.path);
     }
 
     return Scaffold(
@@ -166,7 +192,7 @@ class _ViewMaterialsScreenState extends State<ViewMaterialsScreen> {
                 controller: _searchController,
                 onChanged: (value) {
                   searchFilter(value);
-                  if (_searchController.text.isEmpty) searchedDocuments = [];
+                  if (_searchController.text.isEmpty) searchedMaterials = [];
                 },
                 style: TextStyle(
                   color: kBlackish,
@@ -218,30 +244,112 @@ class _ViewMaterialsScreenState extends State<ViewMaterialsScreen> {
               ),
               Expanded(
                 child: ListView.builder(
-                  itemCount: searchedDocuments.length,
+                  itemCount: searchedMaterials.length,
                   itemBuilder: (context, index) {
                     return Card(
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: ListTile(
                           leading: Image.asset(
-                              searchedDocuments.elementAt(index).subject.path),
-                          title: Text(searchedDocuments.elementAt(index).title),
-                          trailing: GestureDetector(
-                            child: Icon(Icons.visibility),
-                            onTap: () {
-                              // open the file reader if the file is pdf, else let the user download the file
-                              searchedDocuments.elementAt(index).fileType ==
-                                      "pdf"
-                                  ? PDFDocument.fromURL(searchedDocuments
-                                          .elementAt(index)
-                                          .url)
-                                      .then((value) => {
-                                            doc = value,
-                                            readPdf(index),
-                                          })
-                                  : downloadFile(index);
-                            },
+                              (searchedMaterials.elementAt(index) as Document)
+                                  .subject
+                                  .path),
+                          title: Text(searchedMaterials.elementAt(index).title),
+                          trailing: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(
+                                child: GestureDetector(
+                                  child: Icon(Icons.visibility),
+                                  onTap: () {
+                                    // open the file reader if the file is pdf, else let the user download the file
+                                    (searchedMaterials.elementAt(index)
+                                                    as Document)
+                                                .fileType ==
+                                            "pdf"
+                                        ? PDFDocument.fromURL((searchedMaterials
+                                                        .elementAt(index)
+                                                    as Document)
+                                                .url)
+                                            .then((value) => {
+                                                  doc = value,
+                                                  readPdf(index),
+                                                })
+                                        : downloadFile(index);
+                                  },
+                                ),
+                              ),
+                              Container(
+                                child: GestureDetector(
+                                  child: Icon(Icons.favorite),
+                                  onTap: () {
+                                    // open the file reader if the file is pdf, else let the user download the file
+                                    DatabaseAPI.addMaterialToFavorites(
+                                            (searchedMaterials.elementAt(index)
+                                                as Document))
+                                        .then((value) => {
+                                              value == "done"
+                                                  ? AwesomeDialog(
+                                                      context: context,
+                                                      animType: AnimType.SCALE,
+                                                      dialogType:
+                                                          DialogType.SUCCES,
+                                                      body: Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(8.0),
+                                                        child: Center(
+                                                          child: Text(
+                                                            'doc added to favorites',
+                                                            style: kTitleStyle.copyWith(
+                                                                color:
+                                                                    kBlackish,
+                                                                fontSize: 14,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .normal),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      btnOkOnPress: () {
+                                                        int count = 0;
+                                                        Navigator.popUntil(
+                                                            context, (route) {
+                                                          return count++ == 1;
+                                                        });
+                                                      },
+                                                    ).show()
+                                                  : AwesomeDialog(
+                                                      context: context,
+                                                      animType: AnimType.SCALE,
+                                                      dialogType:
+                                                          DialogType.ERROR,
+                                                      body: Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(8.0),
+                                                        child: Center(
+                                                          child: Text(
+                                                            'ERROR ',
+                                                            style: kTitleStyle.copyWith(
+                                                                color:
+                                                                    kBlackish,
+                                                                fontSize: 14,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .normal),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      btnOkOnPress: () {
+                                                        Navigator.pop(context);
+                                                      },
+                                                    ).show()
+                                            });
+                                  },
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ),
