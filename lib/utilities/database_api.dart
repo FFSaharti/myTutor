@@ -98,11 +98,11 @@ class DatabaseAPI {
     });
   }
 
-  static Future<String> resetUserPassword(String email) async{
-    try{
+  static Future<String> resetUserPassword(String email) async {
+    try {
       await _auth.sendPasswordResetEmail(email: email);
       return "success";
-    }on FirebaseAuthException catch (e) {
+    } on FirebaseAuthException catch (e) {
       return e.code;
     }
   }
@@ -373,19 +373,14 @@ class DatabaseAPI {
       return e.message;
     }
   }
-  
-  static Future<List<Rate>> getTutorRates(String tutorid) async{
-    
-    List<Rate> tempRate = [];
-     var res =_firestore.collection("Tutor").doc(tutorid).collection("rate").get();
-    res.then((value) => value.docs.forEach((doc) {
-      
-      tempRate.add(Rate(doc.data()["review"], doc.data()["teachSkills"], doc.data()["friendliness"], doc.data()["communication"], doc.data()["creativity"]));
-    }
 
-    ));
-
-    return tempRate;
+  static Future<QuerySnapshot> getTutorRates(String tutorid) async {
+    return await _firestore
+        .collection("Tutor")
+        .doc(tutorid)
+        .collection("rate")
+        .orderBy("rateDate", descending: true)
+        .get();
   }
 
   // session related
@@ -524,7 +519,16 @@ class DatabaseAPI {
       'friendliness': rate.friendliness,
       'creativity': rate.creativity,
       'review': rate.review,
+      'rateDate': rate.date,
+      'sessionTitle': rate.sessionTitle,
     });
+  }
+
+  static Future<QuerySnapshot> getSessionNumber(String tutorId) {
+    return _firestore
+        .collection("session")
+        .where("tutor", isEqualTo: tutorId)
+        .get();
   }
 
   // document related
@@ -736,9 +740,12 @@ class DatabaseAPI {
     return status;
   }
 
-  static Stream<QuerySnapshot> fetchAllMaterialsData() {
+  static Stream<QuerySnapshot> fetchAllMaterialsData(String tutorid) {
     // return _firestore.collection("Quiz").snapshots();
-    return _firestore.collection("Material").snapshots();
+    return _firestore
+        .collection("Material")
+        .where("issuerId", isEqualTo: tutorid)
+        .snapshots();
   }
 
   static Future<String> addMaterialToFavorites(Document doc) async {
@@ -753,7 +760,7 @@ class DatabaseAPI {
     return status;
   }
 
-  // static Future<QuerySnapshot> fetchFavDocs() {
-  //   return _firestore.collection("Material").get();
-  // }
+// static Future<QuerySnapshot> fetchFavDocs() {
+//   return _firestore.collection("Material").get();
+// }
 }

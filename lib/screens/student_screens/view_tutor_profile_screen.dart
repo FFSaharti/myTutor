@@ -1,9 +1,15 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:mytutor/classes/rate.dart';
 import 'package:mytutor/classes/tutor.dart';
 import 'package:mytutor/classes/user.dart';
+import 'package:mytutor/components/material_stream_widget.dart';
+import 'package:mytutor/components/profile_info_widget.dart';
 import 'package:mytutor/utilities/constants.dart';
+import 'package:mytutor/utilities/database_api.dart';
 import 'package:mytutor/utilities/screen_size.dart';
 
+import '../view_reviews_screen.dart';
 
 class ViewTutorProfileScreen extends StatefulWidget {
   final Tutor tutor;
@@ -15,6 +21,56 @@ class ViewTutorProfileScreen extends StatefulWidget {
 }
 
 class _ViewTutorProfileScreenState extends State<ViewTutorProfileScreen> {
+  List<Rate> tutorRates = [];
+  String sessionNumHelper = "";
+  String reviewHelper = "";
+  bool finishedLoadingTutorRate = false;
+
+  void initState() {
+    Timestamp stamptemp;
+    int reviewSum = 0;
+    //load more information about the tutors, since rate/review need one more query to do we will do it here.
+    DatabaseAPI.getTutorRates(widget.tutor.userId).then((value) => {
+          if (value.docs.isNotEmpty)
+            {
+              for (var rate in value.docs)
+                {
+                  stamptemp = rate.data()["rateDate"],
+                  tutorRates.add(Rate(
+                    rate.data()["review"],
+                    rate.data()["teachingSkills"],
+                    rate.data()["friendliness"],
+                    rate.data()["communication"],
+                    rate.data()["creativity"],
+                    stamptemp.toDate(),
+                    rate.data()["sessionTitle"],
+                  )),
+                },
+              if (this.mounted)
+                {
+                  for (Rate rate in tutorRates)
+                    {if (rate.review != null) reviewSum++},
+                  setState(() {
+                    reviewHelper = reviewSum.toString();
+                    finishedLoadingTutorRate = true;
+                  }),
+                }
+            }
+        });
+
+    // get the session num
+    DatabaseAPI.getSessionNumber(widget.tutor.userId).then((value) => {
+          if (this.mounted)
+            {
+              setState(() {
+                sessionNumHelper = value.docs.length.toString();
+              }),
+            }
+        });
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,28 +98,26 @@ class _ViewTutorProfileScreenState extends State<ViewTutorProfileScreen> {
                 Center(
                   child: widget.tutor.profileImag == ""
                       ? Container(
-                    width: ScreenSize.width * 0.30,
-                    height: ScreenSize.height * 0.21,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                    ),
-                    child: Icon(
-                      Icons.account_circle_sharp,
-                      size: 120,
-                    ),
-                  )
+                          width: ScreenSize.width * 0.30,
+                          height: ScreenSize.height * 0.21,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                          ),
+                          child: Icon(
+                            Icons.account_circle_sharp,
+                            size: 120,
+                          ),
+                        )
                       : Container(
-                    width: ScreenSize.width * 0.30,
-                    height: ScreenSize.height * 0.21,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      image: DecorationImage(
-                          image: NetworkImage(
-                              widget.tutor.profileImag),
-                          fit: BoxFit.fill),
-                    ),
-
-                  ),
+                          width: ScreenSize.width * 0.30,
+                          height: ScreenSize.height * 0.21,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            image: DecorationImage(
+                                image: NetworkImage(widget.tutor.profileImag),
+                                fit: BoxFit.fill),
+                          ),
+                        ),
                 ),
                 Center(
                   child: Text(
@@ -92,8 +146,40 @@ class _ViewTutorProfileScreenState extends State<ViewTutorProfileScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    //TODO: Fetch information about tutor and view it
 
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+
+                        ProfileInfoWidget("Sessions",
+                            sessionNumHelper == "" ? "load" : sessionNumHelper),
+                        SizedBox(
+                          width: 5,
+                        ),
+
+                        ProfileInfoWidget(
+                            "Rating",
+                            finishedLoadingTutorRate == true
+                                ? Rate.getAverageRate(tutorRates).toString()
+                                : "load"),
+                        SizedBox(
+                          width: 5,
+                        ),
+
+                        GestureDetector(
+                          child: ProfileInfoWidget("Reviews",
+                              reviewHelper == "" ? "load" : reviewHelper),
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ViewReviewsScreen(
+                                        tutorRates: tutorRates,)),
+                            );
+                          },
+                        ),
+                      ],
+                    ),
                   ],
                 ),
                 Divider(
@@ -121,41 +207,39 @@ class _ViewTutorProfileScreenState extends State<ViewTutorProfileScreen> {
                     ),
                     !(widget.tutor.aboutMe == '')
                         ? Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(3.0),
-                          child: Text(
-                            widget.tutor.aboutMe,
-                            style: TextStyle(
-                                fontSize: 16.5, color: kGreyerish),
-                          ),
-                        ),
-                        Spacer(),
-
-                      ],
-                    )
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(3.0),
+                                child: Text(
+                                  widget.tutor.aboutMe,
+                                  style: TextStyle(
+                                      fontSize: 16.5, color: kGreyerish),
+                                ),
+                              ),
+                              Spacer(),
+                            ],
+                          )
                         : Container(
-                      height: ScreenSize.height * 0.17,
-                      child: Column(
-                        children: [
-                          SizedBox(
-                            height: 20,
-                          ),
-                          Center(
-                            child: Text(
-                              "the tutor does not have a \"About me\" :( ",
-                              style: TextStyle(
-                                  fontSize: 16.5, color: kGreyerish),
+                            height: ScreenSize.height * 0.17,
+                            child: Column(
+                              children: [
+                                SizedBox(
+                                  height: 20,
+                                ),
+                                Center(
+                                  child: Text(
+                                    "the tutor does not have a \"About me\" :( ",
+                                    style: TextStyle(
+                                        fontSize: 16.5, color: kGreyerish),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 20,
+                                ),
+                              ],
                             ),
                           ),
-                          SizedBox(
-                            height: 20,
-                          ),
-
-                        ],
-                      ),
-                    ),
                   ],
                 ),
                 Divider(
@@ -221,7 +305,9 @@ class _ViewTutorProfileScreenState extends State<ViewTutorProfileScreen> {
                         height: 5,
                       ),
                       // TODO: Add ability for tutor to preview his own materials (open file, edit quiz)
-                      //MaterialStreamTutor(),
+                      MaterialStreamTutor(
+                        tutorId: widget.tutor.userId,
+                      ),
                     ],
                   ),
                 ),

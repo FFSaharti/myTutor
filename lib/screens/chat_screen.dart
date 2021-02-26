@@ -350,11 +350,13 @@ class _messagesScreenState extends State<messagesScreen> {
                                               teachRate,
                                               friendRate,
                                               commRate,
-                                              creativityRate),
+                                              creativityRate,
+                                          DateTime.now(),
+                                          widget.currentsession.title),
                                           widget.currentsession.tutor)
                                       : DatabaseAPI.rateTutor(
                                           Rate(null, teachRate, friendRate,
-                                              commRate, creativityRate),
+                                              commRate, creativityRate,DateTime.now(),widget.currentsession.title),
                                           widget.currentsession.tutor);
                                   DatabaseAPI.changeSessionsStatus("closed",
                                       widget.currentsession.session_id);

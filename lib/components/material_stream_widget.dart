@@ -8,10 +8,13 @@ import 'package:mytutor/utilities/database_api.dart';
 import 'package:mytutor/utilities/session_manager.dart';
 
 class MaterialStreamTutor extends StatelessWidget {
+  final String tutorId;
+
+  const MaterialStreamTutor({this.tutorId});
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-      stream: DatabaseAPI.fetchAllMaterialsData(),
+      stream: DatabaseAPI.fetchAllMaterialsData(tutorId),
       builder: (context, snapshot) {
         // List to fill up with all the session the user has.
         List<Widget> UserMaterials = [];
@@ -21,7 +24,7 @@ class MaterialStreamTutor extends StatelessWidget {
             int materialType = material.data()["type"];
 
             if (material.data()['issuerId'] ==
-                SessionManager.loggedInTutor.userId) {
+                tutorId) {
               // MATERIALS IS HIS....
               if (materialType == 1) {
                 // MATERIAL IS DOCUMENT...

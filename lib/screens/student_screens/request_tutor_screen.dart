@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:mytutor/classes/rate.dart';
 import 'package:mytutor/classes/tutor.dart';
 import 'package:mytutor/classes/user.dart';
 import 'package:mytutor/screens/student_screens/view_tutor_profile_screen.dart';
@@ -18,6 +19,7 @@ class RequestTutorScreen extends StatefulWidget {
 
 class _RequestTutorScreenState extends State<RequestTutorScreen> {
   List<Tutor> Tutors = [];
+  List<Rate> rates = [];
   List<MyUser> searchedTutors = [];
   TextEditingController searchController = TextEditingController();
 
@@ -34,22 +36,31 @@ class _RequestTutorScreenState extends State<RequestTutorScreen> {
     return response;
   }
 
+  fetchRates(){
+
+  }
+
   void initState() {
     getTutorsFromApi().then((data) {
       setState(() {
+        Tutor temp;
         for (var tutor in data.docs) {
-          Tutors.add(Tutor(
+              temp = Tutor(
               tutor.data()["name"],
               tutor.data()["email"],
               tutor.data()["pass"],
               tutor.data()["aboutMe"],
               tutor.id,
-              List.from(tutor.data()["experiences"]),
-              tutor.data()["profileImg"]));
-          //TODO: fetch tutor's rate and review, show experiences and mats
+              List.from(tutor.data()['experiences']),
+              // List.from(tutor.data()["experiences"]),
+              tutor.data()["profileImg"]);
+            Tutors.add(temp);
+
         }
       });
     });
+
+
 
     super.initState();
   }
@@ -104,19 +115,24 @@ class _RequestTutorScreenState extends State<RequestTutorScreen> {
                 SizedBox(
                   height: 10,
                 ),
-                Container(
-                    height: 40,
-                    width: 200,
-                    decoration: BoxDecoration(
-                        color: kColorScheme[1],
-                        borderRadius: BorderRadius.all(Radius.circular(10.0))),
-                    child: new Center(
-                      child: new Text(
-                        "Filter options",
-                        style: TextStyle(color: Colors.white, fontSize: 23),
-                        textAlign: TextAlign.center,
-                      ),
-                    )),
+                GestureDetector(
+                  onTap: (){
+
+                  },
+                  child: Container(
+                      height: 40,
+                      width: 200,
+                      decoration: BoxDecoration(
+                          color: kColorScheme[1],
+                          borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                      child: new Center(
+                        child: new Text(
+                          "Filter options",
+                          style: TextStyle(color: Colors.white, fontSize: 23),
+                          textAlign: TextAlign.center,
+                        ),
+                      )),
+                ),
                 SizedBox(
                   height: 10,
                 ),

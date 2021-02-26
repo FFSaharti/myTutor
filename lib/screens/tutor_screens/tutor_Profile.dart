@@ -1,26 +1,83 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:mytutor/classes/rate.dart';
 import 'package:mytutor/classes/subject.dart';
 import 'package:mytutor/components/ez_button.dart';
 import 'package:mytutor/components/material_stream_widget.dart';
+import 'package:mytutor/components/profile_info_widget.dart';
+import 'package:mytutor/screens/view_reviews_screen.dart';
 import 'package:mytutor/utilities/constants.dart';
 import 'package:mytutor/utilities/database_api.dart';
 import 'package:mytutor/utilities/screen_size.dart';
 import 'package:mytutor/utilities/session_manager.dart';
 
+//TODO: the whole screen can be manage with view Tutor Profile Screen.
 class tutorProfile extends StatefulWidget {
   @override
   _tutorProfileState createState() => _tutorProfileState();
 }
 
 class _tutorProfileState extends State<tutorProfile> {
+  List<Rate> tutorRates = [];
+  String sessionNumHelper = "";
+  String reviewHelper = "";
+  bool finishedLoadingTutorRate = false;
+
   Function setParentState(String aboutMe) {
     setState(() {
       SessionManager.loggedInTutor.aboutMe = aboutMe;
     });
+  }
+
+  void initState() {
+    Timestamp stamptemp;
+    int reviewSum = 0;
+    //load more information about the tutors, since rate/review need one more query to do we will do it here.
+    DatabaseAPI.getTutorRates(SessionManager.loggedInTutor.userId)
+        .then((value) => {
+              if (value.docs.isNotEmpty)
+                {
+                  for (var rate in value.docs)
+                    {
+                      stamptemp = rate.data()["rateDate"],
+                      tutorRates.add(Rate(
+                        rate.data()["review"],
+                        rate.data()["teachingSkills"],
+                        rate.data()["friendliness"],
+                        rate.data()["communication"],
+                        rate.data()["creativity"],
+                        stamptemp.toDate(),
+                        rate.data()["sessionTitle"],
+                      )),
+                    },
+                  if (this.mounted)
+                    {
+                      for (Rate rate in tutorRates)
+                        {if (rate.review != null) reviewSum++},
+                      setState(() {
+                        reviewHelper = reviewSum.toString();
+                        finishedLoadingTutorRate = true;
+                      }),
+                    }
+                }
+            });
+
+    // get the session num
+    DatabaseAPI.getSessionNumber(SessionManager.loggedInTutor.userId)
+        .then((value) => {
+              if (this.mounted)
+                {
+                  setState(() {
+                    sessionNumHelper = value.docs.length.toString();
+                  }),
+                }
+            });
+
+    super.initState();
   }
 
   @override
@@ -123,18 +180,32 @@ class _tutorProfileState extends State<tutorProfile> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    //TODO: Fetch information about tutor and view it
-                    ProfileInfoWidget("Sessions", 69.toString()),
+                    ProfileInfoWidget("Sessions",
+                        sessionNumHelper == "" ? "load" : sessionNumHelper),
                     SizedBox(
                       width: 5,
                     ),
-                    //TODO: Clickable rating that shows all the criteria and their rating
-                    ProfileInfoWidget("Rating", 4.5.toString()),
+                    ProfileInfoWidget(
+                        "Rating",
+                        finishedLoadingTutorRate == true
+                            ? Rate.getAverageRate(tutorRates).toString()
+                            : "load"),
                     SizedBox(
                       width: 5,
                     ),
-                    //TODO: Clickable reviews tab that shows all the tutor reviews
-                    ProfileInfoWidget("Reviews", 69.toString()),
+                    GestureDetector(
+                      child: ProfileInfoWidget("Reviews",
+                          reviewHelper == "" ? "load" : reviewHelper),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ViewReviewsScreen(
+                                    tutorRates: tutorRates,
+                                  )),
+                        );
+                      },
+                    ),
                   ],
                 ),
                 Divider(
@@ -281,7 +352,9 @@ class _tutorProfileState extends State<tutorProfile> {
                         height: 5,
                       ),
                       // TODO: Add ability for tutor to preview his own materials (open file, edit quiz)
-                      MaterialStreamTutor(),
+                      MaterialStreamTutor(
+                        tutorId: SessionManager.loggedInTutor.userId,
+                      ),
                     ],
                   ),
                 ),
@@ -437,41 +510,6 @@ class _tutorProfileState extends State<tutorProfile> {
             );
           });
         });
-  }
-}
-
-class ProfileInfoWidget extends StatelessWidget {
-  ProfileInfoWidget(this.infoTitle, this.infoNum);
-
-  String infoTitle = "";
-  String infoNum = "";
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 85,
-      height: 53,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        color: Color(0xffF5F5F5),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(5.0),
-        child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                infoTitle,
-                style: TextStyle(color: kGreyerish, fontSize: 18),
-              ),
-              Text(
-                infoNum,
-                style: TextStyle(color: kBlackish, fontSize: 18),
-              ),
-            ]),
-      ),
-    );
   }
 }
 
