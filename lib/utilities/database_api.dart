@@ -760,6 +760,30 @@ class DatabaseAPI {
     return status;
   }
 
+  static Future<String> editMaterial(String docId, String newTitle, String newDesc) async{
+   try{
+    await _firestore.collection("Material").doc(docId).update({
+       "documentTitle" : newTitle,
+       "documentDesc" : newDesc,
+     });
+
+     return "success";
+   } on FirebaseException catch (e) {
+     return e.message;
+   }
+  }
+
+  static Future<String> deleteMaterial(String oldtitle, String docId) async{
+    try{
+
+      await firebase_storage.FirebaseStorage.instance.ref().child(oldtitle).delete();
+      await _firestore.collection("Material").doc(docId).delete();
+
+      return "success";
+    } on FirebaseException catch (e) {
+      return e.message;
+    }
+  }
 // static Future<QuerySnapshot> fetchFavDocs() {
 //   return _firestore.collection("Material").get();
 // }
