@@ -15,6 +15,8 @@ import 'package:mytutor/utilities/database_api.dart';
 import 'package:mytutor/utilities/screen_size.dart';
 import 'package:mytutor/utilities/session_manager.dart';
 
+import 'interests_screen.dart';
+
 //TODO: the whole screen can be manage with view Tutor Profile Screen.
 class tutorProfile extends StatefulWidget {
   @override
@@ -30,6 +32,24 @@ class _tutorProfileState extends State<tutorProfile> {
   Function setParentState(String aboutMe) {
     setState(() {
       SessionManager.loggedInTutor.aboutMe = aboutMe;
+    });
+  }
+
+  Function setParentStateInt() {
+    setState(() {});
+  }
+
+  Function setParentStateEx() {
+    List<int> chosenSubjects = [];
+
+    for (int i = 0; i < subjects.length; i++) {
+      if (subjects[i].chosen) {
+        chosenSubjects.add(subjects[i].id);
+      }
+    }
+
+    setState(() {
+      SessionManager.loggedInTutor.experiences = chosenSubjects;
     });
   }
 
@@ -244,13 +264,18 @@ class _tutorProfileState extends State<tutorProfile> {
                                 ),
                               ),
                               Spacer(),
-                              IconButton(
-                                icon: Icon(Icons.edit),
-                                iconSize: 20,
-                                onPressed: () {
+                              GestureDetector(
+                                onTap: () {
                                   showAboutMe(setParentState);
                                 },
+                                child: Icon(
+                                  Icons.edit,
+                                  size: 20,
+                                ),
                               ),
+                              SizedBox(
+                                height: 40,
+                              )
                             ],
                           )
                         : Container(
@@ -309,7 +334,17 @@ class _tutorProfileState extends State<tutorProfile> {
                         Text(
                           "Experiences",
                           style: TextStyle(fontSize: 18),
-                        )
+                        ),
+                        Spacer(),
+                        GestureDetector(
+                          onTap: () {
+                            showEditInterests(setParentStateEx());
+                          },
+                          child: Icon(
+                            Icons.edit,
+                            size: 20,
+                          ),
+                        ),
                       ],
                     ),
                     SizedBox(
@@ -373,6 +408,7 @@ class _tutorProfileState extends State<tutorProfile> {
     for (int i = 0; i < SessionManager.loggedInTutor.experiences.length; i++) {
       for (int j = 0; j < subjects.length; j++) {
         if (SessionManager.loggedInTutor.experiences[i] == subjects[j].id) {
+          subjects[j].chosen = true;
           experiences.add(subjects[j]);
         }
       }
@@ -384,6 +420,175 @@ class _tutorProfileState extends State<tutorProfile> {
     }
 
     return widgets;
+  }
+
+  void showEditInterests(Function setParentState) {
+    String searchBox = '';
+    showModalBottomSheet(
+        shape: RoundedRectangleBorder(
+            // borderRadius: BorderRadius.vertical(top: Radius.circular(2.0))
+            ),
+        backgroundColor: Colors.transparent,
+        enableDrag: true,
+        isScrollControlled: true,
+        context: ScreenSize.context,
+        builder: (context) {
+          return StatefulBuilder(
+              builder: (BuildContext context, StateSetter setModalState) {
+            return Container(
+              height: ScreenSize.height * 0.75,
+              child: Scaffold(
+                body: Container(
+                  //     padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                  height: ScreenSize.height * 0.50,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(50)
+                      //   topRight: Radius.circular(100),
+                      //   topLeft: Radius.circular(100),
+                      // )
+                      ,
+                      color: Colors.white),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              IconButton(
+                                  icon: Icon(Icons.cancel),
+                                  onPressed: () {
+                                    resetInterests();
+                                    Navigator.of(context).pop();
+                                  }),
+                              Text(
+                                "Add Experiences",
+                                style: TextStyle(fontSize: 20),
+                              ),
+                              IconButton(
+                                icon: Icon(Icons.check),
+                                onPressed: () {
+                                  // ADD EXPERIENCE
+                                  printNewChosen();
+
+                                  DatabaseAPI.editExperiences()
+                                      .then((value) => {
+                                            if (value == "done")
+                                              {
+                                                setParentStateEx(),
+                                                Navigator.of(context).pop()
+                                              }
+                                          });
+                                },
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 15,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              children: [
+                                Align(
+                                  alignment: Alignment.topLeft,
+                                  child: Text(
+                                    "Subject",
+                                    style: GoogleFonts.secularOne(
+                                        textStyle: TextStyle(
+                                            fontSize: 17,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.black)),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 15,
+                                ),
+                                Column(
+                                  children: [
+                                    TextField(
+                                      onChanged: (value) {
+                                        setModalState(() {
+                                          searchBox = value;
+                                          getSubjects(searchBox);
+                                          // getSelectedSubjects(selectedInterests);
+                                        });
+                                      },
+                                      style: TextStyle(
+                                        color: kBlackish,
+                                      ),
+                                      textAlignVertical:
+                                          TextAlignVertical.center,
+                                      decoration: InputDecoration(
+                                        contentPadding: EdgeInsets.all(0),
+                                        filled: true,
+                                        hintText: 'Search',
+                                        prefixIcon: Icon(Icons.search,
+                                            color: kColorScheme[2]),
+                                        enabledBorder: OutlineInputBorder(
+                                            borderSide: BorderSide.none,
+                                            borderRadius:
+                                                BorderRadius.circular(15)),
+                                        focusedBorder: OutlineInputBorder(
+                                            borderSide: BorderSide.none,
+                                            borderRadius:
+                                                BorderRadius.circular(15)),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 15,
+                                    ),
+                                    Container(
+                                      width: double.infinity,
+                                      decoration: BoxDecoration(
+                                        color: Colors.transparent,
+                                      ),
+                                      height: 50,
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          setModalState(() {
+                                            print("Entered Set State new");
+                                          });
+                                        },
+                                        child: ListView(
+                                            scrollDirection: Axis.horizontal,
+                                            children: getSubjects(searchBox)),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 20,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            );
+          });
+        });
+  }
+
+  List<Widget> getSubjects(String searchBox) {
+    List<Widget> searchResults = [];
+    for (int i = 0; i < subjects.length; i++) {
+      if (subjects[i].searchKeyword(searchBox)) {
+        searchResults.add(
+          InterestWidget(subjects[i], setParentStateInt),
+        );
+        searchResults.add(SizedBox(
+          width: 15,
+        ));
+      }
+    }
+
+    return searchResults;
   }
 
   void showAboutMe(Function setParentState) {
@@ -429,7 +634,6 @@ class _tutorProfileState extends State<tutorProfile> {
                                 "About Me",
                                 style: TextStyle(fontSize: 20),
                               ),
-                              // TODO : Add edit button to edit about me anytime...
                               IconButton(
                                 icon: Icon(Icons.check),
                                 onPressed: () {
@@ -510,6 +714,26 @@ class _tutorProfileState extends State<tutorProfile> {
             );
           });
         });
+  }
+
+  void printNewChosen() {
+    for (int i = 0; i < subjects.length; i++) {
+      if (subjects[i].chosen) print(subjects[i].title);
+    }
+  }
+
+  void resetInterests() {
+    for (int i = 0; i < subjects.length; i++) {
+      subjects[i].chosen = false;
+    }
+
+    for (int i = 0; i < SessionManager.loggedInTutor.experiences.length; i++) {
+      for (int j = 0; j < subjects.length; j++) {
+        if (SessionManager.loggedInTutor.experiences[i] == subjects[j].id) {
+          subjects[j].chosen = true;
+        }
+      }
+    }
   }
 }
 

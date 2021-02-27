@@ -37,10 +37,11 @@ class Subject {
     }
 
     for (int i = 0; i < keywords.length; i++) {
-      if (keywords[i].contains(searchBox)) {
+      if (keywords[i].toLowerCase().contains(searchBox.toLowerCase())) {
         return true;
       }
     }
+
     return false;
   }
 

@@ -378,13 +378,13 @@ class _ProfileStudentState extends State<ProfileStudent> {
             // DOCUMENT TYPE
             if (SessionManager.loggedInStudent.favMats.contains(material.id)) {
               Document tempDoc = Document(
-                  material.data()["title"],
+                  material.data()["documentTitle"],
                   material.data()["type"],
-                  material.data()["url"],
+                  material.data()["documentUrl"],
                   subjects.elementAt(material.data()["subject"]),
                   material.data()["issuerId"],
                   null,
-                  material.data()["description"],
+                  material.data()["documentDesc"],
                   material.data()["fileType"]);
               tempDoc.docid = material.id;
               print("tempDoc id is --> " +

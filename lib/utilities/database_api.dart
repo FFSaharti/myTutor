@@ -760,23 +760,26 @@ class DatabaseAPI {
     return status;
   }
 
-  static Future<String> editMaterial(String docId, String newTitle, String newDesc) async{
-   try{
-    await _firestore.collection("Material").doc(docId).update({
-       "documentTitle" : newTitle,
-       "documentDesc" : newDesc,
-     });
+  static Future<String> editMaterial(
+      String docId, String newTitle, String newDesc) async {
+    try {
+      await _firestore.collection("Material").doc(docId).update({
+        "documentTitle": newTitle,
+        "documentDesc": newDesc,
+      });
 
-     return "success";
-   } on FirebaseException catch (e) {
-     return e.message;
-   }
+      return "success";
+    } on FirebaseException catch (e) {
+      return e.message;
+    }
   }
 
-  static Future<String> deleteMaterial(String oldtitle, String docId) async{
-    try{
-
-      await firebase_storage.FirebaseStorage.instance.ref().child(oldtitle).delete();
+  static Future<String> deleteMaterial(String oldtitle, String docId) async {
+    try {
+      await firebase_storage.FirebaseStorage.instance
+          .ref()
+          .child(oldtitle)
+          .delete();
       await _firestore.collection("Material").doc(docId).delete();
 
       return "success";
@@ -784,6 +787,26 @@ class DatabaseAPI {
       return e.message;
     }
   }
+
+  static Future<String> editExperiences() async {
+    String status = "fail";
+    List<int> chosenSubjects = [];
+
+    for (int i = 0; i < subjects.length; i++) {
+      if (subjects[i].chosen) {
+        chosenSubjects.add(subjects[i].id);
+      }
+    }
+
+    await _firestore
+        .collection("Tutor")
+        .doc(SessionManager.loggedInTutor.userId)
+        .update({"experiences": chosenSubjects}).then(
+            (value) => {status = "done"});
+
+    return status;
+  }
+
 // static Future<QuerySnapshot> fetchFavDocs() {
 //   return _firestore.collection("Material").get();
 // }

@@ -3,11 +3,10 @@ import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mytutor/classes/subject.dart';
 import 'package:mytutor/components/ez_button.dart';
+import 'package:mytutor/screens/login_screen.dart';
 import 'package:mytutor/utilities/constants.dart';
 import 'package:mytutor/utilities/database_api.dart';
 import 'package:mytutor/utilities/screen_size.dart';
-
-import 'homepage_screen_tutor.dart';
 
 class InterestsScreen extends StatefulWidget {
   static String id = 'interests_screen';
@@ -171,8 +170,7 @@ class _InterestsScreenState extends State<InterestsScreen> {
                                       backgroundColor: Colors.red,
                                       duration:
                                           const Duration(milliseconds: 500))),
-                                  Navigator.pushNamed(
-                                      context, HomepageScreenTutor.id)
+                                  Navigator.pushNamed(context, LoginScreen.id)
                                 }
                               else
                                 {
@@ -180,7 +178,7 @@ class _InterestsScreenState extends State<InterestsScreen> {
                                       content: new Text(value),
                                       backgroundColor: Colors.red,
                                       duration:
-                                          const Duration(milliseconds: 500))),
+                                          const Duration(milliseconds: 1500))),
                                 }
                             });
 
