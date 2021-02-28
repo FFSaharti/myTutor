@@ -4,12 +4,14 @@ import 'package:mytutor/classes/question.dart';
 import 'package:mytutor/classes/student.dart';
 import 'package:mytutor/components/question_tutor_widget.dart';
 import 'package:mytutor/screens/tutor_screens/answer_screen_question_details.dart';
+import 'package:mytutor/utilities/constants.dart';
 import 'package:mytutor/utilities/database_api.dart';
 
 class QuestionStreamTutor extends StatelessWidget {
   final List<dynamic> exp;
+  final String search;
 
-  const QuestionStreamTutor({@required this.exp});
+  const QuestionStreamTutor({@required this.exp, this.search});
 
   @override
   Widget build(BuildContext context) {
@@ -23,46 +25,23 @@ class QuestionStreamTutor extends StatelessWidget {
           for (var question in questions) {
             final qSubject = question.data()["subject"];
 
-            if (isTutorExperienced(exp, qSubject)) {
+            if ((isTutorExperienced(exp, qSubject))) {
               final qTitle = question.data()["title"];
               final qState = question.data()["date"];
               final qIssuer = question.data()["issuer"];
               final qDesc = question.data()["description"];
               final qDOS = question.data()["dateOfSubmission"];
               final qID = question.data()['doc_id'];
-
-              TutorQuestions.add(
-                GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => AnswerScreenQuestionDetails(
-                                Question(
-                                    qTitle,
-                                    question.id,
-                                    qDesc,
-                                    qDOS,
-                                    // TODO: Fetch Student from DB
-                                    Student("", "", "", "", qIssuer.toString(),
-                                        [], ""),
-                                    [],
-                                    qSubject.toString(),
-                                    qState),
-                              )),
-                    );
-                  },
-                  child: QuestionTutorWidget(Question(
-                      qTitle,
-                      question.id,
-                      qDesc,
-                      qDOS,
-                      Student("", "", "", "", qIssuer.toString(), [], ""),
-                      [],
-                      qSubject.toString(),
-                      qState)),
-                ),
-              );
+              if (search == '') {
+                addQuestion(context, TutorQuestions, qTitle, question, qDesc,
+                    qDOS, qIssuer, qSubject, qState);
+              } else {
+                if (subjects[qSubject].searchKeyword(search) ||
+                    (qTitle as String).contains(search)) {
+                  addQuestion(context, TutorQuestions, qTitle, question, qDesc,
+                      qDOS, qIssuer, qSubject, qState);
+                }
+              }
             }
           }
         }
@@ -85,5 +64,40 @@ class QuestionStreamTutor extends StatelessWidget {
     }
 
     return false;
+  }
+
+  void addQuestion(BuildContext context, List<Widget> TutorQuestions, qTitle,
+      QueryDocumentSnapshot question, qDesc, qDOS, qIssuer, qSubject, qState) {
+    TutorQuestions.add(
+      GestureDetector(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => AnswerScreenQuestionDetails(
+                      Question(
+                          qTitle,
+                          question.id,
+                          qDesc,
+                          qDOS,
+                          // TODO: Fetch Student from DB
+                          Student("", "", "", "", qIssuer.toString(), [], ""),
+                          [],
+                          qSubject.toString(),
+                          qState),
+                    )),
+          );
+        },
+        child: QuestionTutorWidget(Question(
+            qTitle,
+            question.id,
+            qDesc,
+            qDOS,
+            Student("", "", "", "", qIssuer.toString(), [], ""),
+            [],
+            qSubject.toString(),
+            qState)),
+      ),
+    );
   }
 }
