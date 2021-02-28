@@ -448,7 +448,8 @@ class DatabaseAPI {
   static void checkAndUpdateExpiredSession() async {
     // check the session that expired.
     await _firestore
-        .collection("session").where("status", isEqualTo: "pending")
+        .collection("session")
+        .where("status", isEqualTo: "pending")
         .where("date", isLessThan: DateTime.now())
         .get()
         .then(
@@ -494,7 +495,7 @@ class DatabaseAPI {
   static Future<String> changeSessionsStatus(
       String status, String sessionid) async {
     // main status (pending-expired-active-closed-decline)
-    try{
+    try {
       await _firestore
           .collection("session")
           .doc(sessionid)
@@ -503,7 +504,6 @@ class DatabaseAPI {
     } on FirebaseException {
       return "failed";
     }
-
   }
 
   // chat screen related.
@@ -702,7 +702,7 @@ class DatabaseAPI {
       String quizDesc,
       Quiz tempQuiz) async {
     try {
-      _firestore.collection("Quiz").add({
+      _firestore.collection("Material").add({
         'quizTitle': quizTitle,
         'quizDesc': quizDesc,
         'subject': subjectIndex.id,
@@ -716,7 +716,7 @@ class DatabaseAPI {
                 'correctAnswerIndex': question.correctAnswerIndex,
                 'answers': question.answers
               }).then((questionBack) => {
-                    _firestore.collection("Quiz").doc(quiz.id).update({
+                    _firestore.collection("Material").doc(quiz.id).update({
                       'listOfQuestions':
                           FieldValue.arrayUnion([questionBack.id.toString()])
                     })
@@ -767,25 +767,83 @@ class DatabaseAPI {
   }
 
   static Future<String> editMaterial(
-      String docId, String newTitle, String newDesc) async {
-    try {
-      await _firestore.collection("Material").doc(docId).update({
-        "documentTitle": newTitle,
-        "documentDesc": newDesc,
-      });
+      String docId, String newTitle, String newDesc, int type) async {
+    if (type == 1) {
+      if (newDesc == '') {
+        try {
+          await _firestore.collection("Material").doc(docId).update({
+            "documentTitle": newTitle,
+          });
 
-      return "success";
-    } on FirebaseException catch (e) {
-      return e.message;
+          return "success";
+        } on FirebaseException catch (e) {
+          return e.message;
+        }
+      } else if (newTitle == '') {
+        try {
+          await _firestore.collection("Material").doc(docId).update({
+            "documentDesc": newDesc,
+          });
+
+          return "success";
+        } on FirebaseException catch (e) {
+          return e.message;
+        }
+      } else {
+        try {
+          await _firestore.collection("Material").doc(docId).update({
+            "documentTitle": newTitle,
+            "documentDesc": newDesc,
+          });
+
+          return "success";
+        } on FirebaseException catch (e) {
+          return e.message;
+        }
+      }
+    } else if (type == 2) {
+      if (newTitle == '') {
+        try {
+          await _firestore.collection("Material").doc(docId).update({
+            "quizDesc": newDesc,
+          });
+
+          return "success";
+        } on FirebaseException catch (e) {
+          return e.message;
+        }
+      } else if (newDesc == '') {
+        try {
+          await _firestore.collection("Material").doc(docId).update({
+            "quizTitle": newTitle,
+          });
+
+          return "success";
+        } on FirebaseException catch (e) {
+          return e.message;
+        }
+      } else {
+        try {
+          await _firestore.collection("Material").doc(docId).update({
+            "quizTitle": newTitle,
+            "quizDesc": newDesc,
+          });
+
+          return "success";
+        } on FirebaseException catch (e) {
+          return e.message;
+        }
+      }
     }
   }
 
   static Future<String> deleteMaterial(String oldtitle, String docId) async {
     try {
-      await firebase_storage.FirebaseStorage.instance
-          .ref()
-          .child(oldtitle)
-          .delete();
+      // await firebase_storage.FirebaseStorage.instance
+      //     .ref()
+      //     .child(oldtitle)
+      //     .delete();
+
       await _firestore.collection("Material").doc(docId).delete();
 
       return "success";
@@ -811,6 +869,64 @@ class DatabaseAPI {
             (value) => {status = "done"});
 
     return status;
+  }
+
+  static Future<DocumentSnapshot> fetchQuiz(String quizID) async {
+    print("QUIZ ID IS --> " + quizID);
+    return await _firestore.collection("Material").doc(quizID).get();
+  }
+
+  static Future<DocumentSnapshot> fetchQuestion(question) async {
+    return await _firestore.collection("QuizQuestion").doc(question).get();
+  }
+
+  static Future<String> updateQuizQuestions(
+      Quiz tempQuiz, String quizID) async {
+    //TODO: Delete old questions from DB
+
+    print("number of questions is --> " + tempQuiz.questions.length.toString());
+
+    _firestore.collection("Material").doc(quizID).get().then((value) => {
+          List.from(value.data()["listOfQuestions"]).forEach(
+            (element) {
+              _firestore.collection("QuizQuestion").doc(element).delete();
+            },
+          ),
+          _firestore
+              .collection("Material")
+              .doc(quizID)
+              .update({"listOfQuestions": []}).then((value) => {
+                    _firestore
+                        .collection("Material")
+                        .doc(quizID)
+                        .get()
+                        .then((value) => {
+                              List.from(tempQuiz.questions).forEach((question) {
+                                _firestore.collection("QuizQuestion").add({
+                                  'questionTitle': question.question,
+                                  'correctAnswerIndex':
+                                      question.correctAnswerIndex,
+                                  'answers': question.answers
+                                }).then((questionBack) => {
+                                      _firestore
+                                          .collection("Material")
+                                          .doc(quizID)
+                                          .update({
+                                        'listOfQuestions':
+                                            FieldValue.arrayUnion(
+                                                [questionBack.id.toString()])
+                                      }),
+                                    });
+                              })
+                            }),
+                  }),
+        });
+
+    try {} on FirebaseException catch (e) {
+      return e.message;
+    }
+
+    return "done";
   }
 
 // static Future<QuerySnapshot> fetchFavDocs() {

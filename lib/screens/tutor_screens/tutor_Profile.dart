@@ -471,7 +471,6 @@ class _tutorProfileState extends State<tutorProfile> {
                                 onPressed: () {
                                   // ADD EXPERIENCE
                                   printNewChosen();
-
                                   DatabaseAPI.editExperiences()
                                       .then((value) => {
                                             if (value == "done")

@@ -2,8 +2,11 @@ class QuizQuestion {
   String _question;
   List<String> _answers = [];
   int _correctAnswerIndex;
+  final String _doc_id;
 
-  QuizQuestion(this._question);
+  QuizQuestion(this._question, this._doc_id);
+
+  String get doc_id => _doc_id;
 
   int get correctAnswerIndex => _correctAnswerIndex;
 
