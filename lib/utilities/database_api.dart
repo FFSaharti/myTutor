@@ -445,10 +445,10 @@ class DatabaseAPI {
     }
   }
 
-  static Future<Stream<QuerySnapshot>> checkAndUpdateExpiredSession() async {
+  static void checkAndUpdateExpiredSession() async {
     // check the session that expired.
     await _firestore
-        .collection("session")
+        .collection("session").where("status", isEqualTo: "pending")
         .where("date", isLessThan: DateTime.now())
         .get()
         .then(
@@ -494,10 +494,16 @@ class DatabaseAPI {
   static Future<String> changeSessionsStatus(
       String status, String sessionid) async {
     // main status (pending-expired-active-closed-decline)
-    await _firestore
-        .collection("session")
-        .doc(sessionid)
-        .update({'status': status});
+    try{
+      await _firestore
+          .collection("session")
+          .doc(sessionid)
+          .update({'status': status});
+      return "success";
+    } on FirebaseException {
+      return "failed";
+    }
+
   }
 
   // chat screen related.

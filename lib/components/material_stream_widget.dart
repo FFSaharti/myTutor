@@ -25,6 +25,7 @@ class MaterialStreamTutor extends StatefulWidget {
 class _MaterialStreamTutorState extends State<MaterialStreamTutor> {
   @override
   Widget build(BuildContext context) {
+    print("hello");
     return StreamBuilder<QuerySnapshot>(
       stream: DatabaseAPI.fetchAllMaterialsData(widget.tutorId),
       builder: (context, snapshot) {

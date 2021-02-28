@@ -304,7 +304,6 @@ class _ViewTutorProfileScreenState extends State<ViewTutorProfileScreen> {
                       SizedBox(
                         height: 5,
                       ),
-                      // TODO: Add ability for tutor to preview his own materials (open file, edit quiz)
                       MaterialStreamTutor(
                         tutorId: widget.tutor.userId,
                       ),

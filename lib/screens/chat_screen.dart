@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:mytutor/classes/rate.dart';
 import 'package:mytutor/classes/session.dart';
+import 'package:mytutor/components/ez_button.dart';
 import 'package:mytutor/utilities/constants.dart';
 import 'package:mytutor/utilities/database_api.dart';
 import 'package:mytutor/utilities/screen_size.dart';
@@ -62,7 +63,8 @@ class _messagesScreenState extends State<messagesScreen> {
                           },
                         ).show();
                 } else {
-                  //TODO: bottom sheet for tutor without rating.
+                  showBottomSheetForTutor();
+
                 }
               }),
         ],
@@ -386,6 +388,74 @@ class _messagesScreenState extends State<messagesScreen> {
                     ),
                   ],
                 ),
+              ));
+        });
+  }
+  showBottomSheetForTutor() {
+    showModalBottomSheet(
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(top: Radius.circular(25.0))),
+        context: context,
+        builder: (context) {
+          return Container(
+              height: ScreenSize.height * 0.30,
+              child:Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+
+                  Text("are you sure you want to close ?", style: kTitleStyle.copyWith(color: Colors.black,fontSize: 17),),
+                  SizedBox(
+                    height: ScreenSize.height *0.030,
+                  ),
+                  EZButton(width: ScreenSize.width*0.50, buttonColor: kColorScheme[2], textColor: Colors.white
+                      , isGradient: false, colors: null, buttonText: "Close the session", hasBorder: false, borderColor: null, onPressed: (){
+                    DatabaseAPI.changeSessionsStatus("closed", widget.currentsession.session_id).then((value) => (){
+                      value == "success"?
+                      AwesomeDialog(
+                        context: context,
+                        animType: AnimType.SCALE,
+                        dialogType: DialogType.SUCCES,
+                        body: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Center(
+                            child: Text(
+                              'the session is closed. you cant rate it anymore..',
+                              style: kTitleStyle.copyWith(
+                                  color: kBlackish,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.normal),
+                            ),
+                          ),
+                        ),
+                        btnOkOnPress: () {
+                          Navigator.pop(context);
+                        },
+                      ).show() :  AwesomeDialog(
+                        context: context,
+                        animType: AnimType.SCALE,
+                        dialogType: DialogType.ERROR,
+                        body: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Center(
+                            child: Text(
+                              'failed to close the session, Check if this session is still active and your connection to the internet',
+                              style: kTitleStyle.copyWith(
+                                  color: kBlackish,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.normal),
+                            ),
+                          ),
+                        ),
+                        btnOkOnPress: () {
+                          Navigator.pop(context);
+                        },
+                      ).show();
+
+                    });
+
+
+                      }),
+                ],
               ));
         });
   }
