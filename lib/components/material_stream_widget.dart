@@ -7,6 +7,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:mytutor/classes/document.dart';
 import 'package:mytutor/classes/quiz.dart';
 import 'package:mytutor/components/material_widget.dart';
+import 'package:mytutor/screens/take_quiz_screen.dart';
 import 'package:mytutor/screens/tutor_screens/edit_quiz_screen.dart';
 import 'package:mytutor/utilities/constants.dart';
 import 'package:mytutor/utilities/database_api.dart';
@@ -247,6 +248,14 @@ class _MaterialStreamTutorState extends State<MaterialStreamTutor> {
                                             onPressed: () {
                                               // TAKE QUIZ
                                               print("clicked take quiz");
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      TakeQuizScreen(tempQuiz,
+                                                          material.id),
+                                                ),
+                                              );
                                             },
                                             child: Text(
                                               "Take Quiz",

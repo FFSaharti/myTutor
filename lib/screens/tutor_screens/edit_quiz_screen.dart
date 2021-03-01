@@ -691,7 +691,7 @@ class _EditQuizScreenState extends State<EditQuizScreen> {
     int correctAnswer,
     QuizQuestion tempQuestion,
   ) {
-    int correctAnswerIndex = correctAnswer - 1;
+    int correctAnswerIndex = correctAnswer;
 
     QuizQuestion tempQ = QuizQuestion(questionTitle, "");
     tempQ.question = questionTitle;
@@ -837,11 +837,11 @@ class _EditQuizScreenState extends State<EditQuizScreen> {
                                       tempQuestion.correctAnswerIndex != -1 &&
                                       answersCounter >= 2) {
                                     print("POP...");
-                                    String questionTitlePass = '';
-                                    String answerOnePass = '';
-                                    String answerTwoPass = '';
-                                    String answerThreePass = '';
-                                    String answerFourPass = '';
+                                    // String questionTitlePass = '';
+                                    // String answerOnePass = '';
+                                    // String answerTwoPass = '';
+                                    // String answerThreePass = '';
+                                    // String answerFourPass = '';
                                     tempQuestion = createQuestion(
                                         questionTitleController.text,
                                         answerOneController.text,
