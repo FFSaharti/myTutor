@@ -9,6 +9,7 @@ import 'package:mytutor/classes/document.dart';
 import 'package:mytutor/classes/question.dart';
 import 'package:mytutor/classes/quiz.dart';
 import 'package:mytutor/classes/rate.dart';
+import 'package:mytutor/classes/session.dart';
 import 'package:mytutor/classes/student.dart';
 import 'package:mytutor/classes/subject.dart';
 import 'package:mytutor/classes/tutor.dart';
@@ -406,6 +407,28 @@ class DatabaseAPI {
     });
   }
 
+  static Future<String> scheduleWithStudent(Session session) async {
+
+    try{
+       _firestore.collection("session").add({
+        'student': session.student,
+        'description': session.desc,
+        'title': session.title,
+        'tutor': session.tutor,
+        'date': session.date,
+        'time': session.time,
+        'status': "waiting for student",
+        'lastMessage': "Start texting here...",
+        'timeOfLastMessage': DateTime.now(),
+        'subject' : session.subject,
+      });
+      return "success";
+    } on FirebaseException catch (e) {
+      return "error";
+    }
+
+  }
+
   static Stream<QuerySnapshot> getSessionForMessageScreen(int type) {
     // type 1 current user that login in is tutor , type 0 current user that login in is student
 
@@ -495,7 +518,7 @@ class DatabaseAPI {
 
   static Future<String> changeSessionsStatus(
       String status, String sessionid) async {
-    // main status (pending-expired-active-closed-decline)
+    // main status (pending-expired-active-closed-decline- waiting for student(tutor requesting session to the student))
     try {
       await _firestore
           .collection("session")
