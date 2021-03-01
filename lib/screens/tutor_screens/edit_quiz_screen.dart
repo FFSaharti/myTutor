@@ -24,9 +24,13 @@ class _EditQuizScreenState extends State<EditQuizScreen> {
   List<QuizQuestion> tempQuizQuestions = [];
   List<String> tempAnswers = [];
 
-  void setParentState(QuizQuestion tempQuestion) {
+  void setParentState(QuizQuestion tempQuestion, int index) {
     setState(() {
-      tempQuiz.addQuestion(tempQuestion);
+      if (index == -1)
+        tempQuiz.addQuestion(tempQuestion);
+      else {
+        tempQuiz.questions[index] = tempQuestion;
+      }
     });
   }
 
@@ -105,6 +109,9 @@ class _EditQuizScreenState extends State<EditQuizScreen> {
                           style: kTitleStyle.copyWith(
                               color: Colors.black, fontSize: 15),
                         ),
+                      ),
+                      SizedBox(
+                        height: 3,
                       ),
                       Container(
                         height: ScreenSize.height * 0.3,
@@ -231,8 +238,6 @@ class _EditQuizScreenState extends State<EditQuizScreen> {
   }
 
   void showAddNewQuestion(Function setParentState) {
-    List<Widget> searchResults = [];
-    String searchBox = '';
     QuizQuestion tempQuestion = QuizQuestion("", "");
 
     TextEditingController questionTitleController = TextEditingController();
@@ -318,9 +323,10 @@ class _EditQuizScreenState extends State<EditQuizScreen> {
                                         answerTwoController.text,
                                         answerThreeController.text,
                                         answerFourController.text,
-                                        correctAnswer);
+                                        correctAnswer,
+                                        null);
                                     setParentState;
-                                    setParentState(tempQuestion);
+                                    setParentState(tempQuestion, -1);
                                     Navigator.pop(context);
                                   } else {
                                     print("invalid parameters");
@@ -647,9 +653,25 @@ class _EditQuizScreenState extends State<EditQuizScreen> {
     for (int i = 0; i < tempQuiz.questions.length; i++) {
       // TODO : Implement viewing & editing question before creating quiz...
       widgets.add(
-        Text(
-          tempQuiz.questions[i].question,
-          style: kTitleStyle.copyWith(color: Colors.black, fontSize: 17),
+        Row(
+          children: [
+            Text(
+              tempQuiz.questions[i].question,
+              style: kTitleStyle.copyWith(color: Colors.black, fontSize: 17),
+            ),
+            Spacer(),
+            GestureDetector(
+              onTap: () {
+                print("clicked edit question");
+                //showAddNewQuestion(setParentState);
+                showEditQuestion(setParentState, tempQuiz.questions[i], i);
+              },
+              child: Icon(
+                Icons.edit,
+                size: 15,
+              ),
+            )
+          ],
         ),
       );
       widgets.add(Divider(
@@ -661,12 +683,14 @@ class _EditQuizScreenState extends State<EditQuizScreen> {
   }
 
   QuizQuestion createQuestion(
-      String questionTitle,
-      String answerOne,
-      String answerTwo,
-      String answerThree,
-      String answerFour,
-      int correctAnswer) {
+    String questionTitle,
+    String answerOne,
+    String answerTwo,
+    String answerThree,
+    String answerFour,
+    int correctAnswer,
+    QuizQuestion tempQuestion,
+  ) {
     int correctAnswerIndex = correctAnswer - 1;
 
     QuizQuestion tempQ = QuizQuestion(questionTitle, "");
@@ -675,17 +699,419 @@ class _EditQuizScreenState extends State<EditQuizScreen> {
     tempQ.correctAnswerIndex = correctAnswerIndex;
     if (answerOne.isNotEmpty && answerOne != '') {
       tempQ.addAnswer(answerOne);
+    } else if (tempQuestion != null) {
+      if (tempQuestion.answers.length >= 1) {
+        tempQ.addAnswer(tempQuestion.answers[0]);
+      }
     }
     if (answerTwo.isNotEmpty && answerTwo != '') {
       tempQ.addAnswer(answerTwo);
+    } else if (tempQuestion != null) {
+      if (tempQuestion.answers.length >= 2) {
+        tempQ.addAnswer(tempQuestion.answers[1]);
+      }
     }
     if (answerThree.isNotEmpty && answerThree != '') {
       tempQ.addAnswer(answerThree);
+    } else if (tempQuestion != null) {
+      if (tempQuestion.answers.length >= 3) {
+        tempQ.addAnswer(tempQuestion.answers[2]);
+      }
     }
     if (answerFour.isNotEmpty && answerFour != '') {
       tempQ.addAnswer(answerFour);
+    } else if (tempQuestion != null) {
+      if (tempQuestion.answers.length >= 4) {
+        tempQ.addAnswer(tempQuestion.answers[3]);
+      }
+    }
+
+    if (tempQuestion != null && questionTitle == '' && questionTitle.isEmpty) {
+      tempQ.question = tempQuestion.question;
     }
 
     return tempQ;
+  }
+
+  void showEditQuestion(
+      Function setParentState, QuizQuestion tempQuestion, int index) {
+    TextEditingController questionTitleController = TextEditingController();
+    TextEditingController answerOneController = TextEditingController();
+    TextEditingController answerTwoController = TextEditingController();
+    TextEditingController answerThreeController = TextEditingController();
+    TextEditingController answerFourController = TextEditingController();
+    List<bool> showAddAnswer = [true, false, false, false];
+    int answersCounter = tempQuestion.answers.length;
+    print("answers counter is --> " + answersCounter.toString());
+    for (int i = 0; i < tempQuestion.answers.length; i++) {
+      showAddAnswer[i] = true;
+      print("ANSWER " + i.toString() + " is --> " + tempQuestion.answers[i]);
+    }
+
+    bool getCorrectAnswers() {
+      if (answersCounter == 2) {
+        bool edited = true;
+        if (tempQuestion.answers.length >= 2) {
+          edited = tempQuestion.answers[0].isNotEmpty &&
+              tempQuestion.answers[1].isNotEmpty;
+        }
+
+        return answerOneController.text.isNotEmpty &&
+                answerTwoController.text.isNotEmpty ||
+            edited;
+      }
+      if (answersCounter == 3) {
+        bool edited = true;
+        if (tempQuestion.answers.length >= 3) {
+          edited = tempQuestion.answers[0].isNotEmpty &&
+              tempQuestion.answers[1].isNotEmpty &&
+              tempQuestion.answers[2].isNotEmpty;
+        }
+        return answerOneController.text.isNotEmpty &&
+                answerTwoController.text.isNotEmpty &&
+                answerThreeController.text.isNotEmpty ||
+            edited;
+      }
+      if (answersCounter == 4) {
+        bool edited = true;
+        if (tempQuestion.answers.length >= 4) {
+          tempQuestion.answers[0].isNotEmpty &&
+              tempQuestion.answers[1].isNotEmpty &&
+              tempQuestion.answers[2].isNotEmpty &&
+              tempQuestion.answers[3].isNotEmpty;
+        }
+        return answerOneController.text.isNotEmpty &&
+                answerTwoController.text.isNotEmpty &&
+                answerThreeController.text.isNotEmpty &&
+                answerFourController.text.isNotEmpty ||
+            edited;
+      }
+    }
+
+    showModalBottomSheet(
+        shape: RoundedRectangleBorder(
+            // borderRadius: BorderRadius.vertical(top: Radius.circular(2.0))
+            ),
+        backgroundColor: Colors.transparent,
+        enableDrag: true,
+        isScrollControlled: true,
+        context: ScreenSize.context,
+        builder: (context) {
+          return StatefulBuilder(
+              builder: (BuildContext context, StateSetter setModalState) {
+            return Container(
+              height: ScreenSize.height * 0.70,
+              child: Scaffold(
+                body: Container(
+                  //     padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                  height: ScreenSize.height * 0.70,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(50)
+                      //   topRight: Radius.circular(100),
+                      //   topLeft: Radius.circular(100),
+                      // )
+                      ,
+                      color: Colors.white),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              IconButton(
+                                  icon: Icon(Icons.cancel),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  }),
+                              Text(
+                                "Edit [" + tempQuestion.question + "]",
+                                style: TextStyle(fontSize: 20),
+                              ),
+                              IconButton(
+                                icon: Icon(Icons.check),
+                                onPressed: () {
+                                  // EDIT QUESTION
+                                  if (getCorrectAnswers() &&
+                                      tempQuestion.correctAnswerIndex != -1 &&
+                                      answersCounter >= 2) {
+                                    print("POP...");
+                                    String questionTitlePass = '';
+                                    String answerOnePass = '';
+                                    String answerTwoPass = '';
+                                    String answerThreePass = '';
+                                    String answerFourPass = '';
+                                    tempQuestion = createQuestion(
+                                        questionTitleController.text,
+                                        answerOneController.text,
+                                        answerTwoController.text,
+                                        answerThreeController.text,
+                                        answerFourController.text,
+                                        tempQuestion.correctAnswerIndex,
+                                        tempQuestion);
+                                    setParentState;
+                                    setParentState(tempQuestion, index);
+                                    Navigator.pop(context);
+                                  } else {
+                                    print("invalid parameters");
+                                    //TODO: Show error message cannot leave empty...
+                                  }
+                                },
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 15,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              children: [
+                                Align(
+                                  alignment: Alignment.topLeft,
+                                  child: Text(
+                                    "Question Title",
+                                    style: GoogleFonts.secularOne(
+                                        textStyle: TextStyle(
+                                            fontSize: 17,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.black)),
+                                  ),
+                                ),
+                                TextField(
+                                  controller: questionTitleController,
+                                  decoration: InputDecoration(
+                                    hintText: tempQuestion.question,
+                                    hintStyle: TextStyle(
+                                        fontSize: 17.0, color: Colors.grey),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 20,
+                                ),
+                                (showAddAnswer[0])
+                                    ? Container(
+                                        child: Column(
+                                          children: [
+                                            TextField(
+                                              controller: answerOneController,
+                                              decoration: InputDecoration(
+                                                suffixIcon: (tempQuestion
+                                                            .correctAnswerIndex ==
+                                                        (1 - 1))
+                                                    ? IconButton(
+                                                        icon: Icon(Icons.check),
+                                                        onPressed: () {})
+                                                    : IconButton(
+                                                        icon:
+                                                            Icon(Icons.cancel),
+                                                        onPressed: () {
+                                                          setModalState(() {
+                                                            tempQuestion
+                                                                .correctAnswerIndex = 0;
+                                                          });
+                                                        }),
+                                                hintText:
+                                                    tempQuestion.answers[0],
+                                                hintStyle: TextStyle(
+                                                    fontSize: 17.0,
+                                                    color: Colors.grey),
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              height: 15,
+                                            ),
+                                            (showAddAnswer[1])
+                                                ? Container(
+                                                    child: Column(
+                                                      children: [
+                                                        TextField(
+                                                          controller:
+                                                              answerTwoController,
+                                                          decoration:
+                                                              InputDecoration(
+                                                            hintText:
+                                                                tempQuestion
+                                                                    .answers[1],
+                                                            suffixIcon: (tempQuestion
+                                                                        .correctAnswerIndex ==
+                                                                    (2 - 1))
+                                                                ? IconButton(
+                                                                    icon: Icon(Icons
+                                                                        .check),
+                                                                    onPressed:
+                                                                        () {})
+                                                                : IconButton(
+                                                                    icon: Icon(Icons
+                                                                        .cancel),
+                                                                    onPressed:
+                                                                        () {
+                                                                      setModalState(
+                                                                          () {
+                                                                        tempQuestion
+                                                                            .correctAnswerIndex = 1;
+                                                                      });
+                                                                    }),
+                                                            hintStyle: TextStyle(
+                                                                fontSize: 17.0,
+                                                                color: Colors
+                                                                    .grey),
+                                                          ),
+                                                        ),
+                                                        SizedBox(
+                                                          height: 15,
+                                                        ),
+                                                        // NEW QUESTON HERE
+                                                        (answersCounter < 3)
+                                                            ? Row(
+                                                                children: [
+                                                                  Text(
+                                                                    "Answer",
+                                                                    style: kTitleStyle.copyWith(
+                                                                        color: Colors
+                                                                            .black,
+                                                                        fontSize:
+                                                                            17),
+                                                                  ),
+                                                                  Spacer(),
+                                                                  Padding(
+                                                                    padding: const EdgeInsets
+                                                                            .only(
+                                                                        right:
+                                                                            12.0),
+                                                                    child:
+                                                                        GestureDetector(
+                                                                      onTap:
+                                                                          () {
+                                                                        // ADD ANSWER
+                                                                        print(
+                                                                            "pressed add answer");
+                                                                        setModalState(
+                                                                            () {
+                                                                          answersCounter++;
+                                                                          showAddAnswer[2] =
+                                                                              true;
+                                                                        });
+                                                                      },
+                                                                      child:
+                                                                          Container(
+                                                                        child: Icon(
+                                                                            Icons.add_circle_outline),
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                              )
+                                                            : (showAddAnswer[2])
+                                                                ? Container(
+                                                                    child:
+                                                                        Column(
+                                                                      children: [
+                                                                        TextField(
+                                                                          controller:
+                                                                              answerThreeController,
+                                                                          decoration:
+                                                                              InputDecoration(
+                                                                            hintText: !(tempQuestion.answers.length >= 3)
+                                                                                ? 'Type Answer...'
+                                                                                : tempQuestion.answers[2],
+                                                                            suffixIcon: (tempQuestion.correctAnswerIndex == (3 - 1))
+                                                                                ? IconButton(icon: Icon(Icons.check), onPressed: () {})
+                                                                                : IconButton(
+                                                                                    icon: Icon(Icons.cancel),
+                                                                                    onPressed: () {
+                                                                                      setModalState(() {
+                                                                                        tempQuestion.correctAnswerIndex = 2;
+                                                                                      });
+                                                                                    }),
+                                                                            hintStyle:
+                                                                                TextStyle(fontSize: 17.0, color: Colors.grey),
+                                                                          ),
+                                                                        ),
+                                                                        SizedBox(
+                                                                          height:
+                                                                              15,
+                                                                        ),
+                                                                        // NEW QUESTON HERE
+                                                                        (answersCounter <
+                                                                                4)
+                                                                            ? Row(
+                                                                                children: [
+                                                                                  Text(
+                                                                                    "Answer",
+                                                                                    style: kTitleStyle.copyWith(color: Colors.black, fontSize: 17),
+                                                                                  ),
+                                                                                  Spacer(),
+                                                                                  Padding(
+                                                                                    padding: const EdgeInsets.only(right: 12.0),
+                                                                                    child: GestureDetector(
+                                                                                      onTap: () {
+                                                                                        // ADD ANSWER
+                                                                                        print("pressed add answer");
+                                                                                        setModalState(() {
+                                                                                          answersCounter++;
+                                                                                          showAddAnswer[3] = true;
+                                                                                        });
+                                                                                      },
+                                                                                      child: Container(
+                                                                                        child: Icon(Icons.add_circle_outline),
+                                                                                      ),
+                                                                                    ),
+                                                                                  ),
+                                                                                ],
+                                                                              )
+                                                                            : (showAddAnswer[3])
+                                                                                ? Container(
+                                                                                    child: Column(
+                                                                                      children: [
+                                                                                        TextField(
+                                                                                          controller: answerFourController,
+                                                                                          decoration: InputDecoration(
+                                                                                            hintText: !(tempQuestion.answers.length >= 4) ? 'Type Answer...' : tempQuestion.answers[2],
+                                                                                            suffixIcon: (tempQuestion.correctAnswerIndex == (4 - 1))
+                                                                                                ? IconButton(icon: Icon(Icons.check), onPressed: () {})
+                                                                                                : IconButton(
+                                                                                                    icon: Icon(Icons.cancel),
+                                                                                                    onPressed: () {
+                                                                                                      setModalState(() {
+                                                                                                        tempQuestion.correctAnswerIndex = 3;
+                                                                                                      });
+                                                                                                    }),
+                                                                                            hintStyle: TextStyle(fontSize: 17.0, color: Colors.grey),
+                                                                                          ),
+                                                                                        ),
+                                                                                        SizedBox(
+                                                                                          height: 15,
+                                                                                        ),
+                                                                                        // NEW QUESTON HERE
+                                                                                      ],
+                                                                                    ),
+                                                                                  )
+                                                                                : Container()
+                                                                      ],
+                                                                    ),
+                                                                  )
+                                                                : Container()
+                                                      ],
+                                                    ),
+                                                  )
+                                                : Container()
+                                          ],
+                                        ),
+                                      )
+                                    : Container(),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            );
+          });
+        });
   }
 }
