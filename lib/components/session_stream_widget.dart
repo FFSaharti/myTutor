@@ -39,7 +39,7 @@ class SessionStream extends StatelessWidget {
               final Sessiontime = session.data()["time"];
               final SessionDate = session.data()["date"];
               final SessionDesc = session.data()["description"];
-
+              final SessionSubject = session.data()["subject"];
               // convert the date we got from firebase into timestamp. to change it later to datetime.
               Timestamp stamp = SessionDate;
               print(Sessiontitle);
@@ -54,7 +54,9 @@ class SessionStream extends StatelessWidget {
                     Sessiontime,
                     stamp.toDate(),
                     SessionDesc,
-                    SessionStatus),
+                    SessionStatus,
+                    SessionSubject
+                ),
               ));
             }
           }

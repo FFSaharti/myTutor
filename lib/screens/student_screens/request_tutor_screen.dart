@@ -330,7 +330,8 @@ class _TutorWidgetState extends State<TutorWidget> {
                                       problemController.text,
                                       dateController.text,
                                       tutor,
-                                      timeController.text);
+                                      timeController.text,
+                                  1);
                                   Navigator.of(context).pop();
                                 }
                               }),

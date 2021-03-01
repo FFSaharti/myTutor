@@ -390,7 +390,7 @@ class DatabaseAPI {
   }
 
   static void createNewSession(String title, String problemDesc,
-      String prefDate, MyUser tutor, String time) async {
+      String prefDate, MyUser tutor, String time, int subject) async {
     DateTime tempDate = new DateFormat("yyyy-MM-dd").parse(prefDate);
     await _firestore.collection("session").add({
       'student': SessionManager.loggedInStudent.userId,
@@ -402,6 +402,7 @@ class DatabaseAPI {
       'status': "pending",
       'lastMessage': "Start texting here...",
       'timeOfLastMessage': DateTime.now(),
+      'subject' : subject,
     });
   }
 
