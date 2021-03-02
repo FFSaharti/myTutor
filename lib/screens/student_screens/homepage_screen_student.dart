@@ -158,6 +158,15 @@ class _HomePageStudentState extends State<HomePageStudent> {
                         "Pending Sessions"),
                     mainScreenPage(
                         SessionStream(
+                          status: "waiting for student",
+                          type: 0,
+                          checkexpire: false,
+                          isStudent: true,
+                          expiredSessionView: false,
+                        ),
+                        "waiting for your response"),
+                    mainScreenPage(
+                        SessionStream(
                           status: "closed",
                           type: 0,
                           checkexpire: false,
@@ -173,7 +182,7 @@ class _HomePageStudentState extends State<HomePageStudent> {
               effect: WormEffect(
                   dotColor: kGreyish, activeDotColor: kColorScheme[2]),
               controller: _pageController, // PageController
-              count: 3,
+              count: 4,
             ),
           ],
         ),

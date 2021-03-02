@@ -1,3 +1,4 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
@@ -54,17 +55,34 @@ class _SessionCardWidgetState extends State<SessionCardWidget> {
     return Padding(
       padding: const EdgeInsets.all(15.0),
       child: GestureDetector(
-        onTap: widget.session.status == "pending"
-            ? null
-            : () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => messagesScreen(
-                        currentsession: widget.session,
-                      ),
-                    ));
-              },
+        onTap: (){
+          if (widget.session.status == "waiting for student"){
+            print("clicked waiting");
+          } else if (widget.session.status == "pending"){
+
+          } else{
+            Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => messagesScreen(
+                                currentsession: widget.session,
+                              ),
+                            ));
+                      }
+          }
+
+        // onTap: widget.session.status == "pending"
+        //     ? null
+        //     : () {
+        //         Navigator.push(
+        //             context,
+        //             MaterialPageRoute(
+        //               builder: (context) => messagesScreen(
+        //                 currentsession: widget.session,
+        //               ),
+        //             ));
+        //       },
+        ,
         child: Container(
           height: widget.height * 0.18,
           decoration: new BoxDecoration(
