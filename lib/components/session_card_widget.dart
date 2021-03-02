@@ -6,6 +6,7 @@ import 'package:mytutor/classes/session.dart';
 import 'package:mytutor/screens/chat_screen.dart';
 import 'package:mytutor/utilities/constants.dart';
 import 'package:mytutor/utilities/database_api.dart';
+import 'package:mytutor/utilities/screen_size.dart';
 
 class SessionCardWidget extends StatefulWidget {
   const SessionCardWidget({
@@ -49,7 +50,131 @@ class _SessionCardWidgetState extends State<SessionCardWidget> {
 
     super.initState();
   }
+  showBottomsheetModel(Session session) {
+    // bottomsheet
+    DateTime tempDate = new DateFormat("yyyy-MM-dd").parse("2021-12-1");
+    print(tempDate);
+    showModalBottomSheet(
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(top: Radius.circular(25.0))),
+        context: context,
+        builder: (context) {
+          return Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  IconButton(
+                      icon: Icon(Icons.cancel),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      }),
+                  Text(
+                    "Schedule",
+                    style: TextStyle(fontSize: 20),
+                  ),
+                  IconButton(icon: Icon(Icons.check), onPressed: () {
+                    DatabaseAPI.changeSessionsStatus("active", session.session_id).then((value) => AwesomeDialog(
+                      context: context,
+                      animType: AnimType.SCALE,
+                      dialogType: DialogType.SUCCES,
+                      body: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Center(child: Text(
+                          'the session status has been changed now to active, please navigate to home screen or messages screen to start tutoring',
+                          style: kTitleStyle.copyWith(color: kBlackish,fontSize: 14,fontWeight: FontWeight.normal),
+                        ),),
+                      ),
+                      btnOkOnPress: () {
+                        Navigator.pop(context);
+                      },
+                    )..show());
 
+                  }),
+                ],
+              ),
+              SizedBox(
+                height: ScreenSize.height * 0.010,
+              ),
+              Padding(
+                padding: const EdgeInsets.all(23.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text("Date", style: kTitleStyle.copyWith(fontSize: 19,
+                            color: Colors.black,
+                            fontWeight: FontWeight.normal),),
+                        Text(new DateFormat.yMMMMEEEEd().format(
+                            new DateFormat("yyyy-MM-dd").parse(session.date.toString())),
+                            style: kTitleStyle.copyWith(fontSize: 19,
+                                color: Colors.black,
+                                fontWeight: FontWeight.normal)),
+                        Icon(Icons.date_range),
+                      ],
+                    ),
+                    SizedBox(
+                      height: ScreenSize.height * 0.005,
+                    ),
+                    Divider(),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text("Time", style: kTitleStyle.copyWith(fontSize: 19,
+                            color: Colors.black,
+                            fontWeight: FontWeight.normal),),
+                        Text(session.time, style: kTitleStyle.copyWith(
+                            fontSize: 19,
+                            color: Colors.black,
+                            fontWeight: FontWeight.normal)),
+                        Icon(Icons.alarm),
+                      ],
+                    ),
+                    Divider(),
+                    Row(
+
+                      children: [
+                        Text("Session Description",
+                          style: kTitleStyle.copyWith(fontSize: 19,
+                              color: Colors.black,
+                              fontWeight: FontWeight.normal),),
+
+                      ],
+                    ),
+                    Align(
+                      alignment: Alignment.topLeft,
+                      child: Container(
+                        color: Colors.white10,
+                        child: Text(
+                          session.desc,
+                          style: kTitleStyle.copyWith(color: kGreyerish,fontWeight: FontWeight.w100,fontSize: 17),
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 5,),
+                      ),
+                    ),
+                    Divider(),
+                    SizedBox(
+                      height: ScreenSize.height *0.030,
+                    ),
+
+                    GestureDetector(
+                      onTap: (){
+                        //ReadFullDescription(session.desc);
+                      },
+                      child: Text("click here to read the full description",style: kTitleStyle.copyWith(fontSize: 19,
+                          color: Colors.black,
+                          fontWeight: FontWeight.normal)),
+                    ),
+                  ],
+                ),
+              ),
+
+            ],
+          );
+        });
+  }
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -57,7 +182,7 @@ class _SessionCardWidgetState extends State<SessionCardWidget> {
       child: GestureDetector(
         onTap: (){
           if (widget.session.status == "waiting for student"){
-            print("clicked waiting");
+            showBottomsheetModel(widget.session);
           } else if (widget.session.status == "pending"){
 
           } else{
