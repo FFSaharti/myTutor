@@ -150,12 +150,12 @@ class DatabaseAPI {
   }
 
   static Future<String> userLogin(String email, String pass) async {
-    String status = '';
+    String status = "none";
     try {
       UserCredential userlogin =
           await _auth.signInWithEmailAndPassword(email: email, password: pass);
     } on FirebaseAuthException catch (e) {
-      //  return e.message + " MISMATCH";
+      return e.message;
     }
     try {
       await _firestore
@@ -404,14 +404,13 @@ class DatabaseAPI {
       'status': "pending",
       'lastMessage': "Start texting here...",
       'timeOfLastMessage': DateTime.now(),
-      'subject' : subject,
+      'subject': subject,
     });
   }
 
   static Future<String> scheduleWithStudent(Session session) async {
-
-    try{
-       _firestore.collection("session").add({
+    try {
+      _firestore.collection("session").add({
         'student': session.student,
         'description': session.desc,
         'title': session.title,
@@ -421,13 +420,12 @@ class DatabaseAPI {
         'status': "waiting for student",
         'lastMessage': "Start texting here...",
         'timeOfLastMessage': DateTime.now(),
-        'subject' : session.subject,
+        'subject': session.subject,
       });
       return "success";
     } on FirebaseException catch (e) {
       return "error";
     }
-
   }
 
   static Stream<QuerySnapshot> getSessionForMessageScreen(int type) {
@@ -954,7 +952,7 @@ class DatabaseAPI {
     return "done";
   }
 
-// static Future<QuerySnapshot> fetchFavDocs() {
-//   return _firestore.collection("Material").get();
-// }
+  static Future<QuerySnapshot> loadSystem() async {
+    return _firestore.collection("Student").get();
+  }
 }

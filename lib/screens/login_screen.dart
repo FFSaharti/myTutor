@@ -1,9 +1,9 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:bd_progress_bar/bdprogreebar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:mytutor/components/animated_login_widget.dart';
-import 'package:mytutor/components/ez_button.dart';
+import 'package:mytutor/components/circular_button.dart';
 import 'package:mytutor/screens/student_screens/homepage_screen_student.dart';
 import 'package:mytutor/utilities/constants.dart';
 import 'package:mytutor/utilities/database_api.dart';
@@ -23,143 +23,181 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   String email = '';
   String password = '';
+  bool loading = false;
+
+  void beginLoading() {
+    setState(() {
+      loading = true;
+    });
+  }
+
+  void stopLoading() {
+    setState(() {
+      loading = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(30.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Hero(
-                tag: 'logo',
-                child: Image.asset(
-                  'images/myTutorLogoColored.png',
-                  width: double.infinity,
-                  height: 50,
-                ),
-              ),
-              AnimatedLoginWidget(),
-              SizedBox(
-                height: 60,
-              ),
-              Text(
-                'Login to your account',
-                style: GoogleFonts.secularOne(
-                    textStyle: TextStyle(fontSize: 15, color: Colors.grey)),
-              ),
-              SizedBox(
-                height: 50,
-              ),
-              TextFieldWidget(
-                hintText: 'Email',
-                obscureText: false,
-                prefixIconData: Icons.mail_outline,
-                colorScheme: kColorScheme[4],
-                suffixIconData:
-                    Validator.isValidEmail(email) ? Icons.check : null,
-                onChanged: (value) {
-                  setState(() {
-                    email = value;
-                  });
-                  Validator.isValidEmail(value);
-                },
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              TextFieldWidget(
-                hintText: 'Password',
-                obscureText: LoginScreen.passwordVisible,
-                prefixIconData: Icons.lock,
-                suffixIconData: LoginScreen.passwordVisible
-                    ? Icons.visibility
-                    : Icons.visibility_off,
-                colorScheme: kColorScheme[4],
-                onChanged: (value) {
-                  setState(() {
-                    password = value;
-                  });
-                },
-              ),
-              SizedBox(
-                height: 5,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      resetPasswordBottomSheet();
-                    },
-                    child: Text(
-                      'Forgot your password?',
-                      style: kTitleStyle.copyWith(
-                          fontSize: 13,
-                          color: Colors.lightBlue,
-                          fontWeight: FontWeight.normal),
-                    ),
+      // appBar: PreferredSize(
+      //   child: Container(
+      //     padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
+      //     child: new Padding(
+      //       padding: const EdgeInsets.only(left: 30.0, top: 20.0, bottom: 20.0),
+      //       child: new Text(
+      //         'Arnold Parge',
+      //         style: new TextStyle(
+      //             fontSize: 20.0,
+      //             fontWeight: FontWeight.w500,
+      //             color: Colors.white),
+      //       ),
+      //     ),
+      //     decoration: new BoxDecoration(
+      //         gradient: new LinearGradient(colors: [
+      //           kColorScheme[2],
+      //           kColorScheme[1],
+      //         ]),
+      //         boxShadow: [
+      //           new BoxShadow(
+      //             color: Colors.grey[500],
+      //             blurRadius: 20.0,
+      //             spreadRadius: 1.0,
+      //           )
+      //         ]),
+      //   ),
+      //   preferredSize: new Size(MediaQuery.of(context).size.width, 150.0),
+      // ),
+      backgroundColor: Colors.transparent,
+      body: Container(
+        height: ScreenSize.height,
+        decoration: BoxDecoration(
+          gradient: kBackgroundGradient,
+        ),
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(30.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Hero(
+                  tag: 'logo',
+                  child: Image.asset(
+                    'images/myTutorLogoWhite.png',
+                    width: double.infinity,
+                    height: ScreenSize.height * 0.2,
                   ),
-                ],
-              ),
-              SizedBox(
-                height: 40,
-              ),
-              Builder(builder: (context) {
-                return EZButton(
-                    width: ScreenSize.width,
-                    buttonColor: kColorScheme[1],
-                    textColor: Colors.white,
-                    isGradient: true,
+                ),
+                Text(
+                  "Sign In",
+                  style: GoogleFonts.sen(color: Colors.white, fontSize: 40),
+                ),
+                SizedBox(
+                  height: ScreenSize.height * 0.15,
+                ),
+                TextFieldWidget(
+                  hintText: 'Email',
+                  obscureText: false,
+                  prefixIconData: Icons.mail_outline,
+                  colorScheme: kColorScheme[4],
+                  suffixIconData:
+                      Validator.isValidEmail(email) ? Icons.check : null,
+                  onChanged: (value) {
+                    setState(() {
+                      email = value;
+                    });
+                    Validator.isValidEmail(value);
+                  },
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                TextFieldWidget(
+                  hintText: 'Password',
+                  obscureText: LoginScreen.passwordVisible,
+                  prefixIconData: Icons.lock,
+                  suffixIconData: LoginScreen.passwordVisible
+                      ? Icons.visibility
+                      : Icons.visibility_off,
+                  colorScheme: kColorScheme[4],
+                  onChanged: (value) {
+                    setState(() {
+                      password = value;
+                    });
+                  },
+                ),
+                SizedBox(
+                  height: ScreenSize.height * 0.03,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        resetPasswordBottomSheet();
+                      },
+                      child: Text(
+                        'Forgot your password?',
+                        style:
+                            GoogleFonts.sen(color: Colors.white, fontSize: 20),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 40,
+                ),
+                CircularButton(
+                    width: ScreenSize.width * 0.9,
+                    buttonColor: Colors.white,
+                    textColor: kColorScheme[2],
+                    isGradient: false,
                     colors: [
                       kColorScheme[1],
                       kColorScheme[2],
                       kColorScheme[3],
-                      kColorScheme[4],
+                      kColorScheme[4]
                     ],
-                    buttonText: "Login",
-                    hasBorder: false,
-                    borderColor: null,
+                    buttonText: 'Sign In',
+                    hasBorder: true,
+                    borderColor: kColorScheme[3],
                     onPressed: () {
-                      // TODO: Implement progress bar...
+                      beginLoading();
                       DatabaseAPI.userLogin(email, password).then((value) => {
                             if (value == "Student Login")
                               {
-                                Scaffold.of(context).showSnackBar(SnackBar(
-                                    content: new Text("Welcome"),
-                                    backgroundColor: kColorScheme[2],
-                                    duration:
-                                        const Duration(milliseconds: 500))),
-                                Navigator.pushNamed(
-                                    context, HomepageScreenStudent.id)
+                                Future.delayed(Duration(milliseconds: 100), () {
+                                  Navigator.pushNamed(
+                                      context, HomepageScreenStudent.id);
+                                })
                               }
                             else if (value == "Tutor Login")
                               {
-                                Scaffold.of(context).showSnackBar(SnackBar(
-                                    content: new Text("Welcome"),
-                                    backgroundColor: kColorScheme[2],
-                                    duration:
-                                        const Duration(milliseconds: 500))),
-                                Navigator.pushNamed(
-                                    context, HomepageScreenTutor.id)
+                                Future.delayed(Duration(milliseconds: 100), () {
+                                  Navigator.pushNamed(
+                                      context, HomepageScreenTutor.id);
+                                })
                               }
                             else
                               {
-                                Scaffold.of(context).showSnackBar(SnackBar(
-                                    content: new Text("Invalid Information"),
-                                    backgroundColor: Colors.red,
-                                    duration:
-                                        const Duration(milliseconds: 500))),
-                                // Navigator.pushNamed(
-                                //     context, HomepageScreenTutor.id)
+                                // USER NOT FOUND
+                                //TODO: Show toast for not found user
+                                stopLoading(),
                               }
                           });
-                    });
-              }),
-            ],
+                    }),
+                SizedBox(
+                  height: ScreenSize.height * 0.05,
+                ),
+                loading
+                    ? Loader4(
+                        dotOneColor: Colors.white,
+                        dotTwoColor: Colors.white,
+                        dotThreeColor: Colors.white,
+                      )
+                    : Container()
+              ],
+            ),
           ),
         ),
       ),
@@ -167,21 +205,20 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   resetPasswordBottomSheet() {
-
     TextEditingController EmailController = TextEditingController();
 
     showModalBottomSheet(
-       isScrollControlled: true,
+        isScrollControlled: true,
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(top: Radius.circular(25.0))),
         context: context,
         builder: (context) {
           return Padding(
-            padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+            padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom),
             child: Container(
-              height: ScreenSize.height *0.30,
+              height: ScreenSize.height * 0.30,
               child: Column(
-
                 children: [
                   SizedBox(
                     height: ScreenSize.height * 0.030,
@@ -201,9 +238,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   TextField(
                     controller: EmailController,
-                    onChanged: (value) {
-
-                    },
+                    onChanged: (value) {},
                     decoration: InputDecoration(
                       contentPadding: EdgeInsets.symmetric(
                           vertical: 10.0, horizontal: 20.0),
@@ -218,10 +253,12 @@ class _LoginScreenState extends State<LoginScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       RaisedButton(
-                        onPressed: () async{
-                          if (EmailController.text.isNotEmpty){
-                            String errorCode = await DatabaseAPI.resetUserPassword(EmailController.text);
-                            if (errorCode == "success"){
+                        onPressed: () async {
+                          if (EmailController.text.isNotEmpty) {
+                            String errorCode =
+                                await DatabaseAPI.resetUserPassword(
+                                    EmailController.text);
+                            if (errorCode == "success") {
                               AwesomeDialog(
                                 context: context,
                                 animType: AnimType.SCALE,
@@ -239,10 +276,10 @@ class _LoginScreenState extends State<LoginScreen> {
                                   ),
                                 ),
                                 btnOkOnPress: () {
-                                   Navigator.pop(context);
+                                  Navigator.pop(context);
                                 },
                               ).show();
-                            } else if(errorCode == "invalid-email"){
+                            } else if (errorCode == "invalid-email") {
                               AwesomeDialog(
                                 context: context,
                                 animType: AnimType.SCALE,
@@ -259,11 +296,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                     ),
                                   ),
                                 ),
-                                btnOkOnPress: () {
-
-                                },
+                                btnOkOnPress: () {},
                               ).show();
-                            } else if(errorCode == "user-not-found"){
+                            } else if (errorCode == "user-not-found") {
                               AwesomeDialog(
                                 context: context,
                                 animType: AnimType.SCALE,
@@ -280,14 +315,10 @@ class _LoginScreenState extends State<LoginScreen> {
                                     ),
                                   ),
                                 ),
-                                btnOkOnPress: () {
-
-                                },
+                                btnOkOnPress: () {},
                               ).show();
                             }
                           }
-
-
                         },
                         child: Text(
                           "Submit",
@@ -340,7 +371,7 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
     return TextField(
       obscureText: widget.obscureText,
       onChanged: widget.onChanged,
-      style: TextStyle(color: kColorScheme[4], fontSize: 14),
+      style: TextStyle(color: kColorScheme[4], fontSize: 18),
       decoration: InputDecoration(
         labelText: widget.hintText,
         prefixIcon: Icon(
@@ -349,11 +380,12 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
           color: widget.colorScheme,
         ),
         filled: true,
+        fillColor: Colors.white,
         enabledBorder: UnderlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-            borderSide: BorderSide.none),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(40),
+            borderSide: BorderSide(color: widget.colorScheme)),
+        focusedBorder: UnderlineInputBorder(
+          borderRadius: BorderRadius.circular(40),
           borderSide: BorderSide(color: widget.colorScheme),
         ),
         suffixIcon: GestureDetector(
@@ -369,7 +401,7 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
             color: widget.colorScheme,
           ),
         ),
-        labelStyle: TextStyle(color: widget.colorScheme),
+        labelStyle: TextStyle(color: widget.colorScheme, fontSize: 20),
       ),
     );
   }

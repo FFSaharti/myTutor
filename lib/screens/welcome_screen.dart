@@ -1,9 +1,11 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
-import 'package:mytutor/components/ez_button.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:mytutor/components/circular_button.dart';
 import 'package:mytutor/screens/tour_screen.dart';
 import 'package:mytutor/utilities/constants.dart';
 import 'package:mytutor/utilities/screen_size.dart';
+import 'package:page_transition/page_transition.dart';
 
 import 'login_screen.dart';
 
@@ -17,7 +19,7 @@ class WelcomeScreen extends StatelessWidget {
       backgroundColor: Colors.transparent,
       body: Container(
         // color: Colors.white,
-        width: double.infinity,
+        width: ScreenSize.width,
         decoration: BoxDecoration(
           gradient: kBackgroundGradient,
         ),
@@ -41,20 +43,13 @@ class WelcomeScreen extends StatelessWidget {
                 text: [
                   "My Tutor",
                 ],
-                textStyle: kTitleStyle,
+                textStyle:
+                    GoogleFonts.sen(fontSize: 50, fontWeight: FontWeight.bold),
                 textAlign: TextAlign.center,
               ),
             ),
-            Opacity(
-              opacity: 0.8,
-              child: Text(
-                'Your Tutor, right in your pocket',
-                style: kTitleStyle.copyWith(
-                    fontSize: 18, fontWeight: FontWeight.normal),
-              ),
-            ),
             SizedBox(
-              height: ScreenSize.height * 0.1,
+              height: ScreenSize.height * 0.05,
             ),
             Expanded(
               child: Container(
@@ -62,54 +57,85 @@ class WelcomeScreen extends StatelessWidget {
                   padding: EdgeInsets.all(50),
                   child: Center(
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
-                        EZButton(
-                          width: ScreenSize.width,
-                          buttonColor: Colors.white,
-                          textColor: Colors.white,
-                          isGradient: true,
-                          colors: [
-                            kColorScheme[1],
-                            kColorScheme[2],
-                            kColorScheme[3],
-                            kColorScheme[4]
+                        Column(
+                          children: [
+                            SizedBox(
+                              height: ScreenSize.height * 0.02,
+                            ),
+                            Text(
+                              "Find the perfect tutor! that will assist in all your problems.",
+                              style: GoogleFonts.sen(
+                                  fontSize: 18, color: Colors.grey),
+                              textAlign: TextAlign.center,
+                            ),
+                            SizedBox(
+                              height: ScreenSize.height * 0.05,
+                            ),
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: CircularButton(
+                                width: ScreenSize.width * 0.9,
+                                buttonColor: null,
+                                textColor: Colors.white,
+                                isGradient: true,
+                                colors: [
+                                  kColorScheme[1],
+                                  kColorScheme[2],
+                                  kColorScheme[3],
+                                  kColorScheme[4]
+                                ],
+                                buttonText: 'Sign In',
+                                hasBorder: true,
+                                borderColor: kColorScheme[3],
+                                onPressed: () {
+                                  // Navigator.pushNamed(
+                                  //     context, LoginScreen.id);
+                                  Navigator.push(
+                                      context,
+                                      PageTransition(
+                                          type: PageTransitionType.bottomToTop,
+                                          duration: Duration(milliseconds: 200),
+                                          child: LoginScreen()));
+                                },
+                              ),
+                            ),
+                            SizedBox(
+                              height: ScreenSize.height * 0.02,
+                            ),
+                            Align(
+                              alignment: Alignment.centerRight,
+                              child: CircularButton(
+                                width: ScreenSize.width * 0.9,
+                                buttonColor: Colors.black,
+                                textColor: Colors.white,
+                                isGradient: false,
+                                colors: null,
+                                buttonText: 'Get Started',
+                                hasBorder: false,
+                                borderColor: kColorScheme[3],
+                                onPressed: () {
+                                  Navigator.push(
+                                      context,
+                                      PageTransition(
+                                          type: PageTransitionType.bottomToTop,
+                                          duration: Duration(milliseconds: 500),
+                                          child: TourScreen()));
+                                },
+                              ),
+                            ),
                           ],
-                          buttonText: 'Get Started',
-                          hasBorder: false,
-                          borderColor: kColorScheme[3],
-                          onPressed: () {
-                            Navigator.pushNamed(context, TourScreen.id);
-                          },
-                        ),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        EZButton(
-                          width: ScreenSize.width,
-                          buttonColor: Colors.white,
-                          textColor: kColorScheme[3],
-                          isGradient: false,
-                          colors: null,
-                          buttonText: 'Login',
-                          hasBorder: true,
-                          borderColor: kColorScheme[3],
-                          onPressed: () {
-                            Navigator.pushNamed(context, LoginScreen.id);
-                          },
-                        ),
-                        SizedBox(
-                          height: 15,
                         ),
                       ],
                     ),
                   ),
                 ),
-                width: double.infinity,
+                width: ScreenSize.width,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.only(
-                      topRight: Radius.circular(45),
-                      topLeft: Radius.circular(45)),
+                      topRight: Radius.circular(30),
+                      topLeft: Radius.circular(30)),
                   color: Colors.white,
                 ),
               ),
