@@ -50,7 +50,8 @@ class _MaterialStreamTutorState extends State<MaterialStreamTutor> {
                     material.data()['issuerId'],
                     null,
                     material.data()['documentDesc'],
-                    material.data()['fileType']);
+                    material.data()['fileType'],
+                    material.id);
                 UserMaterials.add(
                   GestureDetector(
                     onTap: () {
@@ -196,7 +197,8 @@ class _MaterialStreamTutorState extends State<MaterialStreamTutor> {
                           2,
                           material.data()['subject'],
                           material.data()['quizTitle'],
-                          material.data()['quizDesc']);
+                          material.data()['quizDesc'],
+                          material.id);
 
                       showModalBottomSheet(
                           shape: RoundedRectangleBorder(
@@ -314,7 +316,8 @@ class _MaterialStreamTutorState extends State<MaterialStreamTutor> {
                           2,
                           material.data()['subject'],
                           material.data()['quizTitle'],
-                          material.data()['quizDesc']),
+                          material.data()['quizDesc'],
+                          material.id),
                       matID: material.id,
                     ),
                   ),

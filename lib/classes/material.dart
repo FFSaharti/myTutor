@@ -4,9 +4,10 @@ class MyMaterial {
   int _subject;
   String _title;
   String _desc;
+  String _docid;
 
-  MyMaterial(
-      this._issuerId, this._type, this._subject, this._title, this._desc);
+  MyMaterial(this._issuerId, this._type, this._subject, this._title, this._desc,
+      this._docid);
 
   int get subjectID => _subject;
 
@@ -36,5 +37,11 @@ class MyMaterial {
 
   set title(String value) {
     _title = value;
+  }
+
+  String get docid => _docid;
+
+  set docid(String value) {
+    _docid = value;
   }
 }

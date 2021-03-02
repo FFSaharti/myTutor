@@ -1,20 +1,25 @@
 import 'dart:io';
 
 import 'package:advance_pdf_viewer/advance_pdf_viewer.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mytutor/classes/document.dart';
+import 'package:mytutor/classes/material.dart';
+import 'package:mytutor/classes/quiz.dart';
 import 'package:mytutor/components/ez_button.dart';
 import 'package:mytutor/components/session_stream_widget.dart';
 import 'package:mytutor/screens/student_screens/request_tutor_screen.dart';
 import 'package:mytutor/screens/student_screens/view_materials_screen.dart';
+import 'package:mytutor/screens/take_quiz_screen.dart';
 import 'package:mytutor/utilities/constants.dart';
 import 'package:mytutor/utilities/database_api.dart';
 import 'package:mytutor/utilities/screen_size.dart';
 import 'package:mytutor/utilities/session_manager.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../message_screen.dart';
 import 'ask_screen_student.dart';
@@ -366,17 +371,21 @@ class _ProfileStudentState extends State<ProfileStudent> {
     });
   }
 
-  List<Document> favDocs = [];
+  List<MyMaterial> favDocs = [];
 
   @override
   void initState() {
     // TODO: implement initState
+
+    print(
+        "FAV MATS IS --> " + SessionManager.loggedInStudent.favMats.toString());
+
     DatabaseAPI.fetchDocument().then((data) {
       if (data.docs.isNotEmpty) {
         for (var material in data.docs) {
-          if (material.data()['type'] == 1) {
-            // DOCUMENT TYPE
-            if (SessionManager.loggedInStudent.favMats.contains(material.id)) {
+          if (SessionManager.loggedInStudent.favMats.contains(material.id)) {
+            if (material.data()['type'] == 1) {
+              // DOCUMENT TYPE
               Document tempDoc = Document(
                   material.data()["documentTitle"],
                   material.data()["type"],
@@ -385,7 +394,8 @@ class _ProfileStudentState extends State<ProfileStudent> {
                   material.data()["issuerId"],
                   null,
                   material.data()["documentDesc"],
-                  material.data()["fileType"]);
+                  material.data()["fileType"],
+                  material.id);
               tempDoc.docid = material.id;
               print("tempDoc id is --> " +
                   tempDoc.docid +
@@ -394,15 +404,20 @@ class _ProfileStudentState extends State<ProfileStudent> {
               setState(() {
                 favDocs.add(tempDoc);
               });
+            } else {
+              // QUIZ TYPE
+
+              Quiz tempQ = Quiz(
+                  material.data()["issuerId"],
+                  material.data()['type'],
+                  material.data()['subject'],
+                  material.data()['quizTitle'],
+                  material.data()['quizDesc'],
+                  material.id);
+              setState(() {
+                favDocs.add(tempQ);
+              });
             }
-          } else {
-            // QUIZ TYPE
-            // materials.add(Quiz(
-            //     material.data()["issuerId"],
-            //     material.data()['type'],
-            //     material.data()['subject'],
-            //     material.data()['quizTitle'],
-            //     material.data()['quizDesc']));
           }
         }
         print("length is --> " + favDocs.length.toString());
@@ -624,31 +639,47 @@ class _ProfileStudentState extends State<ProfileStudent> {
                           padding: const EdgeInsets.all(8.0),
                           child: ListTile(
                             leading: Image.asset(
-                                (favDocs.elementAt(index)).subject.path),
+                                (subjects[favDocs.elementAt(index).subjectID])
+                                    .path),
                             title: Text(favDocs.elementAt(index).title),
-                            // trailing: Column(
-                            //   mainAxisAlignment: MainAxisAlignment.center,
-                            //   children: [
-                            //     Container(
-                            //       child: GestureDetector(
-                            //         child: Icon(Icons.visibility),
-                            //         onTap: () {
-                            //           // open the file reader if the file is pdf, else let the user download the file
-                            //           (favDocs.elementAt(index)).fileType ==
-                            //                   "pdf"
-                            //               ? PDFDocument.fromURL(
-                            //                       (favDocs.elementAt(index))
-                            //                           .url)
-                            //                   .then((value) => {
-                            //                         doc = value,
-                            //                         readPdf(index),
-                            //                       })
-                            //               : downloadFile(index);
-                            //         },
-                            //       ),
-                            //     ),
-                            //   ],
-                            // ),
+                            trailing: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Container(
+                                  child: GestureDetector(
+                                    child: Icon(Icons.visibility),
+                                    onTap: () {
+                                      // open the file reader if the file is pdf, else let the user download the file
+                                      if (favDocs.elementAt(index).type == 1) {
+                                        (favDocs.elementAt(index) as Document)
+                                                    .fileType ==
+                                                "pdf"
+                                            ? PDFDocument.fromURL(
+                                                    (favDocs.elementAt(index)
+                                                            as Document)
+                                                        .url)
+                                                .then((value) => {
+                                                      doc = value,
+                                                      readPdf(index),
+                                                    })
+                                            : downloadFile(index);
+                                      } else {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  TakeQuizScreen(
+                                                      favDocs.elementAt(index),
+                                                      favDocs
+                                                          .elementAt(index)
+                                                          .docid)),
+                                        );
+                                      }
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       );
@@ -661,6 +692,45 @@ class _ProfileStudentState extends State<ProfileStudent> {
         ),
       ),
     );
+  }
+
+  readPdf(int index) {
+    showModalBottomSheet(
+        isScrollControlled: true,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(top: Radius.circular(25.0))),
+        context: context,
+        builder: (context) {
+          return Container(
+            height: ScreenSize.height * 0.90,
+            child: PDFViewer(
+              document: doc,
+            ),
+          );
+        });
+  }
+
+  void downloadFile(int index) async {
+    try {
+      if (await canLaunch((favDocs.elementAt(index) as Document).url)) {
+        await launch((favDocs.elementAt(index) as Document).url);
+      } else {
+        throw 'Could not launch' + favDocs.elementAt(index).toString();
+      }
+    } catch (e) {
+      AwesomeDialog(
+        context: context,
+        animType: AnimType.SCALE,
+        dialogType: DialogType.ERROR,
+        body: Center(
+          child: Text(
+            e.toString(),
+            style: TextStyle(fontStyle: FontStyle.italic),
+          ),
+        ),
+        btnOkOnPress: () {},
+      )..show();
+    }
   }
 
   void showAboutMe(Function setParentState) {

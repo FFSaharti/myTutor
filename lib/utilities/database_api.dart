@@ -6,6 +6,7 @@ import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:intl/intl.dart';
 import 'package:mytutor/classes/answer.dart';
 import 'package:mytutor/classes/document.dart';
+import 'package:mytutor/classes/material.dart';
 import 'package:mytutor/classes/question.dart';
 import 'package:mytutor/classes/quiz.dart';
 import 'package:mytutor/classes/rate.dart';
@@ -754,7 +755,7 @@ class DatabaseAPI {
         .snapshots();
   }
 
-  static Future<String> addMaterialToFavorites(Document doc) async {
+  static Future<String> addMaterialToFavorites(MyMaterial doc) async {
     String status = "done";
     await _firestore
         .collection("Student")

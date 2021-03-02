@@ -30,9 +30,10 @@ class _TakeQuizScreenState extends State<TakeQuizScreen> {
   @override
   void initState() {
     widget.quiz = Quiz(SessionManager.loggedInTutor.userId, 2,
-        widget.quiz.subjectID, widget.quiz.title, widget.quiz.quizDesc);
+        widget.quiz.subjectID, widget.quiz.title, widget.quiz.quizDesc, '');
     DatabaseAPI.fetchQuiz(widget.quizID).then((value) => {
           print("VALUE OF value is --> " + value.toString()),
+          widget.quiz.doc_id = value.id,
           widget.quiz.quizTitle = value.data()["quizTitle"],
           widget.quiz.quizDesc = value.data()["quizDesc"],
           widget.quiz.subjectID = value.data()["subject"],
@@ -165,7 +166,7 @@ class _TakeQuizScreenState extends State<TakeQuizScreen> {
                     btnOkOnPress: () {
                       int count = 0;
                       Navigator.popUntil(context, (route) {
-                        return count++ == 2;
+                        return count++ == 1;
                       });
                     },
                   ).show();

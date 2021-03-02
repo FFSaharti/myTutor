@@ -20,7 +20,7 @@ class EditQuizScreen extends StatefulWidget {
 
 class _EditQuizScreenState extends State<EditQuizScreen> {
   // QUIZ STUFF -
-  Quiz tempQuiz = Quiz(SessionManager.loggedInTutor.userId, 2, -1, '', '');
+  Quiz tempQuiz = Quiz(SessionManager.loggedInTutor.userId, 2, -1, '', '', '');
   List<QuizQuestion> tempQuizQuestions = [];
   List<String> tempAnswers = [];
 
@@ -210,7 +210,7 @@ class _EditQuizScreenState extends State<EditQuizScreen> {
                   btnOkOnPress: () {
                     int count = 0;
                     Navigator.popUntil(context, (route) {
-                      return count++ == 1;
+                      return count++ == 2;
                     });
                   },
                 ).show()

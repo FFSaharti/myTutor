@@ -5,9 +5,11 @@ class Quiz extends MyMaterial {
   List<QuizQuestion> _questions = [];
   String _quizTitle = '';
   String _quizDesc = '';
+  String doc_id;
 
-  Quiz(String issuerId, int type, int subject, this._quizTitle, this._quizDesc)
-      : super(issuerId, type, subject, _quizTitle, _quizDesc);
+  Quiz(String issuerId, int type, int subject, this._quizTitle, this._quizDesc,
+      this.doc_id)
+      : super(issuerId, type, subject, _quizTitle, _quizDesc, doc_id);
 
   String get quizTitle => _quizTitle;
 

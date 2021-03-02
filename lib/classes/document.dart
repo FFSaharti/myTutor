@@ -21,8 +21,8 @@ class Document extends MyMaterial {
   }
 
   Document(this._title, this._type, this._url, this._subject, this._issuerId,
-      this._file, this._description, this._fileType)
-      : super(_issuerId, _type, _subject.id, _title, _description);
+      this._file, this._description, this._fileType, this._docid)
+      : super(_issuerId, _type, _subject.id, _title, _description, _docid);
 
   String get description => _description;
 

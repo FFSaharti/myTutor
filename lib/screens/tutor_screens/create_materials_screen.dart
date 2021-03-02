@@ -37,7 +37,7 @@ class _CreateMaterialsScreenState extends State<CreateMaterialsScreen> {
   bool _quizUserChoose;
 
   // QUIZ STUFF
-  Quiz tempQuiz = Quiz(SessionManager.loggedInTutor.userId, 2, -1, '', '');
+  Quiz tempQuiz = Quiz(SessionManager.loggedInTutor.userId, 2, -1, '', '', "");
 
   void setParentState(QuizQuestion tempQuestion) {
     setState(() {
@@ -487,7 +487,8 @@ class _CreateMaterialsScreenState extends State<CreateMaterialsScreen> {
                 SessionManager.loggedInTutor.userId,
                 _file,
                 _descController.text,
-                filetype))
+                filetype,
+                ""))
             .then((value) => {
                   value == "done"
                       ? AwesomeDialog(
