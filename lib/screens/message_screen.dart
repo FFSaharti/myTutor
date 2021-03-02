@@ -118,6 +118,7 @@ class _MessageScreenState extends State<MessageScreen> {
                         final SessionDesc = session.data()["description"];
                         final timeOfLastMessage =
                         session.data()["timeOfLastMessage"];
+                        final SessionSubject = session.data()["subject"];
                         // convert the date we got from firebase into timestamp. to change it later to datetime.
                         Timestamp stampOftheSessiondate = SessionDate;
                         Timestamp StampOfTheLastMessageTime =
@@ -130,7 +131,8 @@ class _MessageScreenState extends State<MessageScreen> {
                             Sessiontime,
                             stampOftheSessiondate.toDate(),
                             SessionDesc,
-                            SessionStatus);
+                            SessionStatus,
+                            SessionSubject);
                         tempSession.lastMessage =
                         session.data()["lastMessage"];
                         tempSession.timeOfLastMessage =

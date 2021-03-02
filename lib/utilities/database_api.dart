@@ -10,6 +10,7 @@ import 'package:mytutor/classes/material.dart';
 import 'package:mytutor/classes/question.dart';
 import 'package:mytutor/classes/quiz.dart';
 import 'package:mytutor/classes/rate.dart';
+import 'package:mytutor/classes/session.dart';
 import 'package:mytutor/classes/student.dart';
 import 'package:mytutor/classes/subject.dart';
 import 'package:mytutor/classes/tutor.dart';
@@ -391,7 +392,7 @@ class DatabaseAPI {
   }
 
   static void createNewSession(String title, String problemDesc,
-      String prefDate, MyUser tutor, String time) async {
+      String prefDate, MyUser tutor, String time, int subject) async {
     DateTime tempDate = new DateFormat("yyyy-MM-dd").parse(prefDate);
     await _firestore.collection("session").add({
       'student': SessionManager.loggedInStudent.userId,
@@ -403,7 +404,30 @@ class DatabaseAPI {
       'status': "pending",
       'lastMessage': "Start texting here...",
       'timeOfLastMessage': DateTime.now(),
+      'subject' : subject,
     });
+  }
+
+  static Future<String> scheduleWithStudent(Session session) async {
+
+    try{
+       _firestore.collection("session").add({
+        'student': session.student,
+        'description': session.desc,
+        'title': session.title,
+        'tutor': session.tutor,
+        'date': session.date,
+        'time': session.time,
+        'status': "waiting for student",
+        'lastMessage': "Start texting here...",
+        'timeOfLastMessage': DateTime.now(),
+        'subject' : session.subject,
+      });
+      return "success";
+    } on FirebaseException catch (e) {
+      return "error";
+    }
+
   }
 
   static Stream<QuerySnapshot> getSessionForMessageScreen(int type) {
@@ -495,7 +519,7 @@ class DatabaseAPI {
 
   static Future<String> changeSessionsStatus(
       String status, String sessionid) async {
-    // main status (pending-expired-active-closed-decline)
+    // main status (pending-expired-active-closed-decline- waiting for student(tutor requesting session to the student))
     try {
       await _firestore
           .collection("session")

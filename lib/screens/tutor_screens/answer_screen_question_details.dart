@@ -1,10 +1,14 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mytutor/classes/question.dart';
+import 'package:mytutor/classes/session.dart';
 import 'package:mytutor/components/ez_button.dart';
 import 'package:mytutor/utilities/constants.dart';
 import 'package:mytutor/utilities/database_api.dart';
 import 'package:mytutor/utilities/screen_size.dart';
+import 'package:mytutor/utilities/session_manager.dart';
+import 'package:intl/intl.dart';
 
 class AnswerScreenQuestionDetails extends StatefulWidget {
   final Question question;
@@ -140,20 +144,38 @@ class _AnswerScreenQuestionDetailsState
                 ),
               ),
             ),
-            EZButton(
-                width: ScreenSize.width * 0.5,
-                buttonColor: kColorScheme[2],
-                textColor: Colors.white,
-                isGradient: true,
-                colors: [kColorScheme[0], kColorScheme[3]],
-                buttonText: "Answer",
-                hasBorder: false,
-                borderColor: null,
-                onPressed: () {
-                  print("Pressed answer");
-                  showAddQuestion(setParentState);
-                  // SHOW ANSWER BOTTOM BAR
-                })
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                EZButton(
+                    width: ScreenSize.width * 0.5,
+                    buttonColor: kColorScheme[2],
+                    textColor: Colors.white,
+                    isGradient: true,
+                    colors: [kColorScheme[0], kColorScheme[3]],
+                    buttonText: "Answer",
+                    hasBorder: false,
+                    borderColor: null,
+                    onPressed: () {
+                      print("Pressed answer");
+                      showAddQuestion(setParentState);
+                      // SHOW ANSWER BOTTOM BAR
+                    }),
+                EZButton(
+                    width: ScreenSize.width * 0.5,
+                    buttonColor: kColorScheme[2],
+                    textColor: Colors.white,
+                    isGradient: true,
+                    colors: [kColorScheme[0], kColorScheme[3]],
+                    buttonText: "Schedule with student",
+                    hasBorder: false,
+                    borderColor: null,
+                    onPressed: () {
+                      scheduleWithStudent();
+                      // SHOW ANSWER BOTTOM BAR
+                    })
+              ],
+            )
           ],
         ),
       ),
@@ -264,6 +286,245 @@ class _AnswerScreenQuestionDetailsState
               ),
             );
           });
+        });
+  }
+
+  void scheduleWithStudent() {
+    String _preffredDate;
+    TextEditingController timeController = TextEditingController();
+    TextEditingController titleController = TextEditingController();
+    TextEditingController problemController = TextEditingController();
+    TextEditingController dateController = TextEditingController();
+    MediaQueryData mediaQueryData = MediaQuery.of(context);
+    double width = mediaQueryData.size.width;
+    double height = mediaQueryData.size.height;
+    problemController.text = widget.question.description;
+    titleController.text = widget.question.title;
+    showModalBottomSheet(
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(top: Radius.circular(25.0))),
+        backgroundColor: Colors.transparent,
+        enableDrag: true,
+        isScrollControlled: true,
+        context: context,
+        builder: (context) {
+          return Container(
+            height: height * 0.60,
+            child: Container(
+              padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).viewInsets.bottom),
+              height: height * 0.60,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10), color: Colors.white),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          IconButton(
+                              icon: Icon(Icons.cancel),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              }),
+                          Text(
+                            "Session details",
+                            style: TextStyle(fontSize: 20),
+                          ),
+                          IconButton(
+                              icon: Icon(Icons.check),
+                              onPressed: () {
+                                if (titleController.text.isNotEmpty &&
+                                    dateController.text.isNotEmpty &&
+                                    problemController.text.isNotEmpty &&
+                                    timeController.text.isNotEmpty) {
+                                  DatabaseAPI.scheduleWithStudent(Session(
+                                          titleController.text,
+                                          SessionManager.loggedInTutor.userId,
+                                          widget.question.issuer.userId,
+                                          "",
+                                          timeController.text,
+                                          new DateFormat("yyyy-MM-dd")
+                                              .parse(dateController.text),
+                                          problemController.text,
+                                          "",
+                                          int.parse(widget.question.subject)))
+                                      .then((value) => {
+                                            value == "success"
+                                                ? AwesomeDialog(
+                                                    context: context,
+                                                    animType: AnimType.SCALE,
+                                                    dialogType:
+                                                        DialogType.SUCCES,
+                                                    body: Center(
+                                                      child: Text(
+                                                        'the session created successfully. wait till the student accept it to start tutoring.',
+                                                        style: TextStyle(
+                                                            fontStyle: FontStyle
+                                                                .italic),
+                                                      ),
+                                                    ),
+                                                    btnOkOnPress: () {
+                                                      Navigator.of(context).pop();
+                                                    },
+                                                  ).show()
+                                                : AwesomeDialog(
+                                                    context: context,
+                                                    animType: AnimType.SCALE,
+                                                    dialogType:
+                                                        DialogType.ERROR,
+                                                    body: Center(
+                                                      child: Text(
+                                                        'check the entered data and try again ',
+                                                        style: TextStyle(
+                                                            fontStyle: FontStyle
+                                                                .italic,),
+                                                      ),
+                                                    ),
+                                                    btnOkOnPress: () {
+
+                                                    },
+                                                  ).show(),
+                                          });
+
+                                }
+                              }),
+                        ],
+                      ),
+                      Text("Requesting",
+                          style: TextStyle(
+                              fontSize: 22,
+                              fontWeight: FontWeight.normal,
+                              color: Colors.black)),
+                      Text(
+                        widget.question.issuer.name,
+                        style: GoogleFonts.sarabun(
+                            textStyle: TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.blueGrey)),
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          children: [
+                            Align(
+                              alignment: Alignment.topLeft,
+                              child: Text(
+                                "SessionTitle",
+                                style: GoogleFonts.secularOne(
+                                    textStyle: TextStyle(
+                                        fontSize: 17,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black)),
+                              ),
+                            ),
+                            TextField(
+                              controller: titleController,
+                              decoration: InputDecoration(
+                                hintText: 'Type something...',
+                                hintStyle: TextStyle(
+                                    fontSize: 17.0, color: Colors.grey),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            Align(
+                              alignment: Alignment.topLeft,
+                              child: Text(
+                                "Problem Description",
+                                style: GoogleFonts.secularOne(
+                                    textStyle: TextStyle(
+                                        fontSize: 17,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black)),
+                              ),
+                            ),
+                            TextField(
+                              controller: problemController,
+                              decoration: InputDecoration(
+                                hintText: 'Type something...',
+                                hintStyle: TextStyle(
+                                    fontSize: 17.0, color: Colors.grey),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            Align(
+                              alignment: Alignment.topLeft,
+                              child: Text(
+                                "Preferred Date",
+                                style: GoogleFonts.secularOne(
+                                    textStyle: TextStyle(
+                                        fontSize: 17,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black)),
+                              ),
+                            ),
+                            TextField(
+                              controller: dateController,
+                              decoration: InputDecoration(
+                                suffixIcon: GestureDetector(
+                                  child: Icon(Icons.date_range),
+                                  onTap: () {
+                                    showDatePicker(
+                                            context: context,
+                                            initialDate: _preffredDate == null
+                                                ? DateTime.now()
+                                                : _preffredDate,
+                                            firstDate: DateTime.now(),
+                                            lastDate: DateTime(2022))
+                                        .then((value) => dateController.text =
+                                            value.year.toString() +
+                                                "-" +
+                                                value.month.toString() +
+                                                "-" +
+                                                value.day.toString());
+                                  },
+                                ),
+                                hintText: 'Type something...',
+                                hintStyle: TextStyle(
+                                    fontSize: 17.0, color: Colors.grey),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            Align(
+                              alignment: Alignment.topLeft,
+                              child: Text(
+                                "Preferred Time, am/pm",
+                                style: GoogleFonts.secularOne(
+                                    textStyle: TextStyle(
+                                        fontSize: 17,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black)),
+                              ),
+                            ),
+                            TextField(
+                              controller: timeController,
+                              decoration: InputDecoration(
+                                hintText: 'Type something...',
+                                hintStyle: TextStyle(
+                                    fontSize: 17.0, color: Colors.grey),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          );
         });
   }
 }

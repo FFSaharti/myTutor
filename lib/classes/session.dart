@@ -1,4 +1,3 @@
-import 'package:mytutor/classes/tutor.dart';
 
 class Session {
   String _title;
@@ -9,7 +8,14 @@ class Session {
   DateTime _date;
   String _desc;
   String _status;
+  int _subject;
   String _lastMessage;
+
+  int get subject => _subject;
+
+  set subject(int value) {
+    _subject = value;
+  }
 
   String get lastMessage => _lastMessage;
 
@@ -38,7 +44,7 @@ class Session {
   }
 
   Session(this._title, this._tutor, this._student, this._session_id, this._time,
-      this._date, this._desc, this._status);
+      this._date, this._desc, this._status,this._subject);
 
   String get title => _title;
 

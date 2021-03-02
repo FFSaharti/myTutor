@@ -76,11 +76,11 @@ class _SessionCardWidgetState extends State<SessionCardWidget> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Image.asset(
-                "images/Sub-Icons/Java.png",
+                subjects.elementAt(widget.session.subject).path,
                 height: 60,
               ),
               Padding(
-                padding: const EdgeInsets.all(15.0),
+                padding: const EdgeInsets.only(left :10.0),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
