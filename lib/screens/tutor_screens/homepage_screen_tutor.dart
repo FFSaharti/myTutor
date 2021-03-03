@@ -1,17 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_villains/villain.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:mytutor/classes/subject.dart';
-import 'package:mytutor/components/ez_button.dart';
-import 'package:mytutor/components/material_stream_widget.dart';
 import 'package:mytutor/components/session_stream_widget.dart';
 import 'package:mytutor/screens/tutor_screens/answer_screen_tutor.dart';
 import 'package:mytutor/screens/tutor_screens/create_materials_screen.dart';
 import 'package:mytutor/screens/tutor_screens/respond_screen_tutor.dart';
 import 'package:mytutor/screens/tutor_screens/tutor_Profile.dart';
 import 'package:mytutor/utilities/constants.dart';
-import 'package:mytutor/utilities/database_api.dart';
 import 'package:mytutor/utilities/screen_size.dart';
 import 'package:mytutor/utilities/session_manager.dart';
 
@@ -35,6 +32,7 @@ class _HomepageScreenTutorState extends State<HomepageScreenTutor> {
 
   void changeindex(int index) {
     setState(() {
+      VillainController.playAllVillains(context);
       _navindex = index;
       print(_navindex);
     });
@@ -42,24 +40,28 @@ class _HomepageScreenTutorState extends State<HomepageScreenTutor> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        showSelectedLabels: false,
-        showUnselectedLabels: false,
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: "home"),
-          BottomNavigationBarItem(
-              icon: Icon(FontAwesomeIcons.chalkboardTeacher), label: "student"),
-          BottomNavigationBarItem(icon: Icon(Icons.email), label: "messages"),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: "profile"),
-        ],
-        currentIndex: _navindex,
-        onTap: changeindex,
-        selectedItemColor: kColorScheme[3],
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        bottomNavigationBar: BottomNavigationBar(
+          type: BottomNavigationBarType.fixed,
+          showSelectedLabels: false,
+          showUnselectedLabels: false,
+          items: const <BottomNavigationBarItem>[
+            BottomNavigationBarItem(icon: Icon(Icons.home), label: "home"),
+            BottomNavigationBarItem(
+                icon: Icon(FontAwesomeIcons.chalkboardTeacher),
+                label: "student"),
+            BottomNavigationBarItem(icon: Icon(Icons.email), label: "messages"),
+            BottomNavigationBarItem(icon: Icon(Icons.person), label: "profile"),
+          ],
+          currentIndex: _navindex,
+          onTap: changeindex,
+          selectedItemColor: kColorScheme[3],
+        ),
+        body: widgets.elementAt(_navindex),
       ),
-      body: widgets.elementAt(_navindex),
     );
   }
 }
@@ -81,27 +83,33 @@ class _HomePageTutorState extends State<HomePageTutor> {
           ),
           Padding(
             padding: const EdgeInsets.only(left: 13.0),
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: RichText(
-                text: TextSpan(children: [
-                  TextSpan(
-                    text: "Welcome,\nTutor ",
-                    style: GoogleFonts.sarabun(
-                        textStyle: TextStyle(
-                            fontSize: 36,
-                            fontWeight: FontWeight.normal,
-                            color: Colors.black)),
-                  ),
-                  TextSpan(
-                    text: SessionManager.loggedInTutor.name,
-                    style: GoogleFonts.sarabun(
-                        textStyle: TextStyle(
-                            fontSize: 36,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black)),
-                  ),
-                ]),
+            child: Villain(
+              villainAnimation: VillainAnimation.fromLeft(
+                from: Duration(milliseconds: 30),
+                to: Duration(milliseconds: 300),
+              ),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: RichText(
+                  text: TextSpan(children: [
+                    TextSpan(
+                      text: "Welcome,\nTutor ",
+                      style: GoogleFonts.sarabun(
+                          textStyle: TextStyle(
+                              fontSize: 36,
+                              fontWeight: FontWeight.normal,
+                              color: Colors.black)),
+                    ),
+                    TextSpan(
+                      text: SessionManager.loggedInTutor.name,
+                      style: GoogleFonts.sarabun(
+                          textStyle: TextStyle(
+                              fontSize: 36,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black)),
+                    ),
+                  ]),
+                ),
               ),
             ),
           ),

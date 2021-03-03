@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_villains/villains/villains.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mytutor/classes/subject.dart';
 
@@ -122,3 +123,24 @@ List<Subject> subjects = [
       ],
       false),
 ];
+
+AppBar buildAppBar(BuildContext context, Color buttonColor, String title) {
+  return AppBar(
+    title: Text(
+      title,
+      style: GoogleFonts.sen(color: Colors.black, fontSize: 25),
+    ),
+    leading: Villain(
+      villainAnimation: VillainAnimation.fade(
+        from: Duration(milliseconds: 300),
+        to: Duration(milliseconds: 700),
+      ),
+      child: IconButton(
+        icon: Icon(Icons.arrow_back_ios_sharp, color: buttonColor),
+        onPressed: () => Navigator.of(context).pop(),
+      ),
+    ),
+    backgroundColor: Colors.transparent,
+    elevation: 0,
+  );
+}

@@ -40,183 +40,164 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: true,
-      // appBar: PreferredSize(
-      //   child: Container(
-      //     padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
-      //     child: new Padding(
-      //       padding: const EdgeInsets.only(left: 30.0, top: 20.0, bottom: 20.0),
-      //       child: new Text(
-      //         'Arnold Parge',
-      //         style: new TextStyle(
-      //             fontSize: 20.0,
-      //             fontWeight: FontWeight.w500,
-      //             color: Colors.white),
-      //       ),
-      //     ),
-      //     decoration: new BoxDecoration(
-      //         gradient: new LinearGradient(colors: [
-      //           kColorScheme[2],
-      //           kColorScheme[1],
-      //         ]),
-      //         boxShadow: [
-      //           new BoxShadow(
-      //             color: Colors.grey[500],
-      //             blurRadius: 20.0,
-      //             spreadRadius: 1.0,
-      //           )
-      //         ]),
-      //   ),
-      //   preferredSize: new Size(MediaQuery.of(context).size.width, 150.0),
-      // ),
-      backgroundColor: Colors.transparent,
-      body: Container(
-        height: ScreenSize.height,
-        decoration: BoxDecoration(
-          gradient: kBackgroundGradient,
-        ),
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(30.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Hero(
-                  tag: 'logo',
-                  child: Image.asset(
-                    'images/myTutorLogoWhite.png',
-                    width: double.infinity,
-                    height: ScreenSize.height * 0.2,
-                  ),
-                ),
-                Villain(
-                  villainAnimation: VillainAnimation.fade(
-                    from: Duration(milliseconds: 300),
-                    to: Duration(milliseconds: 700),
-                  ),
-                  child: Text(
-                    "Sign In",
-                    style: GoogleFonts.sen(color: Colors.white, fontSize: 40),
-                  ),
-                ),
-                SizedBox(
-                  height: ScreenSize.height * 0.15,
-                ),
-                Villain(
-                  villainAnimation: VillainAnimation.fromRight(
-                    from: Duration(milliseconds: 200),
-                    to: Duration(milliseconds: 500),
-                  ),
-                  child: TextFieldWidget(
-                    hintText: 'Email',
-                    obscureText: false,
-                    prefixIconData: Icons.mail_outline,
-                    colorScheme: kColorScheme[4],
-                    suffixIconData:
-                        Validator.isValidEmail(email) ? Icons.check : null,
-                    onChanged: (value) {
-                      setState(() {
-                        email = value;
-                      });
-                      Validator.isValidEmail(value);
-                    },
-                  ),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Villain(
-                  villainAnimation: VillainAnimation.fromRight(
-                    from: Duration(milliseconds: 200),
-                    to: Duration(milliseconds: 500),
-                  ),
-                  child: TextFieldWidget(
-                    hintText: 'Password',
-                    obscureText: LoginScreen.passwordVisible,
-                    prefixIconData: Icons.lock,
-                    suffixIconData: LoginScreen.passwordVisible
-                        ? Icons.visibility
-                        : Icons.visibility_off,
-                    colorScheme: kColorScheme[4],
-                    onChanged: (value) {
-                      setState(() {
-                        password = value;
-                      });
-                    },
-                  ),
-                ),
-                SizedBox(
-                  height: ScreenSize.height * 0.03,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        resetPasswordBottomSheet();
-                      },
-                      child: Text(
-                        'Forgot your password?',
-                        style:
-                            GoogleFonts.sen(color: Colors.white, fontSize: 20),
-                      ),
+    return Container(
+      height: ScreenSize.height,
+      decoration: BoxDecoration(
+        gradient: kBackgroundGradient,
+      ),
+      child: WillPopScope(
+        onWillPop: () async => false,
+        child: Scaffold(
+          resizeToAvoidBottomInset: true,
+          appBar: buildAppBar(context, Colors.white, ""),
+          backgroundColor: Colors.transparent,
+          body: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(25.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Hero(
+                    tag: 'logo',
+                    child: Image.asset(
+                      'images/myTutorLogoWhite.png',
+                      width: double.infinity,
+                      height: ScreenSize.height * 0.2,
                     ),
-                  ],
-                ),
-                SizedBox(
-                  height: 40,
-                ),
-                CircularButton(
-                    width: ScreenSize.width * 0.9,
-                    buttonColor: Colors.white,
-                    textColor: kColorScheme[2],
-                    isGradient: false,
-                    colors: [
-                      kColorScheme[1],
-                      kColorScheme[2],
-                      kColorScheme[3],
-                      kColorScheme[4]
+                  ),
+                  Villain(
+                    villainAnimation: VillainAnimation.fade(
+                      from: Duration(milliseconds: 300),
+                      to: Duration(milliseconds: 700),
+                    ),
+                    child: Text(
+                      "Sign In",
+                      style: GoogleFonts.sen(color: Colors.white, fontSize: 40),
+                    ),
+                  ),
+                  SizedBox(
+                    height: ScreenSize.height * 0.07,
+                  ),
+                  Villain(
+                    villainAnimation: VillainAnimation.fromRight(
+                      from: Duration(milliseconds: 200),
+                      to: Duration(milliseconds: 500),
+                    ),
+                    child: TextFieldWidget(
+                      hintText: 'Email',
+                      obscureText: false,
+                      prefixIconData: Icons.mail_outline,
+                      colorScheme: kColorScheme[4],
+                      suffixIconData:
+                          Validator.isValidEmail(email) ? Icons.check : null,
+                      onChanged: (value) {
+                        setState(() {
+                          email = value;
+                        });
+                        Validator.isValidEmail(value);
+                      },
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Villain(
+                    villainAnimation: VillainAnimation.fromRight(
+                      from: Duration(milliseconds: 200),
+                      to: Duration(milliseconds: 500),
+                    ),
+                    child: TextFieldWidget(
+                      hintText: 'Password',
+                      obscureText: LoginScreen.passwordVisible,
+                      prefixIconData: Icons.lock,
+                      suffixIconData: LoginScreen.passwordVisible
+                          ? Icons.visibility
+                          : Icons.visibility_off,
+                      colorScheme: kColorScheme[4],
+                      onChanged: (value) {
+                        setState(() {
+                          password = value;
+                        });
+                      },
+                    ),
+                  ),
+                  SizedBox(
+                    height: ScreenSize.height * 0.03,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          resetPasswordBottomSheet();
+                        },
+                        child: Text(
+                          'Forgot your password?',
+                          style: GoogleFonts.sen(
+                              color: Colors.white, fontSize: 20),
+                        ),
+                      ),
                     ],
-                    buttonText: 'Sign In',
-                    hasBorder: true,
-                    borderColor: kColorScheme[3],
-                    onPressed: () {
-                      beginLoading();
-                      DatabaseAPI.userLogin(email, password).then((value) => {
-                            if (value == "Student Login")
-                              {
-                                Future.delayed(Duration(milliseconds: 100), () {
-                                  Navigator.pushNamed(
-                                      context, HomepageScreenStudent.id);
-                                })
-                              }
-                            else if (value == "Tutor Login")
-                              {
-                                Future.delayed(Duration(milliseconds: 100), () {
-                                  Navigator.pushNamed(
-                                      context, HomepageScreenTutor.id);
-                                })
-                              }
-                            else
-                              {
-                                // USER NOT FOUND
-                                //TODO: Show toast for not found user
-                                stopLoading(),
-                              }
-                          });
-                    }),
-                SizedBox(
-                  height: ScreenSize.height * 0.05,
-                ),
-                loading
-                    ? Loader4(
-                        dotOneColor: Colors.white,
-                        dotTwoColor: Colors.white,
-                        dotThreeColor: Colors.white,
-                      )
-                    : Container()
-              ],
+                  ),
+                  SizedBox(
+                    height: 40,
+                  ),
+                  CircularButton(
+                      width: ScreenSize.width * 0.9,
+                      buttonColor: Colors.white,
+                      textColor: kColorScheme[2],
+                      isGradient: false,
+                      colors: [
+                        kColorScheme[1],
+                        kColorScheme[2],
+                        kColorScheme[3],
+                        kColorScheme[4]
+                      ],
+                      buttonText: 'Sign In',
+                      hasBorder: true,
+                      borderColor: kColorScheme[3],
+                      onPressed: () {
+                        beginLoading();
+                        DatabaseAPI.userLogin(email, password).then((value) => {
+                              if (value == "Student Login")
+                                {
+                                  Future.delayed(Duration(milliseconds: 100),
+                                      () {
+                                    Navigator.pushNamed(
+                                        context, HomepageScreenStudent.id);
+                                  })
+                                }
+                              else if (value == "Tutor Login")
+                                {
+                                  Future.delayed(Duration(milliseconds: 100),
+                                      () {
+                                    Navigator.pushNamed(
+                                        context, HomepageScreenTutor.id);
+                                  })
+                                }
+                              else
+                                {
+                                  // USER NOT FOUND
+                                  //TODO: Show toast for not found user
+                                  Future.delayed(Duration(milliseconds: 1000),
+                                      () {
+                                    stopLoading();
+                                  })
+                                }
+                            });
+                      }),
+                  SizedBox(
+                    height: ScreenSize.height * 0.05,
+                  ),
+                  loading
+                      ? Loader4(
+                          dotOneColor: Colors.white,
+                          dotTwoColor: Colors.white,
+                          dotThreeColor: Colors.white,
+                        )
+                      : Container()
+                ],
+              ),
             ),
           ),
         ),
@@ -244,21 +225,18 @@ class _LoginScreenState extends State<LoginScreen> {
                     height: ScreenSize.height * 0.030,
                   ),
                   Text(
-                    "enter your email",
+                    "Provide us with your E-mail",
                     style: kTitleStyle.copyWith(
                         fontSize: 17,
                         fontWeight: FontWeight.normal,
                         color: Colors.black),
                   ),
                   SizedBox(
-                    height: ScreenSize.height * 0.0090,
-                  ),
-                  SizedBox(
-                    height: ScreenSize.height * 0.0090,
+                    height: ScreenSize.height * 0.0180,
                   ),
                   TextField(
                     controller: EmailController,
-                    onChanged: (value) {},
+                    textAlign: TextAlign.left,
                     decoration: InputDecoration(
                       contentPadding: EdgeInsets.symmetric(
                           vertical: 10.0, horizontal: 20.0),
@@ -269,93 +247,176 @@ class _LoginScreenState extends State<LoginScreen> {
                   SizedBox(
                     height: ScreenSize.height * 0.020,
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      RaisedButton(
-                        onPressed: () async {
-                          if (EmailController.text.isNotEmpty) {
-                            String errorCode =
-                                await DatabaseAPI.resetUserPassword(
-                                    EmailController.text);
-                            if (errorCode == "success") {
-                              AwesomeDialog(
-                                context: context,
-                                animType: AnimType.SCALE,
-                                dialogType: DialogType.SUCCES,
-                                body: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Center(
-                                    child: Text(
-                                      'check your email for reset link..',
-                                      style: kTitleStyle.copyWith(
-                                          color: kBlackish,
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.normal),
-                                    ),
+                  CircularButton(
+                      width: ScreenSize.width * 0.5,
+                      buttonColor: kColorScheme[2],
+                      textColor: Colors.white,
+                      isGradient: true,
+                      colors: [
+                        kColorScheme[1],
+                        kColorScheme[2],
+                        kColorScheme[3],
+                        kColorScheme[4]
+                      ],
+                      buttonText: 'Proceed',
+                      hasBorder: true,
+                      borderColor: kColorScheme[3],
+                      onPressed: () async {
+                        if (EmailController.text.isNotEmpty) {
+                          String errorCode =
+                              await DatabaseAPI.resetUserPassword(
+                                  EmailController.text);
+                          if (errorCode == "success") {
+                            // AwesomeDialog(
+                            //   context: context,
+                            //   animType: AnimType.SCALE,
+                            //   dialogType: DialogType.SUCCES,
+                            //   body: Padding(
+                            //     padding: const EdgeInsets.all(8.0),
+                            //     child: Center(
+                            //       child: Text(
+                            //         'check your email for reset link..',
+                            //         style: kTitleStyle.copyWith(
+                            //             color: kBlackish,
+                            //             fontSize: 14,
+                            //             fontWeight: FontWeight.normal),
+                            //       ),
+                            //     ),
+                            //   ),
+                            //   btnOkOnPress: () {
+                            //     Navigator.pop(context);
+                            //   },
+                            // ).show();
+                          } else if (errorCode == "invalid-email") {
+                            AwesomeDialog(
+                              context: context,
+                              animType: AnimType.SCALE,
+                              dialogType: DialogType.ERROR,
+                              body: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Center(
+                                  child: Text(
+                                    'Invalid email',
+                                    style: kTitleStyle.copyWith(
+                                        color: kBlackish,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.normal),
                                   ),
                                 ),
-                                btnOkOnPress: () {
-                                  Navigator.pop(context);
-                                },
-                              ).show();
-                            } else if (errorCode == "invalid-email") {
-                              AwesomeDialog(
-                                context: context,
-                                animType: AnimType.SCALE,
-                                dialogType: DialogType.ERROR,
-                                body: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Center(
-                                    child: Text(
-                                      'Invalid email',
-                                      style: kTitleStyle.copyWith(
-                                          color: kBlackish,
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.normal),
-                                    ),
+                              ),
+                              btnOkOnPress: () {},
+                            ).show();
+                          } else if (errorCode == "user-not-found") {
+                            AwesomeDialog(
+                              context: context,
+                              animType: AnimType.SCALE,
+                              dialogType: DialogType.ERROR,
+                              body: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Center(
+                                  child: Text(
+                                    'we dont have a user with that email.',
+                                    style: kTitleStyle.copyWith(
+                                        color: kBlackish,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.normal),
                                   ),
                                 ),
-                                btnOkOnPress: () {},
-                              ).show();
-                            } else if (errorCode == "user-not-found") {
-                              AwesomeDialog(
-                                context: context,
-                                animType: AnimType.SCALE,
-                                dialogType: DialogType.ERROR,
-                                body: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Center(
-                                    child: Text(
-                                      'we dont have a user with that email.',
-                                      style: kTitleStyle.copyWith(
-                                          color: kBlackish,
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.normal),
-                                    ),
-                                  ),
-                                ),
-                                btnOkOnPress: () {},
-                              ).show();
-                            }
+                              ),
+                              btnOkOnPress: () {
+                                // Navigator.pop(context);
+                              },
+                            ).show();
                           }
-                        },
-                        child: Text(
-                          "Submit",
-                          style: GoogleFonts.sarabun(
-                            textStyle: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.normal,
-                                color: Colors.white),
-                          ),
-                        ),
-                        color: kColorScheme[2],
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15.0),
-                        ),
-                      ),
-                    ],
-                  ),
+                        }
+                      }),
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.center,
+                  //   children: [
+                  //     RaisedButton(
+                  //       onPressed: () async {
+                  //         if (EmailController.text.isNotEmpty) {
+                  //           String errorCode =
+                  //               await DatabaseAPI.resetUserPassword(
+                  //                   EmailController.text);
+                  //           if (errorCode == "success") {
+                  //             // AwesomeDialog(
+                  //             //   context: context,
+                  //             //   animType: AnimType.SCALE,
+                  //             //   dialogType: DialogType.SUCCES,
+                  //             //   body: Padding(
+                  //             //     padding: const EdgeInsets.all(8.0),
+                  //             //     child: Center(
+                  //             //       child: Text(
+                  //             //         'check your email for reset link..',
+                  //             //         style: kTitleStyle.copyWith(
+                  //             //             color: kBlackish,
+                  //             //             fontSize: 14,
+                  //             //             fontWeight: FontWeight.normal),
+                  //             //       ),
+                  //             //     ),
+                  //             //   ),
+                  //             //   btnOkOnPress: () {
+                  //             //     Navigator.pop(context);
+                  //             //   },
+                  //             // ).show();
+                  //           } else if (errorCode == "invalid-email") {
+                  //             // AwesomeDialog(
+                  //             //   context: context,
+                  //             //   animType: AnimType.SCALE,
+                  //             //   dialogType: DialogType.ERROR,
+                  //             //   body: Padding(
+                  //             //     padding: const EdgeInsets.all(8.0),
+                  //             //     child: Center(
+                  //             //       child: Text(
+                  //             //         'Invalid email',
+                  //             //         style: kTitleStyle.copyWith(
+                  //             //             color: kBlackish,
+                  //             //             fontSize: 14,
+                  //             //             fontWeight: FontWeight.normal),
+                  //             //       ),
+                  //             //     ),
+                  //             //   ),
+                  //             //   btnOkOnPress: () {},
+                  //             // ).show();
+                  //           } else if (errorCode == "user-not-found") {
+                  //             // AwesomeDialog(
+                  //             //   context: context,
+                  //             //   animType: AnimType.SCALE,
+                  //             //   dialogType: DialogType.ERROR,
+                  //             //   body: Padding(
+                  //             //     padding: const EdgeInsets.all(8.0),
+                  //             //     child: Center(
+                  //             //       child: Text(
+                  //             //         'we dont have a user with that email.',
+                  //             //         style: kTitleStyle.copyWith(
+                  //             //             color: kBlackish,
+                  //             //             fontSize: 14,
+                  //             //             fontWeight: FontWeight.normal),
+                  //             //       ),
+                  //             //     ),
+                  //             //   ),
+                  //             //   btnOkOnPress: () {},
+                  //             // ).show();
+                  //           }
+                  //         }
+                  //       },
+                  //       child: Text(
+                  //         "Submit",
+                  //         style: GoogleFonts.sarabun(
+                  //           textStyle: TextStyle(
+                  //               fontSize: 18,
+                  //               fontWeight: FontWeight.normal,
+                  //               color: Colors.white),
+                  //         ),
+                  //       ),
+                  //       color: kColorScheme[2],
+                  //       shape: RoundedRectangleBorder(
+                  //         borderRadius: BorderRadius.circular(15.0),
+                  //       ),
+                  //     ),
+                  //   ],
+                  // ),
                 ],
               ),
             ),

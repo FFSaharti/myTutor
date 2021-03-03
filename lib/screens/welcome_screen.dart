@@ -16,152 +16,155 @@ class WelcomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ScreenSize.createScreen(context);
-    return Scaffold(
-      backgroundColor: Colors.transparent,
-      body: Container(
-        // color: Colors.white,
-        width: ScreenSize.width,
-        decoration: BoxDecoration(
-          gradient: kBackgroundGradient,
-        ),
-        child: Column(
-          children: [
-            SizedBox(
-              height: ScreenSize.height * 0.1,
-            ),
-            Hero(
-              tag: 'logo',
-              child: Image.asset(
-                'images/myTutorLogoWhite.png',
-                height: 200,
-                width: 200,
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        body: Container(
+          // color: Colors.white,
+          width: ScreenSize.width,
+          decoration: BoxDecoration(
+            gradient: kBackgroundGradient,
+          ),
+          child: Column(
+            children: [
+              SizedBox(
+                height: ScreenSize.height * 0.1,
               ),
-            ),
-            SizedBox(
-              width: 250.0,
-              child: TypewriterAnimatedTextKit(
-                speed: Duration(milliseconds: 200),
-                text: [
-                  "My Tutor",
-                ],
-                textStyle:
-                    GoogleFonts.sen(fontSize: 50, fontWeight: FontWeight.bold),
-                textAlign: TextAlign.center,
+              Hero(
+                tag: 'logo',
+                child: Image.asset(
+                  'images/myTutorLogoWhite.png',
+                  height: 200,
+                  width: 200,
+                ),
               ),
-            ),
-            SizedBox(
-              height: ScreenSize.height * 0.05,
-            ),
-            Expanded(
-              child: Container(
-                child: Padding(
-                  padding: EdgeInsets.all(50),
-                  child: Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: <Widget>[
-                        Column(
-                          children: [
-                            SizedBox(
-                              height: ScreenSize.height * 0.02,
-                            ),
-                            Text(
-                              "Find the perfect tutor! that will assist in all your problems.",
-                              style: GoogleFonts.sen(
-                                  fontSize: 18, color: Colors.grey),
-                              textAlign: TextAlign.center,
-                            ),
-                            SizedBox(
-                              height: ScreenSize.height * 0.05,
-                            ),
-                            Villain(
-                              villainAnimation: VillainAnimation.fromLeft(
-                                from: Duration(milliseconds: 100),
-                                to: Duration(milliseconds: 400),
+              SizedBox(
+                width: 250.0,
+                child: TypewriterAnimatedTextKit(
+                  speed: Duration(milliseconds: 200),
+                  text: [
+                    "My Tutor",
+                  ],
+                  textStyle: GoogleFonts.sen(
+                      fontSize: 50, fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              SizedBox(
+                height: ScreenSize.height * 0.05,
+              ),
+              Expanded(
+                child: Container(
+                  child: Padding(
+                    padding: EdgeInsets.all(50),
+                    child: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: <Widget>[
+                          Column(
+                            children: [
+                              SizedBox(
+                                height: ScreenSize.height * 0.02,
                               ),
-                              animateExit: false,
-                              // secondaryVillainAnimation:
-                              //     VillainAnimation.fade(),
-                              child: Align(
-                                alignment: Alignment.centerLeft,
-                                child: CircularButton(
-                                  width: ScreenSize.width * 0.9,
-                                  buttonColor: null,
-                                  textColor: Colors.white,
-                                  isGradient: true,
-                                  colors: [
-                                    kColorScheme[1],
-                                    kColorScheme[2],
-                                    kColorScheme[3],
-                                    kColorScheme[4]
-                                  ],
-                                  buttonText: 'Sign In',
-                                  hasBorder: true,
-                                  borderColor: kColorScheme[3],
-                                  onPressed: () {
-                                    // Navigator.pushNamed(
-                                    //     context, LoginScreen.id);
-                                    Navigator.push(
-                                        context,
-                                        PageTransition(
-                                            type:
-                                                PageTransitionType.bottomToTop,
-                                            duration:
-                                                Duration(milliseconds: 200),
-                                            child: LoginScreen()));
-                                  },
+                              Text(
+                                "Find the perfect tutor! that will assist in all your problems.",
+                                style: GoogleFonts.sen(
+                                    fontSize: 18, color: Colors.grey),
+                                textAlign: TextAlign.center,
+                              ),
+                              SizedBox(
+                                height: ScreenSize.height * 0.05,
+                              ),
+                              Villain(
+                                villainAnimation: VillainAnimation.fromLeft(
+                                  from: Duration(milliseconds: 100),
+                                  to: Duration(milliseconds: 400),
+                                ),
+                                animateExit: false,
+                                // secondaryVillainAnimation:
+                                //     VillainAnimation.fade(),
+                                child: Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: CircularButton(
+                                    width: ScreenSize.width * 0.9,
+                                    buttonColor: null,
+                                    textColor: Colors.white,
+                                    isGradient: true,
+                                    colors: [
+                                      kColorScheme[1],
+                                      kColorScheme[2],
+                                      kColorScheme[3],
+                                      kColorScheme[4]
+                                    ],
+                                    buttonText: 'Sign In',
+                                    hasBorder: true,
+                                    borderColor: kColorScheme[3],
+                                    onPressed: () {
+                                      // Navigator.pushNamed(
+                                      //     context, LoginScreen.id);
+                                      Navigator.push(
+                                          context,
+                                          PageTransition(
+                                              type: PageTransitionType
+                                                  .bottomToTop,
+                                              duration:
+                                                  Duration(milliseconds: 200),
+                                              child: LoginScreen()));
+                                    },
+                                  ),
                                 ),
                               ),
-                            ),
-                            SizedBox(
-                              height: ScreenSize.height * 0.02,
-                            ),
-                            Villain(
-                              villainAnimation: VillainAnimation.fromRight(
-                                from: Duration(milliseconds: 300),
-                                to: Duration(milliseconds: 700),
+                              SizedBox(
+                                height: ScreenSize.height * 0.02,
                               ),
-                              animateExit: false,
-                              child: Align(
-                                alignment: Alignment.centerRight,
-                                child: CircularButton(
-                                  width: ScreenSize.width * 0.9,
-                                  buttonColor: Colors.black,
-                                  textColor: Colors.white,
-                                  isGradient: false,
-                                  colors: null,
-                                  buttonText: 'Get Started',
-                                  hasBorder: false,
-                                  borderColor: kColorScheme[3],
-                                  onPressed: () {
-                                    Navigator.push(
-                                        context,
-                                        PageTransition(
-                                            type:
-                                                PageTransitionType.bottomToTop,
-                                            duration:
-                                                Duration(milliseconds: 500),
-                                            child: TourScreen()));
-                                  },
+                              Villain(
+                                villainAnimation: VillainAnimation.fromRight(
+                                  from: Duration(milliseconds: 300),
+                                  to: Duration(milliseconds: 700),
+                                ),
+                                animateExit: false,
+                                child: Align(
+                                  alignment: Alignment.centerRight,
+                                  child: CircularButton(
+                                    width: ScreenSize.width * 0.9,
+                                    buttonColor: Colors.black,
+                                    textColor: Colors.white,
+                                    isGradient: false,
+                                    colors: null,
+                                    buttonText: 'Get Started',
+                                    hasBorder: false,
+                                    borderColor: kColorScheme[3],
+                                    onPressed: () {
+                                      Navigator.push(
+                                          context,
+                                          PageTransition(
+                                              type: PageTransitionType
+                                                  .bottomToTop,
+                                              duration:
+                                                  Duration(milliseconds: 500),
+                                              child: TourScreen()));
+                                    },
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                      ],
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-                width: ScreenSize.width,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                      topRight: Radius.circular(30),
-                      topLeft: Radius.circular(30)),
-                  color: Colors.white,
+                  width: ScreenSize.width,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.only(
+                        topRight: Radius.circular(30),
+                        topLeft: Radius.circular(30)),
+                    color: Colors.white,
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

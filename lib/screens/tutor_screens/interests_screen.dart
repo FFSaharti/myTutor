@@ -1,12 +1,15 @@
+import 'package:bd_progress_bar/bdprogreebar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_villains/villains/villains.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mytutor/classes/subject.dart';
-import 'package:mytutor/components/ez_button.dart';
+import 'package:mytutor/components/circular_button.dart';
 import 'package:mytutor/screens/login_screen.dart';
 import 'package:mytutor/utilities/constants.dart';
 import 'package:mytutor/utilities/database_api.dart';
 import 'package:mytutor/utilities/screen_size.dart';
+import 'package:page_transition/page_transition.dart';
 
 class InterestsScreen extends StatefulWidget {
   static String id = 'interests_screen';
@@ -19,6 +22,7 @@ class _InterestsScreenState extends State<InterestsScreen> {
   List<Widget> selectedInterests = [];
   List<Widget> searchResults = [];
   String searchBox = '';
+  bool loading = false;
 
   void setParentState() {
     setState(() {
@@ -27,127 +31,131 @@ class _InterestsScreenState extends State<InterestsScreen> {
   }
 
   @override
+  void initState() {
+    // TODO: implement initState
+    stopLoading();
+    resetInterests();
+    super.initState();
+  }
+
+  void beginLoading() {
+    setState(() {
+      loading = true;
+    });
+  }
+
+  void stopLoading() {
+    setState(() {
+      loading = false;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        resizeToAvoidBottomInset: false,
-        body: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            children: <Widget>[
-              SizedBox(
-                height: 15,
-              ),
-              Text(
-                'Pick Interests',
-                style: GoogleFonts.sourceSansPro(
-                    textStyle: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.normal,
-                        color: kBlackish)),
-              ),
-              SizedBox(
-                height: 5,
-              ),
-              TextField(
-                onChanged: (value) {
-                  setState(() {
-                    searchBox = value;
-                    getSubjects(searchBox);
-                  });
-                },
-                style: TextStyle(
-                  color: kBlackish,
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+          appBar: buildAppBar(context, kColorScheme[3], "Pick Interests"),
+          resizeToAvoidBottomInset: false,
+          body: Padding(
+            padding: const EdgeInsets.only(left: 20.0, right: 20),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Villain(
+                  villainAnimation: VillainAnimation.fromRight(
+                    from: Duration(milliseconds: 200),
+                    to: Duration(milliseconds: 500),
+                  ),
+                  child: TextField(
+                    onChanged: (value) {
+                      setState(() {
+                        searchBox = value;
+                        getSubjects(searchBox);
+                      });
+                    },
+                    style: TextStyle(
+                      color: kBlackish,
+                    ),
+                    textAlignVertical: TextAlignVertical.center,
+                    decoration: InputDecoration(
+                      contentPadding: EdgeInsets.all(0),
+                      filled: true,
+                      hintText: 'Search',
+                      prefixIcon: Icon(Icons.search, color: kColorScheme[2]),
+                      enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide.none,
+                          borderRadius: BorderRadius.circular(30)),
+                      focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide.none,
+                          borderRadius: BorderRadius.circular(30)),
+                    ),
+                  ),
                 ),
-                textAlignVertical: TextAlignVertical.center,
-                decoration: InputDecoration(
-                  contentPadding: EdgeInsets.all(0),
-                  filled: true,
-                  hintText: 'Search',
-                  prefixIcon: Icon(Icons.search, color: kColorScheme[2]),
-                  enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide.none,
-                      borderRadius: BorderRadius.circular(15)),
-                  focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide.none,
-                      borderRadius: BorderRadius.circular(15)),
+                SizedBox(
+                  height: ScreenSize.height * 0.01,
                 ),
-              ),
-              SizedBox(
-                height: 8,
-              ),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  ' Search Results',
-                  style: GoogleFonts.sourceSansPro(
-                      textStyle: TextStyle(
-                          fontSize: 17,
-                          fontWeight: FontWeight.normal,
-                          color: kGreyish)),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    ' Search Results',
+                    style: GoogleFonts.sourceSansPro(
+                        textStyle: TextStyle(
+                            fontSize: 17,
+                            fontWeight: FontWeight.normal,
+                            color: kGreyish)),
+                  ),
                 ),
-              ),
-              SizedBox(
-                height: 8,
-              ),
-              Container(
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: Colors.transparent,
+                SizedBox(
+                  height: ScreenSize.height * 0.01,
                 ),
-                height: 50,
-                child: GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      print("Entered Set State");
-                      getSelectedSubjects();
-                    });
-                  },
+                Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: Colors.transparent,
+                  ),
+                  height: ScreenSize.height * 0.07,
                   child: ListView(
                     scrollDirection: Axis.horizontal,
                     children: searchResults,
                   ),
                 ),
-              ),
-              SizedBox(
-                height: 8,
-              ),
-              Divider(
-                color: kGreyish,
-              ),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  ' Selected Interests',
-                  style: GoogleFonts.sourceSansPro(
-                      textStyle: TextStyle(
-                          fontSize: 17,
-                          fontWeight: FontWeight.normal,
-                          color: kGreyish)),
+                SizedBox(
+                  height: ScreenSize.height * 0.01,
                 ),
-              ),
-              SizedBox(
-                height: 8,
-              ),
-              Container(
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: Colors.transparent,
+                Divider(
+                  color: kGreyish,
                 ),
-                height: 50,
-                child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  children: selectedInterests,
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    ' Selected Interests',
+                    style: GoogleFonts.sourceSansPro(
+                        textStyle: TextStyle(
+                            fontSize: 17,
+                            fontWeight: FontWeight.normal,
+                            color: kGreyish)),
+                  ),
                 ),
-              ),
-              Container(
-                height: 130,
-              ),
-              SizedBox(
-                height: 8,
-              ),
-              Builder(builder: (context) {
-                return EZButton(
-                  width: ScreenSize.width,
+                SizedBox(
+                  height: 8,
+                ),
+                Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: Colors.transparent,
+                  ),
+                  height: ScreenSize.height * 0.07,
+                  child: ListView(
+                    scrollDirection: Axis.horizontal,
+                    children: selectedInterests,
+                  ),
+                ),
+                SizedBox(
+                  height: ScreenSize.height * 0.1,
+                ),
+                CircularButton(
+                  width: ScreenSize.width * 0.7,
                   buttonColor: kColorScheme[1],
                   textColor: Colors.white,
                   isGradient: true,
@@ -157,38 +165,61 @@ class _InterestsScreenState extends State<InterestsScreen> {
                     kColorScheme[3],
                     kColorScheme[4],
                   ],
-                  buttonText: "Complete Sign Up",
+                  buttonText: "Sign Up",
                   hasBorder: false,
                   borderColor: null,
                   onPressed: () {
+                    beginLoading();
                     DatabaseAPI.createTutor(DatabaseAPI.tempUser.email)
                         .then((value) => {
                               if (value == "Success")
                                 {
-                                  Scaffold.of(context).showSnackBar(SnackBar(
-                                      content: new Text("Welcome"),
-                                      backgroundColor: Colors.red,
-                                      duration:
-                                          const Duration(milliseconds: 500))),
-                                  Navigator.pushNamed(context, LoginScreen.id)
+                                  Future.delayed(Duration(milliseconds: 500),
+                                      () {
+                                    Navigator.push(
+                                        context,
+                                        PageTransition(
+                                            type: PageTransitionType
+                                                .leftToRightWithFade,
+                                            duration:
+                                                Duration(milliseconds: 500),
+                                            child: LoginScreen()));
+                                  })
                                 }
                               else
                                 {
-                                  Scaffold.of(context).showSnackBar(SnackBar(
-                                      content: new Text(value),
-                                      backgroundColor: Colors.red,
-                                      duration:
-                                          const Duration(milliseconds: 1500))),
-                                }
+                                  // SHOW TOAST MESSAGE OF FAIL
+                                  Future.delayed(Duration(milliseconds: 500),
+                                      () {
+                                    // Navigator.push(
+                                    //     context,
+                                    //     PageTransition(
+                                    //         type: PageTransitionType
+                                    //             .leftToRightWithFade,
+                                    //         duration:
+                                    //         Duration(milliseconds: 500),
+                                    //         child: LoginScreen()));
+                                  })
+                                },
+                              stopLoading()
                             });
-
                     resetInterests();
                   },
-                );
-              })
-            ],
-          ),
-        ));
+                ),
+                SizedBox(
+                  height: ScreenSize.height * 0.1,
+                ),
+                loading
+                    ? Loader4(
+                        dotOneColor: kColorScheme[1],
+                        dotTwoColor: kColorScheme[1],
+                        dotThreeColor: kColorScheme[1],
+                      )
+                    : Container(),
+              ],
+            ),
+          )),
+    );
   }
 
   void getSubjects(String searchBox) {

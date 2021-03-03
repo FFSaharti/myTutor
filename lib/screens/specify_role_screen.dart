@@ -1,12 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_villains/villains/villains.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:mytutor/components/ez_button.dart';
-import 'package:mytutor/screens/student_screens/homepage_screen_student.dart';
+import 'package:mytutor/components/circular_button.dart';
+import 'package:mytutor/screens/login_screen.dart';
 import 'package:mytutor/screens/tutor_screens/interests_screen.dart';
 import 'package:mytutor/utilities/constants.dart';
 import 'package:mytutor/utilities/database_api.dart';
 import 'package:mytutor/utilities/screen_size.dart';
+import 'package:page_transition/page_transition.dart';
 
 class SpecifyRoleScreen extends StatefulWidget {
   static String id = 'specify_role_screen';
@@ -58,98 +60,104 @@ class _SpecifyRoleScreenState extends State<SpecifyRoleScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            SizedBox(
-              height: 80,
-            ),
-            Text(
-              'Specify Role',
-              style: kTitleStyle.copyWith(color: kGreyerish, fontSize: 30),
-            ),
-            SizedBox(
-              height: 25,
-            ),
-            AnimatedSwitcher(
-              duration: Duration(milliseconds: 300),
-              // child: Image.asset(
-              //   selectedPath,
-              //   width: 250,
-              // ),
-              child: selectedWidget,
-              transitionBuilder: (Widget child, Animation<double> animation) {
-                return ScaleTransition(child: child, scale: animation);
-              },
-            ),
-            SizedBox(
-              height: 25,
-            ),
-            NotificationListener<OverscrollIndicatorNotification>(
-              onNotification: (overscroll) {
-                overscroll.disallowGlow();
-              },
-              child: Expanded(
-                child: CupertinoPicker(
-                  backgroundColor: Colors.white,
-                  itemExtent: 38,
-                  onSelectedItemChanged: (selectedIndex) {
-                    setState(() {
-                      if (selectedIndex == 0) {
-                        selectedWidget = tutorWidget;
-                      } else {
-                        selectedWidget = studentWidget;
-                      }
-                    });
-                  },
-                  children: [
-                    Text('Tutor',
-                        style: kTitleStyle.copyWith(
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+        appBar: buildAppBar(context, kColorScheme[3], "Specify Role"),
+        backgroundColor: Colors.white,
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              SizedBox(
+                height: ScreenSize.height * 0.05,
+              ),
+              AnimatedSwitcher(
+                duration: Duration(milliseconds: 350),
+                // child: Image.asset(
+                //   selectedPath,
+                //   width: 250,
+                // ),
+                child: selectedWidget,
+                transitionBuilder: (Widget child, Animation<double> animation) {
+                  return ScaleTransition(child: child, scale: animation);
+                },
+              ),
+              NotificationListener<OverscrollIndicatorNotification>(
+                onNotification: (overscroll) {
+                  overscroll.disallowGlow();
+                },
+                child: Expanded(
+                  child: CupertinoPicker(
+                    backgroundColor: Colors.white,
+                    itemExtent: 35,
+                    onSelectedItemChanged: (selectedIndex) {
+                      setState(() {
+                        if (selectedIndex == 0) {
+                          selectedWidget = tutorWidget;
+                        } else {
+                          selectedWidget = studentWidget;
+                        }
+                      });
+                    },
+                    children: [
+                      Text(
+                        'Tutor',
+                        style: GoogleFonts.sen(
+                            color: Colors.black,
                             fontSize: 25,
-                            fontWeight: FontWeight.normal,
-                            color: Colors.black)),
-                    Text(
-                      'Student',
-                      style: GoogleFonts.secularOne(
-                          textStyle: kTitleStyle.copyWith(
-                              fontSize: 25,
-                              fontWeight: FontWeight.normal,
-                              color: Colors.black)),
-                    ),
-                  ],
+                            fontWeight: FontWeight.normal),
+                      ),
+                      Text(
+                        'Student',
+                        style: GoogleFonts.sen(
+                            color: Colors.black,
+                            fontSize: 25,
+                            fontWeight: FontWeight.normal),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-            EZButton(
-                width: ScreenSize.width,
-                buttonColor: kColorScheme[1],
-                textColor: Colors.white,
-                isGradient: true,
-                colors: [
-                  kColorScheme[1],
-                  kColorScheme[2],
-                  kColorScheme[3],
-                  kColorScheme[4],
-                ],
-                buttonText: "Sign Up",
-                hasBorder: false,
-                borderColor: null,
-                onPressed: () {
-                  if (selectedWidget == studentWidget) {
-                    DatabaseAPI.createStudent();
-                    Navigator.pushNamed(context, HomepageScreenStudent.id);
-                  } else {
-                    // Chosen Tutor
-                    Navigator.pushNamed(context, InterestsScreen.id);
-                  }
-                }),
-            SizedBox(
-              height: 70,
-            ),
-          ],
+              Villain(
+                villainAnimation: VillainAnimation.fromBottom(
+                  from: Duration(milliseconds: 100),
+                  to: Duration(milliseconds: 300),
+                ),
+                child: CircularButton(
+                    width: ScreenSize.width * 0.8,
+                    buttonColor: kColorScheme[1],
+                    textColor: Colors.white,
+                    isGradient: true,
+                    colors: [
+                      kColorScheme[1],
+                      kColorScheme[2],
+                      kColorScheme[3],
+                      kColorScheme[4],
+                    ],
+                    buttonText: "Sign Up",
+                    hasBorder: false,
+                    borderColor: null,
+                    onPressed: () {
+                      if (selectedWidget == studentWidget) {
+                        DatabaseAPI.createStudent();
+                        Navigator.push(
+                            context,
+                            PageTransition(
+                                type: PageTransitionType.leftToRightWithFade,
+                                duration: Duration(milliseconds: 500),
+                                child: LoginScreen()));
+                      } else {
+                        // Chosen Tutor
+                        Navigator.pushNamed(context, InterestsScreen.id);
+                      }
+                    }),
+              ),
+              SizedBox(
+                height: ScreenSize.height * 0.1,
+              ),
+            ],
+          ),
         ),
       ),
     );

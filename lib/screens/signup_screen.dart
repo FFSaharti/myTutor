@@ -30,211 +30,190 @@ class _SignupScreenState extends State<SignupScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: true,
-      body: Container(
-        height: ScreenSize.height,
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Container(
         decoration: BoxDecoration(
           gradient: kBackgroundGradient,
         ),
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(30.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                SizedBox(
-                  height: ScreenSize.height * 0.02,
-                ),
-                Hero(
-                  tag: 'logo',
-                  child: Image.asset(
-                    'images/myTutorLogoWhite.png',
-                    width: double.infinity,
-                    height: ScreenSize.height * 0.2,
+        child: Scaffold(
+          appBar: buildAppBar(context, Colors.white, ""),
+          resizeToAvoidBottomInset: true,
+          backgroundColor: Colors.transparent,
+          body: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(25.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  Hero(
+                    tag: 'logo',
+                    child: Image.asset(
+                      'images/myTutorLogoWhite.png',
+                      width: double.infinity,
+                      height: ScreenSize.height * 0.09,
+                    ),
                   ),
-                ),
-                Villain(
-                  villainAnimation: VillainAnimation.fade(
-                    from: Duration(milliseconds: 300),
-                    to: Duration(milliseconds: 700),
+                  Villain(
+                    villainAnimation: VillainAnimation.fade(
+                      from: Duration(milliseconds: 300),
+                      to: Duration(milliseconds: 700),
+                    ),
+                    child: Text(
+                      "Sign Up",
+                      style: GoogleFonts.sen(color: Colors.white, fontSize: 40),
+                    ),
                   ),
-                  child: Text(
-                    "Sign Up",
-                    style: GoogleFonts.sen(color: Colors.white, fontSize: 40),
+                  SizedBox(
+                    height: ScreenSize.height * 0.03,
                   ),
-                ),
-                SizedBox(
-                  height: ScreenSize.height * 0.03,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      height: ScreenSize.height * 0.08,
-                      width: ScreenSize.width * 0.15,
-                      child: FloatingActionButton(
-                        child: Icon(
-                          Icons.upload_outlined,
-                          color: kColorScheme[4],
-                          size: ScreenSize.height * 0.05,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        height: ScreenSize.height * 0.08,
+                        width: ScreenSize.width * 0.15,
+                        child: FloatingActionButton(
+                          child: Icon(
+                            Icons.upload_outlined,
+                            color: kColorScheme[4],
+                            size: ScreenSize.height * 0.05,
+                          ),
+                          backgroundColor: Colors.white,
+                          elevation: 2,
+                          onPressed: () async {
+                            //TODO : implement FileHelper class.....
+                            FilePickerResult file = await FilePicker.platform
+                                .pickFiles(type: FileType.image);
+                            file == null
+                                ? null
+                                : _file = File(file.files.single.path);
+                            DatabaseAPI.tempFile = _file;
+                          },
                         ),
-                        backgroundColor: Colors.white,
-                        elevation: 2,
-                        onPressed: () async {
-                          //TODO : implement FileHelper class.....
-                          FilePickerResult file = await FilePicker.platform
-                              .pickFiles(type: FileType.image);
-                          file == null
-                              ? null
-                              : _file = File(file.files.single.path);
-                          DatabaseAPI.tempFile = _file;
-                        },
                       ),
-                    ),
-                    SizedBox(
-                      width: ScreenSize.width * 0.02,
-                    ),
-                    Center(
-                      child: Text(
-                        "Upload Profile Picture",
-                        style: GoogleFonts.sen(
-                            color: Colors.white,
-                            fontSize: 19,
-                            letterSpacing: -1),
+                      SizedBox(
+                        width: ScreenSize.width * 0.02,
                       ),
-                    )
-                  ],
-                ),
-                SizedBox(
-                  height: ScreenSize.height * 0.015,
-                ),
-                Divider(
-                  color: Colors.white,
-                ),
-                SizedBox(
-                  height: ScreenSize.height * 0.015,
-                ),
-                Villain(
-                  villainAnimation: VillainAnimation.fromLeft(
-                    from: Duration(milliseconds: 50),
-                    to: Duration(milliseconds: 300),
+                      Center(
+                        child: Text(
+                          "Upload Profile Picture",
+                          style: GoogleFonts.sen(
+                              color: Colors.white,
+                              fontSize: 19,
+                              letterSpacing: -1),
+                        ),
+                      )
+                    ],
                   ),
-                  child: TextFieldWidget(
-                    hintText: 'Full Name',
-                    obscureText: false,
-                    prefixIconData: Icons.person,
-                    colorScheme: kColorScheme[4],
-                    suffixIconData:
-                        Validator.isValidName(name) ? Icons.check : null,
-                    onChanged: (value) {
-                      setState(() {
-                        name = value;
-                      });
-                      DatabaseAPI.tempUser.name = name;
-                      Validator.isValidName(value);
-                    },
+                  SizedBox(
+                    height: ScreenSize.height * 0.015,
                   ),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Villain(
-                  villainAnimation: VillainAnimation.fromRight(
-                    from: Duration(milliseconds: 50),
-                    to: Duration(milliseconds: 300),
+                  Divider(
+                    color: Colors.white,
                   ),
-                  child: TextFieldWidget(
-                    hintText: 'Email',
-                    obscureText: false,
-                    prefixIconData: Icons.mail_outline,
-                    colorScheme: kColorScheme[4],
-                    suffixIconData:
-                        Validator.isValidEmail(email) ? Icons.check : null,
-                    onChanged: (value) {
-                      setState(() {
-                        email = value;
-                      });
-                      DatabaseAPI.tempUser.email = email;
-                      Validator.isValidEmail(value);
-                    },
+                  SizedBox(
+                    height: ScreenSize.height * 0.015,
                   ),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Villain(
-                  villainAnimation: VillainAnimation.fromLeft(
-                    from: Duration(milliseconds: 50),
-                    to: Duration(milliseconds: 300),
+                  Villain(
+                    villainAnimation: VillainAnimation.fromLeft(
+                      from: Duration(milliseconds: 50),
+                      to: Duration(milliseconds: 300),
+                    ),
+                    child: TextFieldWidget(
+                      hintText: 'Full Name',
+                      obscureText: false,
+                      prefixIconData: Icons.person,
+                      colorScheme: kColorScheme[4],
+                      suffixIconData:
+                          Validator.isValidName(name) ? Icons.check : null,
+                      onChanged: (value) {
+                        setState(() {
+                          name = value;
+                        });
+                        DatabaseAPI.tempUser.name = name;
+                        Validator.isValidName(value);
+                      },
+                    ),
                   ),
-                  child: TextFieldWidget(
-                    onChanged: (value) {
-                      password = value;
-                      DatabaseAPI.tempUser.password = value;
-                    },
-                    hintText: 'Password',
-                    obscureText: SignupScreen.passwordVisible,
-                    prefixIconData: Icons.lock,
-                    suffixIconData: SignupScreen.passwordVisible
-                        ? Icons.visibility
-                        : Icons.visibility_off,
-                    colorScheme: kColorScheme[4],
-                    // isVisible: passwordVisible,
+                  SizedBox(
+                    height: 10,
                   ),
-                ),
-                SizedBox(
-                  height: ScreenSize.height * 0.02,
-                ),
-                // EZButton(
-                //   width: ScreenSize.width,
-                //   buttonColor: kColorScheme[1],
-                //   textColor: Colors.white,
-                //   isGradient: true,
-                //   colors: [
-                //     kColorScheme[1],
-                //     kColorScheme[2],
-                //     kColorScheme[3],
-                //     kColorScheme[4],
-                //   ],
-                //   buttonText: "Upload your profile picture",
-                //   hasBorder: false,
-                //   borderColor: null,
-                //   onPressed: () async {
-                //     //TODO : implement FileHelper class.....
-                //     FilePickerResult file = await FilePicker.platform
-                //         .pickFiles(type: FileType.image);
-                //     file == null ? null : _file = File(file.files.single.path);
-                //     DatabaseAPI.tempFile = _file;
-                //   },
-                // ),
-                SizedBox(
-                  height: ScreenSize.height * 0.04,
-                ),
-                Villain(
-                  villainAnimation: VillainAnimation.fromBottom(
-                    from: Duration(milliseconds: 200),
-                    to: Duration(milliseconds: 400),
+                  Villain(
+                    villainAnimation: VillainAnimation.fromRight(
+                      from: Duration(milliseconds: 50),
+                      to: Duration(milliseconds: 300),
+                    ),
+                    child: TextFieldWidget(
+                      hintText: 'Email',
+                      obscureText: false,
+                      prefixIconData: Icons.mail_outline,
+                      colorScheme: kColorScheme[4],
+                      suffixIconData:
+                          Validator.isValidEmail(email) ? Icons.check : null,
+                      onChanged: (value) {
+                        setState(() {
+                          email = value;
+                        });
+                        DatabaseAPI.tempUser.email = email;
+                        Validator.isValidEmail(value);
+                      },
+                    ),
                   ),
-                  child: CircularButton(
-                      width: ScreenSize.width * 0.9,
-                      buttonColor: Colors.white,
-                      textColor: kColorScheme[2],
-                      isGradient: false,
-                      colors: [
-                        kColorScheme[1],
-                        kColorScheme[2],
-                        kColorScheme[3],
-                        kColorScheme[4]
-                      ],
-                      buttonText: 'Next',
-                      hasBorder: true,
-                      borderColor: kColorScheme[3],
-                      onPressed: () {
-                        Navigator.pushNamed(context, SpecifyRoleScreen.id);
-                      }),
-                ),
-              ],
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Villain(
+                    villainAnimation: VillainAnimation.fromLeft(
+                      from: Duration(milliseconds: 50),
+                      to: Duration(milliseconds: 300),
+                    ),
+                    child: TextFieldWidget(
+                      onChanged: (value) {
+                        password = value;
+                        DatabaseAPI.tempUser.password = value;
+                      },
+                      hintText: 'Password',
+                      obscureText: SignupScreen.passwordVisible,
+                      prefixIconData: Icons.lock,
+                      suffixIconData: SignupScreen.passwordVisible
+                          ? Icons.visibility
+                          : Icons.visibility_off,
+                      colorScheme: kColorScheme[4],
+                      // isVisible: passwordVisible,
+                    ),
+                  ),
+                  SizedBox(
+                    height: ScreenSize.height * 0.02,
+                  ),
+                  SizedBox(
+                    height: ScreenSize.height * 0.04,
+                  ),
+                  Villain(
+                    villainAnimation: VillainAnimation.fromBottom(
+                      from: Duration(milliseconds: 200),
+                      to: Duration(milliseconds: 400),
+                    ),
+                    child: CircularButton(
+                        width: ScreenSize.width * 0.9,
+                        buttonColor: Colors.white,
+                        textColor: kColorScheme[2],
+                        isGradient: false,
+                        colors: [
+                          kColorScheme[1],
+                          kColorScheme[2],
+                          kColorScheme[3],
+                          kColorScheme[4]
+                        ],
+                        buttonText: 'Next',
+                        hasBorder: true,
+                        borderColor: kColorScheme[3],
+                        onPressed: () {
+                          Navigator.pushNamed(context, SpecifyRoleScreen.id);
+                        }),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

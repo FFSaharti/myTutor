@@ -21,115 +21,83 @@ class _TourScreenState extends State<TourScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          SizedBox(
-            height: ScreenSize.height * 0.05,
-          ),
-          Hero(
-            tag: 'logo',
-            child: Image.asset(
-              'images/myTutorLogoColored.png',
-              height: ScreenSize.height * 0.08,
-              width: ScreenSize.width * 0.2,
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+        appBar: buildAppBar(context, kColorScheme[2], ""),
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            SizedBox(
+              height: ScreenSize.height * 0.03,
             ),
-          ),
-          SizedBox(
-            height: ScreenSize.height * 0.04,
-          ),
-          Container(
-            height: ScreenSize.height * 0.57,
-            width: double.infinity,
-            child: NotificationListener<OverscrollIndicatorNotification>(
-              // ignore: missing_return
-              onNotification: (overscroll) {
-                overscroll.disallowGlow();
-              },
-              child: PageView(
-                controller: _pageController,
-                onPageChanged: (int) {
-                  VillainController.playAllVillains(context);
+            Container(
+              height: ScreenSize.height * 0.52,
+              width: double.infinity,
+              child: NotificationListener<OverscrollIndicatorNotification>(
+                // ignore: missing_return
+                onNotification: (overscroll) {
+                  overscroll.disallowGlow();
                 },
-                children: <Widget>[
-                  TourPages(AnimatedResumeWidget(), "Build your résumé",
-                      "Fill your profile with a list of your experiences, favorite topics and more!"),
-                  TourPages(AnimatedSolveProblemWidget(), "Solve your problems",
-                      "Explain your problem, and find solution responses from other Tutors!"),
-                  TourPages(AnimatedmMaterialsWidget(), "Find Materials",
-                      "View materials posted by Tutors that could really assist you."),
-                  // TourPages("images/myTutorLogo.png", "Find Materials",
-                  //     "View materials posted by other users that could really assist you."),
-                ],
+                child: PageView(
+                  controller: _pageController,
+                  onPageChanged: (int) {
+                    VillainController.playAllVillains(context);
+                  },
+                  children: <Widget>[
+                    TourPages(AnimatedResumeWidget(), "Build your résumé",
+                        "Fill your profile with a list of your experiences, favorite topics and more!"),
+                    TourPages(
+                        AnimatedSolveProblemWidget(),
+                        "Solve your problems",
+                        "Explain your problem, and find solution responses from other Tutors!"),
+                    TourPages(AnimatedmMaterialsWidget(), "Find Materials",
+                        "View materials posted by Tutors that could really assist you."),
+                    // TourPages("images/myTutorLogo.png", "Find Materials",
+                    //     "View materials posted by other users that could really assist you."),
+                  ],
+                ),
               ),
             ),
-          ),
-          SizedBox(
-            height: ScreenSize.height * 0.06,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              SmoothPageIndicator(
-                  controller: _pageController, // PageController
-                  count: 3,
-                  effect: JumpingDotEffect(
-                      dotColor: kGreyish,
-                      activeDotColor: kColorScheme[2]), // your preferred effect
-                  onDotClicked: (index) {}),
-              SizedBox(
-                width: ScreenSize.width * 0.2,
-              ),
-              Container(
-                child: FloatingActionButton(
-                  backgroundColor: Colors.black,
-                  child: Icon(
-                    Icons.arrow_forward_ios_sharp,
-                    size: 25,
-                  ),
-                  elevation: 1,
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        PageTransition(
-                            type: PageTransitionType.rightToLeftWithFade,
-                            duration: Duration(milliseconds: 200),
-                            child: SignupScreen()));
-                  },
+            SizedBox(
+              height: ScreenSize.height * 0.06,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                SmoothPageIndicator(
+                    controller: _pageController, // PageController
+                    count: 3,
+                    effect: JumpingDotEffect(
+                        dotColor: kGreyish,
+                        activeDotColor:
+                            kColorScheme[2]), // your preferred effect
+                    onDotClicked: (index) {}),
+                SizedBox(
+                  width: ScreenSize.width * 0.2,
                 ),
-                // EZButton(
-                //   width: ScreenSize.width,
-                //   buttonColor: null,
-                //   textColor: Colors.white,
-                //   isGradient: true,
-                //   colors: [kColorScheme[1], kColorScheme[0]],
-                //   buttonText: 'Get Started',
-                //   hasBorder: false,
-                //   borderColor: null,
-                //   onPressed: () {
-                //     Navigator.pushNamed(context, SignupScreen.id);
-                //   },
-                // ),
-              ),
-            ],
-          ),
-
-          // Expanded(
-          //   child: Container(
-          //     child: SizedBox(
-          //       height: 3,
-          //     ),
-          //     width: double.infinity,
-          //     decoration: BoxDecoration(
-          //       borderRadius: BorderRadius.only(
-          //           topRight: Radius.circular(45),
-          //           topLeft: Radius.circular(45)),
-          //       color: Colors.white,
-          //     ),
-          //   ),
-          // ),
-        ],
+                Container(
+                  child: FloatingActionButton(
+                    backgroundColor: Colors.black,
+                    child: Icon(
+                      Icons.arrow_forward_ios_sharp,
+                      size: 25,
+                    ),
+                    elevation: 1,
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          PageTransition(
+                              type: PageTransitionType.rightToLeftWithFade,
+                              duration: Duration(milliseconds: 200),
+                              child: SignupScreen()));
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
