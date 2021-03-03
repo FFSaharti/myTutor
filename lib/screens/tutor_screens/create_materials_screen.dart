@@ -87,9 +87,9 @@ class _CreateMaterialsScreenState extends State<CreateMaterialsScreen> {
                             border: Border.all(color: kColorScheme[1])),
                       ),
                       decoration: new BoxDecoration(
-                        color: Colors.black,
+                        color: Colors.transparent,
                         shape: BoxShape.circle,
-                        border: Border.all(width: 5.0, color: Colors.white),
+                        border: Border.all(width: 5.0, color: Colors.transparent),
                       ),
                     ),
                   ),
@@ -122,9 +122,9 @@ class _CreateMaterialsScreenState extends State<CreateMaterialsScreen> {
                             border: Border.all(color: kColorScheme[1])),
                       ),
                       decoration: new BoxDecoration(
-                        color: Colors.black,
+                        color: Colors.transparent,
                         shape: BoxShape.circle,
-                        border: Border.all(width: 5.0, color: Colors.white),
+                        border: Border.all(width: 5.0, color: Colors.transparent),
                       ),
                     ),
                   ),

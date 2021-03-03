@@ -5,10 +5,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:mytutor/classes/rate.dart';
 import 'package:mytutor/classes/session.dart';
+import 'package:mytutor/classes/student.dart';
+import 'package:mytutor/classes/tutor.dart';
+import 'package:mytutor/classes/user.dart';
 import 'package:mytutor/components/ez_button.dart';
 import 'package:mytutor/utilities/constants.dart';
 import 'package:mytutor/utilities/database_api.dart';
@@ -16,166 +20,400 @@ import 'package:mytutor/utilities/screen_size.dart';
 import 'package:mytutor/utilities/session_manager.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
 
-class messagesScreen extends StatefulWidget {
+//TODO: implement view all chat/ image only.
+//TODO: implement view profile by clicking on circle Avatar?
+class ChatScreen extends StatefulWidget {
   final Session currentsession;
 
-  const messagesScreen({this.currentsession});
+  const ChatScreen({this.currentsession});
 
   @override
-  _messagesScreenState createState() => _messagesScreenState();
+  _ChatScreenState createState() => _ChatScreenState();
 }
 
-class _messagesScreenState extends State<messagesScreen> {
+class _ChatScreenState extends State<ChatScreen> {
+  void getCurrentuser() {
+    SessionManager.loggedInTutor.userId == ""
+        ? DatabaseAPI.getUserbyid(widget.currentsession.tutor, 0)
+            .then((value) => {
+                  setState(() {
+                    receiverDataLoadIndicator = !receiverDataLoadIndicator;
+                    receiver = Student(
+                        value.data()["name"],
+                        value.data()["email"],
+                        "none",
+                        value.data()["aboutMe"],
+                        value.data()["userId"],
+                        [],
+                        value.data()["profileImg"]);
+                  })
+                })
+        : DatabaseAPI.getUserbyid(widget.currentsession.student, 1)
+            .then((value) => {
+                  setState(() {
+                    receiverDataLoadIndicator = !receiverDataLoadIndicator;
+                    receiver = Tutor(
+                        value.data()["name"],
+                        value.data()["email"],
+                        "none",
+                        value.data()["aboutMe"],
+                        value.data()["userId"],
+                        [],
+                        value.data()["profileImg"]);
+                  })
+                });
+  }
+
+  void initState() {
+    getCurrentuser();
+  }
+
   final messageTextController = TextEditingController();
-  bool loading = false;
+  String dropdownValue = 'rate tutor';
+  bool fileUploadIndicator = false;
+  bool receiverDataLoadIndicator = false;
   String newMessage;
+  MyUser receiver;
+  int userChooseForTypeofChat = 0;
 
   refresh() {
     setState(() {
-      loading = !loading;
+      fileUploadIndicator = !fileUploadIndicator;
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: null,
-        elevation: 0,
-        backgroundColor: Color(0x44000000),
-        actions: <Widget>[
-          IconButton(
-              icon: Icon(Icons.info_outline),
-              onPressed: () {
-                if (SessionManager.loggedInTutor.userId == "") {
-                  // current user is student, show him the bottom sheet to give  him the ability to rate the session
-                  // check if the session is active, then show the rate bottom sheet, if not show a error pop up.
-                  widget.currentsession.status == "active"
-                      ? showBottomSheetForStudent()
-                      : AwesomeDialog(
-                          context: context,
-                          animType: AnimType.SCALE,
-                          dialogType: DialogType.ERROR,
-                          body: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Center(
-                              child: Text(
-                                'the session is closed. you cant rate it anymore..',
-                                style: kTitleStyle.copyWith(
-                                    color: kBlackish,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.normal),
-                              ),
-                            ),
-                          ),
-                          btnOkOnPress: () {
-                            Navigator.pop(context);
-                          },
-                        ).show();
-                } else {
-                  showBottomSheetForTutor();
-                }
-              }),
-        ],
-      ),
+      // appBar: AppBar(
+      //   leading: null,
+      //   elevation: 0,
+      //   backgroundColor: Color(0x44000000),
+      //   actions: <Widget>[
+      //     IconButton(
+      //         icon: Icon(Icons.info_outline),
+      //         onPressed: () {
+      //           if (SessionManager.loggedInTutor.userId == "") {
+      //             // current user is student, show him the bottom sheet to give  him the ability to rate the session
+      //             // check if the session is active, then show the rate bottom sheet, if not show a error pop up.
+      //             widget.currentsession.status == "active"
+      //                 ? showBottomSheetForStudent()
+      //                 : AwesomeDialog(
+      //                     context: context,
+      //                     animType: AnimType.SCALE,
+      //                     dialogType: DialogType.ERROR,
+      //                     body: Padding(
+      //                       padding: const EdgeInsets.all(8.0),
+      //                       child: Center(
+      //                         child: Text(
+      //                           'the session is closed. you cant rate it anymore..',
+      //                           style: kTitleStyle.copyWith(
+      //                               color: kBlackish,
+      //                               fontSize: 14,
+      //                               fontWeight: FontWeight.normal),
+      //                         ),
+      //                       ),
+      //                     ),
+      //                     btnOkOnPress: () {
+      //                       Navigator.pop(context);
+      //                     },
+      //                   ).show();
+      //           } else {
+      //             showBottomSheetForTutor();
+      //           }
+      //         }),
+      //   ],
+      // ),
       extendBodyBehindAppBar: true,
       body: SafeArea(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            NotificationListener<OverscrollIndicatorNotification>(
-              // ignore: missing_return
-              onNotification: (overscroll) {
-                overscroll.disallowGlow();
-              },
-              child: MessagesStream(
-                sessionid: widget.currentsession.session_id,
-              ),
-            ),
-            loading == true
-                ? LinearProgressIndicator(
-                    backgroundColor: Colors.white,
-                    valueColor: AlwaysStoppedAnimation<Color>(kColorScheme[3]),
-                  )
-                : Text(""),
-            Container(
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
+        child: receiverDataLoadIndicator == false
+            ? Center(
+                child: CircularProgressIndicator(
+                  backgroundColor: Colors.white,
+                  valueColor: AlwaysStoppedAnimation<Color>(kColorScheme[3]),
+                ),
+              )
+            : Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
-                  IconButton(
-                    icon: Icon(Icons.attach_file),
-                    onPressed: () async {
-                      //TODO: imageuplode
-                      refresh();
-                      String filename = "hello";
-                      FilePickerResult file = await FilePicker.platform
-                          .pickFiles(type: FileType.image);
-                      File _file;
-                      try{
-                        file.files.single.path == null
-                            ? print("hello")
-                            : _file = File(file.files.single.path);
-                        DatabaseAPI.uploadImageToStorage(
-                            _file,
-                            widget.currentsession.session_id,
-                            SessionManager.loggedInUser.name)
-                            .then((value) => {
-                          refresh(),
-                        });
-                      }  catch (e) {
-                        refresh();
-                        print('never reached');
-                      }
-
-                    },
-                  ),
-                  Expanded(
-                    child: TextField(
-                      readOnly: widget.currentsession.status == "closed"
-                          ? true
-                          : false,
-                      controller: messageTextController,
-                      onChanged: (value) {
-                        newMessage = value;
-                      },
-                      decoration: InputDecoration(
-                        contentPadding: EdgeInsets.symmetric(
-                            vertical: 10.0, horizontal: 20.0),
-                        hintText: widget.currentsession.status == "closed"
-                            ? 'the session is ended. its in view Mode only'
-                            : 'Type....',
-                        border: InputBorder.none,
+                  Stack(
+                    children: [
+                      Container(
+                        height: ScreenSize.height * 0.18,
+                        decoration: new BoxDecoration(
+                            color: kColorScheme[1],
+                            borderRadius: new BorderRadius.only(
+                                bottomRight: const Radius.circular(25.0),
+                                bottomLeft: const Radius.circular(25.0))),
                       ),
+                      Padding(
+                        padding: const EdgeInsets.all(15.0),
+                        child: Column(
+                          children: [
+                            SizedBox(
+                              height: ScreenSize.height * 0.010,
+                            ),
+
+                            ListTile(
+                              leading: CircleAvatar(
+                                backgroundImage:
+                                    NetworkImage(receiver.profileImag),
+                                backgroundColor: kColorScheme[1],
+                                foregroundColor: Colors.black,
+                                radius: 30.0,
+                              ),
+                              title: receiverDataLoadIndicator == true
+                                  ? Text(
+                                      receiver.name,
+                                      style: kTitleStyle.copyWith(fontSize: 30),
+                                    )
+                                  : Text(""),
+                              trailing: DropdownButton<String>(
+                                icon: Icon(
+                                  Icons.more_vert,
+                                  color: Colors.white,
+                                ),
+                                iconSize: 24,
+                                elevation: 16,
+                                style: TextStyle(color: Colors.deepPurple),
+                                onChanged: (String userChoose) {
+                                  setState(() {
+                                    if(userChoose == 'close session'){
+                                      showBottomSheetForTutor();
+                                    } else if (userChoose == 'rate tutor') {
+                                      if (SessionManager.loggedInTutor.userId ==
+                                          "")
+                                        // current user is student, show him the bottom sheet to give  him the ability to rate the session
+                                        // check if the session is active, then show the rate bottom sheet, if not show a error pop up.
+                                        widget.currentsession.status == "active"
+                                            ? showBottomSheetForStudent()
+                                            : AwesomeDialog(
+                                                context: context,
+                                                animType: AnimType.SCALE,
+                                                dialogType: DialogType.ERROR,
+                                                body: Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: Center(
+                                                    child: Text(
+                                                      'the session is closed. you cant rate it anymore..',
+                                                      style:
+                                                          kTitleStyle.copyWith(
+                                                              color: kBlackish,
+                                                              fontSize: 14,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .normal),
+                                                    ),
+                                                  ),
+                                                ),
+                                                btnOkOnPress: () {
+                                                  Navigator.pop(context);
+                                                },
+                                              ).show();
+                                    } else {
+                                      showBottomSheetForSessionDescription();
+                                    }
+                                  });
+                                },
+                                items: SessionManager.loggedInTutor == "" ?<String>[
+                                  'rate tutor',
+                                  'read session\ndescription',
+                                ].map<DropdownMenuItem<String>>((String value) {
+                                  return DropdownMenuItem<String>(
+                                    value: value,
+                                    child: Text(
+                                      value,
+                                      style: TextStyle(color: Colors.black),
+                                    ),
+                                  );
+                                }).toList() : <String>[
+                                  'close session',
+                                  'read session\ndescription',
+                                ].map<DropdownMenuItem<String>>((String value) {
+                                  return DropdownMenuItem<String>(
+                                    value: value,
+                                    child: Text(
+                                      value,
+                                      style: TextStyle(color: Colors.black),
+                                    ),
+                                  );
+                                }).toList()
+                              ),
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        userChooseForTypeofChat = 0;
+                                      });
+                                    },
+                                    child: Container(
+                                      width: ScreenSize.width * 0.25,
+                                      height: ScreenSize.height * 0.050,
+                                      child: Container(
+                                        child: Center(
+                                            child: Text(
+                                          "All chat",
+                                          style: TextStyle(
+                                              color:
+                                                  userChooseForTypeofChat == 0
+                                                      ? kColorScheme[1]
+                                                      : Colors.white),
+                                        )),
+                                        decoration: new BoxDecoration(
+                                            color: userChooseForTypeofChat == 0
+                                                ? Colors.white
+                                                : kColorScheme[1],
+                                            shape: BoxShape.rectangle,
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(12.0)),
+                                            border: Border.all(
+                                                color: kColorScheme[1])),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        userChooseForTypeofChat = 1;
+                                      });
+                                    },
+                                    child: Container(
+                                      width: ScreenSize.width * 0.25,
+                                      height: ScreenSize.height * 0.050,
+                                      child: Container(
+                                        child: Center(
+                                            child: Text(
+                                          "Image only",
+                                          style: TextStyle(
+                                              color:
+                                                  userChooseForTypeofChat == 1
+                                                      ? kColorScheme[1]
+                                                      : Colors.white),
+                                        )),
+                                        decoration: new BoxDecoration(
+                                            color: userChooseForTypeofChat == 1
+                                                ? Colors.white
+                                                : kColorScheme[1],
+                                            shape: BoxShape.rectangle,
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(12.0)),
+                                            border: Border.all(
+                                                color: kColorScheme[1])),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  // receiverDataLoadIndicator == false ? Text("hello") :
+                  //     Text(receiverName),
+                  NotificationListener<OverscrollIndicatorNotification>(
+                    // ignore: missing_return
+                    onNotification: (overscroll) {
+                      overscroll.disallowGlow();
+                    },
+                    child: MessagesStream(
+                      sessionid: widget.currentsession.session_id,
                     ),
                   ),
-                  FlatButton(
-                    onPressed: widget.currentsession.status == "closed"
-                        ? null
-                        : () {
-                            messageTextController.clear();
-                            DatabaseAPI.saveNewMessage(
-                                widget.currentsession.session_id,
-                                newMessage,
-                                SessionManager.loggedInUser.name);
-                          },
+                  fileUploadIndicator == true
+                      ? LinearProgressIndicator(
+                          backgroundColor: Colors.white,
+                          valueColor:
+                              AlwaysStoppedAnimation<Color>(kColorScheme[3]),
+                        )
+                      : Text(""),
+                  Container(
                     child: Row(
-                      children: [
-                        Text("Send"),
-                        SizedBox(
-                          width: 5,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        IconButton(
+                          icon: Icon(Icons.attach_file),
+                          onPressed: () async {
+                            //TODO: imageuplode
+                            refresh();
+                            String filename = "hello";
+                            FilePickerResult file = await FilePicker.platform
+                                .pickFiles(type: FileType.image);
+                            File _file;
+                            try {
+                              file.files.single.path == null
+                                  ? print("hello")
+                                  : _file = File(file.files.single.path);
+                              DatabaseAPI.uploadImageToStorage(
+                                      _file,
+                                      widget.currentsession.session_id,
+                                      SessionManager.loggedInUser.name)
+                                  .then((value) => {
+                                        refresh(),
+                                      });
+                            } catch (e) {
+                              refresh();
+                              print('never reached');
+                            }
+                          },
                         ),
-                        Icon(
-                          Icons.arrow_forward_ios_outlined,
+                        Expanded(
+                          child: TextField(
+                            readOnly: widget.currentsession.status == "closed"
+                                ? true
+                                : false,
+                            controller: messageTextController,
+                            onChanged: (value) {
+                              newMessage = value;
+                            },
+                            decoration: InputDecoration(
+                              contentPadding: EdgeInsets.symmetric(
+                                  vertical: 10.0, horizontal: 20.0),
+                              hintText: widget.currentsession.status == "closed"
+                                  ? 'the session is ended. its in view Mode only'
+                                  : 'Type....',
+                              border: InputBorder.none,
+                            ),
+                          ),
+                        ),
+                        FlatButton(
+                          onPressed: widget.currentsession.status == "closed"
+                              ? null
+                              : () {
+                                  messageTextController.clear();
+                                  DatabaseAPI.saveNewMessage(
+                                      widget.currentsession.session_id,
+                                      newMessage,
+                                      SessionManager.loggedInUser.name);
+                                },
+                          child: Row(
+                            children: [
+                              Text("Send"),
+                              SizedBox(
+                                width: 5,
+                              ),
+                              Icon(
+                                Icons.arrow_forward_ios_outlined,
+                              ),
+                            ],
+                          ),
                         ),
                       ],
                     ),
                   ),
                 ],
               ),
-            ),
-          ],
-        ),
       ),
     );
   }
@@ -475,55 +713,98 @@ class _messagesScreenState extends State<messagesScreen> {
                       hasBorder: false,
                       borderColor: null,
                       onPressed: () {
+
                         DatabaseAPI.changeSessionsStatus(
-                                "closed", widget.currentsession.session_id)
-                            .then((value) => () {
-                                  value == "success"
-                                      ? AwesomeDialog(
-                                          context: context,
-                                          animType: AnimType.SCALE,
-                                          dialogType: DialogType.SUCCES,
-                                          body: Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: Center(
-                                              child: Text(
-                                                'the session is closed. you cant rate it anymore..',
-                                                style: kTitleStyle.copyWith(
-                                                    color: kBlackish,
-                                                    fontSize: 14,
-                                                    fontWeight:
-                                                        FontWeight.normal),
-                                              ),
-                                            ),
-                                          ),
-                                          btnOkOnPress: () {
-                                            Navigator.pop(context);
-                                          },
-                                        ).show()
-                                      : AwesomeDialog(
-                                          context: context,
-                                          animType: AnimType.SCALE,
-                                          dialogType: DialogType.ERROR,
-                                          body: Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: Center(
-                                              child: Text(
-                                                'failed to close the session, Check if this session is still active and your connection to the internet',
-                                                style: kTitleStyle.copyWith(
-                                                    color: kBlackish,
-                                                    fontSize: 14,
-                                                    fontWeight:
-                                                        FontWeight.normal),
-                                              ),
-                                            ),
-                                          ),
-                                          btnOkOnPress: () {
-                                            Navigator.pop(context);
-                                          },
-                                        ).show();
+                            "close", widget.currentsession.session_id)
+                            .then((value) => {
+                          if(value == 'success'){
+                            AwesomeDialog(
+                              context: context,
+                              animType: AnimType.SCALE,
+                              dialogType: DialogType.SUCCES,
+                              body: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Center(
+                                  child: Text(
+                                    'the session has been successfully closed ',
+                                    style: kTitleStyle.copyWith(
+                                        color: kBlackish,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.normal),
+                                  ),
+                                ),
+                              ),
+                              btnOkOnPress: () {
+                                int _popCount = 0;
+                                Navigator.popUntil(context, (route) {
+                                  return _popCount++ == 2;
                                 });
+                              },
+                            )..show(),
+                          } else {
+                            AwesomeDialog(
+                              context: context,
+                              animType: AnimType.SCALE,
+                              dialogType: DialogType.ERROR,
+                              body: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Center(
+                                  child: Text(
+                                    'Error occur please try again',
+                                    style: kTitleStyle.copyWith(
+                                        color: kBlackish,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.normal),
+                                  ),
+                                ),
+                              ),
+                              btnOkOnPress: () {
+                                Navigator.pop(context);
+                              },
+                            )..show(),
+                          }
+
+                        });
+
                       }),
                 ],
+              ));
+        });
+  }
+
+  showBottomSheetForSessionDescription() {
+    showModalBottomSheet(
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(top: Radius.circular(25.0))),
+        context: context,
+        builder: (context) {
+          return Container(
+              height: ScreenSize.height * 0.40,
+              child: Padding(
+                padding: const EdgeInsets.all(15.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Text(
+                      widget.currentsession.title,
+                      style: GoogleFonts.sarabun(
+                        textStyle: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.normal,
+                            color: Colors.black),
+                      ),
+                    ),
+                    Text(
+                      "Description:\t\t"+widget.currentsession.desc,
+                      style:
+                          kTitleStyle.copyWith(color: Colors.black, fontSize: 17),
+                    ),
+                    SizedBox(
+                      height: ScreenSize.height * 0.030,
+                    ),
+
+                  ],
+                ),
               ));
         });
   }
@@ -619,24 +900,23 @@ class MessageShape extends StatefulWidget {
 }
 
 class _MessageShapeState extends State<MessageShape> {
-  void _showBiggerImage(String url){
+  void _showBiggerImage(String url) {
     showModalBottomSheet(
-      isScrollControlled: true,
+        isScrollControlled: true,
         context: context,
-        builder: (builder){
+        builder: (builder) {
           return new Container(
-            height: ScreenSize.height *0.90,
+            height: ScreenSize.height * 0.90,
             color: Colors.transparent, //could change this to Color(0xFF737373),
             //so you don't have to change MaterialApp canvasColor
-            child:  FadeInImage(
+            child: FadeInImage(
               placeholder: AssetImage("images/loading.png"),
               image: NetworkImage(
                 widget.imageUrl,
               ),
             ),
           );
-        }
-    );
+        });
   }
 
   @override
@@ -652,8 +932,7 @@ class _MessageShapeState extends State<MessageShape> {
               ? ClipRRect(
                   borderRadius: BorderRadius.circular(8.0),
                   child: GestureDetector(
-                    onTap: (){
-
+                    onTap: () {
                       _showBiggerImage(widget.imageUrl);
                     },
                     child: FadeInImage(
@@ -671,7 +950,6 @@ class _MessageShapeState extends State<MessageShape> {
                       : MainAxisAlignment.start,
                   children: [
                     Material(
-
                       borderRadius: widget.SameUser
                           ? BorderRadius.only(
                               topLeft: Radius.circular(20.0),
@@ -690,7 +968,8 @@ class _MessageShapeState extends State<MessageShape> {
                         child: Text(
                           widget.text,
                           style: TextStyle(
-                            color: widget.SameUser ? Colors.white : Colors.black54,
+                            color:
+                                widget.SameUser ? Colors.white : Colors.black54,
                             fontSize: 15.0,
                           ),
                         ),

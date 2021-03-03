@@ -274,7 +274,7 @@ class _MessageListTileState extends State<MessageListTile> {
         Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => messagesScreen(
+              builder: (context) => ChatScreen(
                 currentsession: widget.session,
               ),
             ));
