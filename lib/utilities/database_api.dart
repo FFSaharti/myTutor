@@ -504,6 +504,30 @@ class DatabaseAPI {
     });
   }
 
+  static Future<String> saveNewMessageAsImage(
+      String sessionId, String sender, String imgUrl) async {
+    try {
+      _firestore
+          .collection("session")
+          .doc(sessionId)
+          .collection("messages")
+          .add({
+        'text': 'image',
+        'sender': sender,
+        'time': DateTime.now(),
+        'imageUrl': imgUrl,
+      });
+      _firestore.collection("session").doc(sessionId).update({
+        'lastMessage': 'image included type to load..',
+        'timeOfLastMessage': DateTime.now(),
+      });
+
+      return "success";
+    } on FirebaseException catch (e) {
+      return "error";
+    }
+  }
+
   static Future<DocumentSnapshot> getUserbyid(String userID, int type) async {
     // type 1 = student , type 0 = tutor
     if (type == 1) {
@@ -562,7 +586,7 @@ class DatabaseAPI {
 
   // document related
 
-  static void uplodeDocumentToTutorCollection(Document document) async {
+  static void uploadDocumentToTutorCollection(Document document) async {
     await _firestore.collection("Material").add({
       "documentTitle": document.title,
       "documentDesc": document.description,
@@ -583,7 +607,27 @@ class DatabaseAPI {
       String url =
           await (await uploadTask.then((value) => value.ref.getDownloadURL()));
       document.url = url;
-      await uplodeDocumentToTutorCollection(document);
+      await uploadDocumentToTutorCollection(document);
+      return "done";
+    } on FirebaseException catch (e) {
+      return "error";
+    }
+  }
+
+  static Future<String> uploadImageToStorage(
+    File file,
+    String sessionId,
+    String sender,
+  ) async {
+    try {
+      firebase_storage.UploadTask uploadTask;
+      firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance
+          .ref()
+          .child('images/'+DateTime.now().toString()+ file.path.split("/").last);
+      uploadTask = ref.putData(file.readAsBytesSync());
+      String url =
+          await (await uploadTask.then((value) => value.ref.getDownloadURL()));
+      saveNewMessageAsImage(sessionId, sender, url);
       return "done";
     } on FirebaseException catch (e) {
       return "error";

@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -24,7 +27,14 @@ class messagesScreen extends StatefulWidget {
 
 class _messagesScreenState extends State<messagesScreen> {
   final messageTextController = TextEditingController();
+  bool loading = false;
   String newMessage;
+
+  refresh() {
+    setState(() {
+      loading = !loading;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +74,6 @@ class _messagesScreenState extends State<messagesScreen> {
                         ).show();
                 } else {
                   showBottomSheetForTutor();
-
                 }
               }),
         ],
@@ -75,13 +84,52 @@ class _messagesScreenState extends State<messagesScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            MessagesStream(
-              sessionid: widget.currentsession.session_id,
+            NotificationListener<OverscrollIndicatorNotification>(
+              // ignore: missing_return
+              onNotification: (overscroll) {
+                overscroll.disallowGlow();
+              },
+              child: MessagesStream(
+                sessionid: widget.currentsession.session_id,
+              ),
             ),
+            loading == true
+                ? LinearProgressIndicator(
+                    backgroundColor: Colors.white,
+                    valueColor: AlwaysStoppedAnimation<Color>(kColorScheme[3]),
+                  )
+                : Text(""),
             Container(
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
+                  IconButton(
+                    icon: Icon(Icons.attach_file),
+                    onPressed: () async {
+                      //TODO: imageuplode
+                      refresh();
+                      String filename = "hello";
+                      FilePickerResult file = await FilePicker.platform
+                          .pickFiles(type: FileType.image);
+                      File _file;
+                      try{
+                        file.files.single.path == null
+                            ? print("hello")
+                            : _file = File(file.files.single.path);
+                        DatabaseAPI.uploadImageToStorage(
+                            _file,
+                            widget.currentsession.session_id,
+                            SessionManager.loggedInUser.name)
+                            .then((value) => {
+                          refresh(),
+                        });
+                      }  catch (e) {
+                        refresh();
+                        print('never reached');
+                      }
+
+                    },
+                  ),
                   Expanded(
                     child: TextField(
                       readOnly: widget.currentsession.status == "closed"
@@ -113,12 +161,12 @@ class _messagesScreenState extends State<messagesScreen> {
                           },
                     child: Row(
                       children: [
-                        Text("send"),
+                        Text("Send"),
                         SizedBox(
                           width: 5,
                         ),
                         Icon(
-                          Icons.arrow_forward_rounded,
+                          Icons.arrow_forward_ios_outlined,
                         ),
                       ],
                     ),
@@ -353,12 +401,18 @@ class _messagesScreenState extends State<messagesScreen> {
                                               friendRate,
                                               commRate,
                                               creativityRate,
-                                          DateTime.now(),
-                                          widget.currentsession.title),
+                                              DateTime.now(),
+                                              widget.currentsession.title),
                                           widget.currentsession.tutor)
                                       : DatabaseAPI.rateTutor(
-                                          Rate(null, teachRate, friendRate,
-                                              commRate, creativityRate,DateTime.now(),widget.currentsession.title),
+                                          Rate(
+                                              null,
+                                              teachRate,
+                                              friendRate,
+                                              commRate,
+                                              creativityRate,
+                                              DateTime.now(),
+                                              widget.currentsession.title),
                                           widget.currentsession.tutor);
                                   DatabaseAPI.changeSessionsStatus("closed",
                                       widget.currentsession.session_id);
@@ -391,6 +445,7 @@ class _messagesScreenState extends State<messagesScreen> {
               ));
         });
   }
+
   showBottomSheetForTutor() {
     showModalBottomSheet(
         shape: RoundedRectangleBorder(
@@ -399,61 +454,74 @@ class _messagesScreenState extends State<messagesScreen> {
         builder: (context) {
           return Container(
               height: ScreenSize.height * 0.30,
-              child:Column(
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-
-                  Text("are you sure you want to close ?", style: kTitleStyle.copyWith(color: Colors.black,fontSize: 17),),
-                  SizedBox(
-                    height: ScreenSize.height *0.030,
+                  Text(
+                    "are you sure you want to close ?",
+                    style:
+                        kTitleStyle.copyWith(color: Colors.black, fontSize: 17),
                   ),
-                  EZButton(width: ScreenSize.width*0.50, buttonColor: kColorScheme[2], textColor: Colors.white
-                      , isGradient: false, colors: null, buttonText: "Close the session", hasBorder: false, borderColor: null, onPressed: (){
-                    DatabaseAPI.changeSessionsStatus("closed", widget.currentsession.session_id).then((value) => (){
-                      value == "success"?
-                      AwesomeDialog(
-                        context: context,
-                        animType: AnimType.SCALE,
-                        dialogType: DialogType.SUCCES,
-                        body: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Center(
-                            child: Text(
-                              'the session is closed. you cant rate it anymore..',
-                              style: kTitleStyle.copyWith(
-                                  color: kBlackish,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.normal),
-                            ),
-                          ),
-                        ),
-                        btnOkOnPress: () {
-                          Navigator.pop(context);
-                        },
-                      ).show() :  AwesomeDialog(
-                        context: context,
-                        animType: AnimType.SCALE,
-                        dialogType: DialogType.ERROR,
-                        body: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Center(
-                            child: Text(
-                              'failed to close the session, Check if this session is still active and your connection to the internet',
-                              style: kTitleStyle.copyWith(
-                                  color: kBlackish,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.normal),
-                            ),
-                          ),
-                        ),
-                        btnOkOnPress: () {
-                          Navigator.pop(context);
-                        },
-                      ).show();
-
-                    });
-
-
+                  SizedBox(
+                    height: ScreenSize.height * 0.030,
+                  ),
+                  EZButton(
+                      width: ScreenSize.width * 0.50,
+                      buttonColor: kColorScheme[2],
+                      textColor: Colors.white,
+                      isGradient: false,
+                      colors: null,
+                      buttonText: "Close the session",
+                      hasBorder: false,
+                      borderColor: null,
+                      onPressed: () {
+                        DatabaseAPI.changeSessionsStatus(
+                                "closed", widget.currentsession.session_id)
+                            .then((value) => () {
+                                  value == "success"
+                                      ? AwesomeDialog(
+                                          context: context,
+                                          animType: AnimType.SCALE,
+                                          dialogType: DialogType.SUCCES,
+                                          body: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Center(
+                                              child: Text(
+                                                'the session is closed. you cant rate it anymore..',
+                                                style: kTitleStyle.copyWith(
+                                                    color: kBlackish,
+                                                    fontSize: 14,
+                                                    fontWeight:
+                                                        FontWeight.normal),
+                                              ),
+                                            ),
+                                          ),
+                                          btnOkOnPress: () {
+                                            Navigator.pop(context);
+                                          },
+                                        ).show()
+                                      : AwesomeDialog(
+                                          context: context,
+                                          animType: AnimType.SCALE,
+                                          dialogType: DialogType.ERROR,
+                                          body: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Center(
+                                              child: Text(
+                                                'failed to close the session, Check if this session is still active and your connection to the internet',
+                                                style: kTitleStyle.copyWith(
+                                                    color: kBlackish,
+                                                    fontSize: 14,
+                                                    fontWeight:
+                                                        FontWeight.normal),
+                                              ),
+                                            ),
+                                          ),
+                                          btnOkOnPress: () {
+                                            Navigator.pop(context);
+                                          },
+                                        ).show();
+                                });
                       }),
                 ],
               ));
@@ -480,8 +548,11 @@ class MessagesStream extends StatelessWidget {
         List<MessageShape> Messages = [];
         for (var message in messages) {
           final messageText = message.data()['text'];
+          String imageurl = "";
+          messageText == "image"
+              ? imageurl = message.data()['imageUrl']
+              : imageurl = null;
           final messageSender = message.data()['sender'];
-
           final Timestamp timestamp = message.data()['time'] as Timestamp;
           final DateTime dateTime = timestamp.toDate();
           String time;
@@ -504,6 +575,7 @@ class MessagesStream extends StatelessWidget {
             sender: messageSender,
             text: messageText,
             SameUser: currentUser == messageSender,
+            imageUrl: imageurl,
           );
 
           Messages.add(messageShape);
@@ -527,13 +599,45 @@ class MessagesStream extends StatelessWidget {
   }
 }
 
-class MessageShape extends StatelessWidget {
-  MessageShape({this.sender, this.text, this.SameUser, this.time});
+class MessageShape extends StatefulWidget {
+  MessageShape({
+    this.sender,
+    this.text,
+    this.SameUser,
+    this.time,
+    this.imageUrl,
+  });
 
   final String sender;
   final String time;
   final String text;
   final bool SameUser;
+  final String imageUrl;
+
+  @override
+  _MessageShapeState createState() => _MessageShapeState();
+}
+
+class _MessageShapeState extends State<MessageShape> {
+  void _showBiggerImage(String url){
+    showModalBottomSheet(
+      isScrollControlled: true,
+        context: context,
+        builder: (builder){
+          return new Container(
+            height: ScreenSize.height *0.90,
+            color: Colors.transparent, //could change this to Color(0xFF737373),
+            //so you don't have to change MaterialApp canvasColor
+            child:  FadeInImage(
+              placeholder: AssetImage("images/loading.png"),
+              image: NetworkImage(
+                widget.imageUrl,
+              ),
+            ),
+          );
+        }
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -541,45 +645,65 @@ class MessageShape extends StatelessWidget {
       padding: EdgeInsets.all(10.0),
       child: Column(
         crossAxisAlignment:
-            SameUser ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+            widget.SameUser ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: <Widget>[
-          Row(
-            mainAxisAlignment:
-                SameUser ? MainAxisAlignment.end : MainAxisAlignment.start,
-            children: [
-              Material(
-                //TODO: Fix messages shape.
-                borderRadius: SameUser
-                    ? BorderRadius.only(
-                        topLeft: Radius.circular(20.0),
-                        bottomLeft: Radius.circular(30.0),
-                        bottomRight: Radius.circular(0.0))
-                    : BorderRadius.only(
-                        bottomLeft: Radius.circular(30.0),
-                        bottomRight: Radius.circular(30.0),
-                        topRight: Radius.circular(30.0),
+          // check if the test called image then display the image.
+          widget.text == "image"
+              ? ClipRRect(
+                  borderRadius: BorderRadius.circular(8.0),
+                  child: GestureDetector(
+                    onTap: (){
+
+                      _showBiggerImage(widget.imageUrl);
+                    },
+                    child: FadeInImage(
+                      placeholder: AssetImage("images/loading.png"),
+                      image: NetworkImage(
+                        widget.imageUrl,
                       ),
-                elevation: 3.0,
-                color: SameUser ? kColorScheme[1] : Colors.white,
-                child: Padding(
-                  padding:
-                      EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
-                  child: Text(
-                    text,
-                    style: TextStyle(
-                      color: SameUser ? Colors.white : Colors.black54,
-                      fontSize: 15.0,
+                      height: 150,
+                      width: 150,
                     ),
-                  ),
+                  ))
+              : Row(
+                  mainAxisAlignment: widget.SameUser
+                      ? MainAxisAlignment.end
+                      : MainAxisAlignment.start,
+                  children: [
+                    Material(
+
+                      borderRadius: widget.SameUser
+                          ? BorderRadius.only(
+                              topLeft: Radius.circular(20.0),
+                              bottomLeft: Radius.circular(30.0),
+                              bottomRight: Radius.circular(0.0))
+                          : BorderRadius.only(
+                              bottomLeft: Radius.circular(30.0),
+                              bottomRight: Radius.circular(30.0),
+                              topRight: Radius.circular(30.0),
+                            ),
+                      elevation: 3.0,
+                      color: widget.SameUser ? kColorScheme[1] : Colors.white,
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                            vertical: 10.0, horizontal: 20.0),
+                        child: Text(
+                          widget.text,
+                          style: TextStyle(
+                            color: widget.SameUser ? Colors.white : Colors.black54,
+                            fontSize: 15.0,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-            ],
-          ),
+
           SizedBox(
             height: 5,
           ),
           Text(
-            time,
+            widget.time,
             style: TextStyle(color: Colors.grey, fontSize: 12),
           )
         ],
