@@ -44,6 +44,7 @@ class _HomepageScreenStudentState extends State<HomepageScreenStudent> {
   double height;
   int _navindex = 0;
   int _currentIndex = 0;
+  PageController _pageController = PageController();
 
   void changeindex(int index) {
     setState(() {
@@ -51,6 +52,7 @@ class _HomepageScreenStudentState extends State<HomepageScreenStudent> {
       print(_navindex);
     });
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +62,13 @@ class _HomepageScreenStudentState extends State<HomepageScreenStudent> {
         showElevation: true,
         itemCornerRadius: 24,
         curve: Curves.easeIn,
-        onItemSelected: (index) => setState(() => _currentIndex = index),
+        onItemSelected: (index) {
+          _pageController.animateToPage(index,
+              duration: Duration(milliseconds: 450), curve: Curves.easeIn);
+          setState(() {
+            _currentIndex=index;
+          });
+        },
         items: <BottomNavyBarItem>[
           BottomNavyBarItem(
             icon: Icon(Icons.home),
@@ -107,7 +115,15 @@ class _HomepageScreenStudentState extends State<HomepageScreenStudent> {
       //   onTap: changeindex,
       //   selectedItemColor: kColorScheme[3],
       // ),
-      body: widgets.elementAt(_currentIndex),
+      body: PageView(
+        controller: _pageController,
+        children: [
+          HomePageStudent(),
+          StudentSection(),
+          MessageScreen(),
+          ProfileStudent()
+        ],
+      ),
     );
   }
 }
