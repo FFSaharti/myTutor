@@ -140,7 +140,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   Stack(
                     children: [
                       Container(
-                        height: ScreenSize.height * 0.18,
+                        height: ScreenSize.height * 0.20,
                         decoration: new BoxDecoration(
                             color: kColorScheme[1],
                             borderRadius: new BorderRadius.only(
@@ -161,12 +161,12 @@ class _ChatScreenState extends State<ChatScreen> {
                                     NetworkImage(receiver.profileImag),
                                 backgroundColor: kColorScheme[1],
                                 foregroundColor: Colors.black,
-                                radius: 30.0,
+                                radius: 29.0,
                               ),
                               title: receiverDataLoadIndicator == true
                                   ? Text(
                                       receiver.name,
-                                      style: kTitleStyle.copyWith(fontSize: 30),
+                                      style: kTitleStyle.copyWith(fontSize: 28),
                                     )
                                   : Text(""),
                               trailing: DropdownButton<String>(
@@ -217,7 +217,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                     }
                                   });
                                 },
-                                items: SessionManager.loggedInTutor == "" ?<String>[
+                                items: SessionManager.loggedInTutor.userId == "" ?<String>[
                                   'rate tutor',
                                   'read session\ndescription',
                                 ].map<DropdownMenuItem<String>>((String value) {
@@ -242,6 +242,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                 }).toList()
                               ),
                             ),
+                            SizedBox(height: ScreenSize.height * 0.010,),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [

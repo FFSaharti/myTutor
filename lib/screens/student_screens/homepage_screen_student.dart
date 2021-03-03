@@ -20,6 +20,7 @@ import 'package:mytutor/utilities/screen_size.dart';
 import 'package:mytutor/utilities/session_manager.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 
 import '../message_screen.dart';
 import 'ask_screen_student.dart';
@@ -38,9 +39,11 @@ class _HomepageScreenStudentState extends State<HomepageScreenStudent> {
     MessageScreen(),
     ProfileStudent()
   ];
+
   double width;
   double height;
   int _navindex = 0;
+  int _currentIndex = 0;
 
   void changeindex(int index) {
     setState(() {
@@ -52,22 +55,59 @@ class _HomepageScreenStudentState extends State<HomepageScreenStudent> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        showSelectedLabels: false,
-        showUnselectedLabels: false,
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: "home"),
-          BottomNavigationBarItem(
-              icon: Icon(FontAwesomeIcons.chalkboardTeacher), label: "student"),
-          BottomNavigationBarItem(icon: Icon(Icons.email), label: "messages"),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: "profile"),
+      bottomNavigationBar: BottomNavyBar(
+        selectedIndex: _currentIndex,
+        showElevation: true,
+        itemCornerRadius: 24,
+        curve: Curves.easeIn,
+        onItemSelected: (index) => setState(() => _currentIndex = index),
+        items: <BottomNavyBarItem>[
+          BottomNavyBarItem(
+            icon: Icon(Icons.home),
+            title: Text('Home', style: TextStyle(color: kColorScheme[3], fontWeight: FontWeight.bold),),
+            activeColor: kColorScheme[2],
+            inactiveColor: Colors.grey,
+            textAlign: TextAlign.center,
+          ),
+          BottomNavyBarItem(
+            icon: Icon(FontAwesomeIcons.chalkboardTeacher),
+            title: Text('Student',style: TextStyle(color: kColorScheme[3], fontWeight: FontWeight.bold),),
+            activeColor: kColorScheme[2],
+            inactiveColor: Colors.grey,
+            textAlign: TextAlign.center,
+          ),
+          BottomNavyBarItem(
+            icon: Icon(Icons.message),
+            title: Text('Messages',style: TextStyle(color: kColorScheme[3], fontWeight: FontWeight.bold),),
+            activeColor: kColorScheme[2],
+            inactiveColor: Colors.grey,
+            textAlign: TextAlign.center,
+          ),
+          BottomNavyBarItem(
+            icon: Icon(Icons.person),
+            title: Text('Profile',style: TextStyle(color: kColorScheme[3], fontWeight: FontWeight.bold),),
+            activeColor: kColorScheme[2],
+            inactiveColor: Colors.grey,
+            textAlign: TextAlign.center,
+          ),
         ],
-        currentIndex: _navindex,
-        onTap: changeindex,
-        selectedItemColor: kColorScheme[3],
       ),
-      body: widgets.elementAt(_navindex),
+      // bottomNavigationBar: BottomNavigationBar(
+      //   type: BottomNavigationBarType.fixed,
+      //   showSelectedLabels: false,
+      //   showUnselectedLabels: false,
+      //   items: const <BottomNavigationBarItem>[
+      //     BottomNavigationBarItem(icon: Icon(Icons.home), label: "home"),
+      //     BottomNavigationBarItem(
+      //         icon: Icon(FontAwesomeIcons.chalkboardTeacher), label: "student"),
+      //     BottomNavigationBarItem(icon: Icon(Icons.email), label: "messages"),
+      //     BottomNavigationBarItem(icon: Icon(Icons.person), label: "profile"),
+      //   ],
+      //   currentIndex: _navindex,
+      //   onTap: changeindex,
+      //   selectedItemColor: kColorScheme[3],
+      // ),
+      body: widgets.elementAt(_currentIndex),
     );
   }
 }
