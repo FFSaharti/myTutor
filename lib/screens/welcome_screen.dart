@@ -1,5 +1,6 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_villains/villain.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mytutor/components/circular_button.dart';
 import 'package:mytutor/screens/tour_screen.dart';
@@ -73,56 +74,76 @@ class WelcomeScreen extends StatelessWidget {
                             SizedBox(
                               height: ScreenSize.height * 0.05,
                             ),
-                            Align(
-                              alignment: Alignment.centerLeft,
-                              child: CircularButton(
-                                width: ScreenSize.width * 0.9,
-                                buttonColor: null,
-                                textColor: Colors.white,
-                                isGradient: true,
-                                colors: [
-                                  kColorScheme[1],
-                                  kColorScheme[2],
-                                  kColorScheme[3],
-                                  kColorScheme[4]
-                                ],
-                                buttonText: 'Sign In',
-                                hasBorder: true,
-                                borderColor: kColorScheme[3],
-                                onPressed: () {
-                                  // Navigator.pushNamed(
-                                  //     context, LoginScreen.id);
-                                  Navigator.push(
-                                      context,
-                                      PageTransition(
-                                          type: PageTransitionType.bottomToTop,
-                                          duration: Duration(milliseconds: 200),
-                                          child: LoginScreen()));
-                                },
+                            Villain(
+                              villainAnimation: VillainAnimation.fromLeft(
+                                from: Duration(milliseconds: 100),
+                                to: Duration(milliseconds: 400),
+                              ),
+                              animateExit: false,
+                              // secondaryVillainAnimation:
+                              //     VillainAnimation.fade(),
+                              child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: CircularButton(
+                                  width: ScreenSize.width * 0.9,
+                                  buttonColor: null,
+                                  textColor: Colors.white,
+                                  isGradient: true,
+                                  colors: [
+                                    kColorScheme[1],
+                                    kColorScheme[2],
+                                    kColorScheme[3],
+                                    kColorScheme[4]
+                                  ],
+                                  buttonText: 'Sign In',
+                                  hasBorder: true,
+                                  borderColor: kColorScheme[3],
+                                  onPressed: () {
+                                    // Navigator.pushNamed(
+                                    //     context, LoginScreen.id);
+                                    Navigator.push(
+                                        context,
+                                        PageTransition(
+                                            type:
+                                                PageTransitionType.bottomToTop,
+                                            duration:
+                                                Duration(milliseconds: 200),
+                                            child: LoginScreen()));
+                                  },
+                                ),
                               ),
                             ),
                             SizedBox(
                               height: ScreenSize.height * 0.02,
                             ),
-                            Align(
-                              alignment: Alignment.centerRight,
-                              child: CircularButton(
-                                width: ScreenSize.width * 0.9,
-                                buttonColor: Colors.black,
-                                textColor: Colors.white,
-                                isGradient: false,
-                                colors: null,
-                                buttonText: 'Get Started',
-                                hasBorder: false,
-                                borderColor: kColorScheme[3],
-                                onPressed: () {
-                                  Navigator.push(
-                                      context,
-                                      PageTransition(
-                                          type: PageTransitionType.bottomToTop,
-                                          duration: Duration(milliseconds: 500),
-                                          child: TourScreen()));
-                                },
+                            Villain(
+                              villainAnimation: VillainAnimation.fromRight(
+                                from: Duration(milliseconds: 300),
+                                to: Duration(milliseconds: 700),
+                              ),
+                              animateExit: false,
+                              child: Align(
+                                alignment: Alignment.centerRight,
+                                child: CircularButton(
+                                  width: ScreenSize.width * 0.9,
+                                  buttonColor: Colors.black,
+                                  textColor: Colors.white,
+                                  isGradient: false,
+                                  colors: null,
+                                  buttonText: 'Get Started',
+                                  hasBorder: false,
+                                  borderColor: kColorScheme[3],
+                                  onPressed: () {
+                                    Navigator.push(
+                                        context,
+                                        PageTransition(
+                                            type:
+                                                PageTransitionType.bottomToTop,
+                                            duration:
+                                                Duration(milliseconds: 500),
+                                            child: TourScreen()));
+                                  },
+                                ),
                               ),
                             ),
                           ],

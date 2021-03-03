@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_villains/villains/villains.dart';
 import 'package:mytutor/screens/login_screen.dart';
 import 'package:mytutor/screens/signup_screen.dart';
 import 'package:mytutor/screens/student_screens/ask_screen_student.dart';
@@ -27,6 +28,7 @@ class TutorApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      navigatorObservers: [new VillainTransitionObserver()],
       // Using Named Routes to specify all the screens in the app
       initialRoute: SplashScreen.id,
       routes: {
@@ -43,8 +45,8 @@ class TutorApp extends StatelessWidget {
         RequestTutorScreen.id: (context) => RequestTutorScreen(),
         RespondScreenTutor.id: (context) => RespondScreenTutor(),
         AnswerScreenTutor.id: (context) => AnswerScreenTutor(),
-        CreateMaterialsScreen.id : (context) => CreateMaterialsScreen(),
-        ViewMaterialsScreen.id : (context) => ViewMaterialsScreen(),
+        CreateMaterialsScreen.id: (context) => CreateMaterialsScreen(),
+        ViewMaterialsScreen.id: (context) => ViewMaterialsScreen(),
       },
     );
   }

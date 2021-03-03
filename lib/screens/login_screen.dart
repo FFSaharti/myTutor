@@ -2,6 +2,7 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:bd_progress_bar/bdprogreebar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_villains/villains/villains.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mytutor/components/circular_button.dart';
 import 'package:mytutor/screens/student_screens/homepage_screen_student.dart';
@@ -40,6 +41,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       // appBar: PreferredSize(
       //   child: Container(
       //     padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
@@ -88,43 +90,61 @@ class _LoginScreenState extends State<LoginScreen> {
                     height: ScreenSize.height * 0.2,
                   ),
                 ),
-                Text(
-                  "Sign In",
-                  style: GoogleFonts.sen(color: Colors.white, fontSize: 40),
+                Villain(
+                  villainAnimation: VillainAnimation.fade(
+                    from: Duration(milliseconds: 300),
+                    to: Duration(milliseconds: 700),
+                  ),
+                  child: Text(
+                    "Sign In",
+                    style: GoogleFonts.sen(color: Colors.white, fontSize: 40),
+                  ),
                 ),
                 SizedBox(
                   height: ScreenSize.height * 0.15,
                 ),
-                TextFieldWidget(
-                  hintText: 'Email',
-                  obscureText: false,
-                  prefixIconData: Icons.mail_outline,
-                  colorScheme: kColorScheme[4],
-                  suffixIconData:
-                      Validator.isValidEmail(email) ? Icons.check : null,
-                  onChanged: (value) {
-                    setState(() {
-                      email = value;
-                    });
-                    Validator.isValidEmail(value);
-                  },
+                Villain(
+                  villainAnimation: VillainAnimation.fromRight(
+                    from: Duration(milliseconds: 200),
+                    to: Duration(milliseconds: 500),
+                  ),
+                  child: TextFieldWidget(
+                    hintText: 'Email',
+                    obscureText: false,
+                    prefixIconData: Icons.mail_outline,
+                    colorScheme: kColorScheme[4],
+                    suffixIconData:
+                        Validator.isValidEmail(email) ? Icons.check : null,
+                    onChanged: (value) {
+                      setState(() {
+                        email = value;
+                      });
+                      Validator.isValidEmail(value);
+                    },
+                  ),
                 ),
                 SizedBox(
                   height: 10,
                 ),
-                TextFieldWidget(
-                  hintText: 'Password',
-                  obscureText: LoginScreen.passwordVisible,
-                  prefixIconData: Icons.lock,
-                  suffixIconData: LoginScreen.passwordVisible
-                      ? Icons.visibility
-                      : Icons.visibility_off,
-                  colorScheme: kColorScheme[4],
-                  onChanged: (value) {
-                    setState(() {
-                      password = value;
-                    });
-                  },
+                Villain(
+                  villainAnimation: VillainAnimation.fromRight(
+                    from: Duration(milliseconds: 200),
+                    to: Duration(milliseconds: 500),
+                  ),
+                  child: TextFieldWidget(
+                    hintText: 'Password',
+                    obscureText: LoginScreen.passwordVisible,
+                    prefixIconData: Icons.lock,
+                    suffixIconData: LoginScreen.passwordVisible
+                        ? Icons.visibility
+                        : Icons.visibility_off,
+                    colorScheme: kColorScheme[4],
+                    onChanged: (value) {
+                      setState(() {
+                        password = value;
+                      });
+                    },
+                  ),
                 ),
                 SizedBox(
                   height: ScreenSize.height * 0.03,

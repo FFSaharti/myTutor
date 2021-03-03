@@ -31,6 +31,7 @@ dependencies:
   image_picker: ^0.6.7+22
   bd_progress_bar: ^0.0.9
   page_transition: ^1.1.7+6
+  flutter_villains: ^1.2.1
 
 dev_dependencies:
   flutter_test:
