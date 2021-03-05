@@ -483,15 +483,22 @@ class DatabaseAPI {
                 }));
   }
 
-  static Stream<QuerySnapshot> fetchSessionMessages(String sessionid) {
+  static Stream<QuerySnapshot> fetchSessionMessages(String sessionId) {
     return _firestore
         .collection('session')
-        .doc(sessionid)
+        .doc(sessionId)
         .collection("messages")
         .orderBy("time", descending: true)
         .snapshots();
   }
-
+  static Stream<QuerySnapshot> fetchSessionImagesOnly(String sessionId) {
+    return _firestore
+        .collection('session')
+        .doc(sessionId)
+        .collection("messages").where("text", isEqualTo: "image")
+        .orderBy("time", descending: true)
+        .snapshots();
+  }
   static void saveNewMessage(String sessionid, String msg, String sender) {
     _firestore.collection("session").doc(sessionid).collection("messages").add({
       'text': msg,

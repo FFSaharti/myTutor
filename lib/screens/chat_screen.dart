@@ -1,19 +1,18 @@
 import 'dart:io';
 
 import 'package:awesome_dialog/awesome_dialog.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:intl/intl.dart';
 import 'package:mytutor/classes/rate.dart';
 import 'package:mytutor/classes/session.dart';
 import 'package:mytutor/classes/student.dart';
 import 'package:mytutor/classes/tutor.dart';
 import 'package:mytutor/classes/user.dart';
 import 'package:mytutor/components/ez_button.dart';
+import 'package:mytutor/components/messages_stream_widget.dart';
 import 'package:mytutor/utilities/constants.dart';
 import 'package:mytutor/utilities/database_api.dart';
 import 'package:mytutor/utilities/screen_size.dart';
@@ -75,6 +74,7 @@ class _ChatScreenState extends State<ChatScreen> {
   String newMessage;
   MyUser receiver;
   int userChooseForTypeofChat = 0;
+
 
   refresh() {
     setState(() {
@@ -154,7 +154,6 @@ class _ChatScreenState extends State<ChatScreen> {
                             SizedBox(
                               height: ScreenSize.height * 0.010,
                             ),
-
                             ListTile(
                               leading: CircleAvatar(
                                 backgroundImage:
@@ -328,8 +327,12 @@ class _ChatScreenState extends State<ChatScreen> {
                     onNotification: (overscroll) {
                       overscroll.disallowGlow();
                     },
-                    child: MessagesStream(
+                    child: userChooseForTypeofChat == 0 ?  MessagesStream(
                       sessionid: widget.currentsession.session_id,
+                      imageOnly: false,
+                    ) : MessagesStream(
+                      sessionid: widget.currentsession.session_id,
+                      imageOnly: true,
                     ),
                   ),
                   fileUploadIndicator == true
@@ -346,7 +349,6 @@ class _ChatScreenState extends State<ChatScreen> {
                         IconButton(
                           icon: Icon(Icons.attach_file),
                           onPressed: () async {
-                            //TODO: imageuplode
                             refresh();
                             String filename = "hello";
                             FilePickerResult file = await FilePicker.platform
@@ -811,183 +813,4 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 }
 
-class MessagesStream extends StatelessWidget {
-  final String sessionid;
 
-  const MessagesStream({this.sessionid});
-
-  @override
-  Widget build(BuildContext context) {
-    return StreamBuilder<QuerySnapshot>(
-      stream: DatabaseAPI.fetchSessionMessages(sessionid),
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) {
-          return Text("");
-        }
-        final messages = snapshot.data.docs;
-
-        // messages list has all the messageshape widget.
-        List<MessageShape> Messages = [];
-        for (var message in messages) {
-          final messageText = message.data()['text'];
-          String imageurl = "";
-          messageText == "image"
-              ? imageurl = message.data()['imageUrl']
-              : imageurl = null;
-          final messageSender = message.data()['sender'];
-          final Timestamp timestamp = message.data()['time'] as Timestamp;
-          final DateTime dateTime = timestamp.toDate();
-          String time;
-          int num = calculateDifference(dateTime);
-
-          var dateUtc = dateTime.toUtc();
-          var strToDateTime = DateTime.parse(dateUtc.toString());
-          final convertLocal = strToDateTime.toLocal();
-          if (num == 0) {
-            var newFormat = DateFormat("hh:mm");
-            time = newFormat.format(convertLocal);
-          } else {
-            var newFormat = DateFormat("yy-MM");
-            time = newFormat.format(convertLocal);
-          }
-          // time
-          final currentUser = SessionManager.loggedInUser.name;
-          final messageShape = MessageShape(
-            time: time,
-            sender: messageSender,
-            text: messageText,
-            SameUser: currentUser == messageSender,
-            imageUrl: imageurl,
-          );
-
-          Messages.add(messageShape);
-        }
-        return Expanded(
-          child: ListView(
-            reverse: true,
-            padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 20.0),
-            children: Messages,
-          ),
-        );
-      },
-    );
-  }
-
-  int calculateDifference(DateTime date) {
-    DateTime now = DateTime.now();
-    return DateTime(date.year, date.month, date.day)
-        .difference(DateTime(now.year, now.month, now.day))
-        .inDays;
-  }
-}
-
-class MessageShape extends StatefulWidget {
-  MessageShape({
-    this.sender,
-    this.text,
-    this.SameUser,
-    this.time,
-    this.imageUrl,
-  });
-
-  final String sender;
-  final String time;
-  final String text;
-  final bool SameUser;
-  final String imageUrl;
-
-  @override
-  _MessageShapeState createState() => _MessageShapeState();
-}
-
-class _MessageShapeState extends State<MessageShape> {
-  void _showBiggerImage(String url) {
-    showModalBottomSheet(
-        isScrollControlled: true,
-        context: context,
-        builder: (builder) {
-          return new Container(
-            height: ScreenSize.height * 0.90,
-            color: Colors.transparent, //could change this to Color(0xFF737373),
-            //so you don't have to change MaterialApp canvasColor
-            child: FadeInImage(
-              placeholder: AssetImage("images/loading.png"),
-              image: NetworkImage(
-                widget.imageUrl,
-              ),
-            ),
-          );
-        });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.all(10.0),
-      child: Column(
-        crossAxisAlignment:
-            widget.SameUser ? CrossAxisAlignment.end : CrossAxisAlignment.start,
-        children: <Widget>[
-          // check if the test called image then display the image.
-          widget.text == "image"
-              ? ClipRRect(
-                  borderRadius: BorderRadius.circular(8.0),
-                  child: GestureDetector(
-                    onTap: () {
-                      _showBiggerImage(widget.imageUrl);
-                    },
-                    child: FadeInImage(
-                      placeholder: AssetImage("images/loading.png"),
-                      image: NetworkImage(
-                        widget.imageUrl,
-                      ),
-                      height: 150,
-                      width: 150,
-                    ),
-                  ))
-              : Row(
-                  mainAxisAlignment: widget.SameUser
-                      ? MainAxisAlignment.end
-                      : MainAxisAlignment.start,
-                  children: [
-                    Material(
-                      borderRadius: widget.SameUser
-                          ? BorderRadius.only(
-                              topLeft: Radius.circular(20.0),
-                              bottomLeft: Radius.circular(30.0),
-                              bottomRight: Radius.circular(0.0))
-                          : BorderRadius.only(
-                              bottomLeft: Radius.circular(30.0),
-                              bottomRight: Radius.circular(30.0),
-                              topRight: Radius.circular(30.0),
-                            ),
-                      elevation: 3.0,
-                      color: widget.SameUser ? kColorScheme[1] : Colors.white,
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(
-                            vertical: 10.0, horizontal: 20.0),
-                        child: Text(
-                          widget.text,
-                          style: TextStyle(
-                            color:
-                                widget.SameUser ? Colors.white : Colors.black54,
-                            fontSize: 15.0,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-
-          SizedBox(
-            height: 5,
-          ),
-          Text(
-            widget.time,
-            style: TextStyle(color: Colors.grey, fontSize: 12),
-          )
-        ],
-      ),
-    );
-  }
-}
