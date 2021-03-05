@@ -116,6 +116,7 @@ class _HomepageScreenStudentState extends State<HomepageScreenStudent> {
       //   selectedItemColor: kColorScheme[3],
       // ),
       body: PageView(
+        physics:new NeverScrollableScrollPhysics(),
         controller: _pageController,
         children: [
           HomePageStudent(),

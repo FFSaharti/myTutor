@@ -1,3 +1,4 @@
+import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_villains/villain.dart';
@@ -29,6 +30,7 @@ class _HomepageScreenTutorState extends State<HomepageScreenTutor> {
     tutorProfile(),
   ];
   int _navindex = 0;
+  int _currentIndex = 0;
 
   void changeindex(int index) {
     setState(() {
@@ -40,27 +42,64 @@ class _HomepageScreenTutorState extends State<HomepageScreenTutor> {
 
   @override
   Widget build(BuildContext context) {
+    PageController _pageController = PageController();
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
-        resizeToAvoidBottomInset: false,
-        bottomNavigationBar: BottomNavigationBar(
-          type: BottomNavigationBarType.fixed,
-          showSelectedLabels: false,
-          showUnselectedLabels: false,
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(icon: Icon(Icons.home), label: "home"),
-            BottomNavigationBarItem(
-                icon: Icon(FontAwesomeIcons.chalkboardTeacher),
-                label: "student"),
-            BottomNavigationBarItem(icon: Icon(Icons.email), label: "messages"),
-            BottomNavigationBarItem(icon: Icon(Icons.person), label: "profile"),
+        bottomNavigationBar: BottomNavyBar(
+          selectedIndex: _currentIndex,
+          showElevation: true,
+          itemCornerRadius: 24,
+          curve: Curves.easeIn,
+          onItemSelected: (index) {
+            _pageController.animateToPage(index,
+                duration: Duration(milliseconds: 450), curve: Curves.easeIn);
+            setState(() {
+              _currentIndex=index;
+            });
+          },
+          items: <BottomNavyBarItem>[
+            BottomNavyBarItem(
+              icon: Icon(Icons.home),
+              title: Text('Home', style: TextStyle(color: kColorScheme[3], fontWeight: FontWeight.bold),),
+              activeColor: kColorScheme[2],
+              inactiveColor: Colors.grey,
+              textAlign: TextAlign.center,
+            ),
+            BottomNavyBarItem(
+              icon: Icon(FontAwesomeIcons.chalkboardTeacher),
+              title: Text('Tutor',style: TextStyle(color: kColorScheme[3], fontWeight: FontWeight.bold),),
+              activeColor: kColorScheme[2],
+              inactiveColor: Colors.grey,
+              textAlign: TextAlign.center,
+            ),
+            BottomNavyBarItem(
+              icon: Icon(Icons.message),
+              title: Text('Messages',style: TextStyle(color: kColorScheme[3], fontWeight: FontWeight.bold),),
+              activeColor: kColorScheme[2],
+              inactiveColor: Colors.grey,
+              textAlign: TextAlign.center,
+            ),
+            BottomNavyBarItem(
+              icon: Icon(Icons.person),
+              title: Text('Profile',style: TextStyle(color: kColorScheme[3], fontWeight: FontWeight.bold),),
+              activeColor: kColorScheme[2],
+              inactiveColor: Colors.grey,
+              textAlign: TextAlign.center,
+            ),
           ],
-          currentIndex: _navindex,
-          onTap: changeindex,
-          selectedItemColor: kColorScheme[3],
         ),
-        body: widgets.elementAt(_navindex),
+        resizeToAvoidBottomInset: false,
+        body: PageView(
+          physics:new NeverScrollableScrollPhysics(),
+          controller: _pageController,
+          children: [
+            HomePageTutor(),
+            TutorSection(),
+            MessageScreen(),
+            tutorProfile(),
+          ],
+        ),
       ),
     );
   }

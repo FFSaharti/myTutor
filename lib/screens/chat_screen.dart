@@ -13,13 +13,14 @@ import 'package:mytutor/classes/tutor.dart';
 import 'package:mytutor/classes/user.dart';
 import 'package:mytutor/components/ez_button.dart';
 import 'package:mytutor/components/messages_stream_widget.dart';
+import 'package:mytutor/screens/student_screens/view_tutor_profile_screen.dart';
+import 'package:mytutor/screens/view_receiver_profile.dart';
 import 'package:mytutor/utilities/constants.dart';
 import 'package:mytutor/utilities/database_api.dart';
 import 'package:mytutor/utilities/screen_size.dart';
 import 'package:mytutor/utilities/session_manager.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
 
-//TODO: implement view all chat/ image only.
 //TODO: implement view profile by clicking on circle Avatar?
 class ChatScreen extends StatefulWidget {
   final Session currentsession;
@@ -42,7 +43,7 @@ class _ChatScreenState extends State<ChatScreen> {
                         value.data()["email"],
                         "none",
                         value.data()["aboutMe"],
-                        value.data()["userId"],
+                        value.id,
                         [],
                         value.data()["profileImg"]);
                   })
@@ -56,7 +57,7 @@ class _ChatScreenState extends State<ChatScreen> {
                         value.data()["email"],
                         "none",
                         value.data()["aboutMe"],
-                        value.data()["userId"],
+                        value.id,
                         [],
                         value.data()["profileImg"]);
                   })
@@ -74,7 +75,6 @@ class _ChatScreenState extends State<ChatScreen> {
   String newMessage;
   MyUser receiver;
   int userChooseForTypeofChat = 0;
-
 
   refresh() {
     setState(() {
@@ -140,7 +140,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   Stack(
                     children: [
                       Container(
-                        height: ScreenSize.height * 0.20,
+                        height: ScreenSize.height * 0.172,
                         decoration: new BoxDecoration(
                             color: kColorScheme[1],
                             borderRadius: new BorderRadius.only(
@@ -155,93 +155,53 @@ class _ChatScreenState extends State<ChatScreen> {
                               height: ScreenSize.height * 0.010,
                             ),
                             ListTile(
-                              leading: CircleAvatar(
-                                backgroundImage:
-                                    NetworkImage(receiver.profileImag),
-                                backgroundColor: kColorScheme[1],
-                                foregroundColor: Colors.black,
-                                radius: 29.0,
+                              leading: GestureDetector(
+                                onTap: () {
+                                  receiverDataLoadIndicator == true
+                                      ? Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  ViewReceiverProfile(
+                                                    userId: receiver.userId,
+                                                    role: SessionManager
+                                                                .loggedInTutor
+                                                                .userId ==
+                                                            ""
+                                                        ? "tutor"
+                                                        : "student",
+                                                  )),
+                                        )
+                                      : print('wait to load');
+                                },
+                                child: CircleAvatar(
+                                  backgroundImage:
+                                      NetworkImage(receiver.profileImag),
+                                  backgroundColor: kColorScheme[1],
+                                  foregroundColor: Colors.black,
+                                  radius: 27.0,
+                                ),
                               ),
                               title: receiverDataLoadIndicator == true
                                   ? Text(
                                       receiver.name,
-                                      style: kTitleStyle.copyWith(fontSize: 28),
+                                      style: GoogleFonts.openSans(
+                                          fontSize: 25, color: Colors.white),
+                                      maxLines: 1,
                                     )
                                   : Text(""),
-                              trailing: DropdownButton<String>(
-                                icon: Icon(
-                                  Icons.more_vert,
+                              trailing: GestureDetector(
+                                onTap: () {
+                                  SessionManager.loggedInTutor.userId == ""
+                                      ? showBottomSheetForStudent()
+                                      : showBottomSheetForTutor();
+                                },
+                                child: Icon(
+                                  Icons.info_outline,
                                   color: Colors.white,
                                 ),
-                                iconSize: 24,
-                                elevation: 16,
-                                style: TextStyle(color: Colors.deepPurple),
-                                onChanged: (String userChoose) {
-                                  setState(() {
-                                    if(userChoose == 'close session'){
-                                      showBottomSheetForTutor();
-                                    } else if (userChoose == 'rate tutor') {
-                                      if (SessionManager.loggedInTutor.userId ==
-                                          "")
-                                        // current user is student, show him the bottom sheet to give  him the ability to rate the session
-                                        // check if the session is active, then show the rate bottom sheet, if not show a error pop up.
-                                        widget.currentsession.status == "active"
-                                            ? showBottomSheetForStudent()
-                                            : AwesomeDialog(
-                                                context: context,
-                                                animType: AnimType.SCALE,
-                                                dialogType: DialogType.ERROR,
-                                                body: Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(8.0),
-                                                  child: Center(
-                                                    child: Text(
-                                                      'the session is closed. you cant rate it anymore..',
-                                                      style:
-                                                          kTitleStyle.copyWith(
-                                                              color: kBlackish,
-                                                              fontSize: 14,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .normal),
-                                                    ),
-                                                  ),
-                                                ),
-                                                btnOkOnPress: () {
-                                                  Navigator.pop(context);
-                                                },
-                                              ).show();
-                                    } else {
-                                      showBottomSheetForSessionDescription();
-                                    }
-                                  });
-                                },
-                                items: SessionManager.loggedInTutor.userId == "" ?<String>[
-                                  'rate tutor',
-                                  'read session\ndescription',
-                                ].map<DropdownMenuItem<String>>((String value) {
-                                  return DropdownMenuItem<String>(
-                                    value: value,
-                                    child: Text(
-                                      value,
-                                      style: TextStyle(color: Colors.black),
-                                    ),
-                                  );
-                                }).toList() : <String>[
-                                  'close session',
-                                  'read session\ndescription',
-                                ].map<DropdownMenuItem<String>>((String value) {
-                                  return DropdownMenuItem<String>(
-                                    value: value,
-                                    child: Text(
-                                      value,
-                                      style: TextStyle(color: Colors.black),
-                                    ),
-                                  );
-                                }).toList()
                               ),
                             ),
-                            SizedBox(height: ScreenSize.height * 0.010,),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
@@ -260,11 +220,12 @@ class _ChatScreenState extends State<ChatScreen> {
                                         child: Center(
                                             child: Text(
                                           "All chat",
-                                          style: TextStyle(
-                                              color:
-                                                  userChooseForTypeofChat == 0
-                                                      ? kColorScheme[1]
-                                                      : Colors.white),
+
+                                          style: GoogleFonts.openSans(
+                                              fontSize: 15, color:
+                                          userChooseForTypeofChat == 0
+                                              ? kColorScheme[1]
+                                              : Colors.white),
                                         )),
                                         decoration: new BoxDecoration(
                                             color: userChooseForTypeofChat == 0
@@ -294,11 +255,11 @@ class _ChatScreenState extends State<ChatScreen> {
                                         child: Center(
                                             child: Text(
                                           "Image only",
-                                          style: TextStyle(
-                                              color:
-                                                  userChooseForTypeofChat == 1
-                                                      ? kColorScheme[1]
-                                                      : Colors.white),
+                                          style: GoogleFonts.openSans(
+                                              fontSize: 15, color:
+                                          userChooseForTypeofChat == 1
+                                              ? kColorScheme[1]
+                                              : Colors.white),
                                         )),
                                         decoration: new BoxDecoration(
                                             color: userChooseForTypeofChat == 1
@@ -327,13 +288,15 @@ class _ChatScreenState extends State<ChatScreen> {
                     onNotification: (overscroll) {
                       overscroll.disallowGlow();
                     },
-                    child: userChooseForTypeofChat == 0 ?  MessagesStream(
-                      sessionid: widget.currentsession.session_id,
-                      imageOnly: false,
-                    ) : MessagesStream(
-                      sessionid: widget.currentsession.session_id,
-                      imageOnly: true,
-                    ),
+                    child: userChooseForTypeofChat == 0
+                        ? MessagesStream(
+                            sessionid: widget.currentsession.session_id,
+                            imageOnly: false,
+                          )
+                        : MessagesStream(
+                            sessionid: widget.currentsession.session_id,
+                            imageOnly: true,
+                          ),
                   ),
                   fileUploadIndicator == true
                       ? LinearProgressIndicator(
@@ -695,122 +658,103 @@ class _ChatScreenState extends State<ChatScreen> {
         builder: (context) {
           return Container(
               height: ScreenSize.height * 0.30,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    "are you sure you want to close ?",
-                    style:
-                        kTitleStyle.copyWith(color: Colors.black, fontSize: 17),
-                  ),
-                  SizedBox(
-                    height: ScreenSize.height * 0.030,
-                  ),
-                  EZButton(
-                      width: ScreenSize.width * 0.50,
-                      buttonColor: kColorScheme[2],
-                      textColor: Colors.white,
-                      isGradient: false,
-                      colors: null,
-                      buttonText: "Close the session",
-                      hasBorder: false,
-                      borderColor: null,
-                      onPressed: () {
-
-                        DatabaseAPI.changeSessionsStatus(
-                            "close", widget.currentsession.session_id)
-                            .then((value) => {
-                          if(value == 'success'){
-                            AwesomeDialog(
-                              context: context,
-                              animType: AnimType.SCALE,
-                              dialogType: DialogType.SUCCES,
-                              body: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Center(
-                                  child: Text(
-                                    'the session has been successfully closed ',
-                                    style: kTitleStyle.copyWith(
-                                        color: kBlackish,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.normal),
-                                  ),
-                                ),
-                              ),
-                              btnOkOnPress: () {
-                                int _popCount = 0;
-                                Navigator.popUntil(context, (route) {
-                                  return _popCount++ == 2;
-                                });
-                              },
-                            )..show(),
-                          } else {
-                            AwesomeDialog(
-                              context: context,
-                              animType: AnimType.SCALE,
-                              dialogType: DialogType.ERROR,
-                              body: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Center(
-                                  child: Text(
-                                    'Error occur please try again',
-                                    style: kTitleStyle.copyWith(
-                                        color: kBlackish,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.normal),
-                                  ),
-                                ),
-                              ),
-                              btnOkOnPress: () {
-                                Navigator.pop(context);
-                              },
-                            )..show(),
-                          }
-
-                        });
-
-                      }),
-                ],
-              ));
-        });
-  }
-
-  showBottomSheetForSessionDescription() {
-    showModalBottomSheet(
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.vertical(top: Radius.circular(25.0))),
-        context: context,
-        builder: (context) {
-          return Container(
-              height: ScreenSize.height * 0.40,
               child: Padding(
                 padding: const EdgeInsets.all(15.0),
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     Text(
-                      widget.currentsession.title,
-                      style: GoogleFonts.sarabun(
-                        textStyle: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.normal,
-                            color: Colors.black),
-                      ),
+                      "title : " + widget.currentsession.title,
+                      style: GoogleFonts.openSans(
+                          color: Colors.black, fontSize: 17),
                     ),
                     Text(
-                      "Description:\t\t"+widget.currentsession.desc,
-                      style:
-                          kTitleStyle.copyWith(color: Colors.black, fontSize: 17),
+                      "Subject : " +
+                          subjects
+                              .elementAt(widget.currentsession.subject)
+                              .title,
+                      style: GoogleFonts.openSans(
+                          color: Colors.black, fontSize: 17),
+                    ),
+                    Text(
+                      "Description : " + widget.currentsession.desc,
+                      style: GoogleFonts.openSans(
+                          color: Colors.black, fontSize: 17),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
                     ),
                     SizedBox(
                       height: ScreenSize.height * 0.030,
                     ),
-
+                    EZButton(
+                        width: ScreenSize.width * 0.50,
+                        buttonColor: kColorScheme[2],
+                        textColor: Colors.white,
+                        isGradient: false,
+                        colors: null,
+                        buttonText: "Close the session",
+                        hasBorder: false,
+                        borderColor: null,
+                        onPressed: () {
+                          DatabaseAPI.changeSessionsStatus(
+                                  "close", widget.currentsession.session_id)
+                              .then((value) => {
+                                    if (value == 'success')
+                                      {
+                                        AwesomeDialog(
+                                          context: context,
+                                          animType: AnimType.SCALE,
+                                          dialogType: DialogType.SUCCES,
+                                          body: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Center(
+                                              child: Text(
+                                                'the session has been successfully closed ',
+                                                style: kTitleStyle.copyWith(
+                                                    color: kBlackish,
+                                                    fontSize: 14,
+                                                    fontWeight:
+                                                        FontWeight.normal),
+                                              ),
+                                            ),
+                                          ),
+                                          btnOkOnPress: () {
+                                            int _popCount = 0;
+                                            Navigator.popUntil(context,
+                                                (route) {
+                                              return _popCount++ == 2;
+                                            });
+                                          },
+                                        )..show(),
+                                      }
+                                    else
+                                      {
+                                        AwesomeDialog(
+                                          context: context,
+                                          animType: AnimType.SCALE,
+                                          dialogType: DialogType.ERROR,
+                                          body: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Center(
+                                              child: Text(
+                                                'Error occur please try again',
+                                                style: kTitleStyle.copyWith(
+                                                    color: kBlackish,
+                                                    fontSize: 14,
+                                                    fontWeight:
+                                                        FontWeight.normal),
+                                              ),
+                                            ),
+                                          ),
+                                          btnOkOnPress: () {
+                                            Navigator.pop(context);
+                                          },
+                                        )..show(),
+                                      }
+                                  });
+                        }),
                   ],
                 ),
               ));
         });
   }
 }
-
-
