@@ -446,6 +446,16 @@ class DatabaseAPI {
           .orderBy("timeOfLastMessage", descending: true)
           .snapshots();
   }
+  static Future<DocumentSnapshot> getStreamOfUserbyId(String userID, int type)  {
+    // type 1 = student , type 0 = tutor
+    if (type == 1) {
+      // student
+      return  _firestore.collection('Student').doc(userID).get();
+    } else if (type == 0) {
+      // tutor
+      return  _firestore.collection('Tutor').doc(userID).get();
+    }
+  }
 
   static Stream<QuerySnapshot> fetchSessionData(int type, bool checkexpire) {
     // check the session that expired.

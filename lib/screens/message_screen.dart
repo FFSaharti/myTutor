@@ -1,4 +1,3 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:mytutor/classes/session.dart';
@@ -15,15 +14,13 @@ class MessageScreen extends StatefulWidget {
 }
 
 class _MessageScreenState extends State<MessageScreen> {
-
   Stream<QuerySnapshot> stream = SessionManager.loggedInTutor.userId == ""
       ? DatabaseAPI.getSessionForMessageScreen(0)
       : DatabaseAPI.getSessionForMessageScreen(1);
-
   List<MessageListTile> holder = [];
   bool search = false;
-  List<Session> searchedChat = [];
   List<MessageListTile> Searchtest = [];
+  List<MessageListTile> userMessages = [];
   TextEditingController searchController = TextEditingController();
 
   void initState() {
@@ -31,11 +28,11 @@ class _MessageScreenState extends State<MessageScreen> {
   }
 
   _filterSession(String title) {
-
     if (this.mounted) {
       setState(() {
-        Searchtest = holder
-            .where((element) => element.nameHelper.toLowerCase().contains(title.toLowerCase()))
+        Searchtest = userMessages
+            .where((element) =>
+                element.nameHelper.toLowerCase().contains(title.toLowerCase()))
             .toList();
       });
     }
@@ -44,7 +41,6 @@ class _MessageScreenState extends State<MessageScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(10.0),
@@ -55,19 +51,17 @@ class _MessageScreenState extends State<MessageScreen> {
                 onChanged: (value) {
                   setState(() {
                     search = true;
-                    Searchtest = holder;
+                    Searchtest = userMessages;
                     _filterSession(value);
                   });
 
                   if (searchController.text.isEmpty) {
                     //update stream
-
                     setState(() {
                       search = false;
                       Searchtest = [];
                     });
                   }
-
                 },
                 style: TextStyle(
                   color: kBlackish,
@@ -90,76 +84,125 @@ class _MessageScreenState extends State<MessageScreen> {
                 height: ScreenSize.height * 0.009,
               ),
               Divider(),
-              search  ? Expanded(
+              search
+                  ? Expanded(
                       child: ListView(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 10.0, vertical: 5),
                         children: Searchtest,
                       ),
-                    ) :
-              StreamBuilder(
-                //TODO: need to create signout function and clear the objects in SessionManager class.
-                stream: stream,
-                builder: (context, snapshot) {
-                  // List to fill up with all the session the user has.
-                  List<MessageListTile> userMessages = [];
-                  if (snapshot.hasData) {
-                    List<QueryDocumentSnapshot> Sessions =
-                        snapshot.data.docs;
-                    for (var session in Sessions) {
-                      String SessionStatus = session.data()["status"];
-                      if (SessionStatus.toLowerCase() == "active") {
-                        final Sessiontutor = session.data()["tutor"];
-                        final Sessionstudentid =
-                        session.data()["student"];
-                        final Sessiontitle = session.data()["title"];
-                        final Sessiontime = session.data()["time"];
-                        final SessionDate = session.data()["date"];
-                        final SessionDesc = session.data()["description"];
-                        final timeOfLastMessage =
-                        session.data()["timeOfLastMessage"];
-                        final SessionSubject = session.data()["subject"];
-                        // convert the date we got from firebase into timestamp. to change it later to datetime.
-                        Timestamp stampOftheSessiondate = SessionDate;
-                        Timestamp StampOfTheLastMessageTime =
-                            timeOfLastMessage;
-                        Session tempSession = Session(
-                            Sessiontitle,
-                            Sessiontutor,
-                            Sessionstudentid,
-                            session.id,
-                            Sessiontime,
-                            stampOftheSessiondate.toDate(),
-                            SessionDesc,
-                            SessionStatus,
-                            SessionSubject);
-                        tempSession.lastMessage =
-                        session.data()["lastMessage"];
-                        tempSession.timeOfLastMessage =
-                            calTime(StampOfTheLastMessageTime);
+                    )
+                  : StreamBuilder(
+                      //TODO: need to create signout function and clear the objects in SessionManager class.
+                      stream: stream,
+                      builder: (context, snapshot) {
+                        // List to fill up with all the session the user has.
+                        if (snapshot.data == null)
+                          return Center(child: CircularProgressIndicator());
+                        List<Session> testSession = [];
+                        if (snapshot.hasData) {
+                          userMessages = [];
+                          List<QueryDocumentSnapshot> Sessions =
+                              snapshot.data.docs;
+                          for (var session in Sessions) {
+                            String SessionStatus = session.data()["status"];
+                            if (SessionStatus.toLowerCase() == "active") {
+                              final Sessiontutor = session.data()["tutor"];
+                              final Sessionstudentid =
+                                  session.data()["student"];
+                              final Sessiontitle = session.data()["title"];
+                              final Sessiontime = session.data()["time"];
+                              final SessionDate = session.data()["date"];
+                              final SessionDesc = session.data()["description"];
+                              final timeOfLastMessage =
+                                  session.data()["timeOfLastMessage"];
+                              final SessionSubject = session.data()["subject"];
+                              // convert the date we got from firebase into timestamp. to change it later to datetime.
+                              Timestamp stampOftheSessiondate = SessionDate;
+                              Timestamp StampOfTheLastMessageTime =
+                                  timeOfLastMessage;
+                              Session tempSession = Session(
+                                  Sessiontitle,
+                                  Sessiontutor,
+                                  Sessionstudentid,
+                                  session.id,
+                                  Sessiontime,
+                                  stampOftheSessiondate.toDate(),
+                                  SessionDesc,
+                                  SessionStatus,
+                                  SessionSubject);
+                              tempSession.lastMessage =
+                                  session.data()["lastMessage"];
+                              tempSession.timeOfLastMessage =
+                                  calTime(StampOfTheLastMessageTime);
+                              testSession.add(tempSession);
+                              userMessages.add(
+                                  MessageListTile(
+                                    session: tempSession,
+                                  )
+                              );
+                            }
+                          }
 
-                        userMessages.add(MessageListTile(
-                          session: tempSession,
-                        ));
-                      }
-                    }
-                    holder = userMessages;
-                  }
-                  return Expanded(
-                    child: ListView(
-                      reverse: false,
-                      padding: EdgeInsets.symmetric(
-                          horizontal: 10.0, vertical: 5),
-                      children: userMessages,
-                    ),
-                  );
-                },
-              )
+                        }
+                        return Expanded(
+                          child: ListView.builder(
+                            itemCount: snapshot.data.docs.length,
+                            itemBuilder: (context, index) {
+                              DocumentSnapshot myDoc =
+                                  snapshot.data.docs[index];
+                              return Column(
+                                children: [
+                                  FutureBuilder(
+                                    future: DatabaseAPI.getStreamOfUserbyId(
+                                        myDoc.data()["student"], 1),
+                                    builder: (context, AsyncSnapshot snap) {
+                                      if (snap.hasData) {
+                                        // check if the user message at this index does not have a user name;
+                                        fetchWidgetIntoList(index,testSession,snap);
+                                        holder = userMessages;
+                                        // add the widget to list of widget to use it for search later.
+                                        return MessageListTile(
+                                          session: testSession.elementAt(index),
+                                          nameHelper: snap.data["name"],
+                                          avatar: createAvatar(snap.data["name"]),
+                                        );
+                                      }
+                                      return Text("");
+                                    },
+                                  ),
+                                ],
+                              );
+                            },
+                          ),
+                        );
+                      },
+                    )
             ],
           ),
         ),
       ),
     );
+  }
+
+  void fetchWidgetIntoList(int index , List<Session> testSession, AsyncSnapshot snap){
+    if(userMessages.elementAt(index).nameHelper == null){
+      // pop this widget out and add new one with name
+      userMessages.removeAt(index);
+      userMessages.insert(index, MessageListTile(
+        session: testSession.elementAt(index),
+        nameHelper: snap.data["name"],
+        avatar: createAvatar(snap.data["name"]),
+      ));
+
+    }
+  }
+  String createAvatar(String name) {
+    List<String> nameSplit = name.split(" ");
+      if (nameSplit.length > 1) {
+        // two case name
+            return nameSplit.elementAt(0)[0] + nameSplit.elementAt(1)[0];
+      } else {
+            return  nameSplit.elementAt(0)[0];
+    }
   }
 }
 
@@ -192,79 +235,24 @@ int calculateDifference(DateTime date) {
 
 class MessageListTile extends StatefulWidget {
   final Session session;
-  String nameHelper = "";
- MessageListTile({Key key, this.session}) : super(key: key);
+  final String nameHelper;
+  final String avatar;
+
+  MessageListTile({this.session, this.nameHelper,this.avatar});
 
   @override
   _MessageListTileState createState() => _MessageListTileState();
 }
 
 class _MessageListTileState extends State<MessageListTile> {
-  //String nameHelper = "";
-  String lastMsg = "";
-  String time = "";
-  String avtar = "";
-  bool finishedLoadingname = false;
-  bool finishedLoadingLastMsg = false;
 
   void dispose() {
     super.dispose();
   }
 
   void initState() {
-    //determine if the user is student or tutor
-    if (this.mounted) {
-      if (SessionManager.loggedInTutor.userId == "") {
-        // the user is Student , we need to get the tutor name.
-        DatabaseAPI.getUserbyid(widget.session.tutor, 0).then((value) => {
-              if (this.mounted)
-                {
-                  setState(() {
-                    widget.nameHelper = value.data()["name"];
-                    finishedLoadingname = true;
-                    createAvtar();
-                  }),
-                }
-            });
-      } else {
-        // get the tutor name
-        if (this.mounted) {
-          DatabaseAPI.getUserbyid(widget.session.student, 1).then((value) => {
-                if (this.mounted)
-                  {
-                    setState(() {
-                      widget.nameHelper = value.data()["name"];
-                      finishedLoadingname = true;
-                      createAvtar();
-                    }),
-                  }
-              });
-        }
-      }
-    }
 
     super.initState();
-  }
-
-
-  void createAvtar() {
-    List<String> nameSplit = widget.nameHelper.split(" ");
-    if (nameSplit.isNotEmpty) {
-      if (nameSplit.length > 1) {
-        // two case name
-        if (this.mounted) {
-          setState(() {
-            avtar = nameSplit.elementAt(0)[0] + nameSplit.elementAt(1)[0];
-          });
-        }
-      } else {
-        if (this.mounted) {
-          setState(() {
-            avtar = nameSplit.elementAt(0)[0];
-          });
-        }
-      }
-    }
   }
 
   @override
@@ -283,14 +271,14 @@ class _MessageListTileState extends State<MessageListTile> {
         leading: CircleAvatar(
           backgroundColor: kColorScheme[1],
           child: Text(
-            avtar.toUpperCase(),
-            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-          ),
+                  widget.avatar.toUpperCase(),
+                  style: TextStyle(
+                      color: Colors.black, fontWeight: FontWeight.bold),
+                )
+
         ),
-        title: finishedLoadingname
-            ? Text(widget.nameHelper,
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20))
-            : Text("loding.."),
+        title: Text(widget.nameHelper,
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
         subtitle: Text(
           widget.session.lastMessage,
           style: TextStyle(fontWeight: FontWeight.normal, fontSize: 16),
