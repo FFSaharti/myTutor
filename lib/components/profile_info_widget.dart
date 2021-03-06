@@ -14,21 +14,21 @@ class ProfileInfoWidget extends StatelessWidget {
       height: 53,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
-        color: Color(0xffF5F5F5),
+        color: Theme.of(context).cardColor,
       ),
       child: Padding(
         padding: const EdgeInsets.all(5.0),
         child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
                 infoTitle,
-                style: TextStyle(color: kGreyerish, fontSize: 18),
+                style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 18,fontWeight: FontWeight.bold),
               ),
               Text(
                 infoNum,
-                style: TextStyle(color: kBlackish, fontSize: 18),
+                style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 18,fontWeight: FontWeight.bold),
               ),
             ]),
       ),

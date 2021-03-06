@@ -168,7 +168,7 @@ class _tutorProfileState extends State<tutorProfile> {
                                         File(file.files.single.path));
                               },
                               child: Align(
-                                child: Icon(Icons.edit),
+                                child: Icon(Icons.edit,color: Theme.of(context).iconTheme.color,),
                                 alignment: Alignment.bottomRight,
                               )),
                         ),
@@ -176,7 +176,7 @@ class _tutorProfileState extends State<tutorProfile> {
                 Center(
                   child: Text(
                     DatabaseAPI.tempTutor.name,
-                    style: kTitleStyle.copyWith(color: kBlackish, fontSize: 30),
+                    style: kTitleStyle.copyWith(color: Theme.of(context).primaryColor, fontSize: 30),
                   ),
                 ),
                 Center(
@@ -247,7 +247,7 @@ class _tutorProfileState extends State<tutorProfile> {
                         ),
                         Text(
                           "About Me",
-                          style: TextStyle(fontSize: 18),
+                          style: TextStyle(fontSize: 18, color: Theme.of(context).primaryColor),
                         )
                       ],
                     ),
@@ -260,7 +260,7 @@ class _tutorProfileState extends State<tutorProfile> {
                                 child: Text(
                                   SessionManager.loggedInTutor.aboutMe,
                                   style: TextStyle(
-                                      fontSize: 16.5, color: kGreyerish),
+                                      fontSize: 16.5, color: Theme.of(context).primaryColor),
                                 ),
                               ),
                               Spacer(),
@@ -271,6 +271,7 @@ class _tutorProfileState extends State<tutorProfile> {
                                 child: Icon(
                                   Icons.edit,
                                   size: 20,
+                                  color: Theme.of(context).iconTheme.color,
                                 ),
                               ),
                               SizedBox(
@@ -333,7 +334,7 @@ class _tutorProfileState extends State<tutorProfile> {
                         ),
                         Text(
                           "Experiences",
-                          style: TextStyle(fontSize: 18),
+                          style: TextStyle(fontSize: 18, color: Theme.of(context).primaryColor),
                         ),
                         Spacer(),
                         GestureDetector(
@@ -343,6 +344,7 @@ class _tutorProfileState extends State<tutorProfile> {
                           child: Icon(
                             Icons.edit,
                             size: 20,
+                            color: Theme.of(context).iconTheme.color,
                           ),
                         ),
                       ],
@@ -379,7 +381,7 @@ class _tutorProfileState extends State<tutorProfile> {
                           ),
                           Text(
                             "Materials",
-                            style: TextStyle(fontSize: 18),
+                            style: TextStyle(fontSize: 18, color: Theme.of(context).primaryColor),
                           )
                         ],
                       ),

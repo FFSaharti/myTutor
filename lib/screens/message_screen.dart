@@ -71,6 +71,7 @@ class _MessageScreenState extends State<MessageScreen> {
                   contentPadding: EdgeInsets.all(0),
                   filled: true,
                   hintText: 'Search by the name of the session..',
+                  hintStyle: TextStyle(color: Theme.of(context).primaryColor),
                   prefixIcon: Icon(Icons.search, color: kColorScheme[2]),
                   enabledBorder: OutlineInputBorder(
                       borderSide: BorderSide.none,
@@ -160,10 +161,16 @@ class _MessageScreenState extends State<MessageScreen> {
                                         fetchWidgetIntoList(index,testSession,snap);
                                         holder = userMessages;
                                         // add the widget to list of widget to use it for search later.
-                                        return MessageListTile(
-                                          session: testSession.elementAt(index),
-                                          nameHelper: snap.data["name"],
-                                          avatar: createAvatar(snap.data["name"]),
+                                        return Column(
+                                          children: [
+                                            MessageListTile(
+                                              session: testSession.elementAt(index),
+                                              nameHelper: snap.data["name"],
+                                              avatar: createAvatar(snap.data["name"]),
+                                            ),
+                                            Divider(
+                                            ),
+                                          ],
                                         );
                                       }
                                       return Text("");
@@ -272,22 +279,21 @@ class _MessageListTileState extends State<MessageListTile> {
           backgroundColor: kColorScheme[1],
           child: Text(
                   widget.avatar.toUpperCase(),
-                  style: TextStyle(
-                      color: Colors.black, fontWeight: FontWeight.bold),
+                  style: TextStyle(color: Theme.of(context).primaryColor,fontWeight: FontWeight.bold),
                 )
 
         ),
         title: Text(widget.nameHelper,
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+            style: TextStyle(color: Theme.of(context).primaryColor,fontWeight: FontWeight.bold, fontSize: 20)),
         subtitle: Text(
           widget.session.lastMessage,
-          style: TextStyle(fontWeight: FontWeight.normal, fontSize: 16),
+          style: TextStyle(color: Theme.of(context).primaryColor,fontWeight: FontWeight.normal, fontSize: 16),
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
         ),
         trailing: Text(
           widget.session.timeOfLastMessage,
-          style: TextStyle(color: Colors.grey, fontSize: 17),
+          style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 17),
         ),
       ),
     );

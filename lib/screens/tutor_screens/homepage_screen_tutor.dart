@@ -47,6 +47,7 @@ class _HomepageScreenTutorState extends State<HomepageScreenTutor> {
       onWillPop: () async => false,
       child: Scaffold(
         bottomNavigationBar: BottomNavyBar(
+          backgroundColor: Theme.of(context).bottomAppBarColor,
           selectedIndex: _currentIndex,
           showElevation: true,
           itemCornerRadius: 24,
@@ -60,29 +61,29 @@ class _HomepageScreenTutorState extends State<HomepageScreenTutor> {
           },
           items: <BottomNavyBarItem>[
             BottomNavyBarItem(
-              icon: Icon(Icons.home),
-              title: Text('Home', style: TextStyle(color: kColorScheme[3], fontWeight: FontWeight.bold),),
+              icon: Icon(Icons.home,color: Theme.of(context).textSelectionColor,),
+              title: Text('Home', style: TextStyle(color: Theme.of(context).textSelectionColor, fontWeight: FontWeight.bold),),
               activeColor: kColorScheme[2],
               inactiveColor: Colors.grey,
               textAlign: TextAlign.center,
             ),
             BottomNavyBarItem(
-              icon: Icon(FontAwesomeIcons.chalkboardTeacher),
-              title: Text('Tutor',style: TextStyle(color: kColorScheme[3], fontWeight: FontWeight.bold),),
+              icon: Icon(FontAwesomeIcons.chalkboardTeacher,color: Theme.of(context).textSelectionColor,),
+              title: Text('Tutor',style: TextStyle(color: Theme.of(context).textSelectionColor, fontWeight: FontWeight.bold),),
               activeColor: kColorScheme[2],
               inactiveColor: Colors.grey,
               textAlign: TextAlign.center,
             ),
             BottomNavyBarItem(
-              icon: Icon(Icons.message),
-              title: Text('Messages',style: TextStyle(color: kColorScheme[3], fontWeight: FontWeight.bold),),
+              icon: Icon(Icons.message, color: Theme.of(context).textSelectionColor,),
+              title: Text('Messages',style: TextStyle(color: Theme.of(context).textSelectionColor, fontWeight: FontWeight.bold),),
               activeColor: kColorScheme[2],
               inactiveColor: Colors.grey,
               textAlign: TextAlign.center,
             ),
             BottomNavyBarItem(
-              icon: Icon(Icons.person),
-              title: Text('Profile',style: TextStyle(color: kColorScheme[3], fontWeight: FontWeight.bold),),
+              icon: Icon(Icons.person,color: Theme.of(context).textSelectionColor,),
+              title: Text('Profile',style: TextStyle(color: Theme.of(context).textSelectionColor, fontWeight: FontWeight.bold),),
               activeColor: kColorScheme[2],
               inactiveColor: Colors.grey,
               textAlign: TextAlign.center,
@@ -137,7 +138,7 @@ class _HomePageTutorState extends State<HomePageTutor> {
                           textStyle: TextStyle(
                               fontSize: 36,
                               fontWeight: FontWeight.normal,
-                              color: Colors.black)),
+                              color: Theme.of(context).primaryColor)),
                     ),
                     TextSpan(
                       text: SessionManager.loggedInTutor.name,
@@ -145,7 +146,7 @@ class _HomePageTutorState extends State<HomePageTutor> {
                           textStyle: TextStyle(
                               fontSize: 36,
                               fontWeight: FontWeight.bold,
-                              color: Colors.black)),
+                              color: Theme.of(context).primaryColor)),
                     ),
                   ]),
                 ),
@@ -165,7 +166,7 @@ class _HomePageTutorState extends State<HomePageTutor> {
                       textStyle: TextStyle(
                           fontSize: 21,
                           fontWeight: FontWeight.normal,
-                          color: kGreyish)),
+                          color: Theme.of(context).primaryColor)),
                 ),
                 //
               ],

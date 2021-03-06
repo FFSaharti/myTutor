@@ -306,6 +306,7 @@ class _ChatScreenState extends State<ChatScreen> {
                         )
                       : Text(""),
                   Container(
+                    color: Theme.of(context).bottomAppBarColor,
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[

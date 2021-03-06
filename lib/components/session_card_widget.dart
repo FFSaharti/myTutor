@@ -263,7 +263,7 @@ class _SessionCardWidgetState extends State<SessionCardWidget> {
         child: Container(
           height: widget.height * 0.18,
           decoration: new BoxDecoration(
-            color: Color(0xFFefefef),
+            color: Theme.of(context).cardColor,
             shape: BoxShape.rectangle,
             borderRadius: new BorderRadius.circular(11.0),
           ),
@@ -288,7 +288,7 @@ class _SessionCardWidgetState extends State<SessionCardWidget> {
                           textStyle: TextStyle(
                               fontSize: 21,
                               fontWeight: FontWeight.normal,
-                              color: Colors.black),
+                              color: Theme.of(context).primaryColor),
                         ),
                       ),
                     ),
@@ -330,7 +330,7 @@ class _SessionCardWidgetState extends State<SessionCardWidget> {
                             textStyle: TextStyle(
                                 fontSize: 21,
                                 fontWeight: FontWeight.normal,
-                                color: Colors.grey),
+                                color: Theme.of(context).primaryColor),
                           ),
                         ),
                       ),

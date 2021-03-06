@@ -53,11 +53,11 @@ class _HomepageScreenStudentState extends State<HomepageScreenStudent> {
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: BottomNavyBar(
+        backgroundColor: Theme.of(context).bottomAppBarColor,
         selectedIndex: _currentIndex,
         showElevation: true,
         itemCornerRadius: 24,
@@ -66,34 +66,50 @@ class _HomepageScreenStudentState extends State<HomepageScreenStudent> {
           _pageController.animateToPage(index,
               duration: Duration(milliseconds: 450), curve: Curves.easeIn);
           setState(() {
-            _currentIndex=index;
+            _currentIndex = index;
           });
         },
         items: <BottomNavyBarItem>[
           BottomNavyBarItem(
-            icon: Icon(Icons.home),
-            title: Text('Home', style: TextStyle(color: kColorScheme[3], fontWeight: FontWeight.bold),),
+            icon: Icon(Icons.home, color: Theme.of(context).textSelectionColor,),
+            title: Text(
+              'Home',
+              style: TextStyle(
+                  color: Theme.of(context).textSelectionColor, fontWeight: FontWeight.bold),
+            ),
             activeColor: kColorScheme[2],
             inactiveColor: Colors.grey,
             textAlign: TextAlign.center,
           ),
           BottomNavyBarItem(
-            icon: Icon(FontAwesomeIcons.chalkboardTeacher),
-            title: Text('Student',style: TextStyle(color: kColorScheme[3], fontWeight: FontWeight.bold),),
+            icon: Icon(FontAwesomeIcons.chalkboardTeacher,color: Theme.of(context).textSelectionColor,),
+            title: Text(
+              'Student',
+              style: TextStyle(
+                  color: Theme.of(context).textSelectionColor, fontWeight: FontWeight.bold),
+            ),
             activeColor: kColorScheme[2],
             inactiveColor: Colors.grey,
             textAlign: TextAlign.center,
           ),
           BottomNavyBarItem(
-            icon: Icon(Icons.message),
-            title: Text('Messages',style: TextStyle(color: kColorScheme[3], fontWeight: FontWeight.bold),),
+            icon: Icon(Icons.message,color: Theme.of(context).textSelectionColor,),
+            title: Text(
+              'Messages',
+              style: TextStyle(
+                  color: Theme.of(context).textSelectionColor, fontWeight: FontWeight.bold),
+            ),
             activeColor: kColorScheme[2],
             inactiveColor: Colors.grey,
             textAlign: TextAlign.center,
           ),
           BottomNavyBarItem(
-            icon: Icon(Icons.person),
-            title: Text('Profile',style: TextStyle(color: kColorScheme[3], fontWeight: FontWeight.bold),),
+            icon: Icon(Icons.person,color: Theme.of(context).textSelectionColor,),
+            title: Text(
+              'Profile',
+              style: TextStyle(
+                color: Theme.of(context).textSelectionColor, fontWeight: FontWeight.bold),
+            ),
             activeColor: kColorScheme[2],
             inactiveColor: Colors.grey,
             textAlign: TextAlign.center,
@@ -116,7 +132,7 @@ class _HomepageScreenStudentState extends State<HomepageScreenStudent> {
       //   selectedItemColor: kColorScheme[3],
       // ),
       body: PageView(
-        physics:new NeverScrollableScrollPhysics(),
+        physics: new NeverScrollableScrollPhysics(),
         controller: _pageController,
         children: [
           HomePageStudent(),
@@ -136,6 +152,7 @@ class HomePageStudent extends StatefulWidget {
 
 class _HomePageStudentState extends State<HomePageStudent> {
   PageController _pageController = PageController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -166,17 +183,19 @@ class _HomePageStudentState extends State<HomePageStudent> {
                       text: "Welcome,\nStudent ",
                       style: GoogleFonts.sarabun(
                           textStyle: TextStyle(
-                              fontSize: 36,
-                              fontWeight: FontWeight.normal,
-                              color: Colors.black)),
+                        fontSize: 36,
+                        fontWeight: FontWeight.normal,
+                        color: Theme.of(context).primaryColor,
+                      )),
                     ),
                     TextSpan(
                       text: DatabaseAPI.tempStudent.name,
                       style: GoogleFonts.sarabun(
                           textStyle: TextStyle(
-                              fontSize: 36,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black)),
+                        fontSize: 36,
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).primaryColor,
+                      )),
                     ),
                   ]),
                 ),
@@ -258,7 +277,7 @@ class _HomePageStudentState extends State<HomePageStudent> {
                 textStyle: TextStyle(
                     fontSize: 21,
                     fontWeight: FontWeight.normal,
-                    color: kGreyish)),
+                    color: Theme.of(context).primaryColor)),
           ),
         ),
         StreamWidget,
@@ -380,7 +399,7 @@ class StudentSectionWidget extends StatelessWidget {
       child: Container(
         width: widget.width * 0.8,
         decoration: BoxDecoration(
-          color: kWhiteish,
+          color: Theme.of(context).cardColor,
           borderRadius: BorderRadius.circular(10),
           boxShadow: [
             BoxShadow(
@@ -431,6 +450,7 @@ class ProfileStudent extends StatefulWidget {
 
 class _ProfileStudentState extends State<ProfileStudent> {
   String _userImage = SessionManager.loggedInStudent.profileImag;
+
   Function setParentState(String aboutMe) {
     setState(() {
       SessionManager.loggedInStudent.aboutMe = aboutMe;
@@ -564,14 +584,14 @@ class _ProfileStudentState extends State<ProfileStudent> {
                                 setState(() {});
                               },
                               child: Align(
-                                child: Icon(Icons.edit),
+                                child: Icon(Icons.edit, color: Theme.of(context).iconTheme.color,),
                                 alignment: Alignment.bottomRight,
                               )),
                         ),
                 ),
                 Text(
                   SessionManager.loggedInStudent.name,
-                  style: kTitleStyle.copyWith(color: kBlackish, fontSize: 30),
+                  style: kTitleStyle.copyWith(color: Theme.of(context).primaryColor, fontSize: 30),
                 ),
                 Center(
                   child: Container(
@@ -611,7 +631,7 @@ class _ProfileStudentState extends State<ProfileStudent> {
                         ),
                         Text(
                           "About Me",
-                          style: TextStyle(fontSize: 18),
+                          style: TextStyle(fontSize: 18, color: Theme.of(context).primaryColor),
                         )
                       ],
                     ),
@@ -623,12 +643,12 @@ class _ProfileStudentState extends State<ProfileStudent> {
                                 child: Text(
                                   SessionManager.loggedInStudent.aboutMe,
                                   style: TextStyle(
-                                      fontSize: 16.5, color: kGreyerish),
+                                      fontSize: 16.5, color: Theme.of(context).primaryColor),
                                 ),
                               ),
                               Spacer(),
                               IconButton(
-                                icon: Icon(Icons.edit),
+                                icon: Icon(Icons.edit, color: Theme.of(context).iconTheme.color,),
                                 iconSize: 20,
                                 onPressed: () {
                                   showAboutMe(setParentState);
@@ -647,7 +667,7 @@ class _ProfileStudentState extends State<ProfileStudent> {
                                   child: Text(
                                     "No \"About me\" :( ",
                                     style: TextStyle(
-                                        fontSize: 16.5, color: kGreyerish),
+                                        fontSize: 16.5, color: Theme.of(context).primaryColor),
                                   ),
                                 ),
                                 SizedBox(
@@ -689,7 +709,7 @@ class _ProfileStudentState extends State<ProfileStudent> {
                     ),
                     Text(
                       "Bookmarked Materials",
-                      style: TextStyle(fontSize: 18),
+                      style: TextStyle(fontSize: 18 , color: Theme.of(context).primaryColor),
                     )
                   ],
                 ),

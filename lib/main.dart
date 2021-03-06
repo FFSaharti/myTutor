@@ -14,6 +14,7 @@ import 'package:mytutor/screens/tutor_screens/homepage_screen_tutor.dart';
 import 'package:mytutor/screens/tutor_screens/interests_screen.dart';
 import 'package:mytutor/screens/tutor_screens/respond_screen_tutor.dart';
 import 'package:mytutor/screens/welcome_screen.dart';
+import 'package:mytutor/utilities/mytheme.dart';
 
 import 'screens/specify_role_screen.dart';
 import 'screens/splash_screen.dart';
@@ -28,6 +29,9 @@ class TutorApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      themeMode: ThemeMode.system,
+      darkTheme: MyTheme.darkTheme,
+      theme: MyTheme.lightTheme,
       navigatorObservers: [new VillainTransitionObserver()],
       // Using Named Routes to specify all the screens in the app
       initialRoute: SplashScreen.id,
