@@ -11,6 +11,7 @@ import 'package:mytutor/classes/material.dart';
 import 'package:mytutor/classes/quiz.dart';
 import 'package:mytutor/components/ez_button.dart';
 import 'package:mytutor/components/session_stream_widget.dart';
+import 'package:mytutor/screens/adjust_general_settings_screen.dart';
 import 'package:mytutor/screens/student_screens/request_tutor_screen.dart';
 import 'package:mytutor/screens/student_screens/view_materials_screen.dart';
 import 'package:mytutor/screens/take_quiz_screen.dart';
@@ -114,6 +115,17 @@ class _HomepageScreenStudentState extends State<HomepageScreenStudent> {
             inactiveColor: Colors.grey,
             textAlign: TextAlign.center,
           ),
+          BottomNavyBarItem(
+            icon: Icon(Icons.settings,color: Theme.of(context).textSelectionColor,),
+            title: Text(
+              'Settings',
+              style: TextStyle(
+                  color: Theme.of(context).textSelectionColor, fontWeight: FontWeight.bold),
+            ),
+            activeColor: kColorScheme[2],
+            inactiveColor: Colors.grey,
+            textAlign: TextAlign.center,
+          ),
         ],
       ),
       // bottomNavigationBar: BottomNavigationBar(
@@ -138,7 +150,8 @@ class _HomepageScreenStudentState extends State<HomepageScreenStudent> {
           HomePageStudent(),
           StudentSection(),
           MessageScreen(),
-          ProfileStudent()
+          ProfileStudent(),
+          AdjustGeneralSettings(),
         ],
       ),
     );

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:mytutor/classes/session.dart';
+import 'package:mytutor/screens/tutor_screens/homepage_screen_tutor.dart';
 import 'package:mytutor/utilities/constants.dart';
 import 'package:mytutor/utilities/database_api.dart';
 import 'package:mytutor/utilities/screen_size.dart';
@@ -40,6 +41,7 @@ class _MessageScreenState extends State<MessageScreen> {
 
   @override
   Widget build(BuildContext context) {
+    FocusNode n = new FocusNode();
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -47,6 +49,7 @@ class _MessageScreenState extends State<MessageScreen> {
           child: Column(
             children: [
               TextField(
+                focusNode: n,
                 controller: searchController,
                 onChanged: (value) {
                   setState(() {
@@ -154,7 +157,14 @@ class _MessageScreenState extends State<MessageScreen> {
                                 children: [
                                   FutureBuilder(
                                     future: DatabaseAPI.getStreamOfUserbyId(
-                                        myDoc.data()["student"], 1),
+                                        SessionManager.loggedInTutor.userId ==
+                                            ""
+                                            ? myDoc.data()["tutor"]
+                                            : myDoc.data()["student"],
+                                        SessionManager.loggedInTutor.userId ==
+                                            ""
+                                            ? 0
+                                            : 1),
                                     builder: (context, AsyncSnapshot snap) {
                                       if (snap.hasData) {
                                         // check if the user message at this index does not have a user name;
@@ -167,6 +177,9 @@ class _MessageScreenState extends State<MessageScreen> {
                                               session: testSession.elementAt(index),
                                               nameHelper: snap.data["name"],
                                               avatar: createAvatar(snap.data["name"]),
+                                                callBackFunction: (){
+                                               //TODO: check for errors occur when calling back without searching.
+                                                }
                                             ),
                                             Divider(
                                             ),
@@ -197,7 +210,18 @@ class _MessageScreenState extends State<MessageScreen> {
       userMessages.insert(index, MessageListTile(
         session: testSession.elementAt(index),
         nameHelper: snap.data["name"],
-        avatar: createAvatar(snap.data["name"]),
+        avatar: createAvatar(snap.data["name"],),
+        callBackFunction: () {
+
+             setState(() {
+               searchController.clear();
+
+               Searchtest = [];
+               search = false;
+             });
+             WidgetsBinding.instance.focusManager.primaryFocus?.unfocus();
+
+            },
       ));
 
     }
@@ -244,8 +268,9 @@ class MessageListTile extends StatefulWidget {
   final Session session;
   final String nameHelper;
   final String avatar;
+  final Function callBackFunction;
 
-  MessageListTile({this.session, this.nameHelper,this.avatar});
+  MessageListTile({this.session, this.nameHelper,this.avatar,this.callBackFunction});
 
   @override
   _MessageListTileState createState() => _MessageListTileState();
@@ -272,7 +297,9 @@ class _MessageListTileState extends State<MessageListTile> {
               builder: (context) => ChatScreen(
                 currentsession: widget.session,
               ),
-            ));
+            )).then((value) => {
+              widget.callBackFunction(),
+        });
       },
       child: ListTile(
         leading: CircleAvatar(
