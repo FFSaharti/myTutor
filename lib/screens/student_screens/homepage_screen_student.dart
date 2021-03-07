@@ -409,49 +409,87 @@ class StudentSectionWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onClick,
-      child: Container(
-        width: widget.width * 0.8,
-        decoration: BoxDecoration(
-          color: Theme.of(context).cardColor,
-          borderRadius: BorderRadius.circular(10),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.2),
-              spreadRadius: 1,
-              blurRadius: 15,
-              offset: Offset(0, 6), // changes position of shadow
-            ),
-          ],
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Image.asset(
-                imgPath,
-                width: 50,
-              ),
-              SizedBox(
-                width: 10,
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: GoogleFonts.sarala(fontSize: 25, color: kBlackish),
-                  ),
-                  Text(
-                    description,
-                    style: GoogleFonts.sarala(fontSize: 14, color: kGreyerish),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ),
+       child: Padding(
+         padding: const EdgeInsets.all(8.0),
+         child: Card(
+           elevation: 4,
+           shape: RoundedRectangleBorder(
+             borderRadius: BorderRadius.circular(15.0),
+           ),
+           color: Theme.of(context).backgroundColor,
+           child: Padding(
+             padding: const EdgeInsets.all(2.0),
+             child: ListTile(
+
+               leading: Column(
+                 mainAxisAlignment: MainAxisAlignment.center,
+                 children: [
+                   Image.asset(
+                     imgPath,
+                     width: 50,
+                   ),
+                 ],
+               ),
+               title:   Text(
+                 title,
+                 style: GoogleFonts.sarala(fontSize: 25, color: kBlackish),
+               ),
+               subtitle: Text(
+                 description,
+                 style: GoogleFonts.sarala(fontSize: 14, color: kGreyerish),
+               ),
+               trailing: Container(
+                 height: double.infinity,
+                 child: Icon(Icons.arrow_forward_ios_outlined),
+               ),
+             ),
+           ),
+         ),
+       ),
+
+      // Container(
+      //   width: widget.width * 0.8,
+      //   decoration: BoxDecoration(
+      //     color: Theme.of(context).cardColor,
+      //     borderRadius: BorderRadius.circular(10),
+      //     boxShadow: [
+      //       BoxShadow(
+      //         color: Colors.black.withOpacity(0.2),
+      //         spreadRadius: 1,
+      //         blurRadius: 15,
+      //         offset: Offset(0, 6), // changes position of shadow
+      //       ),
+      //     ],
+      //   ),
+      //   child: Padding(
+      //     padding: const EdgeInsets.all(8.0),
+      //     child: Row(
+      //       mainAxisAlignment: MainAxisAlignment.start,
+      //       children: [
+      //         Image.asset(
+      //           imgPath,
+      //           width: 50,
+      //         ),
+      //         SizedBox(
+      //           width: 10,
+      //         ),
+      //         Column(
+      //           crossAxisAlignment: CrossAxisAlignment.start,
+      //           children: [
+      //             Text(
+      //               title,
+      //               style: GoogleFonts.sarala(fontSize: 25, color: kBlackish),
+      //             ),
+      //             Text(
+      //               description,
+      //               style: GoogleFonts.sarala(fontSize: 14, color: kGreyerish),
+      //             ),
+      //           ],
+      //         ),
+      //       ],
+      //     ),
+      //   ),
+      // ),
     );
   }
 }

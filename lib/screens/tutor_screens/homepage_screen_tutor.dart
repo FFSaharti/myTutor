@@ -5,6 +5,7 @@ import 'package:flutter_villains/villain.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mytutor/components/session_stream_widget.dart';
+import 'package:mytutor/screens/adjust_general_settings_screen.dart';
 import 'package:mytutor/screens/tutor_screens/answer_screen_tutor.dart';
 import 'package:mytutor/screens/tutor_screens/create_materials_screen.dart';
 import 'package:mytutor/screens/tutor_screens/respond_screen_tutor.dart';
@@ -88,6 +89,13 @@ class _HomepageScreenTutorState extends State<HomepageScreenTutor> {
               inactiveColor: Colors.grey,
               textAlign: TextAlign.center,
             ),
+            BottomNavyBarItem(
+              icon: Icon(Icons.settings,color: Theme.of(context).textSelectionColor,),
+              title: Text('Settings',style: TextStyle(color: Theme.of(context).textSelectionColor, fontWeight: FontWeight.bold),),
+              activeColor: kColorScheme[2],
+              inactiveColor: Colors.grey,
+              textAlign: TextAlign.center,
+            ),
           ],
         ),
         resizeToAvoidBottomInset: false,
@@ -99,6 +107,7 @@ class _HomepageScreenTutorState extends State<HomepageScreenTutor> {
             TutorSection(),
             MessageScreen(),
             tutorProfile(),
+            AdjustGeneralSettings(),
           ],
         ),
       ),
@@ -242,7 +251,7 @@ class _TutorSectionState extends State<TutorSection> {
                   imgPath: "images/Tutor_Section/Answer_Logo.png",
                   title: "Answer",
                   description:
-                      "Answer questions that are posted by \nStudents.",
+                      "Answer questions that are posted by Students.",
                 ),
                 SizedBox(
                   height: 20,
@@ -256,7 +265,7 @@ class _TutorSectionState extends State<TutorSection> {
                   imgPath: "images/Tutor_Section/Respond_Logo.png",
                   title: "Respond",
                   description:
-                      "Respond to request send by \nStudents for creating a session \nwith you!!",
+                      "Respond to request send by Students for creating a session with you!!",
                 ),
                 SizedBox(
                   height: 20,
@@ -269,7 +278,7 @@ class _TutorSectionState extends State<TutorSection> {
                   imgPath: "images/Tutor_Section/Subject_Logo.png",
                   title: "Create Materials",
                   description:
-                      "Share Materials & Create \nQuizzes with Students that can \nbe bookmarked & taken.",
+                      "Share Materials & Create Quizzes with Students that can be bookmarked & taken.",
                 )
               ],
             ),
@@ -298,49 +307,88 @@ class TutorSectionWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onClick,
-      child: Container(
-        width: widget.width * 0.8,
-        decoration: BoxDecoration(
-          color: kWhiteish,
-          borderRadius: BorderRadius.circular(10),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.2),
-              spreadRadius: 1,
-              blurRadius: 15,
-              offset: Offset(0, 6), // changes position of shadow
-            ),
-          ],
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Image.asset(
-                imgPath,
-                width: 50,
-              ),
-              SizedBox(
-                width: 10,
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Card(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15.0),
+          ),
+          color: Theme.of(context).backgroundColor,
+          elevation: 4,
+          child: Padding(
+            padding: const EdgeInsets.all(2.0),
+            child: ListTile(
+
+              leading: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    title,
-                    style: GoogleFonts.sarala(fontSize: 25, color: kBlackish),
-                  ),
-                  Text(
-                    description,
-                    style: GoogleFonts.sarala(fontSize: 14, color: kGreyerish),
-                  ),
+                  Image.asset(
+                         imgPath,
+                           width: 50,
+                        ),
                 ],
               ),
-            ],
+              title:   Text(
+                    title,
+                        style: GoogleFonts.sarala(fontSize: 25, color: Theme.of(context).primaryColor),
+                    ),
+              subtitle: Text(
+                       description,
+                        style: GoogleFonts.sarala(fontSize: 14, color: Theme.of(context).primaryColor),
+                       ),
+              trailing: Container(
+                height: double.infinity,
+                child: Icon(Icons.arrow_forward_ios_outlined, color: Theme.of(context).iconTheme.color,),
+              ),
+            ),
           ),
         ),
       ),
+
+
+      // Container(
+      //   width: widget.width * 0.8,
+      //   decoration: BoxDecoration(
+      //     color: kWhiteish,
+      //     borderRadius: BorderRadius.circular(10),
+      //     boxShadow: [
+      //       BoxShadow(
+      //         color: Colors.black.withOpacity(0.2),
+      //         spreadRadius: 1,
+      //         blurRadius: 15,
+      //         offset: Offset(0, 6), // changes position of shadow
+      //       ),
+      //     ],
+      //   ),
+      //   child: Padding(
+      //     padding: const EdgeInsets.all(8.0),
+      //     child: Row(
+      //       mainAxisAlignment: MainAxisAlignment.start,
+      //       children: [
+      //         Image.asset(
+      //           imgPath,
+      //           width: 50,
+      //         ),
+      //         SizedBox(
+      //           width: 10,
+      //         ),
+      //         Column(
+      //           crossAxisAlignment: CrossAxisAlignment.start,
+      //           children: [
+      //             Text(
+      //               title,
+      //               style: GoogleFonts.sarala(fontSize: 25, color: kBlackish),
+      //             ),
+      //             Text(
+      //               description,
+      //               style: GoogleFonts.sarala(fontSize: 14, color: kGreyerish),
+      //             ),
+      //           ],
+      //         ),
+      //       ],
+      //     ),
+      //   ),
+      // ),
     );
   }
 }

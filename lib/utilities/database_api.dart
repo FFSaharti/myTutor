@@ -59,6 +59,18 @@ class DatabaseAPI {
     _tempStudent = value;
   }
 
+  static void signOut() async{
+      _tempUser = MyUser("", "", "", "", "", "");
+      _tempTutor = Tutor("", "", "", "", "", [], "");
+      _tempStudent = Student("", "", "", "", "", [], "");
+      SessionManager.loggedInTutor = _tempTutor;
+      SessionManager.loggedInStudent = _tempStudent;
+      SessionManager.loggedInUser = _tempUser;
+       _auth.signOut();
+
+
+  }
+
   // user log/sign up
   static Future<String> createStudent() async {
     try {
