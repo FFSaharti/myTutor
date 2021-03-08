@@ -80,50 +80,54 @@ class _SessionCardWidgetState extends State<SessionCardWidget> {
                         DatabaseAPI.changeSessionsStatus(
                                 "active", session.session_id)
                             .then((value) => {
-                              if(value == 'success'){
-                                AwesomeDialog(
-                                  context: context,
-                                  animType: AnimType.SCALE,
-                                  dialogType: DialogType.SUCCES,
-                                  body: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Center(
-                                      child: Text(
-                                        'the session status has been changed now to active, please navigate to home screen or messages screen to start tutoring',
-                                        style: kTitleStyle.copyWith(
-                                            color: kBlackish,
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.normal),
-                                      ),
-                                    ),
-                                  ),
-                                  btnOkOnPress: () {
-                                    Navigator.pop(context);
-                                  },
-                                )..show(),
-                              } else {
-                                AwesomeDialog(
-                                  context: context,
-                                  animType: AnimType.SCALE,
-                                  dialogType: DialogType.ERROR,
-                                  body: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Center(
-                                      child: Text(
-                                        'Error occur please try again',
-                                        style: kTitleStyle.copyWith(
-                                            color: kBlackish,
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.normal),
-                                      ),
-                                    ),
-                                  ),
-                                  btnOkOnPress: () {
-                                    Navigator.pop(context);
-                                  },
-                                )..show(),
-                              }
-
+                                  if (value == 'success')
+                                    {
+                                      AwesomeDialog(
+                                        context: context,
+                                        animType: AnimType.SCALE,
+                                        dialogType: DialogType.SUCCES,
+                                        body: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Center(
+                                            child: Text(
+                                              'the session status has been changed now to active, please navigate to home screen or messages screen to start tutoring',
+                                              style: kTitleStyle.copyWith(
+                                                  color: kBlackish,
+                                                  fontSize: 14,
+                                                  fontWeight:
+                                                      FontWeight.normal),
+                                            ),
+                                          ),
+                                        ),
+                                        btnOkOnPress: () {
+                                          Navigator.pop(context);
+                                        },
+                                      )..show(),
+                                    }
+                                  else
+                                    {
+                                      AwesomeDialog(
+                                        context: context,
+                                        animType: AnimType.SCALE,
+                                        dialogType: DialogType.ERROR,
+                                        body: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Center(
+                                            child: Text(
+                                              'Error occur please try again',
+                                              style: kTitleStyle.copyWith(
+                                                  color: kBlackish,
+                                                  fontSize: 14,
+                                                  fontWeight:
+                                                      FontWeight.normal),
+                                            ),
+                                          ),
+                                        ),
+                                        btnOkOnPress: () {
+                                          Navigator.pop(context);
+                                        },
+                                      )..show(),
+                                    }
                                 });
                       }),
                 ],
@@ -261,21 +265,24 @@ class _SessionCardWidgetState extends State<SessionCardWidget> {
         //       },
         ,
         child: Container(
-          height: widget.height * 0.18,
+          height: widget.height * 0.155,
           decoration: new BoxDecoration(
             color: Theme.of(context).cardColor,
             shape: BoxShape.rectangle,
-            borderRadius: new BorderRadius.circular(11.0),
+            borderRadius: new BorderRadius.circular(20.0),
           ),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
+              SizedBox(
+                width: ScreenSize.width * 0.04,
+              ),
               Image.asset(
                 subjects.elementAt(widget.session.subject).path,
-                height: 60,
+                height: ScreenSize.width * 0.15,
               ),
               Padding(
-                padding: const EdgeInsets.only(left: 10.0),
+                padding: const EdgeInsets.only(left: 12.0),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -293,11 +300,11 @@ class _SessionCardWidgetState extends State<SessionCardWidget> {
                       ),
                     ),
                     SizedBox(
-                      height: 4,
+                      height: ScreenSize.width * 0.005,
                     ),
                     Container(
                       decoration: new BoxDecoration(
-                        color: kColorScheme[2],
+                        color: kColorScheme[1],
                         borderRadius: new BorderRadius.circular(50.0),
                       ),
                       child: Padding(
@@ -316,22 +323,19 @@ class _SessionCardWidgetState extends State<SessionCardWidget> {
                       ),
                     ),
                     SizedBox(
-                      height: 4,
+                      height: ScreenSize.width * 0.005,
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(left: 11, right: 11),
-                      child: SizedBox(
-                        width: 220,
-                        child: Text(
-                          finish ? helperName : "loading..",
-                          overflow: TextOverflow.ellipsis,
-                          softWrap: false,
-                          style: GoogleFonts.sarabun(
-                            textStyle: TextStyle(
-                                fontSize: 21,
-                                fontWeight: FontWeight.normal,
-                                color: Theme.of(context).primaryColor),
-                          ),
+                      padding: const EdgeInsets.only(left: 11),
+                      child: Text(
+                        finish ? helperName : "loading..",
+                        overflow: TextOverflow.ellipsis,
+                        softWrap: false,
+                        style: GoogleFonts.sarabun(
+                          textStyle: TextStyle(
+                              fontSize: 21,
+                              fontWeight: FontWeight.normal,
+                              color: Theme.of(context).primaryColor),
                         ),
                       ),
                     ),

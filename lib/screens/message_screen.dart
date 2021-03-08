@@ -1,12 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_villains/villains/villains.dart';
+import 'package:intl/intl.dart';
 import 'package:mytutor/classes/session.dart';
-import 'package:mytutor/screens/tutor_screens/homepage_screen_tutor.dart';
 import 'package:mytutor/utilities/constants.dart';
 import 'package:mytutor/utilities/database_api.dart';
 import 'package:mytutor/utilities/screen_size.dart';
 import 'package:mytutor/utilities/session_manager.dart';
-import 'package:intl/intl.dart';
+
 import 'chat_screen.dart';
 
 class MessageScreen extends StatefulWidget {
@@ -23,6 +24,8 @@ class _MessageScreenState extends State<MessageScreen> {
   List<MessageListTile> Searchtest = [];
   List<MessageListTile> userMessages = [];
   TextEditingController searchController = TextEditingController();
+  int from = 50;
+  int to = 350;
 
   void initState() {
     super.initState();
@@ -48,40 +51,46 @@ class _MessageScreenState extends State<MessageScreen> {
           padding: const EdgeInsets.all(10.0),
           child: Column(
             children: [
-              TextField(
-                focusNode: n,
-                controller: searchController,
-                onChanged: (value) {
-                  setState(() {
-                    search = true;
-                    Searchtest = userMessages;
-                    _filterSession(value);
-                  });
-
-                  if (searchController.text.isEmpty) {
-                    //update stream
-                    setState(() {
-                      search = false;
-                      Searchtest = [];
-                    });
-                  }
-                },
-                style: TextStyle(
-                  color: kBlackish,
+              Villain(
+                villainAnimation: VillainAnimation.fromRight(
+                  from: Duration(milliseconds: 100),
+                  to: Duration(milliseconds: 450),
                 ),
-                textAlignVertical: TextAlignVertical.center,
-                decoration: InputDecoration(
-                  contentPadding: EdgeInsets.all(0),
-                  filled: true,
-                  hintText: 'Search by the name of the session..',
-                  hintStyle: TextStyle(color: Theme.of(context).primaryColor),
-                  prefixIcon: Icon(Icons.search, color: kColorScheme[2]),
-                  enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide.none,
-                      borderRadius: BorderRadius.circular(15)),
-                  focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide.none,
-                      borderRadius: BorderRadius.circular(15)),
+                child: TextField(
+                  focusNode: n,
+                  controller: searchController,
+                  onChanged: (value) {
+                    setState(() {
+                      search = true;
+                      Searchtest = userMessages;
+                      _filterSession(value);
+                    });
+
+                    if (searchController.text.isEmpty) {
+                      //update stream
+                      setState(() {
+                        search = false;
+                        Searchtest = [];
+                      });
+                    }
+                  },
+                  style: TextStyle(
+                    color: kBlackish,
+                  ),
+                  textAlignVertical: TextAlignVertical.center,
+                  decoration: InputDecoration(
+                    contentPadding: EdgeInsets.all(0),
+                    filled: true,
+                    hintText: 'Search by Session Name',
+                    hintStyle: TextStyle(color: Theme.of(context).primaryColor),
+                    prefixIcon: Icon(Icons.search, color: kColorScheme[2]),
+                    enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide.none,
+                        borderRadius: BorderRadius.circular(15)),
+                    focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide.none,
+                        borderRadius: BorderRadius.circular(15)),
+                  ),
                 ),
               ),
               SizedBox(
@@ -138,15 +147,13 @@ class _MessageScreenState extends State<MessageScreen> {
                               tempSession.timeOfLastMessage =
                                   calTime(StampOfTheLastMessageTime);
                               testSession.add(tempSession);
-                              userMessages.add(
-                                  MessageListTile(
-                                    session: tempSession,
-                                  )
-                              );
+                              userMessages.add(MessageListTile(
+                                session: tempSession,
+                              ));
                             }
                           }
-
                         }
+
                         return Expanded(
                           child: ListView.builder(
                             itemCount: snapshot.data.docs.length,
@@ -155,39 +162,49 @@ class _MessageScreenState extends State<MessageScreen> {
                                   snapshot.data.docs[index];
                               return Column(
                                 children: [
-                                  FutureBuilder(
-                                    future: DatabaseAPI.getStreamOfUserbyId(
-                                        SessionManager.loggedInTutor.userId ==
-                                            ""
-                                            ? myDoc.data()["tutor"]
-                                            : myDoc.data()["student"],
-                                        SessionManager.loggedInTutor.userId ==
-                                            ""
-                                            ? 0
-                                            : 1),
-                                    builder: (context, AsyncSnapshot snap) {
-                                      if (snap.hasData) {
-                                        // check if the user message at this index does not have a user name;
-                                        fetchWidgetIntoList(index,testSession,snap);
-                                        holder = userMessages;
-                                        // add the widget to list of widget to use it for search later.
-                                        return Column(
-                                          children: [
-                                            MessageListTile(
-                                              session: testSession.elementAt(index),
-                                              nameHelper: snap.data["name"],
-                                              avatar: createAvatar(snap.data["name"]),
-                                                callBackFunction: (){
-                                               //TODO: check for errors occur when calling back without searching.
-                                                }
-                                            ),
-                                            Divider(
-                                            ),
-                                          ],
-                                        );
-                                      }
-                                      return Text("");
-                                    },
+                                  Villain(
+                                    villainAnimation:
+                                        VillainAnimation.fromBottom(
+                                      from: Duration(milliseconds: from),
+                                      to: Duration(milliseconds: to),
+                                    ),
+                                    child: FutureBuilder(
+                                      future: DatabaseAPI.getStreamOfUserbyId(
+                                          SessionManager.loggedInTutor.userId ==
+                                                  ""
+                                              ? myDoc.data()["tutor"]
+                                              : myDoc.data()["student"],
+                                          SessionManager.loggedInTutor.userId ==
+                                                  ""
+                                              ? 0
+                                              : 1),
+                                      builder: (context, AsyncSnapshot snap) {
+                                        if (snap.hasData) {
+                                          // check if the user message at this index does not have a user name;
+                                          fetchWidgetIntoList(
+                                              index, testSession, snap);
+                                          holder = userMessages;
+                                          // add the widget to list of widget to use it for search later.
+                                          return Column(
+                                            children: [
+                                              MessageListTile(
+                                                  session: testSession
+                                                      .elementAt(index),
+                                                  nameHelper: snap.data["name"],
+                                                  avatar: createAvatar(
+                                                      snap.data["name"]),
+                                                  callBackFunction: () {
+                                                    //TODO: check for errors occur when calling back without searching.
+                                                  }),
+                                              Divider(),
+                                            ],
+                                          );
+                                        }
+                                        from += 100;
+                                        to += 100;
+                                        return Text("");
+                                      },
+                                    ),
                                   ),
                                 ],
                               );
@@ -203,36 +220,39 @@ class _MessageScreenState extends State<MessageScreen> {
     );
   }
 
-  void fetchWidgetIntoList(int index , List<Session> testSession, AsyncSnapshot snap){
-    if(userMessages.elementAt(index).nameHelper == null){
+  void fetchWidgetIntoList(
+      int index, List<Session> testSession, AsyncSnapshot snap) {
+    if (userMessages.elementAt(index).nameHelper == null) {
       // pop this widget out and add new one with name
       userMessages.removeAt(index);
-      userMessages.insert(index, MessageListTile(
-        session: testSession.elementAt(index),
-        nameHelper: snap.data["name"],
-        avatar: createAvatar(snap.data["name"],),
-        callBackFunction: () {
+      userMessages.insert(
+          index,
+          MessageListTile(
+            session: testSession.elementAt(index),
+            nameHelper: snap.data["name"],
+            avatar: createAvatar(
+              snap.data["name"],
+            ),
+            callBackFunction: () {
+              setState(() {
+                searchController.clear();
 
-             setState(() {
-               searchController.clear();
-
-               Searchtest = [];
-               search = false;
-             });
-             WidgetsBinding.instance.focusManager.primaryFocus?.unfocus();
-
+                Searchtest = [];
+                search = false;
+              });
+              WidgetsBinding.instance.focusManager.primaryFocus?.unfocus();
             },
-      ));
-
+          ));
     }
   }
+
   String createAvatar(String name) {
     List<String> nameSplit = name.split(" ");
-      if (nameSplit.length > 1) {
-        // two case name
-            return nameSplit.elementAt(0)[0] + nameSplit.elementAt(1)[0];
-      } else {
-            return  nameSplit.elementAt(0)[0];
+    if (nameSplit.length > 1) {
+      // two case name
+      return nameSplit.elementAt(0)[0] + nameSplit.elementAt(1)[0];
+    } else {
+      return nameSplit.elementAt(0)[0];
     }
   }
 }
@@ -270,20 +290,19 @@ class MessageListTile extends StatefulWidget {
   final String avatar;
   final Function callBackFunction;
 
-  MessageListTile({this.session, this.nameHelper,this.avatar,this.callBackFunction});
+  MessageListTile(
+      {this.session, this.nameHelper, this.avatar, this.callBackFunction});
 
   @override
   _MessageListTileState createState() => _MessageListTileState();
 }
 
 class _MessageListTileState extends State<MessageListTile> {
-
   void dispose() {
     super.dispose();
   }
 
   void initState() {
-
     super.initState();
   }
 
@@ -299,22 +318,28 @@ class _MessageListTileState extends State<MessageListTile> {
               ),
             )).then((value) => {
               widget.callBackFunction(),
-        });
+            });
       },
       child: ListTile(
         leading: CircleAvatar(
-          backgroundColor: kColorScheme[1],
-          child: Text(
-                  widget.avatar.toUpperCase(),
-                  style: TextStyle(color: Theme.of(context).primaryColor,fontWeight: FontWeight.bold),
-                )
-
-        ),
+            backgroundColor: kColorScheme[1],
+            child: Text(
+              widget.avatar.toUpperCase(),
+              style: TextStyle(
+                  color: Theme.of(context).primaryColor,
+                  fontWeight: FontWeight.bold),
+            )),
         title: Text(widget.nameHelper,
-            style: TextStyle(color: Theme.of(context).primaryColor,fontWeight: FontWeight.bold, fontSize: 20)),
+            style: TextStyle(
+                color: Theme.of(context).primaryColor,
+                fontWeight: FontWeight.bold,
+                fontSize: 20)),
         subtitle: Text(
           widget.session.lastMessage,
-          style: TextStyle(color: Theme.of(context).primaryColor,fontWeight: FontWeight.normal, fontSize: 16),
+          style: TextStyle(
+              color: Theme.of(context).primaryColor,
+              fontWeight: FontWeight.normal,
+              fontSize: 16),
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
         ),

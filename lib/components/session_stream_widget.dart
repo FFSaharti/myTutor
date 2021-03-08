@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_villains/villains/villains.dart';
 import 'package:mytutor/classes/session.dart';
 import 'package:mytutor/components/session_card_widget.dart';
 import 'package:mytutor/utilities/database_api.dart';
@@ -26,7 +27,10 @@ class SessionStream extends StatelessWidget {
       stream: DatabaseAPI.fetchSessionData(type, checkexpire),
       builder: (context, snapshot) {
         // List to fill up with all the session the user has.
-        List<SessionCardWidget> UserSessions = [];
+        List<Widget> UserSessions = [];
+        int from = 0;
+        int to = 400;
+
         if (snapshot.hasData) {
           List<QueryDocumentSnapshot> Sessions = snapshot.data.docs;
           for (var session in Sessions) {
@@ -43,21 +47,31 @@ class SessionStream extends StatelessWidget {
               // convert the date we got from firebase into timestamp. to change it later to datetime.
               Timestamp stamp = SessionDate;
               print(Sessiontitle);
-              UserSessions.add(SessionCardWidget(
-                isStudent: isStudent,
-                height: ScreenSize.height,
-                session: Session(
-                    Sessiontitle,
-                    Sessiontutor,
-                    Sessionstudentid,
-                    session.id,
-                    Sessiontime,
-                    stamp.toDate(),
-                    SessionDesc,
-                    SessionStatus,
-                    SessionSubject
+              UserSessions.add(
+                Villain(
+                  villainAnimation: VillainAnimation.fromBottom(
+                    from: Duration(milliseconds: from),
+                    to: Duration(milliseconds: to),
+                  ),
+                  child: SessionCardWidget(
+                    isStudent: isStudent,
+                    height: ScreenSize.height,
+                    session: Session(
+                        Sessiontitle,
+                        Sessiontutor,
+                        Sessionstudentid,
+                        session.id,
+                        Sessiontime,
+                        stamp.toDate(),
+                        SessionDesc,
+                        SessionStatus,
+                        SessionSubject),
+                  ),
                 ),
-              ));
+              );
+
+              from += 100;
+              to += 100;
             }
           }
         }

@@ -23,15 +23,15 @@ class _MaterialWidgetState extends State<MaterialWidget> {
     print(widget.material.subjectID);
 
     return Padding(
-      padding: const EdgeInsets.all(15.0),
+      padding: const EdgeInsets.all(7.0),
       child: Container(
-        height: ScreenSize.height * 0.165,
+        height: ScreenSize.height * 0.14,
         decoration: BoxDecoration(
           color: kWhiteish,
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(25),
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withOpacity(0.4),
+              color: Colors.grey.withOpacity(0.18),
               spreadRadius: 1,
               blurRadius: 15,
               offset: Offset(0, 6), // changes position of shadow
@@ -48,15 +48,19 @@ class _MaterialWidgetState extends State<MaterialWidget> {
                 width: 50,
               ),
               SizedBox(
-                width: 10,
+                width: ScreenSize.width * 0.03,
               ),
               Column(
+                mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  SizedBox(
+                    height: ScreenSize.height * 0.005,
+                  ),
                   Container(
-                    height: ScreenSize.height * 0.05,
+                    height: ScreenSize.height * 0.03,
                     child: Container(
-                      width: ScreenSize.width * 0.56,
+                      width: ScreenSize.width * 0.50,
                       child: Text(
                         widget.material.title,
                         overflow: TextOverflow.ellipsis,
@@ -71,7 +75,7 @@ class _MaterialWidgetState extends State<MaterialWidget> {
                     ),
                   ),
                   Container(
-                    height: ScreenSize.height * 0.027,
+                    height: ScreenSize.height * 0.03,
                     child: Text(
                       widget.material.desc,
                       overflow: TextOverflow.ellipsis,
@@ -80,13 +84,31 @@ class _MaterialWidgetState extends State<MaterialWidget> {
                           GoogleFonts.sarala(fontSize: 14, color: kGreyerish),
                     ),
                   ),
-                  SizedBox(
-                    height: 10,
+                  Container(
+                    decoration: new BoxDecoration(
+                      color: kColorScheme[1],
+                      borderRadius: new BorderRadius.circular(50.0),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 11.0, right: 11.0),
+                      child: Text(
+                        (widget.material.type == 1)
+                            ? (widget.material as Document).fileType
+                            : "Quiz",
+                        style: GoogleFonts.sarabun(
+                          textStyle: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.normal,
+                              color: Colors.white),
+                        ),
+                      ),
+                    ),
                   ),
-                  (widget.material.type == 1)
-                      ? Text((widget.material as Document).fileType)
-                      : Text("Quiz"),
                 ],
+              ),
+              Icon(
+                Icons.arrow_forward_ios,
+                color: Colors.grey,
               ),
             ],
           ),

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_villains/villains/villains.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mytutor/classes/rate.dart';
 import 'package:mytutor/classes/subject.dart';
@@ -18,12 +19,12 @@ import 'package:mytutor/utilities/session_manager.dart';
 import 'interests_screen.dart';
 
 //TODO: the whole screen can be manage with view Tutor Profile Screen.
-class tutorProfile extends StatefulWidget {
+class TutorProfile extends StatefulWidget {
   @override
-  _tutorProfileState createState() => _tutorProfileState();
+  _TutorProfileState createState() => _TutorProfileState();
 }
 
-class _tutorProfileState extends State<tutorProfile> {
+class _TutorProfileState extends State<TutorProfile> {
   List<Rate> tutorRates = [];
   String sessionNumHelper = "";
   String reviewHelper = "";
@@ -102,300 +103,307 @@ class _tutorProfileState extends State<tutorProfile> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        backgroundColor: Colors.white70,
-        //TODO: Implement sign out button (that clears session manager objects)
-        title: Center(
-          child: Text(
-            "Profile",
-            style: TextStyle(color: Colors.black),
-          ),
-        ),
-      ),
-      body: SafeArea(
-        child: Center(
-          child: Container(
-            width: ScreenSize.width * 0.91,
-            height: ScreenSize.height * 0.9,
-            child: ListView(
-              children: [
-                SizedBox(
-                  height: 20,
-                ),
-                Center(
-                  child: SessionManager.loggedInTutor.profileImag == ""
-                      ? Container(
-                          width: ScreenSize.width * 0.30,
-                          height: ScreenSize.height * 0.21,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                          ),
-                          child: GestureDetector(
-                            onTap: () async {
-                              FilePickerResult file = await FilePicker.platform
-                                  .pickFiles(type: FileType.image);
-                              file == null
-                                  ? null
-                                  : DatabaseAPI.updateUserProfileImage(
-                                      File(file.files.single.path));
-                            },
-                            child: Icon(
-                              Icons.account_circle_sharp,
-                              size: 120,
-                            ),
-                          ),
-                        )
-                      : Container(
-                          width: ScreenSize.width * 0.30,
-                          height: ScreenSize.height * 0.21,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            image: DecorationImage(
-                                image: NetworkImage(
-                                    SessionManager.loggedInTutor.profileImag),
-                                fit: BoxFit.fill),
-                          ),
-                          child: GestureDetector(
-                              onTap: () async {
-                                FilePickerResult file = await FilePicker
-                                    .platform
-                                    .pickFiles(type: FileType.image);
-                                file == null
-                                    ? null
-                                    : DatabaseAPI.updateUserProfileImage(
-                                        File(file.files.single.path));
-                              },
-                              child: Align(
-                                child: Icon(Icons.edit,color: Theme.of(context).iconTheme.color,),
-                                alignment: Alignment.bottomRight,
-                              )),
-                        ),
-                ),
-                Center(
-                  child: Text(
-                    DatabaseAPI.tempTutor.name,
-                    style: kTitleStyle.copyWith(color: Theme.of(context).primaryColor, fontSize: 30),
-                  ),
-                ),
-                Center(
-                  child: Container(
-                    width: 80,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(50),
-                      color: kColorScheme[3],
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+        appBar: buildAppBar(context, kColorScheme[3], "Profile"),
+        body: SafeArea(
+          child: Center(
+            child: Container(
+              width: ScreenSize.width * 0.91,
+              height: ScreenSize.height * 0.9,
+              child: ListView(
+                children: [
+                  Villain(
+                    villainAnimation: VillainAnimation.fade(
+                      from: Duration(milliseconds: 100),
+                      to: Duration(milliseconds: 500),
                     ),
-                    child: Text(
-                      "Tutor",
-                      textAlign: TextAlign.center,
-                      style: kTitleStyle.copyWith(
-                          fontSize: 20, fontWeight: FontWeight.normal),
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: 9,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    ProfileInfoWidget("Sessions",
-                        sessionNumHelper == "" ? "load" : sessionNumHelper),
-                    SizedBox(
-                      width: 5,
-                    ),
-                    ProfileInfoWidget(
-                        "Rating",
-                        finishedLoadingTutorRate == true
-                            ? Rate.getAverageRate(tutorRates).toString()
-                            : "load"),
-                    SizedBox(
-                      width: 5,
-                    ),
-                    GestureDetector(
-                      child: ProfileInfoWidget("Reviews",
-                          reviewHelper == "" ? "load" : reviewHelper),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => ViewReviewsScreen(
-                                    tutorRates: tutorRates,
-                                  )),
-                        );
-                      },
-                    ),
-                  ],
-                ),
-                Divider(
-                  color: kGreyish,
-                ),
-                SizedBox(
-                  height: 5,
-                ),
-                Column(
-                  children: [
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.info_outline_rounded,
-                          size: 18,
-                        ),
-                        SizedBox(
-                          width: 5,
-                        ),
-                        Text(
-                          "About Me",
-                          style: TextStyle(fontSize: 18, color: Theme.of(context).primaryColor),
-                        )
-                      ],
-                    ),
-                    !(SessionManager.loggedInTutor.aboutMe == '')
-                        ? Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(3.0),
-                                child: Text(
-                                  SessionManager.loggedInTutor.aboutMe,
-                                  style: TextStyle(
-                                      fontSize: 16.5, color: Theme.of(context).primaryColor),
-                                ),
+                    child: Center(
+                      child: SessionManager.loggedInTutor.profileImag == ""
+                          ? Container(
+                              width: ScreenSize.width * 0.30,
+                              height: ScreenSize.height * 0.21,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
                               ),
-                              Spacer(),
-                              GestureDetector(
-                                onTap: () {
-                                  showAboutMe(setParentState);
+                              child: GestureDetector(
+                                onTap: () async {
+                                  FilePickerResult file = await FilePicker
+                                      .platform
+                                      .pickFiles(type: FileType.image);
+                                  file == null
+                                      ? null
+                                      : DatabaseAPI.updateUserProfileImage(
+                                          File(file.files.single.path));
                                 },
                                 child: Icon(
-                                  Icons.edit,
-                                  size: 20,
-                                  color: Theme.of(context).iconTheme.color,
+                                  Icons.account_circle_sharp,
+                                  size: 120,
                                 ),
                               ),
-                              SizedBox(
-                                height: 40,
-                              )
-                            ],
-                          )
-                        : Container(
-                            height: ScreenSize.height * 0.17,
-                            child: Column(
-                              children: [
-                                SizedBox(
-                                  height: 20,
-                                ),
-                                Center(
-                                  child: Text(
-                                    "No \"About me\" :( ",
-                                    style: TextStyle(
-                                        fontSize: 16.5, color: kGreyerish),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 20,
-                                ),
-                                EZButton(
-                                    width: ScreenSize.width * 0.5,
-                                    buttonColor: null,
-                                    textColor: Colors.white,
-                                    isGradient: true,
-                                    colors: [kColorScheme[0], kColorScheme[3]],
-                                    buttonText: "Set An About Me",
-                                    hasBorder: false,
-                                    borderColor: null,
-                                    onPressed: () {
-                                      print("pressed set about me");
-                                      showAboutMe(setParentState);
-                                      // setState(() {});
-                                    })
-                              ],
+                            )
+                          : Container(
+                              width: ScreenSize.width * 0.30,
+                              height: ScreenSize.height * 0.21,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                image: DecorationImage(
+                                    image: NetworkImage(SessionManager
+                                        .loggedInTutor.profileImag),
+                                    fit: BoxFit.fill),
+                              ),
+                              child: GestureDetector(
+                                  onTap: () async {
+                                    FilePickerResult file = await FilePicker
+                                        .platform
+                                        .pickFiles(type: FileType.image);
+                                    file == null
+                                        ? null
+                                        : DatabaseAPI.updateUserProfileImage(
+                                            File(file.files.single.path));
+                                  },
+                                  child: Align(
+                                    child: Icon(
+                                      Icons.edit,
+                                      color: Theme.of(context).iconTheme.color,
+                                    ),
+                                    alignment: Alignment.bottomRight,
+                                  )),
                             ),
-                          ),
-                  ],
-                ),
-                Divider(
-                  color: kGreyish,
-                ),
-                SizedBox(
-                  height: 5,
-                ),
-                Column(
-                  children: [
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.school_outlined,
-                          size: 18,
-                        ),
-                        SizedBox(
-                          width: 5,
-                        ),
-                        Text(
-                          "Experiences",
-                          style: TextStyle(fontSize: 18, color: Theme.of(context).primaryColor),
-                        ),
-                        Spacer(),
-                        GestureDetector(
-                          onTap: () {
-                            showEditInterests(setParentStateEx());
-                          },
-                          child: Icon(
-                            Icons.edit,
-                            size: 20,
-                            color: Theme.of(context).iconTheme.color,
-                          ),
-                        ),
-                      ],
                     ),
-                    SizedBox(
-                      height: 5,
+                  ),
+                  Center(
+                    child: Text(
+                      DatabaseAPI.tempTutor.name,
+                      style: GoogleFonts.sen(color: Colors.black, fontSize: 30),
                     ),
-                    Container(
-                      height: 50,
-                      // child: Text(SessionManager.loggedInTutor.experiences[0]
-                      //     .toString()),
-                      child: ListView(
-                        scrollDirection: Axis.horizontal,
-                        children: getExperiences(),
+                  ),
+                  Center(
+                    child: Container(
+                      width: ScreenSize.width * 0.2,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(50),
+                        color: kColorScheme[3],
                       ),
+                      child: Text("Tutor",
+                          textAlign: TextAlign.center,
+                          style: GoogleFonts.sen(
+                              color: Colors.white, fontSize: 21)),
                     ),
-                  ],
-                ),
-                Divider(
-                  color: kGreyish,
-                ),
-                Container(
-                  height: ScreenSize.height * 0.5,
-                  child: Column(
+                  ),
+                  SizedBox(
+                    height: ScreenSize.height * 0.01,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ProfileInfoWidget("Sessions",
+                          sessionNumHelper == "" ? "load" : sessionNumHelper),
+                      SizedBox(
+                        width: ScreenSize.width * 0.02,
+                      ),
+                      ProfileInfoWidget(
+                          "Rating",
+                          finishedLoadingTutorRate == true
+                              ? Rate.getAverageRate(tutorRates).toString()
+                              : "load"),
+                      SizedBox(
+                        width: ScreenSize.width * 0.02,
+                      ),
+                      GestureDetector(
+                        child: ProfileInfoWidget("Reviews",
+                            reviewHelper == "" ? "load" : reviewHelper),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ViewReviewsScreen(
+                                      tutorRates: tutorRates,
+                                    )),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                  Divider(
+                    color: kGreyish,
+                  ),
+                  SizedBox(
+                    height: ScreenSize.height * 0.01,
+                  ),
+                  Column(
                     children: [
                       Row(
                         children: [
                           Icon(
-                            Icons.local_library_outlined,
+                            Icons.info_outline_rounded,
                             size: 18,
                           ),
                           SizedBox(
-                            width: 5,
+                            width: ScreenSize.width * 0.02,
                           ),
                           Text(
-                            "Materials",
-                            style: TextStyle(fontSize: 18, color: Theme.of(context).primaryColor),
+                            "About Me",
+                            style: TextStyle(
+                                fontSize: 18,
+                                color: Theme.of(context).primaryColor),
                           )
                         ],
                       ),
-                      SizedBox(
-                        height: 5,
+                      !(SessionManager.loggedInTutor.aboutMe == '')
+                          ? Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(3.0),
+                                  child: Text(
+                                    SessionManager.loggedInTutor.aboutMe,
+                                    style: TextStyle(
+                                        fontSize: 16.5,
+                                        color: Theme.of(context).primaryColor),
+                                  ),
+                                ),
+                                Spacer(),
+                                GestureDetector(
+                                  onTap: () {
+                                    showAboutMe(setParentState);
+                                  },
+                                  child: Icon(
+                                    Icons.edit,
+                                    size: 20,
+                                    color: Theme.of(context).iconTheme.color,
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: ScreenSize.height * 0.05,
+                                ),
+                              ],
+                            )
+                          : Container(
+                              height: ScreenSize.height * 0.17,
+                              child: Column(
+                                children: [
+                                  SizedBox(
+                                    height: 20,
+                                  ),
+                                  Center(
+                                    child: Text(
+                                      "No \"About me\" :( ",
+                                      style: TextStyle(
+                                          fontSize: 16.5, color: kGreyerish),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 20,
+                                  ),
+                                  EZButton(
+                                      width: ScreenSize.width * 0.5,
+                                      buttonColor: null,
+                                      textColor: Colors.white,
+                                      isGradient: true,
+                                      colors: [
+                                        kColorScheme[0],
+                                        kColorScheme[3]
+                                      ],
+                                      buttonText: "Set An About Me",
+                                      hasBorder: false,
+                                      borderColor: null,
+                                      onPressed: () {
+                                        print("pressed set about me");
+                                        showAboutMe(setParentState);
+                                        // setState(() {});
+                                      })
+                                ],
+                              ),
+                            ),
+                    ],
+                  ),
+                  Divider(
+                    color: kGreyish,
+                  ),
+                  SizedBox(
+                    height: ScreenSize.height * 0.01,
+                  ),
+                  Column(
+                    children: [
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.school_outlined,
+                            size: 18,
+                          ),
+                          SizedBox(
+                            width: ScreenSize.width * 0.02,
+                          ),
+                          Text(
+                            "Experiences",
+                            style: TextStyle(
+                                fontSize: 18,
+                                color: Theme.of(context).primaryColor),
+                          ),
+                          Spacer(),
+                          GestureDetector(
+                            onTap: () {
+                              showEditInterests(setParentStateEx());
+                            },
+                            child: Icon(
+                              Icons.edit,
+                              size: 20,
+                              color: Theme.of(context).iconTheme.color,
+                            ),
+                          ),
+                        ],
                       ),
-                      // TODO: Add ability for tutor to preview his own materials (open file, edit quiz)
-                      MaterialStreamTutor(
-                        tutorId: SessionManager.loggedInTutor.userId,
+                      SizedBox(
+                        height: ScreenSize.height * 0.01,
+                      ),
+                      Container(
+                        height: ScreenSize.height * 0.07,
+                        // child: Text(SessionManager.loggedInTutor.experiences[0]
+                        //     .toString()),
+                        child: ListView(
+                          scrollDirection: Axis.horizontal,
+                          children: getExperiences(),
+                        ),
                       ),
                     ],
                   ),
-                ),
-              ],
+                  Divider(
+                    color: kGreyish,
+                  ),
+                  Container(
+                    height: ScreenSize.height * 0.5,
+                    child: Column(
+                      children: [
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.local_library_outlined,
+                              size: 18,
+                            ),
+                            SizedBox(
+                              width: ScreenSize.width * 0.02,
+                            ),
+                            Text(
+                              "Materials",
+                              style: TextStyle(
+                                  fontSize: 18,
+                                  color: Theme.of(context).primaryColor),
+                            )
+                          ],
+                        ),
+                        SizedBox(
+                          height: ScreenSize.height * 0.01,
+                        ),
+                        MaterialStreamTutor(
+                          tutorId: SessionManager.loggedInTutor.userId,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -416,9 +424,23 @@ class _tutorProfileState extends State<tutorProfile> {
       }
     }
 
+    int from = 50;
+    int to = 500;
+
     for (int i = 0; i < experiences.length; i++) {
-      widgets.add(SubjectWidget(experiences[i]));
+      widgets.add(
+        Villain(
+          villainAnimation: VillainAnimation.fromRight(
+            from: Duration(milliseconds: from),
+            to: Duration(milliseconds: to),
+          ),
+          child: SubjectWidget(experiences[i]),
+        ),
+      );
       widgets.add(SizedBox(width: 9));
+
+      from += 100;
+      to += 100;
     }
 
     return widgets;

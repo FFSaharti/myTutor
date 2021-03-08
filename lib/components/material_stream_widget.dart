@@ -3,6 +3,7 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_villains/villains/villains.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mytutor/classes/document.dart';
 import 'package:mytutor/classes/quiz.dart';
@@ -28,6 +29,8 @@ class _MaterialStreamTutorState extends State<MaterialStreamTutor> {
   @override
   Widget build(BuildContext context) {
     print("hello");
+    int from = 100;
+    int to = 300;
     return StreamBuilder<QuerySnapshot>(
       stream: DatabaseAPI.fetchAllMaterialsData(widget.tutorId),
       builder: (context, snapshot) {
@@ -40,6 +43,7 @@ class _MaterialStreamTutorState extends State<MaterialStreamTutor> {
 
             if (material.data()['issuerId'] == widget.tutorId) {
               // MATERIALS IS HIS....
+
               if (materialType == 1) {
                 // MATERIAL IS DOCUMENT...
                 Document tempDoc = Document(
@@ -63,8 +67,7 @@ class _MaterialStreamTutorState extends State<MaterialStreamTutor> {
                           context: context,
                           builder: (context) {
                             return Container(
-                              height: ScreenSize.height * 0.30,
-                              width: ScreenSize.width,
+                              height: ScreenSize.height * 0.20,
                               child: Column(
                                 children: [
                                   Row(
@@ -179,9 +182,15 @@ class _MaterialStreamTutorState extends State<MaterialStreamTutor> {
                             );
                           });
                     },
-                    child: MaterialWidget(
-                      material: tempDoc,
-                      matID: material.id,
+                    child: Villain(
+                      villainAnimation: VillainAnimation.fromBottom(
+                        from: Duration(milliseconds: from),
+                        to: Duration(milliseconds: to),
+                      ),
+                      child: MaterialWidget(
+                        material: tempDoc,
+                        matID: material.id,
+                      ),
                     ),
                   ),
                 );
@@ -310,19 +319,28 @@ class _MaterialStreamTutorState extends State<MaterialStreamTutor> {
                             );
                           });
                     },
-                    child: MaterialWidget(
-                      material: Quiz(
-                          SessionManager.loggedInTutor.userId,
-                          2,
-                          material.data()['subject'],
-                          material.data()['quizTitle'],
-                          material.data()['quizDesc'],
-                          material.id),
-                      matID: material.id,
+                    child: Villain(
+                      villainAnimation: VillainAnimation.fromBottom(
+                        from: Duration(milliseconds: from),
+                        to: Duration(milliseconds: to),
+                      ),
+                      child: MaterialWidget(
+                        material: Quiz(
+                            SessionManager.loggedInTutor.userId,
+                            2,
+                            material.data()['subject'],
+                            material.data()['quizTitle'],
+                            material.data()['quizDesc'],
+                            material.id),
+                        matID: material.id,
+                      ),
                     ),
                   ),
                 );
               }
+
+              to += 100;
+              from += 100;
             }
           }
         }
