@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_villains/villains/villains.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:mytutor/classes/session.dart';
 import 'package:mytutor/components/session_card_widget.dart';
 import 'package:mytutor/utilities/database_api.dart';
@@ -30,12 +31,10 @@ class SessionStream extends StatelessWidget {
         List<Widget> UserSessions = [];
         int from = 0;
         int to = 400;
-
         if (snapshot.hasData) {
           List<QueryDocumentSnapshot> Sessions = snapshot.data.docs;
           for (var session in Sessions) {
             String SessionStatus = session.data()["status"];
-
             if (SessionStatus.toLowerCase() == status.toLowerCase()) {
               final Sessiontutor = session.data()["tutor"];
               final Sessionstudentid = session.data()["student"];
@@ -76,7 +75,14 @@ class SessionStream extends StatelessWidget {
             }
           }
         }
-        return Expanded(
+        return UserSessions.isEmpty ? Column(
+          children: [
+            SizedBox(
+              height: ScreenSize.height * 0.15 ,
+            ),
+            Center(child: Text("its quite empty in here 😴", style: GoogleFonts.openSans(color: Theme.of(context).primaryColor, fontSize: 21), textAlign: TextAlign.center,),),
+          ],
+        ): Expanded(
           child: ListView(
             reverse: false,
             padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5),

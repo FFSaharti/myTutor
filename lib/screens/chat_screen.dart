@@ -20,6 +20,7 @@ import 'package:mytutor/utilities/database_api.dart';
 import 'package:mytutor/utilities/screen_size.dart';
 import 'package:mytutor/utilities/session_manager.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 //TODO: implement view profile by clicking on circle Avatar?
 class ChatScreen extends StatefulWidget {
@@ -191,14 +192,22 @@ class _ChatScreenState extends State<ChatScreen> {
                                     )
                                   : Text(""),
                               trailing: GestureDetector(
-                                onTap: () {
+                                onTap:  widget.currentsession.status == "closed" ? () {
+                                  Fluttertoast.showToast(
+                                      msg: "you cannot closed or rated this session.",
+                                      toastLength: Toast.LENGTH_SHORT,
+                                      gravity: ToastGravity.CENTER,
+                                      textColor: Colors.white,
+                                      fontSize: 16.0
+                                  );
+                                }: () {
                                   SessionManager.loggedInTutor.userId == ""
                                       ? showBottomSheetForStudent()
                                       : showBottomSheetForTutor();
                                 },
                                 child: Icon(
                                   Icons.info_outline,
-                                  color: Colors.white,
+                                  color: widget.currentsession.status == "closed" ? Colors.grey :Colors.white,
                                 ),
                               ),
                             ),
@@ -312,7 +321,8 @@ class _ChatScreenState extends State<ChatScreen> {
                       children: <Widget>[
                         IconButton(
                           icon: Icon(Icons.attach_file),
-                          onPressed: () async {
+                          onPressed: widget.currentsession.status == "closed"
+                              ? null : () async {
                             refresh();
                             String filename = "hello";
                             FilePickerResult file = await FilePicker.platform

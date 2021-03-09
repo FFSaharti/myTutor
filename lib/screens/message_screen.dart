@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_villains/villains/villains.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:mytutor/classes/session.dart';
 import 'package:mytutor/utilities/constants.dart';
@@ -154,7 +155,14 @@ class _MessageScreenState extends State<MessageScreen> {
                           }
                         }
 
-                        return Expanded(
+                        return userMessages.isEmpty ? Column(
+                          children: [
+                            SizedBox(
+                              height: ScreenSize.height * 0.30 ,
+                            ),
+                            Text("no tutor session available. start one by requesting a tutor  ", style: GoogleFonts.openSans(color: Theme.of(context).primaryColor, fontSize: 21),  textAlign: TextAlign.center,),
+                          ],
+                        ): Expanded(
                           child: ListView.builder(
                             itemCount: snapshot.data.docs.length,
                             itemBuilder: (context, index) {

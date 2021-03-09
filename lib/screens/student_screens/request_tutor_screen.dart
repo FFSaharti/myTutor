@@ -78,6 +78,7 @@ class _RequestTutorScreenState extends State<RequestTutorScreen> {
                 TextField(
                   controller: searchController,
                   onChanged: (value) {
+                    VillainController.playAllVillains(context);
                     setState(() {
                       _filterTutors(value);
                       if (searchController.text.isEmpty) {

@@ -33,6 +33,7 @@ dependencies:
   page_transition: ^1.1.7+6
   flutter_villains: ^1.2.1
   bottom_navy_bar: ^5.6.0
+  fluttertoast: ^7.1.6
 
 dev_dependencies:
   flutter_test:

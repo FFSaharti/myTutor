@@ -1,5 +1,6 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:mytutor/classes/session.dart';
@@ -241,6 +242,13 @@ class _SessionCardWidgetState extends State<SessionCardWidget> {
           if (widget.session.status == "waiting for student") {
             showBottomsheetModel(widget.session);
           } else if (widget.session.status == "pending") {
+            Fluttertoast.showToast(
+                msg: "the tutor does not accept the session yet.",
+                toastLength: Toast.LENGTH_SHORT,
+                gravity: ToastGravity.CENTER,
+                textColor: Colors.white,
+                fontSize: 16.0
+            );
           } else {
             Navigator.push(
                 context,
