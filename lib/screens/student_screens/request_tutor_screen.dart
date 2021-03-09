@@ -7,6 +7,7 @@ import 'package:mytutor/classes/rate.dart';
 import 'package:mytutor/classes/tutor.dart';
 import 'package:mytutor/classes/user.dart';
 import 'package:mytutor/screens/student_screens/view_tutor_profile_screen.dart';
+import 'package:mytutor/screens/view_receiver_profile.dart';
 import 'package:mytutor/utilities/constants.dart';
 import 'package:mytutor/utilities/database_api.dart';
 import 'package:mytutor/utilities/screen_size.dart';
@@ -216,8 +217,9 @@ class _TutorWidgetState extends State<TutorWidget> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => ViewTutorProfileScreen(
-                            tutor: widget.tutor,
+                      builder: (context) => ViewReceiverProfile(
+                            userId: widget.tutor.userId,
+                        role: 'tutor',
                           )),
                 );
               },

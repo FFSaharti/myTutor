@@ -11,6 +11,7 @@ import 'package:mytutor/utilities/screen_size.dart';
 
 import '../view_reviews_screen.dart';
 
+//TODO: can be deleted after test..
 class ViewTutorProfileScreen extends StatefulWidget {
   final Tutor tutor;
 
@@ -77,7 +78,6 @@ class _ViewTutorProfileScreenState extends State<ViewTutorProfileScreen> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         backgroundColor: Colors.white70,
-        //TODO: Implement sign out button (that clears session manager objects)
         title: Center(
           child: Text(
             "Profile",

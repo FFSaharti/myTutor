@@ -399,6 +399,7 @@ class _TutorProfileState extends State<TutorProfile> {
                         ),
                         MaterialStreamTutor(
                           tutorId: SessionManager.loggedInTutor.userId,
+                          isSameUser: true,
                         ),
                       ],
                     ),

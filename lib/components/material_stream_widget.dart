@@ -17,9 +17,11 @@ import 'package:mytutor/utilities/session_manager.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class MaterialStreamTutor extends StatefulWidget {
+  // is same user used to determine if the user should see edit options or not.
   final String tutorId;
+  final bool isSameUser;
 
-  const MaterialStreamTutor({this.tutorId});
+  const MaterialStreamTutor({this.tutorId, this.isSameUser});
 
   @override
   _MaterialStreamTutorState createState() => _MaterialStreamTutorState();
@@ -28,7 +30,6 @@ class MaterialStreamTutor extends StatefulWidget {
 class _MaterialStreamTutorState extends State<MaterialStreamTutor> {
   @override
   Widget build(BuildContext context) {
-    print("hello");
     int from = 100;
     int to = 300;
     return StreamBuilder<QuerySnapshot>(
@@ -66,6 +67,7 @@ class _MaterialStreamTutorState extends State<MaterialStreamTutor> {
                                   top: Radius.circular(25.0))),
                           context: context,
                           builder: (context) {
+                            print(widget.isSameUser.toString());
                             return Container(
                               height: ScreenSize.height * 0.20,
                               child: Column(
@@ -101,79 +103,84 @@ class _MaterialStreamTutorState extends State<MaterialStreamTutor> {
                                     padding: const EdgeInsets.all(23.0),
                                     child: Row(
                                       mainAxisAlignment:
-                                          MainAxisAlignment.spaceAround,
+                                          widget.isSameUser == false
+                                              ? MainAxisAlignment.center
+                                              : MainAxisAlignment.spaceAround,
                                       children: [
                                         Container(
-                                          height: ScreenSize.height * 0.04,
-                                          child: RaisedButton(
-                                            onPressed: () async {
-                                              if (tempDoc.fileType == "pdf") {
-                                                PDFDocument doc =
-                                                    await PDFDocument.fromURL(
-                                                        tempDoc.url);
-                                                showModalBottomSheet(
-                                                  isScrollControlled: true,
-                                                  context: context,
-                                                  builder: (context) {
-                                                    return Container(
-                                                        height:
-                                                            ScreenSize.height,
-                                                        child: Scaffold(
-                                                            body: PDFViewer(
-                                                                document:
-                                                                    doc)));
-                                                  },
-                                                );
-                                              } else {
-                                                if (await canLaunch(
-                                                    tempDoc.url)) {
-                                                  await launch(tempDoc.url);
+                                            height: ScreenSize.height * 0.04,
+                                            child: RaisedButton(
+                                              onPressed: () async {
+                                                if (tempDoc.fileType == "pdf") {
+                                                  PDFDocument doc =
+                                                      await PDFDocument.fromURL(
+                                                          tempDoc.url);
+                                                  showModalBottomSheet(
+                                                    isScrollControlled: true,
+                                                    context: context,
+                                                    builder: (context) {
+                                                      return Container(
+                                                          height:
+                                                              ScreenSize.height,
+                                                          child: Scaffold(
+                                                              body: PDFViewer(
+                                                                  document:
+                                                                      doc)));
+                                                    },
+                                                  );
+                                                } else {
+                                                  if (await canLaunch(
+                                                      tempDoc.url)) {
+                                                    await launch(tempDoc.url);
+                                                  }
                                                 }
-                                              }
-                                            },
-                                            child: Text(
-                                              "View Document",
-                                              style: GoogleFonts.sarabun(
-                                                textStyle: TextStyle(
-                                                    fontSize: 18,
-                                                    fontWeight:
-                                                        FontWeight.normal,
-                                                    color: Colors.white),
+                                              },
+                                              child: Text(
+                                                "View Document",
+                                                style: GoogleFonts.sarabun(
+                                                  textStyle: TextStyle(
+                                                      fontSize: 18,
+                                                      fontWeight:
+                                                          FontWeight.normal,
+                                                      color: Colors.white),
+                                                ),
                                               ),
-                                            ),
-                                            color: kColorScheme[2],
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(15.0),
-                                            ),
-                                          ),
-                                        ),
-                                        Container(
-                                          height: ScreenSize.height * 0.04,
-                                          child: RaisedButton(
-                                            onPressed: () {
-                                              showBottomSheetForEditDocument(
-                                                tempDoc.title,
-                                                material.id,
-                                              );
-                                            },
-                                            child: Text(
-                                              "Edit Document",
-                                              style: GoogleFonts.sarabun(
-                                                textStyle: TextStyle(
-                                                    fontSize: 18,
-                                                    fontWeight:
-                                                        FontWeight.normal,
-                                                    color: Colors.white),
+                                              color: kColorScheme[2],
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(15.0),
                                               ),
-                                            ),
-                                            color: kColorScheme[2],
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(15.0),
-                                            ),
-                                          ),
-                                        ),
+                                            )),
+                                        widget.isSameUser == false
+                                            ? Container()
+                                            : Container(
+                                                height:
+                                                    ScreenSize.height * 0.04,
+                                                child: RaisedButton(
+                                                  onPressed: () {
+                                                    showBottomSheetForEditDocument(
+                                                      tempDoc.title,
+                                                      material.id,
+                                                    );
+                                                  },
+                                                  child: Text(
+                                                    "Edit Document",
+                                                    style: GoogleFonts.sarabun(
+                                                      textStyle: TextStyle(
+                                                          fontSize: 18,
+                                                          fontWeight:
+                                                              FontWeight.normal,
+                                                          color: Colors.white),
+                                                    ),
+                                                  ),
+                                                  color: kColorScheme[2],
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            15.0),
+                                                  ),
+                                                ),
+                                              ),
                                       ],
                                     ),
                                   ),
@@ -216,7 +223,7 @@ class _MaterialStreamTutorState extends State<MaterialStreamTutor> {
                           context: context,
                           builder: (context) {
                             return Container(
-                              height: ScreenSize.height * 0.30,
+                              height: ScreenSize.height * 0.20,
                               width: ScreenSize.width,
                               child: Column(
                                 children: [
@@ -250,8 +257,7 @@ class _MaterialStreamTutorState extends State<MaterialStreamTutor> {
                                   Padding(
                                     padding: const EdgeInsets.all(23.0),
                                     child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceAround,
+                                      mainAxisAlignment:  widget.isSameUser == false ? MainAxisAlignment.center : MainAxisAlignment.spaceAround,
                                       children: [
                                         Container(
                                           height: ScreenSize.height * 0.04,
@@ -285,7 +291,7 @@ class _MaterialStreamTutorState extends State<MaterialStreamTutor> {
                                             ),
                                           ),
                                         ),
-                                        Container(
+                                        widget.isSameUser == false ? Container() : Container(
                                           height: ScreenSize.height * 0.04,
                                           child: RaisedButton(
                                             onPressed: () {

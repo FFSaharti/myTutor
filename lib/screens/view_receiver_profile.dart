@@ -26,6 +26,7 @@ class _ViewReceiverProfileState extends State<ViewReceiverProfile> {
   MyUser user;
   bool loading = false;
 
+
   @override
   void initState() {
     // inislize user object.
@@ -348,6 +349,7 @@ class _ViewProfileTutorState extends State<ViewProfileTutor> {
                     ),
                     MaterialStreamTutor(
                       tutorId: widget.tutor.userId,
+                      isSameUser: false,
                     ),
                   ],
                 ),
