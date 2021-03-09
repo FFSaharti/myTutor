@@ -4,6 +4,7 @@ import 'package:advance_pdf_viewer/advance_pdf_viewer.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_villains/villains/villains.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mytutor/classes/document.dart';
@@ -72,55 +73,75 @@ class _HomepageScreenStudentState extends State<HomepageScreenStudent> {
         },
         items: <BottomNavyBarItem>[
           BottomNavyBarItem(
-            icon: Icon(Icons.home, color: Theme.of(context).textSelectionColor,),
+            icon: Icon(
+              Icons.home,
+              color: Theme.of(context).textSelectionColor,
+            ),
             title: Text(
               'Home',
               style: TextStyle(
-                  color: Theme.of(context).textSelectionColor, fontWeight: FontWeight.bold),
+                  color: Theme.of(context).textSelectionColor,
+                  fontWeight: FontWeight.bold),
             ),
             activeColor: kColorScheme[2],
             inactiveColor: Colors.grey,
             textAlign: TextAlign.center,
           ),
           BottomNavyBarItem(
-            icon: Icon(FontAwesomeIcons.chalkboardTeacher,color: Theme.of(context).textSelectionColor,),
+            icon: Icon(
+              FontAwesomeIcons.chalkboardTeacher,
+              color: Theme.of(context).textSelectionColor,
+            ),
             title: Text(
               'Student',
               style: TextStyle(
-                  color: Theme.of(context).textSelectionColor, fontWeight: FontWeight.bold),
+                  color: Theme.of(context).textSelectionColor,
+                  fontWeight: FontWeight.bold),
             ),
             activeColor: kColorScheme[2],
             inactiveColor: Colors.grey,
             textAlign: TextAlign.center,
           ),
           BottomNavyBarItem(
-            icon: Icon(Icons.message,color: Theme.of(context).textSelectionColor,),
+            icon: Icon(
+              Icons.message,
+              color: Theme.of(context).textSelectionColor,
+            ),
             title: Text(
               'Messages',
               style: TextStyle(
-                  color: Theme.of(context).textSelectionColor, fontWeight: FontWeight.bold),
+                  color: Theme.of(context).textSelectionColor,
+                  fontWeight: FontWeight.bold),
             ),
             activeColor: kColorScheme[2],
             inactiveColor: Colors.grey,
             textAlign: TextAlign.center,
           ),
           BottomNavyBarItem(
-            icon: Icon(Icons.person,color: Theme.of(context).textSelectionColor,),
+            icon: Icon(
+              Icons.person,
+              color: Theme.of(context).textSelectionColor,
+            ),
             title: Text(
               'Profile',
               style: TextStyle(
-                color: Theme.of(context).textSelectionColor, fontWeight: FontWeight.bold),
+                  color: Theme.of(context).textSelectionColor,
+                  fontWeight: FontWeight.bold),
             ),
             activeColor: kColorScheme[2],
             inactiveColor: Colors.grey,
             textAlign: TextAlign.center,
           ),
           BottomNavyBarItem(
-            icon: Icon(Icons.settings,color: Theme.of(context).textSelectionColor,),
+            icon: Icon(
+              Icons.settings,
+              color: Theme.of(context).textSelectionColor,
+            ),
             title: Text(
               'Settings',
               style: TextStyle(
-                  color: Theme.of(context).textSelectionColor, fontWeight: FontWeight.bold),
+                  color: Theme.of(context).textSelectionColor,
+                  fontWeight: FontWeight.bold),
             ),
             activeColor: kColorScheme[2],
             inactiveColor: Colors.grey,
@@ -190,27 +211,33 @@ class _HomePageStudentState extends State<HomePageStudent> {
               padding: const EdgeInsets.only(left: 13.0),
               child: Align(
                 alignment: Alignment.centerLeft,
-                child: RichText(
-                  text: TextSpan(children: [
-                    TextSpan(
-                      text: "Welcome,\nStudent ",
-                      style: GoogleFonts.sarabun(
-                          textStyle: TextStyle(
-                        fontSize: 36,
-                        fontWeight: FontWeight.normal,
-                        color: Theme.of(context).primaryColor,
-                      )),
-                    ),
-                    TextSpan(
-                      text: DatabaseAPI.tempStudent.name,
-                      style: GoogleFonts.sarabun(
-                          textStyle: TextStyle(
-                        fontSize: 36,
-                        fontWeight: FontWeight.bold,
-                        color: Theme.of(context).primaryColor,
-                      )),
-                    ),
-                  ]),
+                child: Villain(
+                  villainAnimation: VillainAnimation.fromLeft(
+                    from: Duration(milliseconds: 30),
+                    to: Duration(milliseconds: 300),
+                  ),
+                  child: RichText(
+                    text: TextSpan(children: [
+                      TextSpan(
+                        text: "Welcome,\nStudent ",
+                        style: GoogleFonts.sarabun(
+                            textStyle: TextStyle(
+                          fontSize: 36,
+                          fontWeight: FontWeight.normal,
+                          color: Theme.of(context).primaryColor,
+                        )),
+                      ),
+                      TextSpan(
+                        text: DatabaseAPI.tempStudent.name,
+                        style: GoogleFonts.sarabun(
+                            textStyle: TextStyle(
+                          fontSize: 36,
+                          fontWeight: FontWeight.bold,
+                          color: Theme.of(context).primaryColor,
+                        )),
+                      ),
+                    ]),
+                  ),
                 ),
               ),
             ),
@@ -317,6 +344,7 @@ class _StudentSectionState extends State<StudentSection> {
     widget.width = mediaQueryData.size.width;
     widget.height = mediaQueryData.size.height;
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(
         automaticallyImplyLeading: false,
         backgroundColor: Colors.white70,
@@ -334,53 +362,77 @@ class _StudentSectionState extends State<StudentSection> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 SizedBox(
-                  height: 50,
+                  height: ScreenSize.height * 0.07,
                 ),
-                Text(
-                  "Select an option",
-                  style: GoogleFonts.sarala(fontSize: 25, color: kGreyerish),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                StudentSectionWidget(
-                  widget: widget,
-                  onClick: () {
-                    print("clicked ASK");
-                    Navigator.pushNamed(context, AskScreenStudent.id);
-                  },
-                  imgPath: "images/Student_Section/Ask_Logo.png",
-                  title: "Ask",
-                  description:
-                      "Post questions that can be viewed and \nanswered by tutors!",
+            Villain(
+              villainAnimation: VillainAnimation.fade(
+                from: Duration(milliseconds: 0),
+                to: Duration(milliseconds: 500),
+              ),
+                  child: Text(
+                    "Select an option",
+                    style: GoogleFonts.sarala(fontSize: 25, color: kGreyerish),
+                  ),
                 ),
                 SizedBox(
-                  height: 20,
+                  height: ScreenSize.height * 0.01,
                 ),
-                StudentSectionWidget(
-                  widget: widget,
-                  onClick: () {
-                    print("clicked REQUEST");
-                    Navigator.pushNamed(context, RequestTutorScreen.id);
-                  },
-                  imgPath: "images/Student_Section/Request_Logo.png",
-                  title: "Request",
-                  description:
-                      "Search for Tutors with a variety of \nfilters and request them!",
+                Villain(
+                  villainAnimation: VillainAnimation.fromBottom(
+                    from: Duration(milliseconds: 0),
+                    to: Duration(milliseconds: 600),
+                  ),
+                  child: StudentSectionWidget(
+                    widget: widget,
+                    onClick: () {
+                      print("clicked ASK");
+                      Navigator.pushNamed(context, AskScreenStudent.id);
+                    },
+                    imgPath: "images/Student_Section/Ask_Logo.png",
+                    title: "Ask",
+                    description:
+                        "Post questions that can be viewed and \nanswered by tutors!",
+                  ),
                 ),
                 SizedBox(
-                  height: 20,
+                  height: ScreenSize.height * 0.01,
                 ),
-                StudentSectionWidget(
-                  widget: widget,
-                  onClick: () {
-                    print("clicked MATERIALS");
-                    Navigator.pushNamed(context, ViewMaterialsScreen.id);
-                  },
-                  imgPath: "images/Student_Section/Materials_Logo.png",
-                  title: "Materials",
-                  description:
-                      "Search for Materials posted by \nother Tutors and bookmark them",
+                Villain(
+                  villainAnimation: VillainAnimation.fromBottom(
+                    from: Duration(milliseconds: 300),
+                    to: Duration(milliseconds: 700),
+                  ),
+                  child: StudentSectionWidget(
+                    widget: widget,
+                    onClick: () {
+                      print("clicked REQUEST");
+                      Navigator.pushNamed(context, RequestTutorScreen.id);
+                    },
+                    imgPath: "images/Student_Section/Request_Logo.png",
+                    title: "Request",
+                    description:
+                        "Search for Tutors with a variety of \nfilters and request them!",
+                  ),
+                ),
+                SizedBox(
+                  height: ScreenSize.height * 0.01,
+                ),
+                Villain(
+                  villainAnimation: VillainAnimation.fromBottom(
+                    from: Duration(milliseconds: 300),
+                    to: Duration(milliseconds: 700),
+                  ),
+                  child: StudentSectionWidget(
+                    widget: widget,
+                    onClick: () {
+                      print("clicked MATERIALS");
+                      Navigator.pushNamed(context, ViewMaterialsScreen.id);
+                    },
+                    imgPath: "images/Student_Section/Materials_Logo.png",
+                    title: "Materials",
+                    description:
+                        "Search for Materials posted by \nother Tutors and bookmark them",
+                  ),
                 )
               ],
             ),
@@ -409,43 +461,42 @@ class StudentSectionWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onClick,
-       child: Padding(
-         padding: const EdgeInsets.all(8.0),
-         child: Card(
-           elevation: 4,
-           shape: RoundedRectangleBorder(
-             borderRadius: BorderRadius.circular(15.0),
-           ),
-           color: Theme.of(context).backgroundColor,
-           child: Padding(
-             padding: const EdgeInsets.all(2.0),
-             child: ListTile(
-
-               leading: Column(
-                 mainAxisAlignment: MainAxisAlignment.center,
-                 children: [
-                   Image.asset(
-                     imgPath,
-                     width: 50,
-                   ),
-                 ],
-               ),
-               title:   Text(
-                 title,
-                 style: GoogleFonts.sarala(fontSize: 25, color: kBlackish),
-               ),
-               subtitle: Text(
-                 description,
-                 style: GoogleFonts.sarala(fontSize: 14, color: kGreyerish),
-               ),
-               trailing: Container(
-                 height: double.infinity,
-                 child: Icon(Icons.arrow_forward_ios_outlined),
-               ),
-             ),
-           ),
-         ),
-       ),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Card(
+          elevation: 4,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15.0),
+          ),
+          color: Theme.of(context).backgroundColor,
+          child: Padding(
+            padding: const EdgeInsets.all(2.0),
+            child: ListTile(
+              leading: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset(
+                    imgPath,
+                    width: 50,
+                  ),
+                ],
+              ),
+              title: Text(
+                title,
+                style: GoogleFonts.sarala(fontSize: 25, color: kBlackish),
+              ),
+              subtitle: Text(
+                description,
+                style: GoogleFonts.sarala(fontSize: 14, color: kGreyerish),
+              ),
+              trailing: Container(
+                height: double.infinity,
+                child: Icon(Icons.arrow_forward_ios_outlined),
+              ),
+            ),
+          ),
+        ),
+      ),
 
       // Container(
       //   width: widget.width * 0.8,
@@ -503,9 +554,12 @@ class _ProfileStudentState extends State<ProfileStudent> {
   String _userImage = SessionManager.loggedInStudent.profileImag;
 
   Function setParentState(String aboutMe) {
-    setState(() {
-      SessionManager.loggedInStudent.aboutMe = aboutMe;
-    });
+    if(this.mounted){
+      setState(() {
+        SessionManager.loggedInStudent.aboutMe = aboutMe;
+      });
+    }
+
   }
 
   List<MyMaterial> favDocs = [];
@@ -538,9 +592,12 @@ class _ProfileStudentState extends State<ProfileStudent> {
                   tempDoc.docid +
                   " material id is --> " +
                   material.id);
-              setState(() {
-                favDocs.add(tempDoc);
-              });
+              if(this.mounted){
+                setState(() {
+                  favDocs.add(tempDoc);
+                });
+              }
+
             } else {
               // QUIZ TYPE
 
@@ -551,9 +608,11 @@ class _ProfileStudentState extends State<ProfileStudent> {
                   material.data()['quizTitle'],
                   material.data()['quizDesc'],
                   material.id);
-              setState(() {
-                favDocs.add(tempQ);
-              });
+              if(this.mounted){
+                setState(() {
+                  favDocs.add(tempQ);
+                });
+              }
             }
           }
         }
@@ -635,14 +694,18 @@ class _ProfileStudentState extends State<ProfileStudent> {
                                 setState(() {});
                               },
                               child: Align(
-                                child: Icon(Icons.edit, color: Theme.of(context).iconTheme.color,),
+                                child: Icon(
+                                  Icons.edit,
+                                  color: Theme.of(context).iconTheme.color,
+                                ),
                                 alignment: Alignment.bottomRight,
                               )),
                         ),
                 ),
                 Text(
                   SessionManager.loggedInStudent.name,
-                  style: kTitleStyle.copyWith(color: Theme.of(context).primaryColor, fontSize: 30),
+                  style: kTitleStyle.copyWith(
+                      color: Theme.of(context).primaryColor, fontSize: 30),
                 ),
                 Center(
                   child: Container(
@@ -682,7 +745,9 @@ class _ProfileStudentState extends State<ProfileStudent> {
                         ),
                         Text(
                           "About Me",
-                          style: TextStyle(fontSize: 18, color: Theme.of(context).primaryColor),
+                          style: TextStyle(
+                              fontSize: 18,
+                              color: Theme.of(context).primaryColor),
                         )
                       ],
                     ),
@@ -694,12 +759,16 @@ class _ProfileStudentState extends State<ProfileStudent> {
                                 child: Text(
                                   SessionManager.loggedInStudent.aboutMe,
                                   style: TextStyle(
-                                      fontSize: 16.5, color: Theme.of(context).primaryColor),
+                                      fontSize: 16.5,
+                                      color: Theme.of(context).primaryColor),
                                 ),
                               ),
                               Spacer(),
                               IconButton(
-                                icon: Icon(Icons.edit, color: Theme.of(context).iconTheme.color,),
+                                icon: Icon(
+                                  Icons.edit,
+                                  color: Theme.of(context).iconTheme.color,
+                                ),
                                 iconSize: 20,
                                 onPressed: () {
                                   showAboutMe(setParentState);
@@ -718,7 +787,8 @@ class _ProfileStudentState extends State<ProfileStudent> {
                                   child: Text(
                                     "No \"About me\" :( ",
                                     style: TextStyle(
-                                        fontSize: 16.5, color: Theme.of(context).primaryColor),
+                                        fontSize: 16.5,
+                                        color: Theme.of(context).primaryColor),
                                   ),
                                 ),
                                 SizedBox(
@@ -760,7 +830,8 @@ class _ProfileStudentState extends State<ProfileStudent> {
                     ),
                     Text(
                       "Bookmarked Materials",
-                      style: TextStyle(fontSize: 18 , color: Theme.of(context).primaryColor),
+                      style: TextStyle(
+                          fontSize: 18, color: Theme.of(context).primaryColor),
                     )
                   ],
                 ),

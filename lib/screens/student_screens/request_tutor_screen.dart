@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_villains/villains/villains.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mytutor/classes/rate.dart';
 import 'package:mytutor/classes/tutor.dart';
@@ -36,16 +37,14 @@ class _RequestTutorScreenState extends State<RequestTutorScreen> {
     return response;
   }
 
-  fetchRates(){
-
-  }
+  fetchRates() {}
 
   void initState() {
     getTutorsFromApi().then((data) {
       setState(() {
         Tutor temp;
         for (var tutor in data.docs) {
-              temp = Tutor(
+          temp = Tutor(
               tutor.data()["name"],
               tutor.data()["email"],
               tutor.data()["pass"],
@@ -54,19 +53,18 @@ class _RequestTutorScreenState extends State<RequestTutorScreen> {
               List.from(tutor.data()['experiences']),
               // List.from(tutor.data()["experiences"]),
               tutor.data()["profileImg"]);
-            Tutors.add(temp);
-
+          Tutors.add(temp);
         }
       });
     });
-
-
 
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    int fromDurationAnimationConter = 0;
+    int toDurationAnimationConter = 400;
     return SafeArea(
       child: Scaffold(
         //resizeToAvoidBottomInset : false,
@@ -116,15 +114,14 @@ class _RequestTutorScreenState extends State<RequestTutorScreen> {
                   height: 10,
                 ),
                 GestureDetector(
-                  onTap: (){
-
-                  },
+                  onTap: () {},
                   child: Container(
                       height: 40,
                       width: 200,
                       decoration: BoxDecoration(
                           color: kColorScheme[1],
-                          borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                          borderRadius:
+                              BorderRadius.all(Radius.circular(10.0))),
                       child: new Center(
                         child: new Text(
                           "Filter options",
@@ -153,7 +150,6 @@ class _RequestTutorScreenState extends State<RequestTutorScreen> {
                       overscroll.disallowGlow();
                     },
                     child: GridView.builder(
-
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         childAspectRatio: 0.80,
                         crossAxisCount: 2,
@@ -166,8 +162,16 @@ class _RequestTutorScreenState extends State<RequestTutorScreen> {
                       // scrollDirection: Axis.horizontal,
                       itemCount: searchedTutors.length,
                       itemBuilder: (context, index) {
-                        return TutorWidget(
-                            tutor: searchedTutors.elementAt(index));
+                        fromDurationAnimationConter += 100;
+                        toDurationAnimationConter += 100;
+                        return Villain(
+                          villainAnimation: VillainAnimation.fromBottom(
+                            from: Duration(milliseconds: fromDurationAnimationConter),
+                            to: Duration(milliseconds: toDurationAnimationConter),
+                          ),
+                          child: TutorWidget(
+                              tutor: searchedTutors.elementAt(index)),
+                        );
                       },
                     ),
                   ),
@@ -331,7 +335,7 @@ class _TutorWidgetState extends State<TutorWidget> {
                                       dateController.text,
                                       tutor,
                                       timeController.text,
-                                  1);
+                                      1);
                                   Navigator.of(context).pop();
                                 }
                               }),
