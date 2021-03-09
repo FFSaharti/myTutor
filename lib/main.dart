@@ -10,9 +10,9 @@ import 'package:mytutor/screens/student_screens/view_materials_screen.dart';
 import 'package:mytutor/screens/tour_screen.dart';
 import 'package:mytutor/screens/tutor_screens/answer_screen_tutor.dart';
 import 'package:mytutor/screens/tutor_screens/create_materials_screen.dart';
-import 'package:mytutor/screens/tutor_screens/homepage_screen_tutor.dart';
 import 'package:mytutor/screens/tutor_screens/interests_screen.dart';
 import 'package:mytutor/screens/tutor_screens/respond_screen_tutor.dart';
+import 'package:mytutor/screens/tutor_screens/tutor_screen.dart';
 import 'package:mytutor/screens/welcome_screen.dart';
 import 'package:mytutor/utilities/mytheme.dart';
 import 'package:mytutor/utilities/theme_provider.dart';
@@ -30,36 +30,36 @@ void main() async {
 class TutorApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) => ChangeNotifierProvider(
-    create: (context) => ThemeProvider(),
-    builder: (context,_){
-      final themeProvider = Provider.of<ThemeProvider>(context);
-      return MaterialApp(
-              themeMode: themeProvider.currentTheme,
-              darkTheme: MyTheme.darkTheme,
-              theme: MyTheme.lightTheme,
-              navigatorObservers: [new VillainTransitionObserver()],
-              // Using Named Routes to specify all the screens in the app
-              initialRoute: SplashScreen.id,
-              routes: {
-                SplashScreen.id: (context) => SplashScreen(),
-                WelcomeScreen.id: (context) => WelcomeScreen(),
-                TourScreen.id: (context) => TourScreen(),
-                LoginScreen.id: (context) => LoginScreen(),
-                SignupScreen.id: (context) => SignupScreen(),
-                SpecifyRoleScreen.id: (context) => SpecifyRoleScreen(),
-                InterestsScreen.id: (context) => InterestsScreen(),
-                HomepageScreenStudent.id: (context) => HomepageScreenStudent(),
-                HomepageScreenTutor.id: (context) => HomepageScreenTutor(),
-                AskScreenStudent.id: (context) => AskScreenStudent(),
-                RequestTutorScreen.id: (context) => RequestTutorScreen(),
-                RespondScreenTutor.id: (context) => RespondScreenTutor(),
-                AnswerScreenTutor.id: (context) => AnswerScreenTutor(),
-                CreateMaterialsScreen.id: (context) => CreateMaterialsScreen(),
-                ViewMaterialsScreen.id: (context) => ViewMaterialsScreen(),
-              },
-            );
-    },
-  );
+        create: (context) => ThemeProvider(),
+        builder: (context, _) {
+          final themeProvider = Provider.of<ThemeProvider>(context);
+          return MaterialApp(
+            themeMode: themeProvider.currentTheme,
+            darkTheme: MyTheme.darkTheme,
+            theme: MyTheme.lightTheme,
+            navigatorObservers: [new VillainTransitionObserver()],
+            // Using Named Routes to specify all the screens in the app
+            initialRoute: SplashScreen.id,
+            routes: {
+              SplashScreen.id: (context) => SplashScreen(),
+              WelcomeScreen.id: (context) => WelcomeScreen(),
+              TourScreen.id: (context) => TourScreen(),
+              LoginScreen.id: (context) => LoginScreen(),
+              SignupScreen.id: (context) => SignupScreen(),
+              SpecifyRoleScreen.id: (context) => SpecifyRoleScreen(),
+              InterestsScreen.id: (context) => InterestsScreen(),
+              HomepageScreenStudent.id: (context) => HomepageScreenStudent(),
+              HomepageScreenTutor.id: (context) => HomepageScreenTutor(),
+              AskScreenStudent.id: (context) => AskScreenStudent(),
+              RequestTutorScreen.id: (context) => RequestTutorScreen(),
+              RespondScreenTutor.id: (context) => RespondScreenTutor(),
+              AnswerScreenTutor.id: (context) => AnswerScreenTutor(),
+              CreateMaterialsScreen.id: (context) => CreateMaterialsScreen(),
+              ViewMaterialsScreen.id: (context) => ViewMaterialsScreen(),
+            },
+          );
+        },
+      );
   //
   // {
   //   final themeProvider = Provider.of<ThemeProvider>(context);

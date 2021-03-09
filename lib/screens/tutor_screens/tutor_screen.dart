@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_villains/villains/villains.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mytutor/screens/adjust_general_settings_screen.dart';
-import 'package:mytutor/screens/tutor_screens/tutor_Profile.dart';
-import 'package:mytutor/screens/tutor_screens/tutor_section.dart';
+import 'package:mytutor/screens/tutor_screens/tutor_options.dart';
+import 'package:mytutor/screens/tutor_screens/tutor_profile.dart';
 import 'package:mytutor/utilities/constants.dart';
 
 import '../message_screen.dart';
@@ -21,12 +21,11 @@ class HomepageScreenTutor extends StatefulWidget {
 class _HomepageScreenTutorState extends State<HomepageScreenTutor> {
   List<Widget> widgets = [
     HomePageTutor(),
-    TutorSection(),
+    TutorOptions(),
     MessageScreen(),
     TutorProfile(),
     AdjustGeneralSettings()
   ];
-  int _navindex = 0;
   int _currentIndex = 0;
 
   @override
@@ -142,7 +141,7 @@ class _HomepageScreenTutorState extends State<HomepageScreenTutor> {
           },
           children: [
             HomePageTutor(),
-            TutorSection(),
+            TutorOptions(),
             MessageScreen(),
             TutorProfile(),
             AdjustGeneralSettings()

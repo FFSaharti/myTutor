@@ -9,15 +9,15 @@ import 'package:mytutor/utilities/screen_size.dart';
 import 'answer_screen_tutor.dart';
 import 'create_materials_screen.dart';
 
-class TutorSection extends StatefulWidget {
+class TutorOptions extends StatefulWidget {
   double height;
   double width;
 
   @override
-  _TutorSectionState createState() => _TutorSectionState();
+  _TutorOptionsState createState() => _TutorOptionsState();
 }
 
-class _TutorSectionState extends State<TutorSection> {
+class _TutorOptionsState extends State<TutorOptions> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

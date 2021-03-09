@@ -134,6 +134,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         DatabaseAPI.tempUser.name = name;
                         Validator.isValidName(value);
                       },
+                      isPassword: false,
                     ),
                   ),
                   SizedBox(
@@ -158,6 +159,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         DatabaseAPI.tempUser.email = email;
                         Validator.isValidEmail(value);
                       },
+                      isPassword: false,
                     ),
                   ),
                   SizedBox(
@@ -176,10 +178,8 @@ class _SignupScreenState extends State<SignupScreen> {
                       hintText: 'Password',
                       obscureText: SignupScreen.passwordVisible,
                       prefixIconData: Icons.lock,
-                      suffixIconData: SignupScreen.passwordVisible
-                          ? Icons.visibility
-                          : Icons.visibility_off,
                       colorScheme: kColorScheme[4],
+                      isPassword: true,
                       // isVisible: passwordVisible,
                     ),
                   ),
@@ -209,7 +209,15 @@ class _SignupScreenState extends State<SignupScreen> {
                         hasBorder: true,
                         borderColor: kColorScheme[3],
                         onPressed: () {
-                          Navigator.pushNamed(context, SpecifyRoleScreen.id);
+                          if (!(Validator.isValidName(name) ||
+                              Validator.isValidEmail(email) ||
+                              (password.length > 6 &&
+                                  password != null &&
+                                  password != ''))) {
+                            Navigator.pushNamed(context, SpecifyRoleScreen.id);
+                          } else {
+                            print('hi');
+                          }
                         }),
                   ),
                 ],
@@ -229,15 +237,16 @@ class TextFieldWidget extends StatefulWidget {
   bool obscureText;
   final Function onChanged;
   final Color colorScheme;
+  bool isPassword;
 
-  TextFieldWidget({
-    this.hintText,
-    this.obscureText,
-    this.onChanged,
-    this.prefixIconData,
-    this.suffixIconData,
-    this.colorScheme,
-  });
+  TextFieldWidget(
+      {this.hintText,
+      this.obscureText,
+      this.onChanged,
+      this.prefixIconData,
+      this.suffixIconData,
+      this.colorScheme,
+      this.isPassword});
 
   @override
   _TextFieldWidgetState createState() => _TextFieldWidgetState();
@@ -266,19 +275,39 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
           borderRadius: BorderRadius.circular(40),
           borderSide: BorderSide(color: widget.colorScheme),
         ),
-        suffixIcon: GestureDetector(
+        suffix: GestureDetector(
+          child: Padding(
+            padding: const EdgeInsets.only(right: 10.0, bottom: 11),
+            child: Icon(
+              (!widget.isPassword)
+                  ? widget.suffixIconData
+                  : SignupScreen.passwordVisible
+                      ? Icons.visibility
+                      : Icons.visibility_off,
+              size: 21,
+              color: widget.colorScheme,
+            ),
+          ),
           onTap: () {
             setState(() {
               SignupScreen.passwordVisible = !SignupScreen.passwordVisible;
               widget.obscureText = !widget.obscureText;
             });
           },
-          child: Icon(
-            widget.suffixIconData,
-            size: 18,
-            color: widget.colorScheme,
-          ),
         ),
+        // suffixIcon: GestureDetector(
+        //   onTap: () {
+        //     setState(() {
+        //       SignupScreen.passwordVisible = !SignupScreen.passwordVisible;
+        //       widget.obscureText = !widget.obscureText;
+        //     });
+        //   },
+        //   child: Icon(
+        //     widget.suffixIconData,
+        //     size: 18,
+        //     color: widget.colorScheme,
+        //   ),
+        // ),
         labelStyle: TextStyle(color: widget.colorScheme, fontSize: 20),
       ),
     );

@@ -2,13 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_villains/villains/villains.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mytutor/components/circular_button.dart';
+import 'package:mytutor/screens/welcome_screen.dart';
 import 'package:mytutor/utilities/constants.dart';
 import 'package:mytutor/utilities/database_api.dart';
 import 'package:mytutor/utilities/screen_size.dart';
 import 'package:mytutor/utilities/theme_provider.dart';
 import 'package:provider/provider.dart';
-
-import 'login_screen.dart';
 
 class AdjustGeneralSettings extends StatelessWidget {
   @override
@@ -76,7 +75,7 @@ class AdjustGeneralSettings extends StatelessWidget {
                           context,
                           MaterialPageRoute(
                               builder: (BuildContext context) =>
-                                  LoginScreen()));
+                                  WelcomeScreen()));
                     })
               ],
             ),

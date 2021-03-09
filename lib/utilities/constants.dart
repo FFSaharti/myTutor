@@ -125,7 +125,7 @@ List<Subject> subjects = [
 ];
 
 AppBar buildAppBar(BuildContext context, Color buttonColor, String title,
-    [bool removeBackButton]) {
+    [bool removeBackButton, Function onBack]) {
   if (removeBackButton == null) {
     removeBackButton = false;
   }

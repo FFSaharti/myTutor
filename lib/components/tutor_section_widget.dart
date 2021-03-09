@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:mytutor/screens/tutor_screens/tutor_section.dart';
+import 'package:mytutor/screens/tutor_screens/tutor_options.dart';
 
 class TutorSectionWidget extends StatelessWidget {
   TutorSectionWidget(
@@ -10,7 +10,7 @@ class TutorSectionWidget extends StatelessWidget {
       @required this.title,
       @required this.description});
 
-  final TutorSection widget;
+  final TutorOptions widget;
   final Function onClick;
   final String imgPath;
   final String title;

@@ -6,13 +6,14 @@ import 'package:flutter_villains/villains/villains.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mytutor/components/circular_button.dart';
 import 'package:mytutor/screens/student_screens/homepage_screen_student.dart';
+import 'package:mytutor/screens/welcome_screen.dart';
 import 'package:mytutor/utilities/constants.dart';
 import 'package:mytutor/utilities/database_api.dart';
 import 'package:mytutor/utilities/regEx.dart';
 import 'package:mytutor/utilities/screen_size.dart';
-import 'package:mytutor/utilities/session_manager.dart';
+import 'package:page_transition/page_transition.dart';
 
-import 'tutor_screens/homepage_screen_tutor.dart';
+import 'tutor_screens/tutor_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   static String id = 'login_screen';
@@ -50,7 +51,14 @@ class _LoginScreenState extends State<LoginScreen> {
         onWillPop: () async => false,
         child: Scaffold(
           resizeToAvoidBottomInset: true,
-          appBar: buildAppBar(context, Colors.white, ""),
+          appBar: buildAppBar(context, Colors.white, "", false, () {
+            Navigator.pushReplacement(
+                context,
+                PageTransition(
+                    type: PageTransitionType.bottomToTop,
+                    duration: Duration(milliseconds: 500),
+                    child: WelcomeScreen()));
+          }),
           backgroundColor: Colors.transparent,
           body: SingleChildScrollView(
             child: Padding(
