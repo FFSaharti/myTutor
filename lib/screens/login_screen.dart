@@ -94,6 +94,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     child: TextFieldWidget(
                       hintText: 'Email',
+                      isPassword: false,
                       obscureText: false,
                       prefixIconData: Icons.mail_outline,
                       colorScheme: kColorScheme[4],
@@ -108,7 +109,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                   SizedBox(
-                    height: 10,
+                    height: ScreenSize.height * 0.01,
                   ),
                   Villain(
                     villainAnimation: VillainAnimation.fromRight(
@@ -123,6 +124,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           ? Icons.visibility
                           : Icons.visibility_off,
                       colorScheme: kColorScheme[4],
+                      isPassword: true,
                       onChanged: (value) {
                         setState(() {
                           password = value;
@@ -149,7 +151,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ],
                   ),
                   SizedBox(
-                    height: 40,
+                    height: ScreenSize.height * 0.05,
                   ),
                   CircularButton(
                       width: ScreenSize.width * 0.9,
@@ -187,7 +189,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               else
                                 {
                                   // USER NOT FOUND
-                                  //TODO: Show toast for not found user
+                                  //TODO: Show dialog for user not found
                                   Future.delayed(Duration(milliseconds: 1000),
                                       () {
                                     stopLoading();
@@ -235,9 +237,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   Text(
                     "Provide us with your E-mail",
-                    style: kTitleStyle.copyWith(
+                    style: GoogleFonts.sen(
                         fontSize: 17,
-                        fontWeight: FontWeight.normal,
+                        fontWeight: FontWeight.bold,
                         color: Colors.black),
                   ),
                   SizedBox(
@@ -257,175 +259,89 @@ class _LoginScreenState extends State<LoginScreen> {
                     height: ScreenSize.height * 0.020,
                   ),
                   CircularButton(
-                      width: ScreenSize.width * 0.5,
-                      buttonColor: kColorScheme[2],
-                      textColor: Colors.white,
-                      isGradient: true,
-                      colors: [
-                        kColorScheme[1],
-                        kColorScheme[2],
-                        kColorScheme[3],
-                        kColorScheme[4]
-                      ],
-                      buttonText: 'Proceed',
-                      hasBorder: true,
-                      borderColor: kColorScheme[3],
-                      onPressed: () async {
-                        if (EmailController.text.isNotEmpty) {
-                          String errorCode =
-                              await DatabaseAPI.resetUserPassword(
-                                  EmailController.text);
-                          if (errorCode == "success") {
-                            // AwesomeDialog(
-                            //   context: context,
-                            //   animType: AnimType.SCALE,
-                            //   dialogType: DialogType.SUCCES,
-                            //   body: Padding(
-                            //     padding: const EdgeInsets.all(8.0),
-                            //     child: Center(
-                            //       child: Text(
-                            //         'check your email for reset link..',
-                            //         style: kTitleStyle.copyWith(
-                            //             color: kBlackish,
-                            //             fontSize: 14,
-                            //             fontWeight: FontWeight.normal),
-                            //       ),
-                            //     ),
-                            //   ),
-                            //   btnOkOnPress: () {
-                            //     Navigator.pop(context);
-                            //   },
-                            // ).show();
-                          } else if (errorCode == "invalid-email") {
-                            AwesomeDialog(
-                              context: context,
-                              animType: AnimType.SCALE,
-                              dialogType: DialogType.ERROR,
-                              body: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Center(
-                                  child: Text(
-                                    'Invalid email',
-                                    style: kTitleStyle.copyWith(
-                                        color: kBlackish,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.normal),
-                                  ),
+                    width: ScreenSize.width * 0.5,
+                    buttonColor: kColorScheme[2],
+                    textColor: Colors.white,
+                    isGradient: true,
+                    colors: [
+                      kColorScheme[1],
+                      kColorScheme[2],
+                      kColorScheme[3],
+                      kColorScheme[4]
+                    ],
+                    buttonText: 'Proceed',
+                    hasBorder: true,
+                    borderColor: kColorScheme[3],
+                    onPressed: () async {
+                      if (EmailController.text.isNotEmpty) {
+                        String errorCode = await DatabaseAPI.resetUserPassword(
+                            EmailController.text);
+                        if (errorCode == "success") {
+                        } else if (errorCode == "invalid-email") {
+                          AwesomeDialog(
+                            context: context,
+                            animType: AnimType.SCALE,
+                            dialogType: DialogType.ERROR,
+                            body: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Center(
+                                child: Text(
+                                  'Invalid E-Mail',
+                                  style: kTitleStyle.copyWith(
+                                      color: kBlackish,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.normal),
                                 ),
                               ),
-                              btnOkOnPress: () {},
-                            ).show();
-                          } else if (errorCode == "user-not-found") {
-                            AwesomeDialog(
-                              context: context,
-                              animType: AnimType.SCALE,
-                              dialogType: DialogType.ERROR,
-                              body: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Center(
-                                  child: Text(
-                                    'we dont have a user with that email.',
-                                    style: kTitleStyle.copyWith(
-                                        color: kBlackish,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.normal),
-                                  ),
+                            ),
+                            btnOkOnPress: () {},
+                          ).show();
+                        } else if (errorCode == "user-not-found") {
+                          AwesomeDialog(
+                            context: context,
+                            animType: AnimType.SCALE,
+                            dialogType: DialogType.ERROR,
+                            body: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Center(
+                                child: Text(
+                                  'User not found!',
+                                  style: kTitleStyle.copyWith(
+                                      color: kBlackish,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.normal),
                                 ),
                               ),
-                              btnOkOnPress: () {
-                                // Navigator.pop(context);
-                              },
-                            ).show();
-                          }
+                            ),
+                            btnOkOnPress: () {
+                              // Navigator.pop(context);
+                            },
+                          ).show();
                         }
-                      }),
-                  // Row(
-                  //   mainAxisAlignment: MainAxisAlignment.center,
-                  //   children: [
-                  //     RaisedButton(
-                  //       onPressed: () async {
-                  //         if (EmailController.text.isNotEmpty) {
-                  //           String errorCode =
-                  //               await DatabaseAPI.resetUserPassword(
-                  //                   EmailController.text);
-                  //           if (errorCode == "success") {
-                  //             // AwesomeDialog(
-                  //             //   context: context,
-                  //             //   animType: AnimType.SCALE,
-                  //             //   dialogType: DialogType.SUCCES,
-                  //             //   body: Padding(
-                  //             //     padding: const EdgeInsets.all(8.0),
-                  //             //     child: Center(
-                  //             //       child: Text(
-                  //             //         'check your email for reset link..',
-                  //             //         style: kTitleStyle.copyWith(
-                  //             //             color: kBlackish,
-                  //             //             fontSize: 14,
-                  //             //             fontWeight: FontWeight.normal),
-                  //             //       ),
-                  //             //     ),
-                  //             //   ),
-                  //             //   btnOkOnPress: () {
-                  //             //     Navigator.pop(context);
-                  //             //   },
-                  //             // ).show();
-                  //           } else if (errorCode == "invalid-email") {
-                  //             // AwesomeDialog(
-                  //             //   context: context,
-                  //             //   animType: AnimType.SCALE,
-                  //             //   dialogType: DialogType.ERROR,
-                  //             //   body: Padding(
-                  //             //     padding: const EdgeInsets.all(8.0),
-                  //             //     child: Center(
-                  //             //       child: Text(
-                  //             //         'Invalid email',
-                  //             //         style: kTitleStyle.copyWith(
-                  //             //             color: kBlackish,
-                  //             //             fontSize: 14,
-                  //             //             fontWeight: FontWeight.normal),
-                  //             //       ),
-                  //             //     ),
-                  //             //   ),
-                  //             //   btnOkOnPress: () {},
-                  //             // ).show();
-                  //           } else if (errorCode == "user-not-found") {
-                  //             // AwesomeDialog(
-                  //             //   context: context,
-                  //             //   animType: AnimType.SCALE,
-                  //             //   dialogType: DialogType.ERROR,
-                  //             //   body: Padding(
-                  //             //     padding: const EdgeInsets.all(8.0),
-                  //             //     child: Center(
-                  //             //       child: Text(
-                  //             //         'we dont have a user with that email.',
-                  //             //         style: kTitleStyle.copyWith(
-                  //             //             color: kBlackish,
-                  //             //             fontSize: 14,
-                  //             //             fontWeight: FontWeight.normal),
-                  //             //       ),
-                  //             //     ),
-                  //             //   ),
-                  //             //   btnOkOnPress: () {},
-                  //             // ).show();
-                  //           }
-                  //         }
-                  //       },
-                  //       child: Text(
-                  //         "Submit",
-                  //         style: GoogleFonts.sarabun(
-                  //           textStyle: TextStyle(
-                  //               fontSize: 18,
-                  //               fontWeight: FontWeight.normal,
-                  //               color: Colors.white),
-                  //         ),
-                  //       ),
-                  //       color: kColorScheme[2],
-                  //       shape: RoundedRectangleBorder(
-                  //         borderRadius: BorderRadius.circular(15.0),
-                  //       ),
-                  //     ),
-                  //   ],
-                  // ),
+                      } else {
+                        AwesomeDialog(
+                          context: context,
+                          animType: AnimType.SCALE,
+                          dialogType: DialogType.ERROR,
+                          body: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Center(
+                              child: Text(
+                                'Please Provide an E-mail',
+                                style: kTitleStyle.copyWith(
+                                    color: kBlackish,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.normal),
+                              ),
+                            ),
+                          ),
+                          btnOkOnPress: () {
+                            // Navigator.pop(context);
+                          },
+                        ).show();
+                      }
+                    },
+                  ),
                 ],
               ),
             ),
@@ -441,15 +357,16 @@ class TextFieldWidget extends StatefulWidget {
   bool obscureText;
   final Function onChanged;
   final Color colorScheme;
+  bool isPassword;
 
-  TextFieldWidget({
-    this.hintText,
-    this.obscureText,
-    this.onChanged,
-    this.prefixIconData,
-    this.suffixIconData,
-    this.colorScheme,
-  });
+  TextFieldWidget(
+      {this.hintText,
+      this.obscureText,
+      this.onChanged,
+      this.prefixIconData,
+      this.suffixIconData,
+      this.colorScheme,
+      this.isPassword});
 
   @override
   _TextFieldWidgetState createState() => _TextFieldWidgetState();
@@ -478,18 +395,25 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
           borderRadius: BorderRadius.circular(40),
           borderSide: BorderSide(color: widget.colorScheme),
         ),
-        suffixIcon: GestureDetector(
+        suffix: GestureDetector(
+          child: Padding(
+            padding: const EdgeInsets.only(right: 10.0, bottom: 11),
+            child: Icon(
+              (!widget.isPassword)
+                  ? widget.suffixIconData
+                  : !LoginScreen.passwordVisible
+                      ? Icons.visibility
+                      : Icons.visibility_off,
+              size: 21,
+              color: widget.colorScheme,
+            ),
+          ),
           onTap: () {
             setState(() {
               LoginScreen.passwordVisible = !LoginScreen.passwordVisible;
               widget.obscureText = !widget.obscureText;
             });
           },
-          child: Icon(
-            widget.suffixIconData,
-            size: 18,
-            color: widget.colorScheme,
-          ),
         ),
         labelStyle: TextStyle(color: widget.colorScheme, fontSize: 20),
       ),

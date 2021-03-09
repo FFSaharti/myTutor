@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:advance_pdf_viewer/advance_pdf_viewer.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_villains/villains/villains.dart';
@@ -22,7 +23,6 @@ import 'package:mytutor/utilities/screen_size.dart';
 import 'package:mytutor/utilities/session_manager.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 
 import '../message_screen.dart';
 import 'ask_screen_student.dart';
@@ -364,11 +364,11 @@ class _StudentSectionState extends State<StudentSection> {
                 SizedBox(
                   height: ScreenSize.height * 0.07,
                 ),
-            Villain(
-              villainAnimation: VillainAnimation.fade(
-                from: Duration(milliseconds: 0),
-                to: Duration(milliseconds: 500),
-              ),
+                Villain(
+                  villainAnimation: VillainAnimation.fade(
+                    from: Duration(milliseconds: 0),
+                    to: Duration(milliseconds: 500),
+                  ),
                   child: Text(
                     "Select an option",
                     style: GoogleFonts.sarala(fontSize: 25, color: kGreyerish),
@@ -554,20 +554,17 @@ class _ProfileStudentState extends State<ProfileStudent> {
   String _userImage = SessionManager.loggedInStudent.profileImag;
 
   Function setParentState(String aboutMe) {
-    if(this.mounted){
+    if (this.mounted) {
       setState(() {
         SessionManager.loggedInStudent.aboutMe = aboutMe;
       });
     }
-
   }
 
   List<MyMaterial> favDocs = [];
 
   @override
   void initState() {
-    // TODO: implement initState
-
     print(
         "FAV MATS IS --> " + SessionManager.loggedInStudent.favMats.toString());
 
@@ -592,12 +589,11 @@ class _ProfileStudentState extends State<ProfileStudent> {
                   tempDoc.docid +
                   " material id is --> " +
                   material.id);
-              if(this.mounted){
+              if (this.mounted) {
                 setState(() {
                   favDocs.add(tempDoc);
                 });
               }
-
             } else {
               // QUIZ TYPE
 
@@ -608,7 +604,7 @@ class _ProfileStudentState extends State<ProfileStudent> {
                   material.data()['quizTitle'],
                   material.data()['quizDesc'],
                   material.id);
-              if(this.mounted){
+              if (this.mounted) {
                 setState(() {
                   favDocs.add(tempQ);
                 });

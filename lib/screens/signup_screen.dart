@@ -138,7 +138,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     ),
                   ),
                   SizedBox(
-                    height: 10,
+                    height: ScreenSize.height * 0.01,
                   ),
                   Villain(
                     villainAnimation: VillainAnimation.fromRight(
@@ -163,7 +163,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     ),
                   ),
                   SizedBox(
-                    height: 10,
+                    height: ScreenSize.height * 0.01,
                   ),
                   Villain(
                     villainAnimation: VillainAnimation.fromLeft(
@@ -209,14 +209,14 @@ class _SignupScreenState extends State<SignupScreen> {
                         hasBorder: true,
                         borderColor: kColorScheme[3],
                         onPressed: () {
-                          if (!(Validator.isValidName(name) ||
+                          if ((Validator.isValidName(name) ||
                               Validator.isValidEmail(email) ||
                               (password.length > 6 &&
                                   password != null &&
                                   password != ''))) {
                             Navigator.pushNamed(context, SpecifyRoleScreen.id);
                           } else {
-                            print('hi');
+                            //TODO: ADD DIALOG FOR INVALID INFORMATION
                           }
                         }),
                   ),
@@ -281,7 +281,7 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
             child: Icon(
               (!widget.isPassword)
                   ? widget.suffixIconData
-                  : SignupScreen.passwordVisible
+                  : !SignupScreen.passwordVisible
                       ? Icons.visibility
                       : Icons.visibility_off,
               size: 21,
@@ -295,56 +295,8 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
             });
           },
         ),
-        // suffixIcon: GestureDetector(
-        //   onTap: () {
-        //     setState(() {
-        //       SignupScreen.passwordVisible = !SignupScreen.passwordVisible;
-        //       widget.obscureText = !widget.obscureText;
-        //     });
-        //   },
-        //   child: Icon(
-        //     widget.suffixIconData,
-        //     size: 18,
-        //     color: widget.colorScheme,
-        //   ),
-        // ),
         labelStyle: TextStyle(color: widget.colorScheme, fontSize: 20),
       ),
     );
-    // return TextField(
-    //   obscureText: widget.obscureText,
-    //   onChanged: widget.onChanged,
-    //   style: TextStyle(color: kColorScheme[4], fontSize: 14),
-    //   decoration: InputDecoration(
-    //     labelText: widget.hintText,
-    //     prefixIcon: Icon(
-    //       widget.prefixIconData,
-    //       size: 18,
-    //       color: widget.colorScheme,
-    //     ),
-    //     filled: true,
-    //     enabledBorder: UnderlineInputBorder(
-    //         borderRadius: BorderRadius.circular(10),
-    //         borderSide: BorderSide.none),
-    //     focusedBorder: OutlineInputBorder(
-    //       borderRadius: BorderRadius.circular(10),
-    //       borderSide: BorderSide(color: widget.colorScheme),
-    //     ),
-    //     suffixIcon: GestureDetector(
-    //       onTap: () {
-    //         setState(() {
-    //           SignupScreen.passwordVisible = !SignupScreen.passwordVisible;
-    //           widget.obscureText = !widget.obscureText;
-    //         });
-    //       },
-    //       child: Icon(
-    //         widget.suffixIconData,
-    //         size: 18,
-    //         color: widget.colorScheme,
-    //       ),
-    //     ),
-    //     labelStyle: TextStyle(color: widget.colorScheme),
-    //   ),
-    // );
   }
 }

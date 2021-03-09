@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_villains/villains/villains.dart';
 import 'package:mytutor/classes/question.dart';
 import 'package:mytutor/classes/student.dart';
 import 'package:mytutor/components/question_tutor_widget.dart';
@@ -10,8 +11,10 @@ import 'package:mytutor/utilities/database_api.dart';
 class QuestionStreamTutor extends StatelessWidget {
   final List<dynamic> exp;
   final String search;
+  int from = 100;
+  int to = 450;
 
-  const QuestionStreamTutor({@required this.exp, this.search});
+  QuestionStreamTutor({@required this.exp, this.search});
 
   @override
   Widget build(BuildContext context) {
@@ -19,6 +22,8 @@ class QuestionStreamTutor extends StatelessWidget {
       stream: DatabaseAPI.fetchQuestionsForTutor(),
       builder: (context, snapshot) {
         // List to fill up with all the session the user has.
+        from = 100;
+        to = 450;
         List<Widget> TutorQuestions = [];
         if (snapshot.hasData) {
           List<QueryDocumentSnapshot> questions = snapshot.data.docs;
@@ -69,35 +74,43 @@ class QuestionStreamTutor extends StatelessWidget {
   void addQuestion(BuildContext context, List<Widget> TutorQuestions, qTitle,
       QueryDocumentSnapshot question, qDesc, qDOS, qIssuer, qSubject, qState) {
     TutorQuestions.add(
-      GestureDetector(
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => AnswerScreenQuestionDetails(
-                      Question(
-                          qTitle,
-                          question.id,
-                          qDesc,
-                          qDOS,
-                          // TODO: Fetch Student from DB
-                          Student("", "", "", "", qIssuer.toString(), [], ""),
-                          [],
-                          qSubject.toString(),
-                          qState),
-                    )),
-          );
-        },
-        child: QuestionTutorWidget(Question(
-            qTitle,
-            question.id,
-            qDesc,
-            qDOS,
-            Student("", "", "", "", qIssuer.toString(), [], ""),
-            [],
-            qSubject.toString(),
-            qState)),
+      Villain(
+        villainAnimation: VillainAnimation.fromBottom(
+          from: Duration(milliseconds: from),
+          to: Duration(milliseconds: to),
+        ),
+        child: GestureDetector(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => AnswerScreenQuestionDetails(
+                        Question(
+                            qTitle,
+                            question.id,
+                            qDesc,
+                            qDOS,
+                            Student("", "", "", "", qIssuer.toString(), [], ""),
+                            [],
+                            qSubject.toString(),
+                            qState),
+                      )),
+            );
+          },
+          child: QuestionTutorWidget(Question(
+              qTitle,
+              question.id,
+              qDesc,
+              qDOS,
+              Student("", "", "", "", qIssuer.toString(), [], ""),
+              [],
+              qSubject.toString(),
+              qState)),
+        ),
       ),
     );
+
+    from += 100;
+    to += 100;
   }
 }

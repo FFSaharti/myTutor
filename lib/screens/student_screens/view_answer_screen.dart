@@ -15,7 +15,6 @@ class ViewAnswerScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //TODO: Implement our own appBar (with title passable, and want back or not)
       appBar: AppBar(
         iconTheme: IconThemeData(
           color: Colors.black, //change your color here.

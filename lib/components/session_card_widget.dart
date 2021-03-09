@@ -250,20 +250,7 @@ class _SessionCardWidgetState extends State<SessionCardWidget> {
                   ),
                 ));
           }
-        }
-
-        // onTap: widget.session.status == "pending"
-        //     ? null
-        //     : () {
-        //         Navigator.push(
-        //             context,
-        //             MaterialPageRoute(
-        //               builder: (context) => messagesScreen(
-        //                 currentsession: widget.session,
-        //               ),
-        //             ));
-        //       },
-        ,
+        },
         child: Container(
           height: widget.height * 0.155,
           decoration: new BoxDecoration(

@@ -89,7 +89,8 @@ class _CreateMaterialsScreenState extends State<CreateMaterialsScreen> {
                       decoration: new BoxDecoration(
                         color: Colors.transparent,
                         shape: BoxShape.circle,
-                        border: Border.all(width: 5.0, color: Colors.transparent),
+                        border:
+                            Border.all(width: 5.0, color: Colors.transparent),
                       ),
                     ),
                   ),
@@ -124,7 +125,8 @@ class _CreateMaterialsScreenState extends State<CreateMaterialsScreen> {
                       decoration: new BoxDecoration(
                         color: Colors.transparent,
                         shape: BoxShape.circle,
-                        border: Border.all(width: 5.0, color: Colors.transparent),
+                        border:
+                            Border.all(width: 5.0, color: Colors.transparent),
                       ),
                     ),
                   ),
@@ -409,7 +411,6 @@ class _CreateMaterialsScreenState extends State<CreateMaterialsScreen> {
     FilePickerResult file =
         await FilePicker.platform.pickFiles(type: FileType.any);
     file == null ? null : _file = File(file.files.single.path);
-
   }
 
   // CREATE QUIZ
@@ -972,7 +973,6 @@ class _CreateMaterialsScreenState extends State<CreateMaterialsScreen> {
     List<Widget> widgets = [];
 
     for (int i = 0; i < tempQuiz.questions.length; i++) {
-      // TODO : Implement viewing & editing question before creating quiz...
       widgets.add(
         Text(
           tempQuiz.questions[i].question,

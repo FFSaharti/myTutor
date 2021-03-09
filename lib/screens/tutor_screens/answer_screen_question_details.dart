@@ -1,14 +1,14 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:mytutor/classes/question.dart';
 import 'package:mytutor/classes/session.dart';
-import 'package:mytutor/components/ez_button.dart';
+import 'package:mytutor/components/circular_button.dart';
 import 'package:mytutor/utilities/constants.dart';
 import 'package:mytutor/utilities/database_api.dart';
 import 'package:mytutor/utilities/screen_size.dart';
 import 'package:mytutor/utilities/session_manager.dart';
-import 'package:intl/intl.dart';
 
 class AnswerScreenQuestionDetails extends StatefulWidget {
   final Question question;
@@ -28,155 +28,159 @@ class _AnswerScreenQuestionDetailsState
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      //TODO: Implement our own appBar (with title passable, and want back or not)
-      appBar: AppBar(
-        iconTheme: IconThemeData(
-          color: Colors.black, //change your color here.
-        ),
-        automaticallyImplyLeading: true,
-        backgroundColor: Colors.white70,
-        title: Text(
-          "View Answer",
-          style: TextStyle(color: Colors.black),
-        ),
-      ),
-      body: Container(
-        child: Column(
-          children: <Widget>[
-            SizedBox(
-              height: 15,
-            ),
-            Center(
-              child: Container(
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+        appBar: buildAppBar(context, kColorScheme[3], "View Question"),
+        body: Container(
+          child: Column(
+            children: <Widget>[
+              Center(
+                child: Container(
+                  width: ScreenSize.width * 0.88,
+                  child: Row(
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                            color: kWhiteish,
+                            borderRadius: BorderRadius.circular(10)),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Image.asset(
+                            subjects[int.parse(widget.question.subject)].path,
+                            width: ScreenSize.width * 0.12,
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: ScreenSize.width * 0.02,
+                      ),
+                      Container(
+                        width: ScreenSize.width * 0.69,
+                        height: ScreenSize.height * 0.103,
+                        decoration: BoxDecoration(
+                            color: kWhiteish,
+                            borderRadius: BorderRadius.circular(10)),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            children: [
+                              Row(
+                                children: [
+                                  Icon(Icons.description),
+                                  Text(
+                                    widget.question.title,
+                                    style: GoogleFonts.sen(
+                                        fontSize: 15,
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold),
+                                  )
+                                ],
+                              ),
+                              SizedBox(
+                                height: ScreenSize.width * 0.01,
+                              ),
+                              Row(
+                                children: [
+                                  Icon(Icons.today),
+                                  Text(
+                                    widget.question.dateOfSubmission,
+                                    style: GoogleFonts.sen(
+                                        fontSize: 15,
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold),
+                                  )
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: ScreenSize.height * 0.009,
+              ),
+              Container(
                 width: ScreenSize.width * 0.88,
-                child: Row(
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                          color: kWhiteish,
-                          borderRadius: BorderRadius.circular(10)),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Image.asset(
-                          subjects[int.parse(widget.question.subject)].path,
-                          width: 50,
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Container(
-                      width: ScreenSize.width * 0.69,
-                      height: ScreenSize.height * 0.103,
-                      decoration: BoxDecoration(
-                          color: kWhiteish,
-                          borderRadius: BorderRadius.circular(10)),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          children: [
-                            Row(
-                              children: [
-                                Icon(Icons.description),
-                                Text(
-                                  widget.question.title,
-                                  style: kTitleStyle.copyWith(
-                                      fontSize: 15, color: Colors.black),
-                                )
-                              ],
-                            ),
-                            SizedBox(
-                              height: 6.1,
-                            ),
-                            Row(
-                              children: [
-                                Icon(Icons.today),
-                                Text(
-                                  widget.question.dateOfSubmission,
-                                  style: kTitleStyle.copyWith(
-                                      fontSize: 15, color: Colors.black),
-                                )
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
+                child: Divider(
+                  height: ScreenSize.height * 0.02,
                 ),
               ),
-            ),
-            SizedBox(
-              height: 9,
-            ),
-            Container(
-              width: ScreenSize.width * 0.88,
-              child: Divider(
-                height: 15,
-              ),
-            ),
-            SizedBox(height: 9),
-            Padding(
-              padding: const EdgeInsets.only(left: 30.0),
-              child: Container(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  "Question Description ",
-                  style:
-                      kTitleStyle.copyWith(fontSize: 20, color: Colors.black),
+              SizedBox(height: ScreenSize.height * 0.01),
+              Padding(
+                padding: const EdgeInsets.only(left: 30.0),
+                child: Container(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    "Question Description ",
+                    style: GoogleFonts.sen(
+                        fontSize: 25,
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold),
+                  ),
                 ),
               ),
-            ),
-            SizedBox(height: 9),
-            Padding(
-              padding: const EdgeInsets.only(left: 30.0),
-              child: Container(
-                alignment: Alignment.topLeft,
-                height: ScreenSize.height * 0.4,
-                child: Text(
-                  widget.question.description,
-                  style: kTitleStyle.copyWith(
-                      color: kGreyerish,
-                      fontSize: 15,
-                      fontWeight: FontWeight.normal),
+              SizedBox(height: ScreenSize.height * 0.005),
+              Padding(
+                padding: const EdgeInsets.only(left: 32.0),
+                child: Container(
+                  alignment: Alignment.topLeft,
+                  height: ScreenSize.height * 0.4,
+                  child: Text(
+                    widget.question.description,
+                    style: GoogleFonts.sen(
+                        fontSize: 15,
+                        color: kGreyerish,
+                        fontWeight: FontWeight.normal),
+                  ),
                 ),
               ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                EZButton(
-                    width: ScreenSize.width * 0.5,
-                    buttonColor: kColorScheme[2],
-                    textColor: Colors.white,
-                    isGradient: true,
-                    colors: [kColorScheme[0], kColorScheme[3]],
-                    buttonText: "Answer",
-                    hasBorder: false,
-                    borderColor: null,
-                    onPressed: () {
-                      print("Pressed answer");
-                      showAddQuestion(setParentState);
-                      // SHOW ANSWER BOTTOM BAR
-                    }),
-                EZButton(
-                    width: ScreenSize.width * 0.5,
-                    buttonColor: kColorScheme[2],
-                    textColor: Colors.white,
-                    isGradient: true,
-                    colors: [kColorScheme[0], kColorScheme[3]],
-                    buttonText: "Schedule with student",
-                    hasBorder: false,
-                    borderColor: null,
-                    onPressed: () {
-                      scheduleWithStudent();
-                      // SHOW ANSWER BOTTOM BAR
-                    })
-              ],
-            )
-          ],
+              Container(
+                width: ScreenSize.width * 0.88,
+                child: Divider(
+                  height: ScreenSize.height * 0.02,
+                ),
+              ),
+              SizedBox(
+                height: ScreenSize.height * 0.05,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  CircularButton(
+                      width: ScreenSize.width * 0.5,
+                      buttonColor: kColorScheme[2],
+                      textColor: Colors.white,
+                      isGradient: true,
+                      colors: [kColorScheme[0], kColorScheme[3]],
+                      buttonText: "Answer",
+                      hasBorder: false,
+                      borderColor: null,
+                      onPressed: () {
+                        print("Pressed answer");
+                        showAddQuestion(setParentState);
+                        // SHOW ANSWER BOTTOM BAR
+                      }),
+                  CircularButton(
+                      width: ScreenSize.width * 0.5,
+                      buttonColor: kColorScheme[2],
+                      textColor: Colors.white,
+                      isGradient: true,
+                      colors: [kColorScheme[0], kColorScheme[3]],
+                      buttonText: "Schedule",
+                      hasBorder: false,
+                      borderColor: null,
+                      onPressed: () {
+                        scheduleWithStudent();
+                        // SHOW ANSWER BOTTOM BAR
+                      })
+                ],
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -186,8 +190,7 @@ class _AnswerScreenQuestionDetailsState
     TextEditingController answerController = TextEditingController();
     showModalBottomSheet(
         shape: RoundedRectangleBorder(
-            // borderRadius: BorderRadius.vertical(top: Radius.circular(2.0))
-            ),
+            borderRadius: BorderRadius.vertical(top: Radius.circular(25.0))),
         backgroundColor: Colors.transparent,
         enableDrag: true,
         isScrollControlled: true,
@@ -196,17 +199,13 @@ class _AnswerScreenQuestionDetailsState
           return StatefulBuilder(
               builder: (BuildContext context, StateSetter setModalState) {
             return Container(
-              height: ScreenSize.height * 0.50,
+              height: ScreenSize.height * 0.70,
               child: Scaffold(
                 body: Container(
                   //     padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
                   height: ScreenSize.height * 0.50,
                   decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(50)
-                      //   topRight: Radius.circular(100),
-                      //   topLeft: Radius.circular(100),
-                      // )
-                      ,
+                      borderRadius: BorderRadius.circular(10),
                       color: Colors.white),
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -223,19 +222,18 @@ class _AnswerScreenQuestionDetailsState
                                   }),
                               Text(
                                 "Answer",
-                                style: TextStyle(fontSize: 20),
+                                style: GoogleFonts.sen(fontSize: 20),
                               ),
                               IconButton(
                                 icon: Icon(Icons.check),
                                 onPressed: () {
-                                  // ADD NEW QUESTION
                                   if (answerController.text.isNotEmpty) {
-                                    // ADD ABOUT ME TO STUDENT...
                                     print("adding answer");
                                     DatabaseAPI.answerQuestion(widget.question,
                                             answerController.text)
                                         .then((value) =>
                                             {Navigator.pop(context)});
+                                    //TODO: Show dialog for answering message successfully
                                   } else {
                                     print("empty parameters");
                                     //TODO: Show error message cannot leave empty...
@@ -245,7 +243,7 @@ class _AnswerScreenQuestionDetailsState
                             ],
                           ),
                           SizedBox(
-                            height: 15,
+                            height: ScreenSize.height * 0.01,
                           ),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
@@ -255,7 +253,7 @@ class _AnswerScreenQuestionDetailsState
                                   alignment: Alignment.topLeft,
                                   child: Text(
                                     "Provide an answer",
-                                    style: GoogleFonts.secularOne(
+                                    style: GoogleFonts.sen(
                                         textStyle: TextStyle(
                                             fontSize: 17,
                                             fontWeight: FontWeight.bold,
@@ -268,12 +266,9 @@ class _AnswerScreenQuestionDetailsState
                                   maxLines: null,
                                   decoration: InputDecoration(
                                     hintText: 'Type something...',
-                                    hintStyle: TextStyle(
+                                    hintStyle: GoogleFonts.sen(
                                         fontSize: 17.0, color: Colors.grey),
                                   ),
-                                ),
-                                SizedBox(
-                                  height: 20,
                                 ),
                               ],
                             ),
@@ -309,7 +304,7 @@ class _AnswerScreenQuestionDetailsState
         context: context,
         builder: (context) {
           return Container(
-            height: height * 0.60,
+            height: height * 0.75,
             child: Container(
               padding: EdgeInsets.only(
                   bottom: MediaQuery.of(context).viewInsets.bottom),
@@ -330,8 +325,8 @@ class _AnswerScreenQuestionDetailsState
                                 Navigator.of(context).pop();
                               }),
                           Text(
-                            "Session details",
-                            style: TextStyle(fontSize: 20),
+                            "Session Details",
+                            style: GoogleFonts.sen(fontSize: 20),
                           ),
                           IconButton(
                               icon: Icon(Icons.check),
@@ -360,14 +355,15 @@ class _AnswerScreenQuestionDetailsState
                                                         DialogType.SUCCES,
                                                     body: Center(
                                                       child: Text(
-                                                        'the session created successfully. wait till the student accept it to start tutoring.',
+                                                        'Session sent to student!',
                                                         style: TextStyle(
                                                             fontStyle: FontStyle
                                                                 .italic),
                                                       ),
                                                     ),
                                                     btnOkOnPress: () {
-                                                      Navigator.of(context).pop();
+                                                      Navigator.of(context)
+                                                          .pop();
                                                     },
                                                   ).show()
                                                 : AwesomeDialog(
@@ -377,37 +373,34 @@ class _AnswerScreenQuestionDetailsState
                                                         DialogType.ERROR,
                                                     body: Center(
                                                       child: Text(
-                                                        'check the entered data and try again ',
+                                                        'Invalid Data',
                                                         style: TextStyle(
-                                                            fontStyle: FontStyle
-                                                                .italic,),
+                                                          fontStyle:
+                                                              FontStyle.italic,
+                                                        ),
                                                       ),
                                                     ),
-                                                    btnOkOnPress: () {
-
-                                                    },
+                                                    btnOkOnPress: () {},
                                                   ).show(),
                                           });
-
                                 }
                               }),
                         ],
                       ),
                       Text("Requesting",
-                          style: TextStyle(
+                          style: GoogleFonts.sen(
                               fontSize: 22,
                               fontWeight: FontWeight.normal,
                               color: Colors.black)),
                       Text(
                         widget.question.issuer.name,
-                        style: GoogleFonts.sarabun(
-                            textStyle: TextStyle(
-                                fontSize: 24,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.blueGrey)),
+                        style: GoogleFonts.sen(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.blueGrey),
                       ),
                       SizedBox(
-                        height: 15,
+                        height: ScreenSize.height * 0.01,
                       ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -417,7 +410,7 @@ class _AnswerScreenQuestionDetailsState
                               alignment: Alignment.topLeft,
                               child: Text(
                                 "SessionTitle",
-                                style: GoogleFonts.secularOne(
+                                style: GoogleFonts.sen(
                                     textStyle: TextStyle(
                                         fontSize: 17,
                                         fontWeight: FontWeight.bold,
@@ -428,18 +421,18 @@ class _AnswerScreenQuestionDetailsState
                               controller: titleController,
                               decoration: InputDecoration(
                                 hintText: 'Type something...',
-                                hintStyle: TextStyle(
+                                hintStyle: GoogleFonts.sen(
                                     fontSize: 17.0, color: Colors.grey),
                               ),
                             ),
                             SizedBox(
-                              height: 20,
+                              height: ScreenSize.height * 0.03,
                             ),
                             Align(
                               alignment: Alignment.topLeft,
                               child: Text(
                                 "Problem Description",
-                                style: GoogleFonts.secularOne(
+                                style: GoogleFonts.sen(
                                     textStyle: TextStyle(
                                         fontSize: 17,
                                         fontWeight: FontWeight.bold,
@@ -450,18 +443,18 @@ class _AnswerScreenQuestionDetailsState
                               controller: problemController,
                               decoration: InputDecoration(
                                 hintText: 'Type something...',
-                                hintStyle: TextStyle(
+                                hintStyle: GoogleFonts.sen(
                                     fontSize: 17.0, color: Colors.grey),
                               ),
                             ),
                             SizedBox(
-                              height: 20,
+                              height: ScreenSize.height * 0.03,
                             ),
                             Align(
                               alignment: Alignment.topLeft,
                               child: Text(
                                 "Preferred Date",
-                                style: GoogleFonts.secularOne(
+                                style: GoogleFonts.sen(
                                     textStyle: TextStyle(
                                         fontSize: 17,
                                         fontWeight: FontWeight.bold,
@@ -490,18 +483,18 @@ class _AnswerScreenQuestionDetailsState
                                   },
                                 ),
                                 hintText: 'Type something...',
-                                hintStyle: TextStyle(
+                                hintStyle: GoogleFonts.sen(
                                     fontSize: 17.0, color: Colors.grey),
                               ),
                             ),
                             SizedBox(
-                              height: 20,
+                              height: ScreenSize.height * 0.03,
                             ),
                             Align(
                               alignment: Alignment.topLeft,
                               child: Text(
                                 "Preferred Time, am/pm",
-                                style: GoogleFonts.secularOne(
+                                style: GoogleFonts.sen(
                                     textStyle: TextStyle(
                                         fontSize: 17,
                                         fontWeight: FontWeight.bold,
@@ -512,7 +505,7 @@ class _AnswerScreenQuestionDetailsState
                               controller: timeController,
                               decoration: InputDecoration(
                                 hintText: 'Type something...',
-                                hintStyle: TextStyle(
+                                hintStyle: GoogleFonts.sen(
                                     fontSize: 17.0, color: Colors.grey),
                               ),
                             ),

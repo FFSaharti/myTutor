@@ -77,12 +77,17 @@ class _HomePageTutorState extends State<HomePageTutor> {
                   ],
                 ),
               ),
-              SessionStream(
-                status: "active",
-                isStudent: false,
-                type: 1,
-                checkexpire: false,
-                expiredSessionView: false,
+              NotificationListener<OverscrollIndicatorNotification>(
+                onNotification: (overscroll) {
+                  overscroll.disallowGlow();
+                },
+                child: SessionStream(
+                  status: "active",
+                  isStudent: false,
+                  type: 1,
+                  checkexpire: false,
+                  expiredSessionView: false,
+                ),
               ),
               SizedBox(
                 height: ScreenSize.height * 0.02,
