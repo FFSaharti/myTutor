@@ -124,7 +124,12 @@ List<Subject> subjects = [
       false),
 ];
 
-AppBar buildAppBar(BuildContext context, Color buttonColor, String title) {
+AppBar buildAppBar(BuildContext context, Color buttonColor, String title,
+    [bool removeBackButton]) {
+  if (removeBackButton == null) {
+    removeBackButton = false;
+  }
+
   return AppBar(
     title: Text(
       title,
@@ -135,10 +140,12 @@ AppBar buildAppBar(BuildContext context, Color buttonColor, String title) {
         from: Duration(milliseconds: 300),
         to: Duration(milliseconds: 700),
       ),
-      child: IconButton(
-        icon: Icon(Icons.arrow_back_ios_sharp, color: buttonColor),
-        onPressed: () => Navigator.of(context).pop(),
-      ),
+      child: (removeBackButton)
+          ? Container()
+          : IconButton(
+              icon: Icon(Icons.arrow_back_ios_sharp, color: buttonColor),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
     ),
     backgroundColor: Colors.transparent,
     elevation: 0,

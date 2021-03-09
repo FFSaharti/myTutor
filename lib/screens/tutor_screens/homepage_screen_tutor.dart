@@ -1,7 +1,7 @@
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_villains/villain.dart';
+import 'package:flutter_villains/villains/villains.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mytutor/screens/adjust_general_settings_screen.dart';
 import 'package:mytutor/screens/tutor_screens/tutor_Profile.dart';
@@ -42,11 +42,15 @@ class _HomepageScreenTutorState extends State<HomepageScreenTutor> {
           itemCornerRadius: 24,
           curve: Curves.easeIn,
           onItemSelected: (index) {
-            _pageController.animateToPage(index,
-                duration: Duration(milliseconds: 400), curve: Curves.easeIn);
             setState(() {
               _currentIndex = index;
             });
+            // _pageController.jumpToPage(_currentIndex);
+            _pageController
+                .animateToPage(_currentIndex,
+                    duration: Duration(milliseconds: 300),
+                    curve: Curves.easeInOut)
+                .then((value) => {VillainController.playAllVillains(context)});
           },
           items: <BottomNavyBarItem>[
             BottomNavyBarItem(
@@ -130,17 +134,19 @@ class _HomepageScreenTutorState extends State<HomepageScreenTutor> {
         body: PageView(
           physics: new NeverScrollableScrollPhysics(),
           controller: _pageController,
-          onPageChanged: (ind) {
-            VillainController.playAllVillains(context);
+          onPageChanged: (index) {
+            setState(() {
+              _currentIndex = index;
+              //VillainController.playAllVillains(context);
+            });
           },
-          children: widgets,
-          // [
-          //   HomePageTutor(),
-          //   TutorSection(),
-          //   MessageScreen(),
-          //   TutorProfile(),
-          //   AdjustGeneralSettings(),
-          // ],
+          children: [
+            HomePageTutor(),
+            TutorSection(),
+            MessageScreen(),
+            TutorProfile(),
+            AdjustGeneralSettings()
+          ],
         ),
       ),
     );

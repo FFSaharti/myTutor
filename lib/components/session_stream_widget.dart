@@ -53,6 +53,7 @@ class SessionStream extends StatelessWidget {
                     from: Duration(milliseconds: from),
                     to: Duration(milliseconds: to),
                   ),
+                  animateEntrance: true,
                   child: SessionCardWidget(
                     isStudent: isStudent,
                     height: ScreenSize.height,

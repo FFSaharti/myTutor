@@ -30,6 +30,7 @@ class _HomePageTutorState extends State<HomePageTutor> {
                     from: Duration(milliseconds: 30),
                     to: Duration(milliseconds: 300),
                   ),
+                  animateEntrance: true,
                   child: Align(
                     alignment: Alignment.centerLeft,
                     child: RichText(

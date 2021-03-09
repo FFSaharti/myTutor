@@ -338,7 +338,6 @@ class _MaterialStreamTutorState extends State<MaterialStreamTutor> {
                   ),
                 );
               }
-
               to += 100;
               from += 100;
             }

@@ -103,10 +103,11 @@ class _TutorProfileState extends State<TutorProfile> {
 
   @override
   Widget build(BuildContext context) {
+    //VillainController.playAllVillains(context);
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
-        appBar: buildAppBar(context, kColorScheme[3], "Profile"),
+        appBar: buildAppBar(context, kColorScheme[3], "Profile", true),
         body: SafeArea(
           child: Center(
             child: Container(

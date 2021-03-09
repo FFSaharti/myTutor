@@ -24,8 +24,8 @@ class _MessageScreenState extends State<MessageScreen> {
   List<MessageListTile> Searchtest = [];
   List<MessageListTile> userMessages = [];
   TextEditingController searchController = TextEditingController();
-  int from = 50;
-  int to = 350;
+  int from = 0;
+  int to = 200;
 
   void initState() {
     super.initState();
