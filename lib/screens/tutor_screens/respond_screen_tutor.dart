@@ -121,7 +121,7 @@ class _RespondSessionWidgetState extends State<RespondSessionWidget> {
           height: widget.height * 0.010,
         ),
         Padding(
-          padding: const EdgeInsets.all(15.0),
+          padding: const EdgeInsets.all(3.0),
           child: GestureDetector(
             onTap: () {
               showBottomsheetModel(widget.session);
@@ -142,7 +142,7 @@ class _RespondSessionWidgetState extends State<RespondSessionWidget> {
                 ],
               ),
               child: Padding(
-                padding: const EdgeInsets.only(left: 8.0),
+                padding: const EdgeInsets.all(5.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -178,8 +178,8 @@ class _RespondSessionWidgetState extends State<RespondSessionWidget> {
                               borderRadius: new BorderRadius.circular(50.0),
                             ),
                             child: Padding(
-                              padding: const EdgeInsets.only(
-                                  left: 11.0, right: 11.0),
+                              padding:
+                                  const EdgeInsets.only(left: 5.0, right: 5.0),
                               child: Text(
                                 DateFormat('yyyy-MM-dd')
                                         .format(widget.session.date) +

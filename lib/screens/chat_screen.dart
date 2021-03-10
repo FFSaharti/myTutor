@@ -5,6 +5,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mytutor/classes/rate.dart';
 import 'package:mytutor/classes/session.dart';
@@ -13,14 +14,12 @@ import 'package:mytutor/classes/tutor.dart';
 import 'package:mytutor/classes/user.dart';
 import 'package:mytutor/components/ez_button.dart';
 import 'package:mytutor/components/messages_stream_widget.dart';
-import 'package:mytutor/screens/student_screens/view_tutor_profile_screen.dart';
 import 'package:mytutor/screens/view_receiver_profile.dart';
 import 'package:mytutor/utilities/constants.dart';
 import 'package:mytutor/utilities/database_api.dart';
 import 'package:mytutor/utilities/screen_size.dart';
 import 'package:mytutor/utilities/session_manager.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 //TODO: implement view profile by clicking on circle Avatar?
 class ChatScreen extends StatefulWidget {
@@ -86,45 +85,6 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   leading: null,
-      //   elevation: 0,
-      //   backgroundColor: Color(0x44000000),
-      //   actions: <Widget>[
-      //     IconButton(
-      //         icon: Icon(Icons.info_outline),
-      //         onPressed: () {
-      //           if (SessionManager.loggedInTutor.userId == "") {
-      //             // current user is student, show him the bottom sheet to give  him the ability to rate the session
-      //             // check if the session is active, then show the rate bottom sheet, if not show a error pop up.
-      //             widget.currentsession.status == "active"
-      //                 ? showBottomSheetForStudent()
-      //                 : AwesomeDialog(
-      //                     context: context,
-      //                     animType: AnimType.SCALE,
-      //                     dialogType: DialogType.ERROR,
-      //                     body: Padding(
-      //                       padding: const EdgeInsets.all(8.0),
-      //                       child: Center(
-      //                         child: Text(
-      //                           'the session is closed. you cant rate it anymore..',
-      //                           style: kTitleStyle.copyWith(
-      //                               color: kBlackish,
-      //                               fontSize: 14,
-      //                               fontWeight: FontWeight.normal),
-      //                         ),
-      //                       ),
-      //                     ),
-      //                     btnOkOnPress: () {
-      //                       Navigator.pop(context);
-      //                     },
-      //                   ).show();
-      //           } else {
-      //             showBottomSheetForTutor();
-      //           }
-      //         }),
-      //   ],
-      // ),
       extendBodyBehindAppBar: true,
       body: SafeArea(
         child: receiverDataLoadIndicator == false
@@ -192,22 +152,28 @@ class _ChatScreenState extends State<ChatScreen> {
                                     )
                                   : Text(""),
                               trailing: GestureDetector(
-                                onTap:  widget.currentsession.status == "closed" ? () {
-                                  Fluttertoast.showToast(
-                                      msg: "you cannot closed or rated this session.",
-                                      toastLength: Toast.LENGTH_SHORT,
-                                      gravity: ToastGravity.CENTER,
-                                      textColor: Colors.white,
-                                      fontSize: 16.0
-                                  );
-                                }: () {
-                                  SessionManager.loggedInTutor.userId == ""
-                                      ? showBottomSheetForStudent()
-                                      : showBottomSheetForTutor();
-                                },
+                                onTap: widget.currentsession.status == "closed"
+                                    ? () {
+                                        Fluttertoast.showToast(
+                                            msg:
+                                                "you cannot closed or rated this session.",
+                                            toastLength: Toast.LENGTH_SHORT,
+                                            gravity: ToastGravity.CENTER,
+                                            textColor: Colors.white,
+                                            fontSize: 16.0);
+                                      }
+                                    : () {
+                                        SessionManager.loggedInTutor.userId ==
+                                                ""
+                                            ? showBottomSheetForStudent()
+                                            : showBottomSheetForTutor();
+                                      },
                                 child: Icon(
                                   Icons.info_outline,
-                                  color: widget.currentsession.status == "closed" ? Colors.grey :Colors.white,
+                                  color:
+                                      widget.currentsession.status == "closed"
+                                          ? Colors.grey
+                                          : Colors.white,
                                 ),
                               ),
                             ),
@@ -229,12 +195,12 @@ class _ChatScreenState extends State<ChatScreen> {
                                         child: Center(
                                             child: Text(
                                           "All chat",
-
                                           style: GoogleFonts.openSans(
-                                              fontSize: 15, color:
-                                          userChooseForTypeofChat == 0
-                                              ? kColorScheme[1]
-                                              : Colors.white),
+                                              fontSize: 15,
+                                              color:
+                                                  userChooseForTypeofChat == 0
+                                                      ? kColorScheme[1]
+                                                      : Colors.white),
                                         )),
                                         decoration: new BoxDecoration(
                                             color: userChooseForTypeofChat == 0
@@ -265,10 +231,11 @@ class _ChatScreenState extends State<ChatScreen> {
                                             child: Text(
                                           "Image only",
                                           style: GoogleFonts.openSans(
-                                              fontSize: 15, color:
-                                          userChooseForTypeofChat == 1
-                                              ? kColorScheme[1]
-                                              : Colors.white),
+                                              fontSize: 15,
+                                              color:
+                                                  userChooseForTypeofChat == 1
+                                                      ? kColorScheme[1]
+                                                      : Colors.white),
                                         )),
                                         decoration: new BoxDecoration(
                                             color: userChooseForTypeofChat == 1
@@ -322,28 +289,30 @@ class _ChatScreenState extends State<ChatScreen> {
                         IconButton(
                           icon: Icon(Icons.attach_file),
                           onPressed: widget.currentsession.status == "closed"
-                              ? null : () async {
-                            refresh();
-                            String filename = "hello";
-                            FilePickerResult file = await FilePicker.platform
-                                .pickFiles(type: FileType.image);
-                            File _file;
-                            try {
-                              file.files.single.path == null
-                                  ? print("hello")
-                                  : _file = File(file.files.single.path);
-                              DatabaseAPI.uploadImageToStorage(
-                                      _file,
-                                      widget.currentsession.session_id,
-                                      SessionManager.loggedInUser.name)
-                                  .then((value) => {
-                                        refresh(),
-                                      });
-                            } catch (e) {
-                              refresh();
-                              print('never reached');
-                            }
-                          },
+                              ? null
+                              : () async {
+                                  refresh();
+                                  String filename = "hello";
+                                  FilePickerResult file = await FilePicker
+                                      .platform
+                                      .pickFiles(type: FileType.image);
+                                  File _file;
+                                  try {
+                                    file.files.single.path == null
+                                        ? print("hello")
+                                        : _file = File(file.files.single.path);
+                                    DatabaseAPI.uploadImageToStorage(
+                                            _file,
+                                            widget.currentsession.session_id,
+                                            SessionManager.loggedInUser.name)
+                                        .then((value) => {
+                                              refresh(),
+                                            });
+                                  } catch (e) {
+                                    refresh();
+                                    print('never reached');
+                                  }
+                                },
                         ),
                         Expanded(
                           child: TextField(

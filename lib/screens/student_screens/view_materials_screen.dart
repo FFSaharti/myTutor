@@ -35,7 +35,7 @@ class _ViewMaterialsScreenState extends State<ViewMaterialsScreen> {
             // DOCUMENT TYPE
             Document tempDoc = Document(
                 material.data()["documentTitle"],
-                material.data()["documentType"],
+                material.data()["type"],
                 material.data()["documentUrl"],
                 subjects.elementAt(material.data()["subject"]),
                 material.data()["issuerId"],
@@ -270,21 +270,24 @@ class _ViewMaterialsScreenState extends State<ViewMaterialsScreen> {
                 child: ListView.builder(
                   itemCount: searchedMaterials.length,
                   itemBuilder: (context, index) {
-                    fromDurationAnimationConter +=100;
-                    toDurationAnimationConter +=100;
+                    fromDurationAnimationConter += 100;
+                    toDurationAnimationConter += 100;
                     return Villain(
                       villainAnimation: VillainAnimation.fromBottom(
-                        from: Duration(milliseconds: fromDurationAnimationConter),
+                        from:
+                            Duration(milliseconds: fromDurationAnimationConter),
                         to: Duration(milliseconds: toDurationAnimationConter),
                       ),
                       child: Card(
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: ListTile(
-                            leading: Image.asset(subjects[
-                                    searchedMaterials.elementAt(index).subjectID]
+                            leading: Image.asset(subjects[searchedMaterials
+                                    .elementAt(index)
+                                    .subjectID]
                                 .path),
-                            title: Text(searchedMaterials.elementAt(index).title),
+                            title:
+                                Text(searchedMaterials.elementAt(index).title),
                             trailing: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
@@ -302,8 +305,10 @@ class _ViewMaterialsScreenState extends State<ViewMaterialsScreen> {
                                                     .fileType ==
                                                 "pdf"
                                             ? PDFDocument.fromURL(
-                                                    (searchedMaterials.elementAt(
-                                                            index) as Document)
+                                                    (searchedMaterials
+                                                                .elementAt(
+                                                                    index)
+                                                            as Document)
                                                         .url)
                                                 .then((value) => {
                                                       doc = value,
@@ -375,7 +380,8 @@ class _ViewMaterialsScreenState extends State<ViewMaterialsScreen> {
                                                                 style: kTitleStyle.copyWith(
                                                                     color:
                                                                         kBlackish,
-                                                                    fontSize: 14,
+                                                                    fontSize:
+                                                                        14,
                                                                     fontWeight:
                                                                         FontWeight
                                                                             .normal),
@@ -385,8 +391,10 @@ class _ViewMaterialsScreenState extends State<ViewMaterialsScreen> {
                                                           btnOkOnPress: () {
                                                             int count = 0;
                                                             Navigator.popUntil(
-                                                                context, (route) {
-                                                              return count++ == 1;
+                                                                context,
+                                                                (route) {
+                                                              return count++ ==
+                                                                  1;
                                                             });
                                                           },
                                                         ).show()
@@ -406,7 +414,8 @@ class _ViewMaterialsScreenState extends State<ViewMaterialsScreen> {
                                                                 style: kTitleStyle.copyWith(
                                                                     color:
                                                                         kBlackish,
-                                                                    fontSize: 14,
+                                                                    fontSize:
+                                                                        14,
                                                                     fontWeight:
                                                                         FontWeight
                                                                             .normal),

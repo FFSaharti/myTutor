@@ -236,7 +236,7 @@ class _SessionCardWidgetState extends State<SessionCardWidget> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(15.0),
+      padding: const EdgeInsets.all(8.0),
       child: GestureDetector(
         onTap: () {
           if (widget.session.status == "waiting for student") {
@@ -247,8 +247,7 @@ class _SessionCardWidgetState extends State<SessionCardWidget> {
                 toastLength: Toast.LENGTH_SHORT,
                 gravity: ToastGravity.CENTER,
                 textColor: Colors.white,
-                fontSize: 16.0
-            );
+                fontSize: 16.0);
           } else {
             Navigator.push(
                 context,

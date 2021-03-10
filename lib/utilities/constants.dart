@@ -131,6 +131,7 @@ AppBar buildAppBar(BuildContext context, Color buttonColor, String title,
   }
 
   return AppBar(
+    centerTitle: true,
     title: Text(
       title,
       style: GoogleFonts.sen(color: Colors.black, fontSize: 25),

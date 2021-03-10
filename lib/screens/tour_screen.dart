@@ -28,11 +28,8 @@ class _TourScreenState extends State<TourScreen> {
         body: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            SizedBox(
-              height: ScreenSize.height * 0.03,
-            ),
             Container(
-              height: ScreenSize.height * 0.52,
+              height: ScreenSize.height * 0.65,
               width: double.infinity,
               child: NotificationListener<OverscrollIndicatorNotification>(
                 // ignore: missing_return
@@ -60,7 +57,7 @@ class _TourScreenState extends State<TourScreen> {
               ),
             ),
             SizedBox(
-              height: ScreenSize.height * 0.06,
+              height: ScreenSize.height * 0.02,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -132,7 +129,7 @@ class _TourScreenState extends State<TourScreen> {
           ),
         ),
         SizedBox(
-          height: ScreenSize.height * 0.001,
+          height: ScreenSize.height * 0.05,
         ),
         Villain(
           villainAnimation: VillainAnimation.fade(
