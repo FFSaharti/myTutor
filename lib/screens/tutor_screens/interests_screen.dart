@@ -32,7 +32,6 @@ class _InterestsScreenState extends State<InterestsScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     stopLoading();
     resetInterests();
     super.initState();

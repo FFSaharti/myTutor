@@ -399,8 +399,7 @@ class _EditQuizScreenState extends State<EditQuizScreen> {
                                           ),
                                         ],
                                       )
-                                    : (showAddAnswer[
-                                            0]) // TODO: Create widget for creatingQuizQuestionWidget
+                                    : (showAddAnswer[0])
                                         ? Container(
                                             child: Column(
                                               children: [
@@ -651,7 +650,6 @@ class _EditQuizScreenState extends State<EditQuizScreen> {
     List<Widget> widgets = [];
 
     for (int i = 0; i < tempQuiz.questions.length; i++) {
-      // TODO : Implement viewing & editing question before creating quiz...
       widgets.add(
         Row(
           children: [

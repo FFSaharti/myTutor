@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:mytutor/classes/rate.dart';
 import 'package:mytutor/classes/tutor.dart';
-import 'package:mytutor/classes/user.dart';
 import 'package:mytutor/components/material_stream_widget.dart';
 import 'package:mytutor/components/profile_info_widget.dart';
 import 'package:mytutor/utilities/constants.dart';
@@ -11,7 +10,6 @@ import 'package:mytutor/utilities/screen_size.dart';
 
 import '../view_reviews_screen.dart';
 
-//TODO: can be deleted after test..
 class ViewTutorProfileScreen extends StatefulWidget {
   final Tutor tutor;
 
@@ -146,17 +144,14 @@ class _ViewTutorProfileScreenState extends State<ViewTutorProfileScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-
                         ProfileInfoWidget("Sessions",
                             sessionNumHelper == "" ? "load" : sessionNumHelper),
                         SizedBox(
                           width: 5,
                         ),
-
                         ProfileInfoWidget(
                             "Rating",
                             finishedLoadingTutorRate == true
@@ -165,7 +160,6 @@ class _ViewTutorProfileScreenState extends State<ViewTutorProfileScreen> {
                         SizedBox(
                           width: 5,
                         ),
-
                         GestureDetector(
                           child: ProfileInfoWidget("Reviews",
                               reviewHelper == "" ? "load" : reviewHelper),
@@ -174,7 +168,8 @@ class _ViewTutorProfileScreenState extends State<ViewTutorProfileScreen> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) => ViewReviewsScreen(
-                                        tutorRates: tutorRates,)),
+                                        tutorRates: tutorRates,
+                                      )),
                             );
                           },
                         ),

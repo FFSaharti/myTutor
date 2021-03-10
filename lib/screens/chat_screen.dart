@@ -21,7 +21,6 @@ import 'package:mytutor/utilities/screen_size.dart';
 import 'package:mytutor/utilities/session_manager.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
 
-//TODO: implement view profile by clicking on circle Avatar?
 class ChatScreen extends StatefulWidget {
   final Session currentsession;
 

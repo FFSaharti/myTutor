@@ -50,7 +50,6 @@ class _ViewMaterialsScreenState extends State<ViewMaterialsScreen> {
                 material.id);
             materials.add(tempDoc);
           } else {
-            //TODO: HANDLE QUIZ FETCHES
             // QUIZ TYPE
             materials.add(Quiz(
                 material.data()["issuerId"],
@@ -340,7 +339,6 @@ class _ViewMaterialsScreenState extends State<ViewMaterialsScreen> {
                                           searchedMaterials
                                               .elementAt(index)
                                               .docid);
-                                      // TODO: Don't accept adding of redundant materials
                                       if (SessionManager.loggedInStudent.favMats
                                           .contains(searchedMaterials
                                               .elementAt(index)

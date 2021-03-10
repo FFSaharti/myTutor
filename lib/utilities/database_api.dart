@@ -990,8 +990,6 @@ class DatabaseAPI {
 
   static Future<String> updateQuizQuestions(
       Quiz tempQuiz, String quizID) async {
-    //TODO: Delete old questions from DB
-
     print("number of questions is --> " + tempQuiz.questions.length.toString());
 
     _firestore.collection("Material").doc(quizID).get().then((value) => {

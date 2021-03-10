@@ -733,8 +733,7 @@ class _CreateMaterialsScreenState extends State<CreateMaterialsScreen> {
                                           ),
                                         ],
                                       )
-                                    : (showAddAnswer[
-                                            0]) // TODO: Create widget for creatingQuizQuestionWidget
+                                    : (showAddAnswer[0])
                                         ? Container(
                                             child: Column(
                                               children: [

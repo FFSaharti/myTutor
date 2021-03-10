@@ -29,7 +29,6 @@ const Color kWhiteish = Color(0xffe2e2e2);
 
 const List validEmail = ['test@gmail.com'];
 
-// TODO: Edit subjects images in photoshop
 List<Subject> subjects = [
   Subject(0, 'JAVA', 'images/Sub-Icons/Java.png', ['Object-Oriented', 'JAVA'],
       false),

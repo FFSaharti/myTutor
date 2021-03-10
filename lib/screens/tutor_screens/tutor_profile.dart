@@ -17,7 +17,6 @@ import 'package:mytutor/utilities/session_manager.dart';
 
 import 'interests_screen.dart';
 
-//TODO: the whole screen can be manage with view Tutor Profile Screen.
 class TutorProfile extends StatefulWidget {
   @override
   _TutorProfileState createState() => _TutorProfileState();
@@ -686,7 +685,6 @@ class _TutorProfileState extends State<TutorProfile> {
                                     print("POP...");
                                   } else {
                                     print("empty parameters");
-                                    //TODO: Show error message cannot leave empty...
                                   }
                                 },
                               ),
