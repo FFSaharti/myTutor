@@ -11,7 +11,7 @@ const List<Color> kColorScheme = [
   Color(0xFF4F9900),
 ];
 
-TextStyle kTitleStyle = GoogleFonts.secularOne(
+TextStyle kTitleStyle = GoogleFonts.sen(
     textStyle: TextStyle(
         fontSize: 50, fontWeight: FontWeight.bold, color: Colors.white));
 

@@ -96,18 +96,23 @@ class _TakeQuizScreenState extends State<TakeQuizScreen> {
                     borderRadius: BorderRadius.circular(20),
                     color: Colors.grey),
                 //color: Colors.white,
-                child: PageView(
-                  controller: _pageController,
-                  children: finish
-                      ? getListOfQuestions(widget.quiz)
-                      : [
-                          // Center(
-                          //     child: Text(
-                          //   "Loading Questions",
-                          //   style: kTitleStyle.copyWith(
-                          //       fontSize: 25, color: Colors.black),
-                          // ))
-                        ],
+                child: NotificationListener<OverscrollIndicatorNotification>(
+                  onNotification: (overscroll) {
+                    overscroll.disallowGlow();
+                  },
+                  child: PageView(
+                    controller: _pageController,
+                    children: finish
+                        ? getListOfQuestions(widget.quiz)
+                        : [
+                            // Center(
+                            //     child: Text(
+                            //   "Loading Questions",
+                            //   style: kTitleStyle.copyWith(
+                            //       fontSize: 25, color: Colors.black),
+                            // ))
+                          ],
+                  ),
                 ),
               ),
               SizedBox(

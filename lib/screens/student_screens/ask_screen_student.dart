@@ -159,7 +159,7 @@ void showAddQuestion() {
         return StatefulBuilder(
             builder: (BuildContext context, StateSetter setModalState) {
           return Container(
-            height: ScreenSize.height * 0.70,
+            height: ScreenSize.height * 0.9,
             child: Scaffold(
               body: Container(
                 //     padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
@@ -392,7 +392,7 @@ class _InterestWidgetState extends State<InterestWidget> {
             : Colors.white,
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.5),
+            color: Colors.grey.withOpacity(0.2),
             spreadRadius: 1,
             blurRadius: 15,
             offset: Offset(0, 6), // changes position of shadow

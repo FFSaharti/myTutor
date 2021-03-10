@@ -137,7 +137,7 @@ class _MaterialStreamTutorState extends State<MaterialStreamTutor> {
                                               },
                                               child: Text(
                                                 "View Document",
-                                                style: GoogleFonts.sarabun(
+                                                style: GoogleFonts.sen(
                                                   textStyle: TextStyle(
                                                       fontSize: 18,
                                                       fontWeight:
@@ -148,7 +148,7 @@ class _MaterialStreamTutorState extends State<MaterialStreamTutor> {
                                               color: kColorScheme[2],
                                               shape: RoundedRectangleBorder(
                                                 borderRadius:
-                                                    BorderRadius.circular(15.0),
+                                                    BorderRadius.circular(30.0),
                                               ),
                                             )),
                                         widget.isSameUser == false
@@ -165,7 +165,7 @@ class _MaterialStreamTutorState extends State<MaterialStreamTutor> {
                                                   },
                                                   child: Text(
                                                     "Edit Document",
-                                                    style: GoogleFonts.sarabun(
+                                                    style: GoogleFonts.sen(
                                                       textStyle: TextStyle(
                                                           fontSize: 18,
                                                           fontWeight:
@@ -177,7 +177,7 @@ class _MaterialStreamTutorState extends State<MaterialStreamTutor> {
                                                   shape: RoundedRectangleBorder(
                                                     borderRadius:
                                                         BorderRadius.circular(
-                                                            15.0),
+                                                            30.0),
                                                   ),
                                                 ),
                                               ),
@@ -255,9 +255,12 @@ class _MaterialStreamTutorState extends State<MaterialStreamTutor> {
                                     height: ScreenSize.height * 0.010,
                                   ),
                                   Padding(
-                                    padding: const EdgeInsets.all(23.0),
+                                    padding: const EdgeInsets.all(15.0),
                                     child: Row(
-                                      mainAxisAlignment:  widget.isSameUser == false ? MainAxisAlignment.center : MainAxisAlignment.spaceAround,
+                                      mainAxisAlignment:
+                                          widget.isSameUser == false
+                                              ? MainAxisAlignment.center
+                                              : MainAxisAlignment.spaceAround,
                                       children: [
                                         Container(
                                           height: ScreenSize.height * 0.04,
@@ -276,7 +279,7 @@ class _MaterialStreamTutorState extends State<MaterialStreamTutor> {
                                             },
                                             child: Text(
                                               "Take Quiz",
-                                              style: GoogleFonts.sarabun(
+                                              style: GoogleFonts.sen(
                                                 textStyle: TextStyle(
                                                     fontSize: 18,
                                                     fontWeight:
@@ -287,36 +290,40 @@ class _MaterialStreamTutorState extends State<MaterialStreamTutor> {
                                             color: kColorScheme[2],
                                             shape: RoundedRectangleBorder(
                                               borderRadius:
-                                                  BorderRadius.circular(15.0),
+                                                  BorderRadius.circular(30.0),
                                             ),
                                           ),
                                         ),
-                                        widget.isSameUser == false ? Container() : Container(
-                                          height: ScreenSize.height * 0.04,
-                                          child: RaisedButton(
-                                            onPressed: () {
-                                              showBottomSheetForEditQuiz(
-                                                tempQuiz.title,
-                                                material.id,
-                                              );
-                                            },
-                                            child: Text(
-                                              "Edit Quiz",
-                                              style: GoogleFonts.sarabun(
-                                                textStyle: TextStyle(
-                                                    fontSize: 18,
-                                                    fontWeight:
-                                                        FontWeight.normal,
-                                                    color: Colors.white),
+                                        widget.isSameUser == false
+                                            ? Container()
+                                            : Container(
+                                                height:
+                                                    ScreenSize.height * 0.04,
+                                                child: RaisedButton(
+                                                  onPressed: () {
+                                                    showBottomSheetForEditQuiz(
+                                                      tempQuiz.title,
+                                                      material.id,
+                                                    );
+                                                  },
+                                                  child: Text(
+                                                    "Edit Quiz",
+                                                    style: GoogleFonts.sen(
+                                                      textStyle: TextStyle(
+                                                          fontSize: 18,
+                                                          fontWeight:
+                                                              FontWeight.normal,
+                                                          color: Colors.white),
+                                                    ),
+                                                  ),
+                                                  color: kColorScheme[2],
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            30.0),
+                                                  ),
+                                                ),
                                               ),
-                                            ),
-                                            color: kColorScheme[2],
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(15.0),
-                                            ),
-                                          ),
-                                        ),
                                       ],
                                     ),
                                   ),
@@ -606,13 +613,16 @@ class _MaterialStreamTutorState extends State<MaterialStreamTutor> {
                   SizedBox(
                     height: ScreenSize.height * 0.010,
                   ),
-                  Center(
-                    child: Text(
-                      "Edit [" + title + "]",
-                      style: kTitleStyle.copyWith(
-                          fontSize: 17,
-                          fontWeight: FontWeight.normal,
-                          color: Colors.black),
+                  Container(
+                    width: ScreenSize.width,
+                    child: Center(
+                      child: Text(
+                        "Edit [" + title + "]",
+                        style: kTitleStyle.copyWith(
+                            fontSize: 17,
+                            fontWeight: FontWeight.normal,
+                            color: Colors.black),
+                      ),
                     ),
                   ),
                   SizedBox(
@@ -683,12 +693,12 @@ class _MaterialStreamTutorState extends State<MaterialStreamTutor> {
                       )
                     ],
                   ),
+                  SizedBox(
+                    height: ScreenSize.height * 0.05,
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      SizedBox(
-                        height: ScreenSize.height * 0.09,
-                      ),
                       Container(
                         height: ScreenSize.height * 0.04,
                         child: RaisedButton(
@@ -752,7 +762,7 @@ class _MaterialStreamTutorState extends State<MaterialStreamTutor> {
                           },
                           child: Text(
                             "Insert Edit",
-                            style: GoogleFonts.sarabun(
+                            style: GoogleFonts.sen(
                               textStyle: TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.normal,
@@ -761,7 +771,7 @@ class _MaterialStreamTutorState extends State<MaterialStreamTutor> {
                           ),
                           color: kColorScheme[2],
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15.0),
+                            borderRadius: BorderRadius.circular(30.0),
                           ),
                         ),
                       ),
@@ -824,7 +834,7 @@ class _MaterialStreamTutorState extends State<MaterialStreamTutor> {
                           },
                           child: Text(
                             "Delete",
-                            style: GoogleFonts.sarabun(
+                            style: GoogleFonts.sen(
                               textStyle: TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.normal,
@@ -833,7 +843,7 @@ class _MaterialStreamTutorState extends State<MaterialStreamTutor> {
                           ),
                           color: Colors.red,
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15.0),
+                            borderRadius: BorderRadius.circular(30.0),
                           ),
                         ),
                       ),

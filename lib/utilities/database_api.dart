@@ -59,16 +59,21 @@ class DatabaseAPI {
     _tempStudent = value;
   }
 
-  static void signOut() async{
-      _tempUser = MyUser("", "", "", "", "", "");
-      _tempTutor = Tutor("", "", "", "", "", [], "");
-      _tempStudent = Student("", "", "", "", "", [], "");
-      SessionManager.loggedInTutor = _tempTutor;
-      SessionManager.loggedInStudent = _tempStudent;
-      SessionManager.loggedInUser = _tempUser;
-       _auth.signOut();
+  static void signOut() async {
+    _tempUser = MyUser("", "", "", "", "", "");
+    _tempTutor = Tutor("", "", "", "", "", [], "");
+    _tempStudent = Student("", "", "", "", "", [], "");
+    SessionManager.loggedInTutor = _tempTutor;
+    SessionManager.loggedInStudent = _tempStudent;
+    SessionManager.loggedInUser = _tempUser;
+    resetInterests();
+    _auth.signOut();
+  }
 
-
+  static void resetInterests() {
+    for (int i = 0; i < subjects.length; i++) {
+      subjects[i].chosen = false;
+    }
   }
 
   // user log/sign up
@@ -109,6 +114,7 @@ class DatabaseAPI {
       "questions": [],
       "aboutMe": "",
       "profileImg": tempUser.profileImag,
+      "listOfFavMats": []
     });
   }
 
@@ -458,14 +464,15 @@ class DatabaseAPI {
           .orderBy("timeOfLastMessage", descending: true)
           .snapshots();
   }
-  static Future<DocumentSnapshot> getStreamOfUserbyId(String userID, int type)  {
+
+  static Future<DocumentSnapshot> getStreamOfUserbyId(String userID, int type) {
     // type 1 = student , type 0 = tutor
     if (type == 1) {
       // student
-      return  _firestore.collection('Student').doc(userID).get();
+      return _firestore.collection('Student').doc(userID).get();
     } else if (type == 0) {
       // tutor
-      return  _firestore.collection('Tutor').doc(userID).get();
+      return _firestore.collection('Tutor').doc(userID).get();
     }
   }
 
@@ -513,14 +520,17 @@ class DatabaseAPI {
         .orderBy("time", descending: true)
         .snapshots();
   }
+
   static Stream<QuerySnapshot> fetchSessionImagesOnly(String sessionId) {
     return _firestore
         .collection('session')
         .doc(sessionId)
-        .collection("messages").where("text", isEqualTo: "image")
+        .collection("messages")
+        .where("text", isEqualTo: "image")
         .orderBy("time", descending: true)
         .snapshots();
   }
+
   static void saveNewMessage(String sessionid, String msg, String sender) {
     _firestore.collection("session").doc(sessionid).collection("messages").add({
       'text': msg,
@@ -652,7 +662,9 @@ class DatabaseAPI {
       firebase_storage.UploadTask uploadTask;
       firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance
           .ref()
-          .child('images/'+DateTime.now().toString()+ file.path.split("/").last);
+          .child('images/' +
+              DateTime.now().toString() +
+              file.path.split("/").last);
       uploadTask = ref.putData(file.readAsBytesSync());
       String url =
           await (await uploadTask.then((value) => value.ref.getDownloadURL()));

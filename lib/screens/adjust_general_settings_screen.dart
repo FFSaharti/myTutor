@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_villains/villains/villains.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:mytutor/components/circular_button.dart';
 import 'package:mytutor/screens/welcome_screen.dart';
 import 'package:mytutor/utilities/constants.dart';
 import 'package:mytutor/utilities/database_api.dart';
@@ -58,25 +57,75 @@ class AdjustGeneralSettings extends StatelessWidget {
                   ),
                 ),
                 SizedBox(
-                  height: ScreenSize.height * 0.59,
+                  height: ScreenSize.height * 0.54,
                 ),
-                CircularButton(
-                    width: ScreenSize.width * 0.40,
-                    buttonColor: kColorScheme[1],
-                    textColor: Theme.of(context).primaryColor,
-                    isGradient: false,
-                    colors: null,
-                    buttonText: "Log out",
-                    hasBorder: false,
-                    borderColor: null,
-                    onPressed: () {
+                Opacity(
+                  opacity: 0.90,
+                  child: GestureDetector(
+                    onTap: () {
                       DatabaseAPI.signOut();
                       Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
                               builder: (BuildContext context) =>
                                   WelcomeScreen()));
-                    })
+                    },
+                    child: Card(
+                      elevation: 2.5,
+                      color: Colors.red,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15.0),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(15.0),
+                        child: Row(
+                          children: [
+                            Text("Log Out",
+                                style: GoogleFonts.sen(
+                                    color:
+                                        Theme.of(context).secondaryHeaderColor,
+                                    fontSize: 20)
+                                // TextStyle(
+                                //     color: Theme.of(context).primaryColor,
+                                //     fontSize: 30),
+                                ),
+                            Spacer(),
+                            IconButton(
+                                icon: Icon(
+                                  Icons.logout,
+                                  color: Theme.of(context).secondaryHeaderColor,
+                                ),
+                                onPressed: () {
+                                  DatabaseAPI.signOut();
+                                  Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (BuildContext context) =>
+                                              WelcomeScreen()));
+                                })
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                // CircularButton(
+                //     width: ScreenSize.width * 0.40,
+                //     buttonColor: kColorScheme[1],
+                //     textColor: Theme.of(context).primaryColor,
+                //     isGradient: false,
+                //     colors: null,
+                //     buttonText: "Log out",
+                //     hasBorder: false,
+                //     borderColor: null,
+                //     onPressed: () {
+                //       DatabaseAPI.signOut();
+                //       Navigator.pushReplacement(
+                //           context,
+                //           MaterialPageRoute(
+                //               builder: (BuildContext context) =>
+                //                   WelcomeScreen()));
+                //     })
               ],
             ),
           ),

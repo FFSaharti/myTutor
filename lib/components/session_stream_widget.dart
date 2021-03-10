@@ -75,20 +75,31 @@ class SessionStream extends StatelessWidget {
             }
           }
         }
-        return UserSessions.isEmpty ? Column(
-          children: [
-            SizedBox(
-              height: ScreenSize.height * 0.15 ,
-            ),
-            Center(child: Text("its quite empty in here 😴", style: GoogleFonts.openSans(color: Theme.of(context).primaryColor, fontSize: 21), textAlign: TextAlign.center,),),
-          ],
-        ): Expanded(
-          child: ListView(
-            reverse: false,
-            padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5),
-            children: UserSessions,
-          ),
-        );
+        return UserSessions.isEmpty
+            ? Column(
+                children: [
+                  SizedBox(
+                    height: ScreenSize.height * 0.15,
+                  ),
+                  Center(
+                    child: Text(
+                      "its quite empty in here",
+                      style: GoogleFonts.openSans(
+                          color: Colors.grey,
+                          // Theme.of(context).primaryColor,
+                          fontSize: 21),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ],
+              )
+            : Expanded(
+                child: ListView(
+                  reverse: false,
+                  padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5),
+                  children: UserSessions,
+                ),
+              );
       },
     );
   }

@@ -100,8 +100,14 @@ class _MessageScreenState extends State<MessageScreen> {
               Divider(),
               search
                   ? Expanded(
-                      child: ListView(
-                        children: Searchtest,
+                      child:
+                          NotificationListener<OverscrollIndicatorNotification>(
+                        onNotification: (overscroll) {
+                          overscroll.disallowGlow();
+                        },
+                        child: ListView(
+                          children: Searchtest,
+                        ),
                       ),
                     )
                   : StreamBuilder(
@@ -155,70 +161,95 @@ class _MessageScreenState extends State<MessageScreen> {
                           }
                         }
 
-                        return userMessages.isEmpty ? Column(
-                          children: [
-                            SizedBox(
-                              height: ScreenSize.height * 0.30 ,
-                            ),
-                            Text("no tutor session available. start one by requesting a tutor  ", style: GoogleFonts.openSans(color: Theme.of(context).primaryColor, fontSize: 21),  textAlign: TextAlign.center,),
-                          ],
-                        ): Expanded(
-                          child: ListView.builder(
-                            itemCount: snapshot.data.docs.length,
-                            itemBuilder: (context, index) {
-                              DocumentSnapshot myDoc =
-                                  snapshot.data.docs[index];
-                              return Column(
+                        return userMessages.isEmpty
+                            ? Column(
                                 children: [
-                                  Villain(
-                                    villainAnimation:
-                                        VillainAnimation.fromBottom(
-                                      from: Duration(milliseconds: from),
-                                      to: Duration(milliseconds: to),
-                                    ),
-                                    child: FutureBuilder(
-                                      future: DatabaseAPI.getStreamOfUserbyId(
-                                          SessionManager.loggedInTutor.userId ==
-                                                  ""
-                                              ? myDoc.data()["tutor"]
-                                              : myDoc.data()["student"],
-                                          SessionManager.loggedInTutor.userId ==
-                                                  ""
-                                              ? 0
-                                              : 1),
-                                      builder: (context, AsyncSnapshot snap) {
-                                        if (snap.hasData) {
-                                          // check if the user message at this index does not have a user name;
-                                          fetchWidgetIntoList(
-                                              index, testSession, snap);
-                                          holder = userMessages;
-                                          // add the widget to list of widget to use it for search later.
-                                          return Column(
-                                            children: [
-                                              MessageListTile(
-                                                  session: testSession
-                                                      .elementAt(index),
-                                                  nameHelper: snap.data["name"],
-                                                  avatar: createAvatar(
-                                                      snap.data["name"]),
-                                                  callBackFunction: () {
-                                                    //TODO: check for errors occur when calling back without searching.
-                                                  }),
-                                              Divider(),
-                                            ],
-                                          );
-                                        }
-                                        from += 100;
-                                        to += 100;
-                                        return Text("");
-                                      },
-                                    ),
+                                  SizedBox(
+                                    height: ScreenSize.height * 0.30,
+                                  ),
+                                  Text(
+                                    "no tutor session available. start one by requesting a tutor  ",
+                                    style: GoogleFonts.openSans(
+                                        color: Theme.of(context).primaryColor,
+                                        fontSize: 21),
+                                    textAlign: TextAlign.center,
                                   ),
                                 ],
+                              )
+                            : Expanded(
+                                child: NotificationListener<
+                                    OverscrollIndicatorNotification>(
+                                  onNotification: (overscroll) {
+                                    overscroll.disallowGlow();
+                                  },
+                                  child: ListView.builder(
+                                    itemCount: snapshot.data.docs.length,
+                                    itemBuilder: (context, index) {
+                                      DocumentSnapshot myDoc =
+                                          snapshot.data.docs[index];
+                                      return Column(
+                                        children: [
+                                          Villain(
+                                            villainAnimation:
+                                                VillainAnimation.fromBottom(
+                                              from:
+                                                  Duration(milliseconds: from),
+                                              to: Duration(milliseconds: to),
+                                            ),
+                                            child: FutureBuilder(
+                                              future: DatabaseAPI
+                                                  .getStreamOfUserbyId(
+                                                      SessionManager
+                                                                  .loggedInTutor
+                                                                  .userId ==
+                                                              ""
+                                                          ? myDoc
+                                                              .data()["tutor"]
+                                                          : myDoc.data()[
+                                                              "student"],
+                                                      SessionManager
+                                                                  .loggedInTutor
+                                                                  .userId ==
+                                                              ""
+                                                          ? 0
+                                                          : 1),
+                                              builder: (context,
+                                                  AsyncSnapshot snap) {
+                                                if (snap.hasData) {
+                                                  // check if the user message at this index does not have a user name;
+                                                  fetchWidgetIntoList(
+                                                      index, testSession, snap);
+                                                  holder = userMessages;
+                                                  // add the widget to list of widget to use it for search later.
+                                                  return Column(
+                                                    children: [
+                                                      MessageListTile(
+                                                          session: testSession
+                                                              .elementAt(index),
+                                                          nameHelper:
+                                                              snap.data["name"],
+                                                          avatar: createAvatar(
+                                                              snap.data[
+                                                                  "name"]),
+                                                          callBackFunction: () {
+                                                            //TODO: check for errors occur when calling back without searching.
+                                                          }),
+                                                      Divider(),
+                                                    ],
+                                                  );
+                                                }
+                                                from += 100;
+                                                to += 100;
+                                                return Text("");
+                                              },
+                                            ),
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  ),
+                                ),
                               );
-                            },
-                          ),
-                        );
                       },
                     )
             ],
