@@ -69,7 +69,12 @@ class _HomepageScreenStudentState extends State<HomepageScreenStudent> {
         curve: Curves.easeIn,
         onItemSelected: (index) {
           setState(() {
-            _currentIndex= index;
+            _currentIndex = index;
+            _pageController
+                .animateToPage(_currentIndex,
+                    duration: Duration(milliseconds: 300),
+                    curve: Curves.easeInOut)
+                .then((value) => {VillainController.playAllVillains(context)});
           });
         },
         items: <BottomNavyBarItem>[
@@ -165,7 +170,10 @@ class _HomepageScreenStudentState extends State<HomepageScreenStudent> {
       //   onTap: changeindex,
       //   selectedItemColor: kColorScheme[3],
       // ),
-      body: widgets.elementAt(_currentIndex),
+      body: PageView(
+        controller: _pageController,
+        children: widgets,
+      ),
     );
   }
 }
@@ -319,4 +327,3 @@ class _HomePageStudentState extends State<HomePageStudent> {
     );
   }
 }
-

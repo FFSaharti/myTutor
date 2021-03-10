@@ -62,7 +62,6 @@ class Rate {
     for(int i = 0 ; i < totalRates.length ; i++){
       sum += totalRates.elementAt(i).creativity+totalRates.elementAt(i).friendliness+totalRates.elementAt(i).communicationSkills+totalRates.elementAt(i).teachingSkills;
     }
-    print('sum is ' + sum.toString());
     return sum/ (totalRates.length * 4);
 
 

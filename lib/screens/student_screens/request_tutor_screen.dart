@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -20,14 +21,20 @@ class RequestTutorScreen extends StatefulWidget {
 }
 
 class _RequestTutorScreenState extends State<RequestTutorScreen> {
-  List<Tutor> Tutors = [];
-  List<Rate> rates = [];
+  List<Tutor> tutors = [];
+  List<Rate> tutorRates = [];
   List<MyUser> searchedTutors = [];
   TextEditingController searchController = TextEditingController();
+  int _dropDownMenuController = 1;
+  int _dropDownMenuControllerForRating = 1;
+  bool checkedExperineceFilter = false;
+  bool checkedRateFilter = false;
+  List<dynamic> tutorsSubjects = [];
 
   _filterTutors(String name) {
     setState(() {
-      searchedTutors = Tutors.where(
+      searchedTutors = tutors
+          .where(
               (Tutor) => Tutor.name.toLowerCase().contains(name.toLowerCase()))
           .toList();
     });
@@ -38,7 +45,25 @@ class _RequestTutorScreenState extends State<RequestTutorScreen> {
     return response;
   }
 
-  fetchRates() {}
+  fetchRates(Tutor tutor) {
+    Timestamp stamptemp;
+    DatabaseAPI.getTutorRates(tutor.userId).then((value) => {
+          for (var rate in value.docs)
+            {
+              stamptemp = rate.data()["rateDate"],
+              tutorRates.add(Rate(
+                rate.data()["review"],
+                rate.data()["teachingSkills"],
+                rate.data()["friendliness"],
+                rate.data()["communication"],
+                rate.data()["creativity"],
+                stamptemp.toDate(),
+                rate.data()["sessionTitle"],
+              )),
+              tutor.rates = tutorRates,
+            }
+        });
+  }
 
   void initState() {
     getTutorsFromApi().then((data) {
@@ -51,13 +76,21 @@ class _RequestTutorScreenState extends State<RequestTutorScreen> {
               tutor.data()["pass"],
               tutor.data()["aboutMe"],
               tutor.id,
-              List.from(tutor.data()['experiences']),
-              // List.from(tutor.data()["experiences"]),
+              [],
               tutor.data()["profileImg"]);
-          Tutors.add(temp);
+          List.from(tutor.data()['experiences']).forEach((element) {
+            temp.addExperience(element);
+          });
+
+          tutors.add(temp);
         }
       });
-    });
+    }).whenComplete(() => {
+          for (var tutor in tutors)
+            {
+              fetchRates(tutor),
+            }
+        });
 
     super.initState();
   }
@@ -75,7 +108,6 @@ class _RequestTutorScreenState extends State<RequestTutorScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                //TODO: Implement filter options for searching for tutor
                 TextField(
                   controller: searchController,
                   onChanged: (value) {
@@ -116,7 +148,10 @@ class _RequestTutorScreenState extends State<RequestTutorScreen> {
                   height: 10,
                 ),
                 GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+
+                    showFilterOptions();
+                  },
                   child: Container(
                       height: 40,
                       width: 200,
@@ -168,8 +203,10 @@ class _RequestTutorScreenState extends State<RequestTutorScreen> {
                         toDurationAnimationConter += 100;
                         return Villain(
                           villainAnimation: VillainAnimation.fromBottom(
-                            from: Duration(milliseconds: fromDurationAnimationConter),
-                            to: Duration(milliseconds: toDurationAnimationConter),
+                            from: Duration(
+                                milliseconds: fromDurationAnimationConter),
+                            to: Duration(
+                                milliseconds: toDurationAnimationConter),
                           ),
                           child: TutorWidget(
                               tutor: searchedTutors.elementAt(index)),
@@ -186,6 +223,223 @@ class _RequestTutorScreenState extends State<RequestTutorScreen> {
         ),
       ),
     );
+  }
+
+  void showFilterOptions() {
+    showModalBottomSheet(
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(top: Radius.circular(25.0))),
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        enableDrag: true,
+        isScrollControlled: true,
+        context: context,
+        builder: (context) {
+          return StatefulBuilder(
+            builder: (BuildContext context, StateSetter setModalState) {
+              return Container(
+                height: ScreenSize.height * 0.40,
+                child: Padding(
+                  padding: const EdgeInsets.all(15.0),
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          IconButton(
+                              icon: Icon(
+                                Icons.cancel,
+                                color: Theme.of(context).iconTheme.color,
+                              ),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              }),
+                          Text(
+                            "Filters Options",
+                            style: kTitleStyle.copyWith(
+                                color: Theme.of(context).primaryColor,
+                                fontSize: 17),
+                          ),
+                          IconButton(
+                              icon: Icon(
+                                Icons.check,
+                                color: Theme.of(context).iconTheme.color,
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  searchedTutors = [];
+                                });
+                                applyFilter();
+                                Navigator.pop(context);
+                              }),
+                        ],
+                      ),
+                      SizedBox(
+                        height: ScreenSize.height * 0.030,
+                      ),
+                      Text(
+                        "filter based on",
+                        style: GoogleFonts.openSans(
+                            fontSize: 17,
+                            color: Theme.of(context).primaryColor,
+                            fontWeight: FontWeight.bold),
+                        textAlign: TextAlign.center,
+                      ),
+                      SizedBox(
+                        height: ScreenSize.height * 0.010,
+                      ),
+                      Row(
+                        children: [
+                          Checkbox(
+                              activeColor: kColorScheme[2],
+                              value: checkedExperineceFilter,
+                              onChanged: (bool value) {
+                                setModalState(() {
+                                  checkedExperineceFilter = value;
+                                });
+                              }),
+                          Text(
+                            " on experience ",
+                            style: GoogleFonts.openSans(
+                                fontSize: 18,
+                                color: Theme.of(context).primaryColor,
+                                fontWeight: FontWeight.bold),
+                            textAlign: TextAlign.center,
+                          ),
+                          SizedBox(
+                            width: ScreenSize.width * 0.040,
+                          ),
+                          Expanded(
+                            child: DropdownButton(
+                              isExpanded: true,
+                              value: _dropDownMenuController,
+                              icon: Icon(
+                                Icons.arrow_drop_down_outlined,
+                                color: Theme.of(context).iconTheme.color,
+                              ),
+                              items: fetchSubjects(),
+                              onChanged: (value) {
+                                setState(() {
+                                  setModalState(() {
+                                    _dropDownMenuController = value;
+                                  });
+                                });
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: ScreenSize.height * 0.010,
+                      ),
+                      Row(
+                        children: [
+                          Checkbox(
+                              activeColor: kColorScheme[2],
+                              value: checkedRateFilter,
+                              onChanged: (bool value) {
+                                setModalState(() {
+                                  checkedRateFilter = value;
+                                });
+                              }),
+                          Text(
+                            "average rating above ",
+                            style: GoogleFonts.openSans(
+                                fontSize: 18,
+                                color: Theme.of(context).primaryColor,
+                                fontWeight: FontWeight.bold),
+                            textAlign: TextAlign.center,
+                          ),
+                          SizedBox(
+                            width: ScreenSize.width * 0.040,
+                          ),
+                          Expanded(
+                            child: DropdownButton(
+                              isExpanded: true,
+                              value: _dropDownMenuControllerForRating,
+                              icon: Icon(
+                                Icons.arrow_drop_down_outlined,
+                                color: Theme.of(context).iconTheme.color,
+                              ),
+                              onChanged: (value) {
+                                setState(() {
+                                  setModalState(() {
+                                    _dropDownMenuControllerForRating = value;
+                                  });
+                                });
+                              },
+                              items: <int>[1, 2, 3, 4, 5]
+                                  .map<DropdownMenuItem<int>>((int value) {
+                                return DropdownMenuItem<int>(
+                                  value: value,
+                                  child: Center(child: Text(value.toString())),
+                                );
+                              }).toList(),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          );
+        });
+  }
+
+  List<DropdownMenuItem> fetchSubjects() {
+    List<DropdownMenuItem> items = [];
+    for (int i = 0; i < subjects.length; i++) {
+      items.add(DropdownMenuItem(
+        child: Center(
+          child: Text(
+            subjects.elementAt(i).title,
+            style: GoogleFonts.openSans(color: Colors.black),
+          ),
+        ),
+        value: i,
+      ));
+    }
+    return items;
+  }
+
+  void applyFilter() {
+    if (checkedExperineceFilter == true && checkedRateFilter == true) {
+
+      for (int i = 0; i < tutors.length; i++) {
+        for (int j = 0; j < tutors.elementAt(i).experiences.length; j++) {
+          if (tutors.elementAt(i).experiences.elementAt(j) ==
+              _dropDownMenuController) {
+            if (Rate.getAverageRate(tutors.elementAt(i).rates) >
+                _dropDownMenuControllerForRating) {
+              searchedTutors.add(tutors.elementAt(i));
+              break;
+            }
+          }
+        }
+      }
+
+    } else if (checkedExperineceFilter == true) {
+
+      setState(() {
+        for (int i = 0; i < tutors.length; i++) {
+          for (int j = 0; j < tutors.elementAt(i).experiences.length; j++) {
+            if (tutors.elementAt(i).experiences.elementAt(j) ==
+                _dropDownMenuController) {
+              searchedTutors.add(tutors.elementAt(i));
+              break;
+            }
+          }
+        }
+      });
+    } else if (checkedRateFilter == true) {
+
+      for (var tutor in tutors) {
+        Rate.getAverageRate(tutor.rates) > _dropDownMenuControllerForRating
+            ? searchedTutors.add(tutor)
+            : Text("");
+      }
+    }
   }
 }
 
@@ -219,7 +473,7 @@ class _TutorWidgetState extends State<TutorWidget> {
                   MaterialPageRoute(
                       builder: (context) => ViewReceiverProfile(
                             userId: widget.tutor.userId,
-                        role: 'tutor',
+                            role: 'tutor',
                           )),
                 );
               },
@@ -259,7 +513,6 @@ class _TutorWidgetState extends State<TutorWidget> {
           ),
           GestureDetector(
             onTap: () {
-              print("SHOW BUTTON");
               showbutton(widget.tutor);
             },
             child: Container(
