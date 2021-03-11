@@ -2,6 +2,7 @@ import 'package:bd_progress_bar/bdprogreebar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_villains/villains/villains.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mytutor/classes/subject.dart';
 import 'package:mytutor/components/circular_button.dart';
@@ -169,10 +170,12 @@ class _InterestsScreenState extends State<InterestsScreen> {
                   borderColor: null,
                   onPressed: () {
                     beginLoading();
+                    int count;
                     DatabaseAPI.createTutor(DatabaseAPI.tempUser.email)
                         .then((value) => {
                               if (value == "Success")
                                 {
+                                  Fluttertoast.showToast(msg: "welcome to myTutor :)"),
                                   Future.delayed(Duration(milliseconds: 500),
                                       () {
                                     Navigator.push(
@@ -188,6 +191,12 @@ class _InterestsScreenState extends State<InterestsScreen> {
                               else
                                 {
                                   // SHOW TOAST MESSAGE OF FAIL
+                                  Fluttertoast.showToast(msg: value),
+                                  count = 0,
+                                  Navigator.popUntil(context, (route) {
+                                    return count++ == 2;
+                                  }),
+
                                   Future.delayed(Duration(milliseconds: 500),
                                       () {
                                     // Navigator.push(

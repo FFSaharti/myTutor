@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_villains/villains/villains.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mytutor/components/circular_button.dart';
 import 'package:mytutor/screens/login_screen.dart';
@@ -140,13 +141,22 @@ class _SpecifyRoleScreenState extends State<SpecifyRoleScreen> {
                     borderColor: null,
                     onPressed: () {
                       if (selectedWidget == studentWidget) {
-                        DatabaseAPI.createStudent();
-                        Navigator.push(
-                            context,
-                            PageTransition(
-                                type: PageTransitionType.leftToRightWithFade,
-                                duration: Duration(milliseconds: 500),
-                                child: LoginScreen()));
+                        DatabaseAPI.createStudent().then((value) => {
+                              if (value == "Success")
+                                {
+                                  Fluttertoast.showToast(msg: "Welcome to MyTutor :)"),
+                                  Navigator.push(
+                                      context,
+                                      PageTransition(
+                                          type: PageTransitionType
+                                              .leftToRightWithFade,
+                                          duration: Duration(milliseconds: 500),
+                                          child: LoginScreen()))
+                                } else{
+                                Fluttertoast.showToast(msg: value),
+                                Navigator.pop(context),
+                              }
+                            });
                       } else {
                         // Chosen Tutor
                         Navigator.pushNamed(context, InterestsScreen.id);
