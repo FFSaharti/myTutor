@@ -83,64 +83,73 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      extendBodyBehindAppBar: true,
-      body: SafeArea(
-        child: receiverDataLoadIndicator == false
-            ? Center(
-                child: CircularProgressIndicator(
-                  backgroundColor: Colors.white,
-                  valueColor: AlwaysStoppedAnimation<Color>(kColorScheme[3]),
-                ),
-              )
-            : Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: <Widget>[
-                  Stack(
-                    children: [
-                      Container(
-                        height: ScreenSize.height * 0.172,
-                        decoration: new BoxDecoration(
-                            color: kColorScheme[1],
-                            borderRadius: new BorderRadius.only(
-                                bottomRight: const Radius.circular(25.0),
-                                bottomLeft: const Radius.circular(25.0))),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(15.0),
-                        child: Column(
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+        extendBodyBehindAppBar: true,
+        body: SafeArea(
+          child: receiverDataLoadIndicator == false
+              ? Center(
+                  child: CircularProgressIndicator(
+                    backgroundColor: Colors.white,
+                    valueColor: AlwaysStoppedAnimation<Color>(kColorScheme[3]),
+                  ),
+                )
+              : Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: <Widget>[
+                    Stack(
+                      children: [
+                        Container(
+                          height: ScreenSize.height * 0.172,
+                          decoration: new BoxDecoration(
+                              color: kColorScheme[1],
+                              borderRadius: new BorderRadius.only(
+                                  bottomRight: const Radius.circular(25.0),
+                                  bottomLeft: const Radius.circular(25.0))),
+                        ),
+                        Column(
                           children: [
                             SizedBox(
                               height: ScreenSize.height * 0.010,
                             ),
                             ListTile(
-                              leading: GestureDetector(
-                                onTap: () {
-                                  receiverDataLoadIndicator == true
-                                      ? Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  ViewReceiverProfile(
-                                                    userId: receiver.userId,
-                                                    role: SessionManager
-                                                                .loggedInTutor
-                                                                .userId ==
-                                                            ""
-                                                        ? "tutor"
-                                                        : "student",
-                                                  )),
-                                        )
-                                      : print('wait to load');
-                                },
-                                child: CircleAvatar(
-                                  backgroundImage:
-                                      NetworkImage(receiver.profileImag),
-                                  backgroundColor: kColorScheme[1],
-                                  foregroundColor: Colors.black,
-                                  radius: 27.0,
-                                ),
+                              leading: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  GestureDetector(onTap: (){
+                                    Navigator.pop(context);
+                                  },child: Icon(Icons.arrow_back , color: Colors.white,)),
+                                  SizedBox(width: ScreenSize.width *0.020,),
+                                  GestureDetector(
+                                    onTap: () {
+                                      receiverDataLoadIndicator == true
+                                          ? Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      ViewReceiverProfile(
+                                                        userId: receiver.userId,
+                                                        role: SessionManager
+                                                                    .loggedInTutor
+                                                                    .userId ==
+                                                                ""
+                                                            ? "tutor"
+                                                            : "student",
+                                                      )),
+                                            )
+                                          : print('wait to load');
+                                    },
+                                    child: CircleAvatar(
+                                      backgroundImage:
+                                          NetworkImage(receiver.profileImag),
+                                      backgroundColor: kColorScheme[1],
+                                      foregroundColor: Colors.black,
+                                      radius: 27.0,
+                                    ),
+                                  ),
+                                ],
                               ),
                               title: receiverDataLoadIndicator == true
                                   ? Text(
@@ -253,112 +262,112 @@ class _ChatScreenState extends State<ChatScreen> {
                             ),
                           ],
                         ),
-                      ),
-                    ],
-                  ),
-                  // receiverDataLoadIndicator == false ? Text("hello") :
-                  //     Text(receiverName),
-                  NotificationListener<OverscrollIndicatorNotification>(
-                    // ignore: missing_return
-                    onNotification: (overscroll) {
-                      overscroll.disallowGlow();
-                    },
-                    child: userChooseForTypeofChat == 0
-                        ? MessagesStream(
-                            sessionid: widget.currentsession.session_id,
-                            imageOnly: false,
-                          )
-                        : MessagesStream(
-                            sessionid: widget.currentsession.session_id,
-                            imageOnly: true,
-                          ),
-                  ),
-                  fileUploadIndicator == true
-                      ? LinearProgressIndicator(
-                          backgroundColor: Colors.white,
-                          valueColor:
-                              AlwaysStoppedAnimation<Color>(kColorScheme[3]),
-                        )
-                      : Text(""),
-                  Container(
-                    color: Theme.of(context).bottomAppBarColor,
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        IconButton(
-                          icon: Icon(Icons.attach_file),
-                          onPressed: widget.currentsession.status == "closed"
-                              ? null
-                              : () async {
-                                  refresh();
-                                  String filename = "hello";
-                                  FilePickerResult file = await FilePicker
-                                      .platform
-                                      .pickFiles(type: FileType.image);
-                                  File _file;
-                                  try {
-                                    file.files.single.path == null
-                                        ? print("hello")
-                                        : _file = File(file.files.single.path);
-                                    DatabaseAPI.uploadImageToStorage(
-                                            _file,
-                                            widget.currentsession.session_id,
-                                            SessionManager.loggedInUser.name)
-                                        .then((value) => {
-                                              refresh(),
-                                            });
-                                  } catch (e) {
-                                    refresh();
-                                    print('never reached');
-                                  }
-                                },
-                        ),
-                        Expanded(
-                          child: TextField(
-                            readOnly: widget.currentsession.status == "closed"
-                                ? true
-                                : false,
-                            controller: messageTextController,
-                            onChanged: (value) {
-                              newMessage = value;
-                            },
-                            decoration: InputDecoration(
-                              contentPadding: EdgeInsets.symmetric(
-                                  vertical: 10.0, horizontal: 20.0),
-                              hintText: widget.currentsession.status == "closed"
-                                  ? 'the session is ended. its in view Mode only'
-                                  : 'Type....',
-                              border: InputBorder.none,
-                            ),
-                          ),
-                        ),
-                        FlatButton(
-                          onPressed: widget.currentsession.status == "closed"
-                              ? null
-                              : () {
-                                  messageTextController.clear();
-                                  DatabaseAPI.saveNewMessage(
-                                      widget.currentsession.session_id,
-                                      newMessage,
-                                      SessionManager.loggedInUser.name);
-                                },
-                          child: Row(
-                            children: [
-                              Text("Send"),
-                              SizedBox(
-                                width: 5,
-                              ),
-                              Icon(
-                                Icons.arrow_forward_ios_outlined,
-                              ),
-                            ],
-                          ),
-                        ),
                       ],
                     ),
-                  ),
-                ],
-              ),
+                    // receiverDataLoadIndicator == false ? Text("hello") :
+                    //     Text(receiverName),
+                    NotificationListener<OverscrollIndicatorNotification>(
+                      // ignore: missing_return
+                      onNotification: (overscroll) {
+                        overscroll.disallowGlow();
+                      },
+                      child: userChooseForTypeofChat == 0
+                          ? MessagesStream(
+                              sessionid: widget.currentsession.session_id,
+                              imageOnly: false,
+                            )
+                          : MessagesStream(
+                              sessionid: widget.currentsession.session_id,
+                              imageOnly: true,
+                            ),
+                    ),
+                    fileUploadIndicator == true
+                        ? LinearProgressIndicator(
+                            backgroundColor: Colors.white,
+                            valueColor:
+                                AlwaysStoppedAnimation<Color>(kColorScheme[3]),
+                          )
+                        : Text(""),
+                    Container(
+                      color: Theme.of(context).bottomAppBarColor,
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          IconButton(
+                            icon: Icon(Icons.attach_file),
+                            onPressed: widget.currentsession.status == "closed"
+                                ? null
+                                : () async {
+                                    refresh();
+                                    String filename = "hello";
+                                    FilePickerResult file = await FilePicker
+                                        .platform
+                                        .pickFiles(type: FileType.image);
+                                    File _file;
+                                    try {
+                                      file.files.single.path == null
+                                          ? print("hello")
+                                          : _file = File(file.files.single.path);
+                                      DatabaseAPI.uploadImageToStorage(
+                                              _file,
+                                              widget.currentsession.session_id,
+                                              SessionManager.loggedInUser.name)
+                                          .then((value) => {
+                                                refresh(),
+                                              });
+                                    } catch (e) {
+                                      refresh();
+                                      print('never reached');
+                                    }
+                                  },
+                          ),
+                          Expanded(
+                            child: TextField(
+                              readOnly: widget.currentsession.status == "closed"
+                                  ? true
+                                  : false,
+                              controller: messageTextController,
+                              onChanged: (value) {
+                                newMessage = value;
+                              },
+                              decoration: InputDecoration(
+                                contentPadding: EdgeInsets.symmetric(
+                                    vertical: 10.0, horizontal: 20.0),
+                                hintText: widget.currentsession.status == "closed"
+                                    ? 'the session is ended. its in view Mode only'
+                                    : 'Type....',
+                                border: InputBorder.none,
+                              ),
+                            ),
+                          ),
+                          FlatButton(
+                            onPressed: widget.currentsession.status == "closed"
+                                ? null
+                                : () {
+                                    messageTextController.clear();
+                                    DatabaseAPI.saveNewMessage(
+                                        widget.currentsession.session_id,
+                                        newMessage,
+                                        SessionManager.loggedInUser.name);
+                                  },
+                            child: Row(
+                              children: [
+                                Text("Send"),
+                                SizedBox(
+                                  width: 5,
+                                ),
+                                Icon(
+                                  Icons.arrow_forward_ios_outlined,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+        ),
       ),
     );
   }

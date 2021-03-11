@@ -143,7 +143,7 @@ class DatabaseAPI {
     }
   }
 
-  static void updateUserProfileImage(File newImage) async {
+  static Future<String> updateUserProfileImage(File newImage) async {
     ref = firebase_storage.FirebaseStorage.instance
         .ref()
         .child(SessionManager.loggedInUser.name);
@@ -165,6 +165,8 @@ class DatabaseAPI {
           .doc(SessionManager.loggedInUser.userId)
           .update({"profileImg": url});
     }
+
+
   }
 
   static Future<String> userLogin(String email, String pass) async {

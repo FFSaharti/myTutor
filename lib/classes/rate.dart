@@ -56,14 +56,42 @@ class Rate {
 
   // ignore: missing_return
   static double getAverageRate(List<Rate> totalRates){
-
     double sum = 0;
-
     for(int i = 0 ; i < totalRates.length ; i++){
       sum += totalRates.elementAt(i).creativity+totalRates.elementAt(i).friendliness+totalRates.elementAt(i).communicationSkills+totalRates.elementAt(i).teachingSkills;
     }
     return sum/ (totalRates.length * 4);
-
-
   }
+  static double getAverageRateForCreativity(List<Rate> totalRates){
+    double creativitySum = 0;
+    for(int i = 0 ; i < totalRates.length ; i++){
+      creativitySum += totalRates.elementAt(i).creativity;
+    }
+    return creativitySum/ (totalRates.length);
+  }
+
+  static double getAverageRateForFriendliness(List<Rate> totalRates){
+    double friendlinessSum = 0;
+    for(int i = 0 ; i < totalRates.length ; i++){
+      friendlinessSum += totalRates.elementAt(i).friendliness;
+    }
+    return friendlinessSum/ (totalRates.length);
+  }
+
+  static double getAverageRateForCommunication(List<Rate> totalRates){
+    double communicationSum = 0;
+    for(int i = 0 ; i < totalRates.length ; i++){
+      communicationSum += totalRates.elementAt(i).communicationSkills;
+    }
+    return communicationSum/ (totalRates.length);
+  }
+
+  static double getAverageRateForTeachingSkills(List<Rate> totalRates){
+    double teachingSkillsSum = 0;
+    for(int i = 0 ; i < totalRates.length ; i++){
+      teachingSkillsSum += totalRates.elementAt(i).teachingSkills;
+    }
+    return teachingSkillsSum/ (totalRates.length);
+  }
+
 }

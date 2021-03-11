@@ -4,6 +4,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_villains/villains/villains.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mytutor/components/circular_button.dart';
@@ -217,6 +218,7 @@ class _SignupScreenState extends State<SignupScreen> {
                             Navigator.pushNamed(context, SpecifyRoleScreen.id);
                           } else {
                             //TODO: ADD DIALOG FOR INVALID INFORMATION
+                            Fluttertoast.showToast(msg: 'Please fill up all the information before proceed to next step');
                           }
                         }),
                   ),

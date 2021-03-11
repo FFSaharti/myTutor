@@ -9,6 +9,7 @@ import 'package:mytutor/classes/rate.dart';
 import 'package:mytutor/classes/subject.dart';
 import 'package:mytutor/components/material_stream_widget.dart';
 import 'package:mytutor/components/profile_info_widget.dart';
+import 'package:mytutor/components/view_rate_bottom_sheet_widget.dart';
 import 'package:mytutor/screens/view_reviews_screen.dart';
 import 'package:mytutor/utilities/constants.dart';
 import 'package:mytutor/utilities/database_api.dart';
@@ -83,6 +84,16 @@ class _TutorProfileState extends State<TutorProfile> {
                       }),
                     }
                 }
+              else
+                {
+                  // no data mean no review  or rate yet.
+                  setState(() {
+                    reviewHelper = "0";
+                    sessionNumHelper = "0";
+                    finishedLoadingTutorRate = true;
+                  }),
+
+                }
             });
 
     // get the session num
@@ -137,8 +148,14 @@ class _TutorProfileState extends State<TutorProfile> {
                                         .pickFiles(type: FileType.image);
                                     file == null
                                         ? null
-                                        : DatabaseAPI.updateUserProfileImage(
-                                            File(file.files.single.path));
+                                        :  DatabaseAPI.updateUserProfileImage(
+                                            File(file.files.single.path)).then((value) =>
+                                    {
+                                    setState(() {
+                                      SessionManager.loggedInTutor.profileImag = value;
+                                    }),
+                                    });
+
                                   },
                                   child: Icon(
                                     Icons.account_circle_sharp,
@@ -164,7 +181,11 @@ class _TutorProfileState extends State<TutorProfile> {
                                       file == null
                                           ? null
                                           : DatabaseAPI.updateUserProfileImage(
-                                              File(file.files.single.path));
+                                              File(file.files.single.path)).then((value) => {
+                                        setState(() {
+                                          SessionManager.loggedInTutor.profileImag = value;
+                                        }),
+                                      });
                                     },
                                     child: Align(
                                       child: Icon(
@@ -208,11 +229,16 @@ class _TutorProfileState extends State<TutorProfile> {
                         SizedBox(
                           width: ScreenSize.width * 0.02,
                         ),
-                        ProfileInfoWidget(
-                            "Rating",
-                            finishedLoadingTutorRate == true
-                                ? Rate.getAverageRate(tutorRates).toString()
-                                : "load"),
+                        GestureDetector(
+                          onTap: (){
+                            ViewRateBottomSheet.show(tutorRates,context);
+                          },
+                          child: ProfileInfoWidget(
+                              "Rating",
+                              finishedLoadingTutorRate == true
+                                  ? tutorRates.length == 0 ? "0" : Rate.getAverageRate(tutorRates).toString()
+                                  : "load"),
+                        ),
                         SizedBox(
                           width: ScreenSize.width * 0.02,
                         ),

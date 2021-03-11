@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mytutor/classes/document.dart';
 import 'package:mytutor/classes/quiz.dart';
@@ -243,6 +244,7 @@ class _CreateMaterialsScreenState extends State<CreateMaterialsScreen> {
                             Center(
                               child: RaisedButton(
                                 onPressed: () {
+                                  _file == null ? Fluttertoast.showToast(msg: "please attached file first") :
                                   createMaterials();
                                 },
                                 child: Text(
@@ -484,7 +486,26 @@ class _CreateMaterialsScreenState extends State<CreateMaterialsScreen> {
               });
     }
   }
-
+  showProgressDialog(BuildContext context){
+    AlertDialog alert=AlertDialog(
+      content:  Container(
+        child: Row(
+          children: [
+            CircularProgressIndicator(backgroundColor: Colors.white,
+          valueColor:
+          AlwaysStoppedAnimation<Color>(kColorScheme[3]),
+        ),
+            Container(child:Text("     please wait.." )),
+          ],),
+      ),
+    );
+    showDialog(barrierDismissible: false,
+      context:context,
+      builder:(BuildContext context){
+        return alert;
+      },
+    );
+  }
   void createMaterials() {
     String filetype = _file.path.split('/').last.split('.').last;
     if (_descController.text.isNotEmpty &&
@@ -492,6 +513,7 @@ class _CreateMaterialsScreenState extends State<CreateMaterialsScreen> {
         _file != null) {
       if (filetype == "pdf" || filetype == "pptx") {
         // uplode the file
+        showProgressDialog(context);
         DatabaseAPI.uploadFileToStorage(Document(
                 _titleController.text,
                 1,
@@ -523,7 +545,7 @@ class _CreateMaterialsScreenState extends State<CreateMaterialsScreen> {
                           btnOkOnPress: () {
                             int count = 0;
                             Navigator.popUntil(context, (route) {
-                              return count++ == 1;
+                              return count++ == 2;
                             });
                           },
                         ).show()
