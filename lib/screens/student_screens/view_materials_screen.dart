@@ -204,242 +204,246 @@ class _ViewMaterialsScreenState extends State<ViewMaterialsScreen> {
     for (int i = 0; i < materials.length; i++) {
       print(subjects[materials.elementAt(i).subjectID].path);
     }
-    return Scaffold(
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(15.0),
-          child: Column(
-            children: [
-              TextField(
-                controller: _searchController,
-                onChanged: (value) {
-                  searchFilter(value);
-                  if (_searchController.text.isEmpty) searchedMaterials = [];
-                },
-                style: TextStyle(
-                  color: kBlackish,
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+        appBar: buildAppBar(context, kColorScheme[3], "View Materials"),
+        body: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(15.0),
+            child: Column(
+              children: [
+                TextField(
+                  controller: _searchController,
+                  onChanged: (value) {
+                    searchFilter(value);
+                    if (_searchController.text.isEmpty) searchedMaterials = [];
+                  },
+                  style: TextStyle(
+                    color: kBlackish,
+                  ),
+                  textAlignVertical: TextAlignVertical.center,
+                  decoration: InputDecoration(
+                    contentPadding: EdgeInsets.all(0),
+                    filled: true,
+                    hintText: 'Search',
+                    prefixIcon: Icon(Icons.search, color: kColorScheme[2]),
+                    enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide.none,
+                        borderRadius: BorderRadius.circular(15)),
+                    focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide.none,
+                        borderRadius: BorderRadius.circular(15)),
+                  ),
                 ),
-                textAlignVertical: TextAlignVertical.center,
-                decoration: InputDecoration(
-                  contentPadding: EdgeInsets.all(0),
-                  filled: true,
-                  hintText: 'Search',
-                  prefixIcon: Icon(Icons.search, color: kColorScheme[2]),
-                  enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide.none,
-                      borderRadius: BorderRadius.circular(15)),
-                  focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide.none,
-                      borderRadius: BorderRadius.circular(15)),
+                SizedBox(
+                  height: 25,
                 ),
-              ),
-              SizedBox(
-                height: 25,
-              ),
-              Text(
-                "Or",
-                style: TextStyle(fontSize: 17),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              GestureDetector(
-                onTap: () {
-                  viewFilters();
-                },
-                child: Container(
-                    height: ScreenSize.height * 0.055,
-                    width: ScreenSize.width * 0.50,
-                    decoration: BoxDecoration(
-                        color: kColorScheme[1],
-                        borderRadius: BorderRadius.all(Radius.circular(10.0))),
-                    child: new Center(
-                      //TODO: Add search by type (quiz, document)
-                      child: new Text(
-                        "Filter options",
-                        style: TextStyle(color: Colors.white, fontSize: 23),
-                        textAlign: TextAlign.center,
-                      ),
-                    )),
-              ),
-              SizedBox(
-                height: ScreenSize.height * 0.030,
-              ),
-              Expanded(
-                child: ListView.builder(
-                  itemCount: searchedMaterials.length,
-                  itemBuilder: (context, index) {
-                    fromDurationAnimationConter += 100;
-                    toDurationAnimationConter += 100;
-                    return Villain(
-                      villainAnimation: VillainAnimation.fromBottom(
-                        from:
-                            Duration(milliseconds: fromDurationAnimationConter),
-                        to: Duration(milliseconds: toDurationAnimationConter),
-                      ),
-                      child: Card(
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: ListTile(
-                            leading: Image.asset(subjects[searchedMaterials
-                                    .elementAt(index)
-                                    .subjectID]
-                                .path),
-                            title:
-                                Text(searchedMaterials.elementAt(index).title),
-                            trailing: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Container(
-                                  child: GestureDetector(
-                                    child: Icon(Icons.visibility),
-                                    onTap: () {
-                                      // open the file reader if the file is pdf, else let the user download the file
-                                      if (searchedMaterials
-                                              .elementAt(index)
-                                              .type ==
-                                          1) {
-                                        (searchedMaterials.elementAt(index)
-                                                        as Document)
-                                                    .fileType ==
-                                                "pdf"
-                                            ? PDFDocument.fromURL(
-                                                    (searchedMaterials
-                                                                .elementAt(
-                                                                    index)
-                                                            as Document)
-                                                        .url)
-                                                .then((value) => {
-                                                      doc = value,
-                                                      readPdf(index),
-                                                    })
-                                            : downloadFile(index);
-                                      } else {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  TakeQuizScreen(
-                                                      searchedMaterials
-                                                          .elementAt(index),
-                                                      searchedMaterials
-                                                          .elementAt(index)
-                                                          .docid)),
-                                        );
-                                      }
-                                    },
+                Text(
+                  "Or",
+                  style: TextStyle(fontSize: 17),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                GestureDetector(
+                  onTap: () {
+                    viewFilters();
+                  },
+                  child: Container(
+                      height: ScreenSize.height * 0.055,
+                      width: ScreenSize.width * 0.50,
+                      decoration: BoxDecoration(
+                          color: kColorScheme[1],
+                          borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                      child: new Center(
+                        //TODO: Add search by type (quiz, document)
+                        child: new Text(
+                          "Filter options",
+                          style: TextStyle(color: Colors.white, fontSize: 23),
+                          textAlign: TextAlign.center,
+                        ),
+                      )),
+                ),
+                SizedBox(
+                  height: ScreenSize.height * 0.030,
+                ),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: searchedMaterials.length,
+                    itemBuilder: (context, index) {
+                      fromDurationAnimationConter += 100;
+                      toDurationAnimationConter += 100;
+                      return Villain(
+                        villainAnimation: VillainAnimation.fromBottom(
+                          from:
+                              Duration(milliseconds: fromDurationAnimationConter),
+                          to: Duration(milliseconds: toDurationAnimationConter),
+                        ),
+                        child: Card(
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: ListTile(
+                              leading: Image.asset(subjects[searchedMaterials
+                                      .elementAt(index)
+                                      .subjectID]
+                                  .path),
+                              title:
+                                  Text(searchedMaterials.elementAt(index).title),
+                              trailing: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Container(
+                                    child: GestureDetector(
+                                      child: Icon(Icons.visibility),
+                                      onTap: () {
+                                        // open the file reader if the file is pdf, else let the user download the file
+                                        if (searchedMaterials
+                                                .elementAt(index)
+                                                .type ==
+                                            1) {
+                                          (searchedMaterials.elementAt(index)
+                                                          as Document)
+                                                      .fileType ==
+                                                  "pdf"
+                                              ? PDFDocument.fromURL(
+                                                      (searchedMaterials
+                                                                  .elementAt(
+                                                                      index)
+                                                              as Document)
+                                                          .url)
+                                                  .then((value) => {
+                                                        doc = value,
+                                                        readPdf(index),
+                                                      })
+                                              : downloadFile(index);
+                                        } else {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    TakeQuizScreen(
+                                                        searchedMaterials
+                                                            .elementAt(index),
+                                                        searchedMaterials
+                                                            .elementAt(index)
+                                                            .docid)),
+                                          );
+                                        }
+                                      },
+                                    ),
                                   ),
-                                ),
-                                Container(
-                                  child: GestureDetector(
-                                    child: Icon(Icons.favorite),
-                                    onTap: () {
-                                      // open the file reader if the file is pdf, else let the user download the file
-                                      print("DOC ID IS --> " +
-                                          searchedMaterials
-                                              .elementAt(index)
-                                              .docid);
-                                      if (SessionManager.loggedInStudent.favMats
-                                          .contains(searchedMaterials
-                                              .elementAt(index)
-                                              .docid)) {
-                                        AwesomeDialog(
-                                          context: context,
-                                          animType: AnimType.SCALE,
-                                          dialogType: DialogType.ERROR,
-                                          title: "ERROR",
-                                          desc: "Material already in favorites",
-                                          btnOkOnPress: () {},
-                                        ).show();
-                                      } else {
-                                        DatabaseAPI.addMaterialToFavorites(
-                                                searchedMaterials
-                                                    .elementAt(index))
-                                            .then((value) => {
-                                                  SessionManager
-                                                      .loggedInStudent.favMats
-                                                      .add(searchedMaterials
-                                                          .elementAt(index)
-                                                          .docid),
-                                                  value == "done"
-                                                      ? AwesomeDialog(
-                                                          context: context,
-                                                          animType:
-                                                              AnimType.SCALE,
-                                                          dialogType:
-                                                              DialogType.SUCCES,
-                                                          body: Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(8.0),
-                                                            child: Center(
-                                                              child: Text(
-                                                                'material added to favorites',
-                                                                style: kTitleStyle.copyWith(
-                                                                    color:
-                                                                        kBlackish,
-                                                                    fontSize:
-                                                                        14,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .normal),
+                                  Container(
+                                    child: GestureDetector(
+                                      child: Icon(Icons.favorite),
+                                      onTap: () {
+                                        // open the file reader if the file is pdf, else let the user download the file
+                                        print("DOC ID IS --> " +
+                                            searchedMaterials
+                                                .elementAt(index)
+                                                .docid);
+                                        if (SessionManager.loggedInStudent.favMats
+                                            .contains(searchedMaterials
+                                                .elementAt(index)
+                                                .docid)) {
+                                          AwesomeDialog(
+                                            context: context,
+                                            animType: AnimType.SCALE,
+                                            dialogType: DialogType.ERROR,
+                                            title: "ERROR",
+                                            desc: "Material already in favorites",
+                                            btnOkOnPress: () {},
+                                          ).show();
+                                        } else {
+                                          DatabaseAPI.addMaterialToFavorites(
+                                                  searchedMaterials
+                                                      .elementAt(index))
+                                              .then((value) => {
+                                                    SessionManager
+                                                        .loggedInStudent.favMats
+                                                        .add(searchedMaterials
+                                                            .elementAt(index)
+                                                            .docid),
+                                                    value == "done"
+                                                        ? AwesomeDialog(
+                                                            context: context,
+                                                            animType:
+                                                                AnimType.SCALE,
+                                                            dialogType:
+                                                                DialogType.SUCCES,
+                                                            body: Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .all(8.0),
+                                                              child: Center(
+                                                                child: Text(
+                                                                  'material added to favorites',
+                                                                  style: kTitleStyle.copyWith(
+                                                                      color:
+                                                                          kBlackish,
+                                                                      fontSize:
+                                                                          14,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .normal),
+                                                                ),
                                                               ),
                                                             ),
-                                                          ),
-                                                          btnOkOnPress: () {
-                                                            int count = 0;
-                                                            Navigator.popUntil(
-                                                                context,
-                                                                (route) {
-                                                              return count++ ==
-                                                                  1;
-                                                            });
-                                                          },
-                                                        ).show()
-                                                      : AwesomeDialog(
-                                                          context: context,
-                                                          animType:
-                                                              AnimType.SCALE,
-                                                          dialogType:
-                                                              DialogType.ERROR,
-                                                          body: Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(8.0),
-                                                            child: Center(
-                                                              child: Text(
-                                                                'ERROR ',
-                                                                style: kTitleStyle.copyWith(
-                                                                    color:
-                                                                        kBlackish,
-                                                                    fontSize:
-                                                                        14,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .normal),
+                                                            btnOkOnPress: () {
+                                                              int count = 0;
+                                                              Navigator.popUntil(
+                                                                  context,
+                                                                  (route) {
+                                                                return count++ ==
+                                                                    1;
+                                                              });
+                                                            },
+                                                          ).show()
+                                                        : AwesomeDialog(
+                                                            context: context,
+                                                            animType:
+                                                                AnimType.SCALE,
+                                                            dialogType:
+                                                                DialogType.ERROR,
+                                                            body: Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .all(8.0),
+                                                              child: Center(
+                                                                child: Text(
+                                                                  'ERROR ',
+                                                                  style: kTitleStyle.copyWith(
+                                                                      color:
+                                                                          kBlackish,
+                                                                      fontSize:
+                                                                          14,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .normal),
+                                                                ),
                                                               ),
                                                             ),
-                                                          ),
-                                                          btnOkOnPress: () {
-                                                            Navigator.pop(
-                                                                context);
-                                                          },
-                                                        ).show()
-                                                });
-                                      }
-                                    },
+                                                            btnOkOnPress: () {
+                                                              Navigator.pop(
+                                                                  context);
+                                                            },
+                                                          ).show()
+                                                  });
+                                        }
+                                      },
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    );
-                  },
-                ),
-              )
-            ],
+                      );
+                    },
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ),

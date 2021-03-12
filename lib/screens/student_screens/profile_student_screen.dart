@@ -4,6 +4,7 @@ import 'package:advance_pdf_viewer/advance_pdf_viewer.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_villains/villains/villains.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mytutor/classes/document.dart';
 import 'package:mytutor/classes/material.dart';
@@ -92,6 +93,8 @@ class _ProfileStudentState extends State<ProfileStudent> {
   }
 
   PDFDocument doc;
+  int from = 100;
+  int to = 450;
 
   @override
   Widget build(BuildContext context) {
@@ -299,59 +302,73 @@ class _ProfileStudentState extends State<ProfileStudent> {
                   height: 10,
                 ),
                 Expanded(
-                  child: ListView.builder(
-                    itemCount: favDocs.length,
-                    itemBuilder: (context, index) {
-                      return Card(
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: ListTile(
-                            leading: Image.asset(
-                                (subjects[favDocs.elementAt(index).subjectID])
-                                    .path),
-                            title: Text(favDocs.elementAt(index).title),
-                            trailing: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Container(
-                                  child: GestureDetector(
-                                    child: Icon(Icons.visibility),
-                                    onTap: () {
-                                      // open the file reader if the file is pdf, else let the user download the file
-                                      if (favDocs.elementAt(index).type == 1) {
-                                        (favDocs.elementAt(index) as Document)
-                                            .fileType ==
-                                            "pdf"
-                                            ? PDFDocument.fromURL(
-                                            (favDocs.elementAt(index)
-                                            as Document)
-                                                .url)
-                                            .then((value) => {
-                                          doc = value,
-                                          readPdf(index),
-                                        })
-                                            : downloadFile(index);
-                                      } else {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  TakeQuizScreen(
-                                                      favDocs.elementAt(index),
-                                                      favDocs
-                                                          .elementAt(index)
-                                                          .docid)),
-                                        );
-                                      }
-                                    },
-                                  ),
+                  child: NotificationListener<OverscrollIndicatorNotification>(
+                    // ignore: missing_return
+                    onNotification: (overscroll) {
+                      overscroll.disallowGlow();
+                    },
+                    child: ListView.builder(
+                      itemCount: favDocs.length,
+                      itemBuilder: (context, index) {
+                        from += 100;
+                        to += 250;
+                        return Villain(
+                          villainAnimation: VillainAnimation.fromBottom(
+                            from: Duration(milliseconds: from),
+                            to: Duration(milliseconds: to),
+                          ),
+                          child: Card(
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: ListTile(
+                                leading: Image.asset(
+                                    (subjects[favDocs.elementAt(index).subjectID])
+                                        .path),
+                                title: Text(favDocs.elementAt(index).title),
+                                trailing: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Container(
+                                      child: GestureDetector(
+                                        child: Icon(Icons.visibility),
+                                        onTap: () {
+                                          // open the file reader if the file is pdf, else let the user download the file
+                                          if (favDocs.elementAt(index).type == 1) {
+                                            (favDocs.elementAt(index) as Document)
+                                                .fileType ==
+                                                "pdf"
+                                                ? PDFDocument.fromURL(
+                                                (favDocs.elementAt(index)
+                                                as Document)
+                                                    .url)
+                                                .then((value) => {
+                                              doc = value,
+                                              readPdf(index),
+                                            })
+                                                : downloadFile(index);
+                                          } else {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      TakeQuizScreen(
+                                                          favDocs.elementAt(index),
+                                                          favDocs
+                                                              .elementAt(index)
+                                                              .docid)),
+                                            );
+                                          }
+                                        },
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ],
+                              ),
                             ),
                           ),
-                        ),
-                      );
-                    },
+                        );
+                      },
+                    ),
                   ),
                 )
               ],

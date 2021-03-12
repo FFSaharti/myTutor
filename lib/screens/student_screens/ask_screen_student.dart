@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_villains/villains/villains.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mytutor/classes/subject.dart';
 import 'package:mytutor/components/question_stream_widget.dart';
@@ -18,74 +19,79 @@ class _AskScreenStudentState extends State<AskScreenStudent> {
   PageController _pageController = PageController();
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        iconTheme: IconThemeData(
-          color: Colors.black, //change your color here.
-        ),
-        automaticallyImplyLeading: true,
-        backgroundColor: Colors.white70,
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(
-              Icons.add,
-              color: Colors.black,
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+        appBar: AppBar(
+          actions: [
+            IconButton(
+              icon: Icon(Icons.add, color: kColorScheme[3]),
+              onPressed: () => showAddQuestion(),
             ),
-            onPressed: () {
-              print("clicked Add Question");
-              showAddQuestion();
-            },
-          ),
-        ],
+          ],
+        centerTitle: true,
         title: Text(
           "Ask",
-          style: TextStyle(color: Colors.black),
+          style: GoogleFonts.sen(color: Colors.black, fontSize: 25),
         ),
+        leading: Villain(
+          villainAnimation: VillainAnimation.fade(
+            from: Duration(milliseconds: 300),
+            to: Duration(milliseconds: 700),
+          ),
+          child: IconButton(
+            icon: Icon(Icons.arrow_back_ios_sharp, color: kColorScheme[3]),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+        ),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
       ),
-      body: SafeArea(
-        child: GestureDetector(
-          onTap: () {
-            print("updating questions...");
-          },
-          child: Container(
-            child: Center(
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: 30,
-                  ),
-                  Container(
-                    height: ScreenSize.height * 0.69,
-                    child:
-                        NotificationListener<OverscrollIndicatorNotification>(
-                      // ignore: missing_return
-                      onNotification: (overscroll) {
-                        overscroll.disallowGlow();
-                      },
-                      child: PageView(
-                        controller: _pageController,
-                        children: [
-                          mainScreenPage(
-                              QuestionStream(
-                                status: "Active",
-                              ),
-                              "Active Questions"),
-                          mainScreenPage(
-                              QuestionStream(
-                                status: "Closed",
-                              ),
-                              "Closed Questions"),
-                        ],
+        body: SafeArea(
+          child: GestureDetector(
+            onTap: () {
+              print("updating questions...");
+            },
+            child: Container(
+              child: Center(
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: 30,
+                    ),
+                    Container(
+                      height: ScreenSize.height * 0.69,
+                      child:
+                          NotificationListener<OverscrollIndicatorNotification>(
+                        // ignore: missing_return
+                        onNotification: (overscroll) {
+                          overscroll.disallowGlow();
+                        },
+                        child: PageView(
+                          controller: _pageController,
+                          children: [
+                            mainScreenPage(
+                                QuestionStream(
+                                  status: "Active",
+                                ),
+                                "Active Questions"),
+                            mainScreenPage(
+                                QuestionStream(
+                                  status: "Closed",
+                                ),
+                                "Closed Questions"),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                  SmoothPageIndicator(
-                    effect: WormEffect(
-                        dotColor: kGreyish, activeDotColor: kColorScheme[2]),
-                    controller: _pageController, // PageController
-                    count: 2,
-                  ),
-                ],
+                    SmoothPageIndicator(
+                      effect: WormEffect(
+                          dotColor: kGreyish, activeDotColor: kColorScheme[2]),
+                      controller: _pageController, // PageController
+                      count: 2,
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

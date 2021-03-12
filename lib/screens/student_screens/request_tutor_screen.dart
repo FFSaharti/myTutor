@@ -101,124 +101,128 @@ class _RequestTutorScreenState extends State<RequestTutorScreen> {
   Widget build(BuildContext context) {
     int fromDurationAnimationConter = 0;
     int toDurationAnimationConter = 400;
-    return SafeArea(
-      child: Scaffold(
-        //resizeToAvoidBottomInset : false,
-        body: Center(
-          child: Padding(
-            padding: const EdgeInsets.all(15.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                TextField(
-                  controller: searchController,
-                  onChanged: (value) {
-                    VillainController.playAllVillains(context);
-                    setState(() {
-                      _filterTutors(value);
-                      if (searchController.text.isEmpty) {
-                        searchedTutors = [];
-                      }
-                      // getSelectedSubjects(selectedInterests);
-                    });
-                  },
-                  style: TextStyle(
-                    color: kBlackish,
-                  ),
-                  textAlignVertical: TextAlignVertical.center,
-                  decoration: InputDecoration(
-                    contentPadding: EdgeInsets.all(0),
-                    filled: true,
-                    hintText: 'Search',
-                    prefixIcon: Icon(Icons.search, color: kColorScheme[2]),
-                    enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide.none,
-                        borderRadius: BorderRadius.circular(15)),
-                    focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide.none,
-                        borderRadius: BorderRadius.circular(15)),
-                  ),
-                ),
-                SizedBox(
-                  height: 25,
-                ),
-                Text(
-                  "Or",
-                  style: TextStyle(fontSize: 17),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                GestureDetector(
-                  onTap: () {
-                    showFilterOptions();
-                  },
-                  child: Container(
-                      height: 40,
-                      width: 200,
-                      decoration: BoxDecoration(
-                          color: kColorScheme[1],
-                          borderRadius:
-                              BorderRadius.all(Radius.circular(10.0))),
-                      child: new Center(
-                        child: new Text(
-                          "Filter options",
-                          style: TextStyle(color: Colors.white, fontSize: 23),
-                          textAlign: TextAlign.center,
-                        ),
-                      )),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Divider(),
-                SizedBox(
-                  height: 10,
-                ),
-                searchedTutors.length > 0
-                    ? Text(
-                        "Showing " +
-                            searchedTutors.length.toString() +
-                            " Results",
-                        style: TextStyle(fontSize: 18))
-                    : Text(""),
-                Expanded(
-                  child: NotificationListener<OverscrollIndicatorNotification>(
-                    onNotification: (overscroll) {
-                      overscroll.disallowGlow();
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: SafeArea(
+        child: Scaffold(
+          appBar: buildAppBar(context, kColorScheme[3], "Request Tutor"),
+          //resizeToAvoidBottomInset : false,
+          body: Center(
+            child: Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  TextField(
+                    controller: searchController,
+                    onChanged: (value) {
+                      VillainController.playAllVillains(context);
+                      setState(() {
+                        _filterTutors(value);
+                        if (searchController.text.isEmpty) {
+                          searchedTutors = [];
+                        }
+                        // getSelectedSubjects(selectedInterests);
+                      });
                     },
-                    child: GridView.builder(
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        childAspectRatio: 0.80,
-                        crossAxisCount: 2,
-                        crossAxisSpacing: 10.0,
-                        mainAxisSpacing: 10.0,
-                      ),
-                      shrinkWrap: true,
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 0.0, vertical: 15.0),
-                      // scrollDirection: Axis.horizontal,
-                      itemCount: searchedTutors.length,
-                      itemBuilder: (context, index) {
-                        fromDurationAnimationConter += 100;
-                        toDurationAnimationConter += 100;
-                        return Villain(
-                          villainAnimation: VillainAnimation.fromBottom(
-                            from: Duration(
-                                milliseconds: fromDurationAnimationConter),
-                            to: Duration(
-                                milliseconds: toDurationAnimationConter),
-                          ),
-                          child: TutorWidget(
-                              tutor: searchedTutors.elementAt(index)),
-                        );
-                      },
+                    style: TextStyle(
+                      color: kBlackish,
+                    ),
+                    textAlignVertical: TextAlignVertical.center,
+                    decoration: InputDecoration(
+                      contentPadding: EdgeInsets.all(0),
+                      filled: true,
+                      hintText: 'Search',
+                      prefixIcon: Icon(Icons.search, color: kColorScheme[2]),
+                      enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide.none,
+                          borderRadius: BorderRadius.circular(15)),
+                      focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide.none,
+                          borderRadius: BorderRadius.circular(15)),
                     ),
                   ),
-                ),
-                // SizedBox(height: 150,),
-                //Temp solution
-              ],
+                  SizedBox(
+                    height: 25,
+                  ),
+                  Text(
+                    "Or",
+                    style: TextStyle(fontSize: 17),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      showFilterOptions();
+                    },
+                    child: Container(
+                        height: 40,
+                        width: 200,
+                        decoration: BoxDecoration(
+                            color: kColorScheme[1],
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(10.0))),
+                        child: new Center(
+                          child: new Text(
+                            "Filter options",
+                            style: TextStyle(color: Colors.white, fontSize: 23),
+                            textAlign: TextAlign.center,
+                          ),
+                        )),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Divider(),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  searchedTutors.length > 0
+                      ? Text(
+                          "Showing " +
+                              searchedTutors.length.toString() +
+                              " Results",
+                          style: TextStyle(fontSize: 18))
+                      : Text(""),
+                  Expanded(
+                    child: NotificationListener<OverscrollIndicatorNotification>(
+                      onNotification: (overscroll) {
+                        overscroll.disallowGlow();
+                      },
+                      child: GridView.builder(
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          childAspectRatio: 0.80,
+                          crossAxisCount: 2,
+                          crossAxisSpacing: 10.0,
+                          mainAxisSpacing: 10.0,
+                        ),
+                        shrinkWrap: true,
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 0.0, vertical: 15.0),
+                        // scrollDirection: Axis.horizontal,
+                        itemCount: searchedTutors.length,
+                        itemBuilder: (context, index) {
+                          fromDurationAnimationConter += 100;
+                          toDurationAnimationConter += 100;
+                          return Villain(
+                            villainAnimation: VillainAnimation.fromBottom(
+                              from: Duration(
+                                  milliseconds: fromDurationAnimationConter),
+                              to: Duration(
+                                  milliseconds: toDurationAnimationConter),
+                            ),
+                            child: TutorWidget(
+                                tutor: searchedTutors.elementAt(index)),
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                  // SizedBox(height: 150,),
+                  //Temp solution
+                ],
+              ),
             ),
           ),
         ),

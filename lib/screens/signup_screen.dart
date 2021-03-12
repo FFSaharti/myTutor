@@ -156,6 +156,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       onChanged: (value) {
                         setState(() {
                           email = value;
+                          print(email);
                         });
                         DatabaseAPI.tempUser.email = email;
                         Validator.isValidEmail(value);
@@ -210,16 +211,41 @@ class _SignupScreenState extends State<SignupScreen> {
                         hasBorder: true,
                         borderColor: kColorScheme[3],
                         onPressed: () {
-                          if ((Validator.isValidName(name) ||
-                              Validator.isValidEmail(email) ||
-                              (password.length > 6 &&
-                                  password != null &&
-                                  password != ''))) {
-                            Navigator.pushNamed(context, SpecifyRoleScreen.id);
-                          } else {
-                            //TODO: ADD DIALOG FOR INVALID INFORMATION
-                            Fluttertoast.showToast(msg: 'Please fill up all the information before proceed to next step');
+
+                          if(Validator.isValidName(name) && Validator.isValidEmail(email) && password.length > 6 && email != null &&
+                          email != '' ){
+                            DatabaseAPI.checkIfEmailExists(email).then((value) =>{
+                              if (value == 'Exists'){
+                                Fluttertoast.showToast(msg: "the email already has been used please choose another one")
+                              } else{
+                                Navigator.pushNamed(context, SpecifyRoleScreen.id),
+                              }
+                            }
+                            );
+                          } else{
+                            password.length <= 6 ?   Fluttertoast.showToast(msg: 'Password length should be more then 6') :  Fluttertoast.showToast(msg: 'Please fill up all the information before proceed to next step');
+
                           }
+                          // if ((Validator.isValidName(name) ||
+                          //     Validator.isValidEmail(email) ||
+                          //     (password.length > 6 &&
+                          //         email != null &&
+                          //         email != '' &&
+                          //         password != null &&
+                          //         password != ''))) {
+                          //   DatabaseAPI.checkIfEmailExists(email).then((value) =>{
+                          //     if (value == 'Exists'){
+                          //       Fluttertoast.showToast(msg: "the email already has been used please choose another one")
+                          //     } else{
+                          //       Navigator.pushNamed(context, SpecifyRoleScreen.id),
+                          //     }
+                          //   }
+                          //     );
+                          //
+                          // } else {
+                          //   //TODO: ADD DIALOG FOR INVALID INFORMATION
+                          //   Fluttertoast.showToast(msg: 'Please fill up all the information before proceed to next step');
+                          // }
                         }),
                   ),
                 ],

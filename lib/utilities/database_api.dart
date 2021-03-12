@@ -119,6 +119,26 @@ class DatabaseAPI {
     });
   }
 
+  static Future<String> checkIfEmailExists(String email) async{
+
+    try{
+       QuerySnapshot doc = await _firestore.collection('Student').where('email',isEqualTo: email).get();
+       if(doc.docs.isNotEmpty){
+         return 'Exists';
+       } else{
+         QuerySnapshot doc = await _firestore.collection('Tutor').where('email',isEqualTo: email).get();
+         if(doc.docs.isNotEmpty){
+           return 'Exists';
+         }
+       }
+       return 'available';
+    } on FirebaseException catch (e) {
+
+      return e.message;
+    }
+
+
+  }
   static Future<String> resetUserPassword(String email) async {
     try {
       await _auth.sendPasswordResetEmail(email: email);
