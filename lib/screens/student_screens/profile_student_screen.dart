@@ -98,16 +98,7 @@ class _ProfileStudentState extends State<ProfileStudent> {
     print("here" +
         (SessionManager.loggedInStudent.profileImag == null).toString());
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        backgroundColor: Colors.white70,
-        title: Center(
-          child: Text(
-            "Profile",
-            style: TextStyle(color: Colors.black),
-          ),
-        ),
-      ),
+      appBar: buildAppBar(context, kColorScheme[3], "Profile", true),
       body: SafeArea(
         child: Center(
           child: Container(

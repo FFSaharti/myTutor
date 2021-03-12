@@ -1,8 +1,10 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_villains/villains/villains.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mytutor/classes/rate.dart';
 import 'package:mytutor/classes/tutor.dart';
@@ -149,7 +151,6 @@ class _RequestTutorScreenState extends State<RequestTutorScreen> {
                 ),
                 GestureDetector(
                   onTap: () {
-
                     showFilterOptions();
                   },
                   child: Container(
@@ -405,7 +406,6 @@ class _RequestTutorScreenState extends State<RequestTutorScreen> {
 
   void applyFilter() {
     if (checkedExperineceFilter == true && checkedRateFilter == true) {
-
       for (int i = 0; i < tutors.length; i++) {
         for (int j = 0; j < tutors.elementAt(i).experiences.length; j++) {
           if (tutors.elementAt(i).experiences.elementAt(j) ==
@@ -418,9 +418,7 @@ class _RequestTutorScreenState extends State<RequestTutorScreen> {
           }
         }
       }
-
     } else if (checkedExperineceFilter == true) {
-
       setState(() {
         for (int i = 0; i < tutors.length; i++) {
           for (int j = 0; j < tutors.elementAt(i).experiences.length; j++) {
@@ -433,7 +431,6 @@ class _RequestTutorScreenState extends State<RequestTutorScreen> {
         }
       });
     } else if (checkedRateFilter == true) {
-
       for (var tutor in tutors) {
         Rate.getAverageRate(tutor.rates) > _dropDownMenuControllerForRating
             ? searchedTutors.add(tutor)
@@ -554,13 +551,15 @@ class _TutorWidgetState extends State<TutorWidget> {
         context: context,
         builder: (context) {
           return Container(
-            height: height * 0.60,
+            height: height * 0.85,
             child: Container(
+
               padding: EdgeInsets.only(
                   bottom: MediaQuery.of(context).viewInsets.bottom),
               height: height * 0.60,
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10), color: Colors.white),
+
+                  borderRadius: BorderRadius.circular(10), color: Theme.of(context).scaffoldBackgroundColor),
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: SingleChildScrollView(
@@ -591,8 +590,56 @@ class _TutorWidgetState extends State<TutorWidget> {
                                       dateController.text,
                                       tutor,
                                       timeController.text,
-                                      1);
-                                  Navigator.of(context).pop();
+                                      1).then((value) => {
+                                        if(value == "success"){
+                                          AwesomeDialog(
+                                            context: context,
+                                            animType: AnimType.SCALE,
+                                            dialogType: DialogType.SUCCES,
+                                            body: Padding(
+                                              padding: const EdgeInsets.all(8.0),
+                                              child: Center(
+                                                child: Text(
+                                                  'the session has been created. you should wait now till you hear back from the tutor 🕜',
+                                                  style: kTitleStyle.copyWith(
+                                                      color: kBlackish,
+                                                      fontSize: 14,
+                                                      fontWeight:
+                                                      FontWeight.normal),
+                                                ),
+                                              ),
+                                            ),
+                                            btnOkOnPress: () {
+                                              Navigator.pop(context);
+                                            },
+                                          ).show(),
+                                        } else{
+                                          AwesomeDialog(
+                                            context: context,
+                                            animType: AnimType.SCALE,
+                                            dialogType: DialogType.ERROR,
+                                            body: Padding(
+                                              padding: const EdgeInsets.all(8.0),
+                                              child: Center(
+                                                child: Text(
+                                                  value+' Please try again Later',
+                                                  style: kTitleStyle.copyWith(
+                                                      color: kBlackish,
+                                                      fontSize: 14,
+                                                      fontWeight:
+                                                      FontWeight.normal),
+                                                ),
+                                              ),
+                                            ),
+                                            btnOkOnPress: () {
+                                              Navigator.pop(context);
+                                            },
+                                          ).show(),
+                                        }
+                                  });
+                                  //Navigator.of(context).pop();
+                                } else{
+                                  Fluttertoast.showToast(msg: "Please fill up all the fields");
                                 }
                               }),
                         ],
@@ -645,7 +692,7 @@ class _TutorWidgetState extends State<TutorWidget> {
                             Align(
                               alignment: Alignment.topLeft,
                               child: Text(
-                                "SessionTitle",
+                                "Session Title",
                                 style: GoogleFonts.secularOne(
                                     textStyle: TextStyle(
                                         fontSize: 17,
@@ -656,7 +703,7 @@ class _TutorWidgetState extends State<TutorWidget> {
                             TextField(
                               controller: titleController,
                               decoration: InputDecoration(
-                                hintText: 'Type something...',
+                                hintText: 'Help with... ',
                                 hintStyle: TextStyle(
                                     fontSize: 17.0, color: Colors.grey),
                               ),
@@ -678,7 +725,7 @@ class _TutorWidgetState extends State<TutorWidget> {
                             TextField(
                               controller: problemController,
                               decoration: InputDecoration(
-                                hintText: 'Type something...',
+                                hintText: 'i cant understand ...',
                                 hintStyle: TextStyle(
                                     fontSize: 17.0, color: Colors.grey),
                               ),
@@ -698,6 +745,7 @@ class _TutorWidgetState extends State<TutorWidget> {
                               ),
                             ),
                             TextField(
+                              readOnly: true,
                               controller: dateController,
                               decoration: InputDecoration(
                                 suffixIcon: GestureDetector(
@@ -718,7 +766,7 @@ class _TutorWidgetState extends State<TutorWidget> {
                                                 value.day.toString());
                                   },
                                 ),
-                                hintText: 'Type something...',
+                                hintText: '2021-12-12...',
                                 hintStyle: TextStyle(
                                     fontSize: 17.0, color: Colors.grey),
                               ),
@@ -739,8 +787,43 @@ class _TutorWidgetState extends State<TutorWidget> {
                             ),
                             TextField(
                               controller: timeController,
+                              readOnly: true,
                               decoration: InputDecoration(
-                                hintText: 'Type something...',
+                                suffixIcon: GestureDetector(
+                                    onTap: () {
+                                      TimeOfDay _PreferredTime = TimeOfDay.now();
+                                      TimeOfDay _selectedTimeConvFormat;
+                                      String dayOrNight= "";
+                                      showTimePicker(
+                                        context: context,
+                                        initialTime: TimeOfDay.now(),
+                                        builder: (BuildContext context,
+                                            Widget child) {
+                                          return Theme(
+                                            data: Theme.of(context),
+                                            child: child,
+                                          );
+                                        },
+                                      ).then((value) => {
+                                            if (value != null)
+                                              {
+                                                _PreferredTime = value,
+                                                _selectedTimeConvFormat = _PreferredTime.replacing(hour: _PreferredTime.hourOfPeriod),
+                                                dayOrNight = _PreferredTime.period == DayPeriod.am ? "AM" : "PM",
+                                                print(_selectedTimeConvFormat.hour == 0 && _PreferredTime.period == DayPeriod.pm),
+                                                if(_selectedTimeConvFormat.hour == 0 && _PreferredTime.period == DayPeriod.pm){
+                                                  // unique case where the system view 12pm as 0 so we will set it manually
+                                                  timeController.text = "12"+ ":" + _selectedTimeConvFormat.minute.toString()+" "+dayOrNight,
+                                                } else{
+                                                  timeController.text = _selectedTimeConvFormat.hour.toString() + ":" + _selectedTimeConvFormat.minute.toString()+" "+dayOrNight,
+
+                                                }
+
+                                              }
+                                          });
+                                    },
+                                    child: Icon(Icons.access_time)),
+                                hintText: '12:01 pm...',
                                 hintStyle: TextStyle(
                                     fontSize: 17.0, color: Colors.grey),
                               ),

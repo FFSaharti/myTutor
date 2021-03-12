@@ -21,16 +21,6 @@ class _StudentSectionState extends State<StudentSection> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: true,
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        backgroundColor: Colors.white70,
-        title: Center(
-          child: Text(
-            "Student",
-            style: TextStyle(color: Colors.black),
-          ),
-        ),
-      ),
       body: SafeArea(
         child: Container(
           child: Center(

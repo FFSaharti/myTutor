@@ -412,21 +412,27 @@ class DatabaseAPI {
     return await _firestore.collection("Tutor").get();
   }
 
-  static void createNewSession(String title, String problemDesc,
+  static Future<String> createNewSession(String title, String problemDesc,
       String prefDate, MyUser tutor, String time, int subject) async {
     DateTime tempDate = new DateFormat("yyyy-MM-dd").parse(prefDate);
-    await _firestore.collection("session").add({
-      'student': SessionManager.loggedInStudent.userId,
-      'description': problemDesc,
-      'title': title,
-      'tutor': tutor.userId,
-      'date': tempDate,
-      'time': time,
-      'status': "pending",
-      'lastMessage': "Start texting here...",
-      'timeOfLastMessage': DateTime.now(),
-      'subject': subject,
-    });
+    try{
+      await _firestore.collection("session").add({
+        'student': SessionManager.loggedInStudent.userId,
+        'description': problemDesc,
+        'title': title,
+        'tutor': tutor.userId,
+        'date': tempDate,
+        'time': time,
+        'status': "pending",
+        'lastMessage': "Start texting here...",
+        'timeOfLastMessage': DateTime.now(),
+        'subject': subject,
+      });
+     return "success";
+    } on FirebaseException catch (e) {
+      return e.message;
+    }
+
   }
 
   static Future<String> scheduleWithStudent(Session session) async {

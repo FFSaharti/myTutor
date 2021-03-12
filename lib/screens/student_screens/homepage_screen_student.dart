@@ -190,22 +190,12 @@ class _HomePageStudentState extends State<HomePageStudent> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        backgroundColor: Colors.white70,
-        title: Center(
-          child: Text(
-            "Homepage",
-            style: TextStyle(color: Colors.black),
-          ),
-        ),
-      ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
             SizedBox(
-              height: ScreenSize.height * 0.03,
+              height: ScreenSize.height * 0.09,
             ),
             Padding(
               padding: const EdgeInsets.only(left: 13.0),
