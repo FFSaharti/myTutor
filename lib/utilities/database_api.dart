@@ -187,6 +187,8 @@ class DatabaseAPI {
           .update({"profileImg": url});
     }
 
+    return url;
+
 
   }
 

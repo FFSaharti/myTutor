@@ -153,8 +153,12 @@ class _ProfileStudentState extends State<ProfileStudent> {
                           file == null
                               ? null
                               : DatabaseAPI.updateUserProfileImage(
-                              File(file.files.single.path));
-                          setState(() {});
+                              File(file.files.single.path)).then((value) => {
+                            setState(() {
+                              SessionManager.loggedInStudent.profileImag = value;
+                            }),
+                          });
+
                         },
                         child: Align(
                           child: Icon(
