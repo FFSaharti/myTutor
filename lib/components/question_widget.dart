@@ -83,7 +83,7 @@ class _QuestionWidgetState extends State<QuestionWidget> {
         height: ScreenSize.height * 0.15,
         decoration: BoxDecoration(
           color: kWhiteish,
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(25),
           boxShadow: [
             BoxShadow(
               color: Colors.grey.withOpacity(0.4),
@@ -112,7 +112,7 @@ class _QuestionWidgetState extends State<QuestionWidget> {
                     height: ScreenSize.height * 0.05,
                     child: Text(
                       widget.question.title,
-                      style: GoogleFonts.sarala(fontSize: 25, color: kBlackish),
+                      style: GoogleFonts.sen(fontSize: 25, color: kBlackish),
                     ),
                   ),
                   Container(
@@ -121,8 +121,7 @@ class _QuestionWidgetState extends State<QuestionWidget> {
                       widget.question.description,
                       overflow: TextOverflow.ellipsis,
                       softWrap: false,
-                      style:
-                          GoogleFonts.sarala(fontSize: 14, color: kGreyerish),
+                      style: GoogleFonts.sen(fontSize: 14, color: kGreyerish),
                     ),
                   ),
                   Container(
@@ -131,7 +130,7 @@ class _QuestionWidgetState extends State<QuestionWidget> {
                       children: [
                         !finish
                             ? SizedBox(
-                                width: ScreenSize.width * 0.35,
+                                width: ScreenSize.width * 0.30,
                               )
                             : SizedBox(
                                 width: ScreenSize.width * 0.45,
@@ -141,7 +140,7 @@ class _QuestionWidgetState extends State<QuestionWidget> {
                               ? "Loading Answers..."
                               : widget.question.answers.length.toString() +
                                   " Answers",
-                          style: GoogleFonts.sarala(
+                          style: GoogleFonts.sen(
                               fontSize: 13, color: kColorScheme[4]),
                         ),
                       ],

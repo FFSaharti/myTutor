@@ -1,33 +1,18 @@
-import 'dart:io';
-
-import 'package:advance_pdf_viewer/advance_pdf_viewer.dart';
-import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_villains/villains/villains.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:mytutor/classes/document.dart';
-import 'package:mytutor/classes/material.dart';
-import 'package:mytutor/classes/quiz.dart';
-import 'package:mytutor/components/ez_button.dart';
 import 'package:mytutor/components/session_stream_widget.dart';
 import 'package:mytutor/screens/adjust_general_settings_screen.dart';
 import 'package:mytutor/screens/student_screens/profile_student_screen.dart';
-import 'package:mytutor/screens/student_screens/request_tutor_screen.dart';
 import 'package:mytutor/screens/student_screens/student_sections_screen.dart';
-import 'package:mytutor/screens/student_screens/view_materials_screen.dart';
-import 'package:mytutor/screens/take_quiz_screen.dart';
 import 'package:mytutor/utilities/constants.dart';
 import 'package:mytutor/utilities/database_api.dart';
 import 'package:mytutor/utilities/screen_size.dart';
-import 'package:mytutor/utilities/session_manager.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../message_screen.dart';
-import 'ask_screen_student.dart';
 
 class HomepageScreenStudent extends StatefulWidget {
   static String id = 'homepage_screen_student';
@@ -60,120 +45,109 @@ class _HomepageScreenStudentState extends State<HomepageScreenStudent> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      bottomNavigationBar: BottomNavyBar(
-        backgroundColor: Theme.of(context).bottomAppBarColor,
-        selectedIndex: _currentIndex,
-        showElevation: true,
-        itemCornerRadius: 24,
-        curve: Curves.easeIn,
-        onItemSelected: (index) {
-          setState(() {
-            _currentIndex = index;
-            _pageController
-                .animateToPage(_currentIndex,
-                    duration: Duration(milliseconds: 300),
-                    curve: Curves.easeInOut)
-                .then((value) => {VillainController.playAllVillains(context)});
-          });
-        },
-        items: <BottomNavyBarItem>[
-          BottomNavyBarItem(
-            icon: Icon(
-              Icons.home,
-              color: Theme.of(context).textSelectionColor,
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+        bottomNavigationBar: BottomNavyBar(
+          backgroundColor: Theme.of(context).bottomAppBarColor,
+          selectedIndex: _currentIndex,
+          showElevation: true,
+          itemCornerRadius: 24,
+          curve: Curves.easeIn,
+          onItemSelected: (index) {
+            setState(() {
+              _currentIndex = index;
+              _pageController
+                  .animateToPage(_currentIndex,
+                      duration: Duration(milliseconds: 300),
+                      curve: Curves.easeInOut)
+                  .then(
+                      (value) => {VillainController.playAllVillains(context)});
+            });
+          },
+          items: <BottomNavyBarItem>[
+            BottomNavyBarItem(
+              icon: Icon(
+                Icons.home,
+                color: Theme.of(context).textSelectionColor,
+              ),
+              title: Text(
+                'Home',
+                style: TextStyle(
+                    color: Theme.of(context).textSelectionColor,
+                    fontWeight: FontWeight.bold),
+              ),
+              activeColor: kColorScheme[2],
+              inactiveColor: Colors.grey,
+              textAlign: TextAlign.center,
             ),
-            title: Text(
-              'Home',
-              style: TextStyle(
-                  color: Theme.of(context).textSelectionColor,
-                  fontWeight: FontWeight.bold),
+            BottomNavyBarItem(
+              icon: Icon(
+                FontAwesomeIcons.chalkboardTeacher,
+                color: Theme.of(context).textSelectionColor,
+              ),
+              title: Text(
+                'Student',
+                style: TextStyle(
+                    color: Theme.of(context).textSelectionColor,
+                    fontWeight: FontWeight.bold),
+              ),
+              activeColor: kColorScheme[2],
+              inactiveColor: Colors.grey,
+              textAlign: TextAlign.center,
             ),
-            activeColor: kColorScheme[2],
-            inactiveColor: Colors.grey,
-            textAlign: TextAlign.center,
-          ),
-          BottomNavyBarItem(
-            icon: Icon(
-              FontAwesomeIcons.chalkboardTeacher,
-              color: Theme.of(context).textSelectionColor,
+            BottomNavyBarItem(
+              icon: Icon(
+                Icons.message,
+                color: Theme.of(context).textSelectionColor,
+              ),
+              title: Text(
+                'Messages',
+                style: TextStyle(
+                    color: Theme.of(context).textSelectionColor,
+                    fontWeight: FontWeight.bold),
+              ),
+              activeColor: kColorScheme[2],
+              inactiveColor: Colors.grey,
+              textAlign: TextAlign.center,
             ),
-            title: Text(
-              'Student',
-              style: TextStyle(
-                  color: Theme.of(context).textSelectionColor,
-                  fontWeight: FontWeight.bold),
+            BottomNavyBarItem(
+              icon: Icon(
+                Icons.person,
+                color: Theme.of(context).textSelectionColor,
+              ),
+              title: Text(
+                'Profile',
+                style: TextStyle(
+                    color: Theme.of(context).textSelectionColor,
+                    fontWeight: FontWeight.bold),
+              ),
+              activeColor: kColorScheme[2],
+              inactiveColor: Colors.grey,
+              textAlign: TextAlign.center,
             ),
-            activeColor: kColorScheme[2],
-            inactiveColor: Colors.grey,
-            textAlign: TextAlign.center,
-          ),
-          BottomNavyBarItem(
-            icon: Icon(
-              Icons.message,
-              color: Theme.of(context).textSelectionColor,
+            BottomNavyBarItem(
+              icon: Icon(
+                Icons.settings,
+                color: Theme.of(context).textSelectionColor,
+              ),
+              title: Text(
+                'Settings',
+                style: TextStyle(
+                    color: Theme.of(context).textSelectionColor,
+                    fontWeight: FontWeight.bold),
+              ),
+              activeColor: kColorScheme[2],
+              inactiveColor: Colors.grey,
+              textAlign: TextAlign.center,
             ),
-            title: Text(
-              'Messages',
-              style: TextStyle(
-                  color: Theme.of(context).textSelectionColor,
-                  fontWeight: FontWeight.bold),
-            ),
-            activeColor: kColorScheme[2],
-            inactiveColor: Colors.grey,
-            textAlign: TextAlign.center,
-          ),
-          BottomNavyBarItem(
-            icon: Icon(
-              Icons.person,
-              color: Theme.of(context).textSelectionColor,
-            ),
-            title: Text(
-              'Profile',
-              style: TextStyle(
-                  color: Theme.of(context).textSelectionColor,
-                  fontWeight: FontWeight.bold),
-            ),
-            activeColor: kColorScheme[2],
-            inactiveColor: Colors.grey,
-            textAlign: TextAlign.center,
-          ),
-          BottomNavyBarItem(
-            icon: Icon(
-              Icons.settings,
-              color: Theme.of(context).textSelectionColor,
-            ),
-            title: Text(
-              'Settings',
-              style: TextStyle(
-                  color: Theme.of(context).textSelectionColor,
-                  fontWeight: FontWeight.bold),
-            ),
-            activeColor: kColorScheme[2],
-            inactiveColor: Colors.grey,
-            textAlign: TextAlign.center,
-          ),
-        ],
-      ),
-      // bottomNavigationBar: BottomNavigationBar(
-      //   type: BottomNavigationBarType.fixed,
-      //   showSelectedLabels: false,
-      //   showUnselectedLabels: false,
-      //   items: const <BottomNavigationBarItem>[
-      //     BottomNavigationBarItem(icon: Icon(Icons.home), label: "home"),
-      //     BottomNavigationBarItem(
-      //         icon: Icon(FontAwesomeIcons.chalkboardTeacher), label: "student"),
-      //     BottomNavigationBarItem(icon: Icon(Icons.email), label: "messages"),
-      //     BottomNavigationBarItem(icon: Icon(Icons.person), label: "profile"),
-      //   ],
-      //   currentIndex: _navindex,
-      //   onTap: changeindex,
-      //   selectedItemColor: kColorScheme[3],
-      // ),
-      body: PageView(
-        physics: new NeverScrollableScrollPhysics(),
-        controller: _pageController,
-        children: widgets,
+          ],
+        ),
+        body: PageView(
+          physics: new NeverScrollableScrollPhysics(),
+          controller: _pageController,
+          children: widgets,
+        ),
       ),
     );
   }
@@ -270,7 +244,7 @@ class _HomePageStudentState extends State<HomePageStudent> {
                           isStudent: true,
                           expiredSessionView: false,
                         ),
-                        "waiting for your response"),
+                        "Waiting for your response"),
                     mainScreenPage(
                         SessionStream(
                           status: "closed",
@@ -283,6 +257,9 @@ class _HomePageStudentState extends State<HomePageStudent> {
                   ],
                 ),
               ),
+            ),
+            SizedBox(
+              height: ScreenSize.height * 0.05,
             ),
             SmoothPageIndicator(
               effect: WormEffect(
@@ -310,9 +287,12 @@ class _HomePageStudentState extends State<HomePageStudent> {
                     color: Theme.of(context).primaryColor)),
           ),
         ),
+        SizedBox(
+          height: ScreenSize.height * 0.01,
+        ),
         StreamWidget,
         SizedBox(
-          height: ScreenSize.height * 0.05,
+          height: ScreenSize.height * 0.01,
         ),
       ],
     );

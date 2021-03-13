@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mytutor/classes/answer.dart';
-import 'package:mytutor/components/ez_button.dart';
+import 'package:mytutor/components/circular_button.dart';
 import 'package:mytutor/screens/student_screens/question_answers_page_screen_student.dart';
 import 'package:mytutor/utilities/constants.dart';
 import 'package:mytutor/utilities/database_api.dart';
@@ -15,106 +16,106 @@ class ViewAnswerScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        iconTheme: IconThemeData(
-          color: Colors.black, //change your color here.
-        ),
-        automaticallyImplyLeading: true,
-        backgroundColor: Colors.white70,
-        title: Text(
-          "View Answer",
-          style: TextStyle(color: Colors.black),
-        ),
-      ),
+      appBar: buildAppBar(context, kColorScheme[3], "View Answer"),
       body: Container(
         child: Column(
           children: <Widget>[
-            SizedBox(
-              height: 15,
-            ),
-            Center(
-              child: Container(
-                width: ScreenSize.width * 0.85,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.person,
-                          size: 40,
-                        ),
-                        SizedBox(
-                          width: 5,
-                        ),
-                        Text(
-                          answer.tutor.name,
-                          style: kTitleStyle.copyWith(
-                              fontSize: 20, color: Colors.black),
-                        )
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.calendar_today,
-                          size: 40,
-                        ),
-                        SizedBox(
-                          width: 5,
-                        ),
-                        Container(
-                          child: Text(
-                            answer.date,
+            Card(
+              shape: RoundedRectangleBorder(
+                side: BorderSide(color: Colors.white70, width: 1),
+                borderRadius: BorderRadius.circular(15),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  width: ScreenSize.width * 0.85,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.person,
+                            size: 40,
+                          ),
+                          SizedBox(
+                            width: 5,
+                          ),
+                          Text(
+                            answer.tutor.name,
                             style: kTitleStyle.copyWith(
                                 fontSize: 20, color: Colors.black),
+                          )
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.calendar_today,
+                            size: 40,
                           ),
-                        ),
-                      ],
-                    ),
-                  ],
+                          SizedBox(
+                            width: 5,
+                          ),
+                          Container(
+                            child: Text(
+                              answer.date,
+                              style: kTitleStyle.copyWith(
+                                  fontSize: 20, color: Colors.black),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
             SizedBox(
-              height: 9,
+              height: ScreenSize.height * 0.01,
             ),
             Container(
               width: ScreenSize.width * 0.88,
               child: Divider(
-                height: 15,
+                height: ScreenSize.height * 0.02,
               ),
             ),
-            SizedBox(height: 9),
+            SizedBox(height: ScreenSize.height * 0.01),
+            Container(
+              alignment: Alignment.center,
+              child: Text(
+                "Provided Answer ",
+                style: kTitleStyle.copyWith(fontSize: 20, color: Colors.black),
+              ),
+            ),
             Padding(
-              padding: const EdgeInsets.only(left: 30.0),
-              child: Container(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  "Provided Answer ",
-                  style:
-                      kTitleStyle.copyWith(fontSize: 20, color: Colors.black),
+              padding: const EdgeInsets.all(15.0),
+              child: Card(
+                shape: RoundedRectangleBorder(
+                  side: BorderSide(color: Colors.white70, width: 1),
+                  borderRadius: BorderRadius.circular(15),
                 ),
-              ),
-            ),
-            SizedBox(height: 9),
-            Padding(
-              padding: const EdgeInsets.only(left: 30.0),
-              child: Container(
-                alignment: Alignment.topLeft,
-                height: ScreenSize.height * 0.4,
-                child: Text(
-                  answer.answer,
-                  style: kTitleStyle.copyWith(
-                      color: kGreyerish,
-                      fontSize: 15,
-                      fontWeight: FontWeight.normal),
+                elevation: 0,
+                child: Padding(
+                  padding: const EdgeInsets.all(15.0),
+                  child: Container(
+                    alignment: Alignment.topLeft,
+                    height: ScreenSize.height * 0.4,
+                    child: Text(
+                      answer.answer,
+                      style: kTitleStyle.copyWith(
+                          color: kGreyerish,
+                          fontSize: 15,
+                          fontWeight: FontWeight.normal),
+                    ),
+                  ),
                 ),
               ),
             ),
             (this.question.question.state == "Active")
-                ? EZButton(
+                ? CircularButton(
                     width: ScreenSize.width * 0.5,
+                    fontSize: 15,
                     buttonColor: kColorScheme[2],
                     textColor: Colors.white,
                     isGradient: true,
@@ -125,6 +126,8 @@ class ViewAnswerScreen extends StatelessWidget {
                     onPressed: () {
                       print("Pressed Close");
                       DatabaseAPI.closeQuestion(this.question.question);
+                      Fluttertoast.showToast(
+                          msg: 'Question Closed Successfully!');
                       Navigator.pop(context);
                       Navigator.pop(context);
                     })

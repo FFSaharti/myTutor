@@ -9,11 +9,12 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:mytutor/classes/rate.dart';
 import 'package:mytutor/classes/tutor.dart';
 import 'package:mytutor/classes/user.dart';
-import 'package:mytutor/screens/student_screens/view_tutor_profile_screen.dart';
-import 'package:mytutor/screens/view_receiver_profile.dart';
+import 'package:mytutor/components/circular_button.dart';
 import 'package:mytutor/utilities/constants.dart';
 import 'package:mytutor/utilities/database_api.dart';
 import 'package:mytutor/utilities/screen_size.dart';
+
+import '../view_receiver_profile.dart';
 
 class RequestTutorScreen extends StatefulWidget {
   static String id = 'request_tutor_screen';
@@ -108,12 +109,11 @@ class _RequestTutorScreenState extends State<RequestTutorScreen> {
           appBar: buildAppBar(context, kColorScheme[3], "Request Tutor"),
           //resizeToAvoidBottomInset : false,
           body: Center(
-            child: Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  TextField(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ListTile(
+                  title: TextField(
                     controller: searchController,
                     onChanged: (value) {
                       VillainController.playAllVillains(context);
@@ -142,64 +142,56 @@ class _RequestTutorScreenState extends State<RequestTutorScreen> {
                           borderRadius: BorderRadius.circular(15)),
                     ),
                   ),
-                  SizedBox(
-                    height: 25,
-                  ),
-                  Text(
-                    "Or",
-                    style: TextStyle(fontSize: 17),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  GestureDetector(
+                  trailing: GestureDetector(
                     onTap: () {
                       showFilterOptions();
                     },
                     child: Container(
-                        height: 40,
-                        width: 200,
-                        decoration: BoxDecoration(
-                            color: kColorScheme[1],
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(10.0))),
-                        child: new Center(
-                          child: new Text(
-                            "Filter options",
-                            style: TextStyle(color: Colors.white, fontSize: 23),
-                            textAlign: TextAlign.center,
-                          ),
-                        )),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: kWhiteish),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Icon(
+                          Icons.sort,
+                          size: 28,
+                          color: kColorScheme[2],
+                        ),
+                      ),
+                    ),
                   ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Divider(),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  searchedTutors.length > 0
-                      ? Text(
-                          "Showing " +
-                              searchedTutors.length.toString() +
-                              " Results",
-                          style: TextStyle(fontSize: 18))
-                      : Text(""),
-                  Expanded(
-                    child: NotificationListener<OverscrollIndicatorNotification>(
-                      onNotification: (overscroll) {
-                        overscroll.disallowGlow();
-                      },
+                ),
+                Container(
+                  width: ScreenSize.width * 0.9,
+                  child: Divider(),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                searchedTutors.length > 0
+                    ? Text(
+                        "Showing " +
+                            searchedTutors.length.toString() +
+                            " Results",
+                        style: GoogleFonts.sen(fontSize: 18))
+                    : Text(""),
+                Expanded(
+                  child: NotificationListener<OverscrollIndicatorNotification>(
+                    onNotification: (overscroll) {
+                      overscroll.disallowGlow();
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
                       child: GridView.builder(
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          childAspectRatio: 0.80,
+                          childAspectRatio: 0.9,
                           crossAxisCount: 2,
-                          crossAxisSpacing: 10.0,
-                          mainAxisSpacing: 10.0,
+                          crossAxisSpacing: .0,
+                          mainAxisSpacing: 5.0,
                         ),
                         shrinkWrap: true,
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 0.0, vertical: 15.0),
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 0.0, vertical: 15.0),
                         // scrollDirection: Axis.horizontal,
                         itemCount: searchedTutors.length,
                         itemBuilder: (context, index) {
@@ -219,10 +211,10 @@ class _RequestTutorScreenState extends State<RequestTutorScreen> {
                       ),
                     ),
                   ),
-                  // SizedBox(height: 150,),
-                  //Temp solution
-                ],
-              ),
+                ),
+                // SizedBox(height: 150,),
+                //Temp solution
+              ],
             ),
           ),
         ),
@@ -456,81 +448,87 @@ class TutorWidget extends StatefulWidget {
 class _TutorWidgetState extends State<TutorWidget> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white12,
-        border: Border.all(color: Colors.grey),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Align(
-            alignment: Alignment.topRight,
-            child: IconButton(
-              icon: Icon(Icons.info_outline),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => ViewReceiverProfile(
-                            userId: widget.tutor.userId,
-                            role: 'tutor',
-                          )),
-                );
-              },
+    return Padding(
+      padding: const EdgeInsets.all(5.0),
+      child: Card(
+        shape: RoundedRectangleBorder(
+          side: BorderSide(color: Colors.white70, width: 1),
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(right: 15.0),
+              child: Align(
+                alignment: Alignment.topRight,
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ViewReceiverProfile(
+                                userId: widget.tutor.userId,
+                                role: 'tutor',
+                              )),
+                    );
+                  },
+                  child: Icon(Icons.info_outline, color: kGreyerish),
+                ),
+              ),
             ),
-          ),
-          widget.tutor.profileImag == ""
-              ? Container(
-                  width: ScreenSize.width * 0.20,
-                  height: ScreenSize.height * 0.10,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                  ),
-                  child: Center(
-                    child: Icon(
-                      Icons.account_circle_sharp,
-                      size: ScreenSize.height * 0.10,
+            widget.tutor.profileImag == ""
+                ? Container(
+                    width: ScreenSize.width * 0.20,
+                    height: ScreenSize.height * 0.10,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                    ),
+                    child: Center(
+                      child: Icon(
+                        Icons.account_circle_sharp,
+                        size: ScreenSize.height * 0.10,
+                      ),
+                    ),
+                  )
+                : Container(
+                    width: ScreenSize.width * 0.20,
+                    height: ScreenSize.height * 0.09,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      image: DecorationImage(
+                          image: NetworkImage(widget.tutor.profileImag),
+                          fit: BoxFit.fill),
                     ),
                   ),
-                )
-              : Container(
-                  width: ScreenSize.width * 0.20,
-                  height: ScreenSize.height * 0.09,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    image: DecorationImage(
-                        image: NetworkImage(widget.tutor.profileImag),
-                        fit: BoxFit.fill),
-                  ),
-                ),
-          Text(
-            widget.tutor.name,
-            style: GoogleFonts.sarabun(
-                textStyle: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.normal,
-                    color: Colors.blueGrey)),
-          ),
-          GestureDetector(
-            onTap: () {
-              showbutton(widget.tutor);
-            },
-            child: Container(
-                height: 30,
-                width: 120,
-                decoration: BoxDecoration(
-                    color: kColorScheme[1],
-                    borderRadius: BorderRadius.all(Radius.circular(10.0))),
-                child: new Center(
-                  child: new Text(
-                    "Request",
-                    style: TextStyle(color: Colors.white, fontSize: 23),
-                    textAlign: TextAlign.center,
-                  ),
-                )),
-          ),
-        ],
+            Text(
+              widget.tutor.name,
+              style: GoogleFonts.sen(
+                  textStyle: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.normal,
+                      color: Colors.black)),
+            ),
+            SizedBox(
+              height: ScreenSize.height * 0.01,
+            ),
+            CircularButton(
+              width: ScreenSize.width * 0.4,
+              height: ScreenSize.height * 0.04,
+              fontSize: 18,
+              buttonColor: kColorScheme[1],
+              textColor: Colors.white,
+              isGradient: false,
+              colors: null,
+              buttonText: "Request",
+              hasBorder: false,
+              borderColor: null,
+              onPressed: () {
+                showbutton(widget.tutor);
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -557,13 +555,12 @@ class _TutorWidgetState extends State<TutorWidget> {
           return Container(
             height: height * 0.85,
             child: Container(
-
               padding: EdgeInsets.only(
                   bottom: MediaQuery.of(context).viewInsets.bottom),
               height: height * 0.60,
               decoration: BoxDecoration(
-
-                  borderRadius: BorderRadius.circular(10), color: Theme.of(context).scaffoldBackgroundColor),
+                  borderRadius: BorderRadius.circular(10),
+                  color: Theme.of(context).scaffoldBackgroundColor),
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: SingleChildScrollView(
@@ -589,61 +586,77 @@ class _TutorWidgetState extends State<TutorWidget> {
                                     problemController.text.isNotEmpty &&
                                     timeController.text.isNotEmpty) {
                                   DatabaseAPI.createNewSession(
-                                      titleController.text,
-                                      problemController.text,
-                                      dateController.text,
-                                      tutor,
-                                      timeController.text,
-                                      1).then((value) => {
-                                        if(value == "success"){
-                                          AwesomeDialog(
-                                            context: context,
-                                            animType: AnimType.SCALE,
-                                            dialogType: DialogType.SUCCES,
-                                            body: Padding(
-                                              padding: const EdgeInsets.all(8.0),
-                                              child: Center(
-                                                child: Text(
-                                                  'the session has been created. you should wait now till you hear back from the tutor 🕜',
-                                                  style: kTitleStyle.copyWith(
-                                                      color: kBlackish,
-                                                      fontSize: 14,
-                                                      fontWeight:
-                                                      FontWeight.normal),
-                                                ),
-                                              ),
-                                            ),
-                                            btnOkOnPress: () {
-                                              Navigator.pop(context);
-                                            },
-                                          ).show(),
-                                        } else{
-                                          AwesomeDialog(
-                                            context: context,
-                                            animType: AnimType.SCALE,
-                                            dialogType: DialogType.ERROR,
-                                            body: Padding(
-                                              padding: const EdgeInsets.all(8.0),
-                                              child: Center(
-                                                child: Text(
-                                                  value+' Please try again Later',
-                                                  style: kTitleStyle.copyWith(
-                                                      color: kBlackish,
-                                                      fontSize: 14,
-                                                      fontWeight:
-                                                      FontWeight.normal),
-                                                ),
-                                              ),
-                                            ),
-                                            btnOkOnPress: () {
-                                              Navigator.pop(context);
-                                            },
-                                          ).show(),
-                                        }
-                                  });
+                                          titleController.text,
+                                          problemController.text,
+                                          dateController.text,
+                                          tutor,
+                                          timeController.text,
+                                          1)
+                                      .then((value) => {
+                                            if (value == "success")
+                                              {
+                                                AwesomeDialog(
+                                                  context: context,
+                                                  animType: AnimType.SCALE,
+                                                  dialogType: DialogType.SUCCES,
+                                                  body: Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            8.0),
+                                                    child: Center(
+                                                      child: Text(
+                                                        'the session has been created. you should wait now till you hear back from the tutor 🕜',
+                                                        style: kTitleStyle
+                                                            .copyWith(
+                                                                color:
+                                                                    kBlackish,
+                                                                fontSize: 14,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .normal),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  btnOkOnPress: () {
+                                                    Navigator.pop(context);
+                                                  },
+                                                ).show(),
+                                              }
+                                            else
+                                              {
+                                                AwesomeDialog(
+                                                  context: context,
+                                                  animType: AnimType.SCALE,
+                                                  dialogType: DialogType.ERROR,
+                                                  body: Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            8.0),
+                                                    child: Center(
+                                                      child: Text(
+                                                        value +
+                                                            ' Please try again Later',
+                                                        style: kTitleStyle
+                                                            .copyWith(
+                                                                color:
+                                                                    kBlackish,
+                                                                fontSize: 14,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .normal),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  btnOkOnPress: () {
+                                                    Navigator.pop(context);
+                                                  },
+                                                ).show(),
+                                              }
+                                          });
                                   //Navigator.of(context).pop();
-                                } else{
-                                  Fluttertoast.showToast(msg: "Please fill up all the fields");
+                                } else {
+                                  Fluttertoast.showToast(
+                                      msg: "Please fill up all the fields");
                                 }
                               }),
                         ],
@@ -795,9 +808,10 @@ class _TutorWidgetState extends State<TutorWidget> {
                               decoration: InputDecoration(
                                 suffixIcon: GestureDetector(
                                     onTap: () {
-                                      TimeOfDay _PreferredTime = TimeOfDay.now();
+                                      TimeOfDay _PreferredTime =
+                                          TimeOfDay.now();
                                       TimeOfDay _selectedTimeConvFormat;
-                                      String dayOrNight= "";
+                                      String dayOrNight = "";
                                       showTimePicker(
                                         context: context,
                                         initialTime: TimeOfDay.now(),
@@ -812,17 +826,48 @@ class _TutorWidgetState extends State<TutorWidget> {
                                             if (value != null)
                                               {
                                                 _PreferredTime = value,
-                                                _selectedTimeConvFormat = _PreferredTime.replacing(hour: _PreferredTime.hourOfPeriod),
-                                                dayOrNight = _PreferredTime.period == DayPeriod.am ? "AM" : "PM",
-                                                print(_selectedTimeConvFormat.hour == 0 && _PreferredTime.period == DayPeriod.pm),
-                                                if(_selectedTimeConvFormat.hour == 0 && _PreferredTime.period == DayPeriod.pm){
-                                                  // unique case where the system view 12pm as 0 so we will set it manually
-                                                  timeController.text = "12"+ ":" + _selectedTimeConvFormat.minute.toString()+" "+dayOrNight,
-                                                } else{
-                                                  timeController.text = _selectedTimeConvFormat.hour.toString() + ":" + _selectedTimeConvFormat.minute.toString()+" "+dayOrNight,
-
-                                                }
-
+                                                _selectedTimeConvFormat =
+                                                    _PreferredTime.replacing(
+                                                        hour: _PreferredTime
+                                                            .hourOfPeriod),
+                                                dayOrNight =
+                                                    _PreferredTime.period ==
+                                                            DayPeriod.am
+                                                        ? "AM"
+                                                        : "PM",
+                                                print(_selectedTimeConvFormat
+                                                            .hour ==
+                                                        0 &&
+                                                    _PreferredTime.period ==
+                                                        DayPeriod.pm),
+                                                if (_selectedTimeConvFormat
+                                                            .hour ==
+                                                        0 &&
+                                                    _PreferredTime.period ==
+                                                        DayPeriod.pm)
+                                                  {
+                                                    // unique case where the system view 12pm as 0 so we will set it manually
+                                                    timeController.text = "12" +
+                                                        ":" +
+                                                        _selectedTimeConvFormat
+                                                            .minute
+                                                            .toString() +
+                                                        " " +
+                                                        dayOrNight,
+                                                  }
+                                                else
+                                                  {
+                                                    timeController.text =
+                                                        _selectedTimeConvFormat
+                                                                .hour
+                                                                .toString() +
+                                                            ":" +
+                                                            _selectedTimeConvFormat
+                                                                .minute
+                                                                .toString() +
+                                                            " " +
+                                                            dayOrNight,
+                                                  }
                                               }
                                           });
                                     },

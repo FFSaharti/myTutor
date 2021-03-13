@@ -92,7 +92,6 @@ class _TutorProfileState extends State<TutorProfile> {
                     sessionNumHelper = "0";
                     finishedLoadingTutorRate = true;
                   }),
-
                 }
             });
 
@@ -148,14 +147,14 @@ class _TutorProfileState extends State<TutorProfile> {
                                         .pickFiles(type: FileType.image);
                                     file == null
                                         ? null
-                                        :  DatabaseAPI.updateUserProfileImage(
-                                            File(file.files.single.path)).then((value) =>
-                                    {
-                                    setState(() {
-                                      SessionManager.loggedInTutor.profileImag = value;
-                                    }),
-                                    });
-
+                                        : DatabaseAPI.updateUserProfileImage(
+                                                File(file.files.single.path))
+                                            .then((value) => {
+                                                  setState(() {
+                                                    SessionManager.loggedInTutor
+                                                        .profileImag = value;
+                                                  }),
+                                                });
                                   },
                                   child: Icon(
                                     Icons.account_circle_sharp,
@@ -181,11 +180,14 @@ class _TutorProfileState extends State<TutorProfile> {
                                       file == null
                                           ? null
                                           : DatabaseAPI.updateUserProfileImage(
-                                              File(file.files.single.path)).then((value) => {
-                                        setState(() {
-                                          SessionManager.loggedInTutor.profileImag = value;
-                                        }),
-                                      });
+                                                  File(file.files.single.path))
+                                              .then((value) => {
+                                                    setState(() {
+                                                      SessionManager
+                                                          .loggedInTutor
+                                                          .profileImag = value;
+                                                    }),
+                                                  });
                                     },
                                     child: Align(
                                       child: Icon(
@@ -230,13 +232,16 @@ class _TutorProfileState extends State<TutorProfile> {
                           width: ScreenSize.width * 0.02,
                         ),
                         GestureDetector(
-                          onTap: (){
-                            ViewRateBottomSheet.show(tutorRates,context);
+                          onTap: () {
+                            ViewRateBottomSheet.show(tutorRates, context);
                           },
                           child: ProfileInfoWidget(
                               "Rating",
                               finishedLoadingTutorRate == true
-                                  ? tutorRates.length == 0 ? "0" : Rate.getAverageRate(tutorRates).toString()
+                                  ? tutorRates.length == 0
+                                      ? "0"
+                                      : Rate.getAverageRate(tutorRates)
+                                          .toString()
                                   : "load"),
                         ),
                         SizedBox(

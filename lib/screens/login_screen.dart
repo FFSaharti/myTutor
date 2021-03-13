@@ -3,6 +3,7 @@ import 'package:bd_progress_bar/bdprogreebar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_villains/villains/villains.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mytutor/components/circular_button.dart';
 import 'package:mytutor/screens/student_screens/homepage_screen_student.dart';
@@ -11,6 +12,7 @@ import 'package:mytutor/utilities/constants.dart';
 import 'package:mytutor/utilities/database_api.dart';
 import 'package:mytutor/utilities/regEx.dart';
 import 'package:mytutor/utilities/screen_size.dart';
+import 'package:mytutor/utilities/session_manager.dart';
 import 'package:page_transition/page_transition.dart';
 
 import 'tutor_screens/tutor_screen.dart';
@@ -174,6 +176,10 @@ class _LoginScreenState extends State<LoginScreen> {
                                 {
                                   Future.delayed(Duration(milliseconds: 100),
                                       () {
+                                    Fluttertoast.showToast(
+                                        msg: 'Signed in as ' +
+                                            SessionManager
+                                                .loggedInStudent.name);
                                     Navigator.pushNamed(
                                         context, HomepageScreenStudent.id);
                                   })
@@ -182,6 +188,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                 {
                                   Future.delayed(Duration(milliseconds: 100),
                                       () {
+                                    Fluttertoast.showToast(
+                                        msg: 'Signed in as ' +
+                                            SessionManager.loggedInTutor.name);
                                     Navigator.pushNamed(
                                         context, HomepageScreenTutor.id);
                                   })
@@ -189,10 +198,11 @@ class _LoginScreenState extends State<LoginScreen> {
                               else
                                 {
                                   // USER NOT FOUND
-                                  //TODO: Show dialog for user not found
                                   Future.delayed(Duration(milliseconds: 1000),
                                       () {
                                     stopLoading();
+                                    Fluttertoast.showToast(
+                                        msg: 'Invalid Email/Password');
                                   })
                                 }
                             });

@@ -11,7 +11,9 @@ class CircularButton extends StatelessWidget {
       @required this.buttonText,
       @required this.hasBorder,
       @required this.borderColor,
-      @required this.onPressed});
+      @required this.onPressed,
+      this.height,
+      this.fontSize});
 
   final double width;
   final Color buttonColor;
@@ -22,11 +24,13 @@ class CircularButton extends StatelessWidget {
   final bool hasBorder;
   final Color borderColor;
   final Function onPressed;
+  double height;
+  double fontSize;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 50.0,
+      height: height == null ? 50 : height,
       child: RaisedButton(
         onPressed: onPressed,
         shape: RoundedRectangleBorder(
@@ -51,7 +55,8 @@ class CircularButton extends StatelessWidget {
             child: Text(
               buttonText,
               textAlign: TextAlign.center,
-              style: GoogleFonts.sen(color: textColor, fontSize: 25),
+              style: GoogleFonts.sen(
+                  color: textColor, fontSize: fontSize == null ? 25 : fontSize),
             ),
           ),
         ),

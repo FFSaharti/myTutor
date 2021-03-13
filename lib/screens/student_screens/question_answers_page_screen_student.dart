@@ -31,32 +31,25 @@ class _QuestionAnswersScreenStudentState
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        iconTheme: IconThemeData(
-          color: Colors.black, //change your color here.
-        ),
-        automaticallyImplyLeading: true,
-        backgroundColor: Colors.white70,
-        title: Text(
-          question.title + " Answers",
-          style: TextStyle(color: Colors.black),
-        ),
-      ),
-      body: SafeArea(
-        child: Container(
-          child: Center(
-            child: Column(
-              children: [
-                SizedBox(
-                  height: 30,
-                ),
-                Container(
-                  child: Column(
-                    children: getAnswers(question.answers),
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+        appBar: buildAppBar(context, kColorScheme[3], "Question Answers"),
+        body: SafeArea(
+          child: Container(
+            child: Center(
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: ScreenSize.height * 0.02,
                   ),
-                ),
-              ],
+                  Container(
+                    child: Column(
+                      children: getAnswers(question.answers),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -109,7 +102,7 @@ class _AnswerWidgetState extends State<AnswerWidget> {
         width: ScreenSize.width * 0.9,
         decoration: BoxDecoration(
           color: kWhiteish,
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(30),
           boxShadow: [
             BoxShadow(
               color: Colors.grey.withOpacity(0.3),
@@ -124,12 +117,18 @@ class _AnswerWidgetState extends State<AnswerWidget> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Icon(
-                Icons.person,
-                size: 80,
+              Container(
+                width: ScreenSize.width * 0.2,
+                height: ScreenSize.height * 0.25,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  image: DecorationImage(
+                      image: NetworkImage(widget.answer.tutor.profileImag),
+                      fit: BoxFit.fill),
+                ),
               ),
               SizedBox(
-                width: 10,
+                width: ScreenSize.width * 0.03,
               ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -138,7 +137,7 @@ class _AnswerWidgetState extends State<AnswerWidget> {
                     height: ScreenSize.height * 0.05,
                     child: Text(
                       widget.answer.tutor.name,
-                      style: GoogleFonts.sarala(fontSize: 25, color: kBlackish),
+                      style: GoogleFonts.sen(fontSize: 25, color: kBlackish),
                     ),
                   ),
                   Container(
@@ -147,8 +146,7 @@ class _AnswerWidgetState extends State<AnswerWidget> {
                       widget.answer.answer,
                       overflow: TextOverflow.ellipsis,
                       softWrap: false,
-                      style:
-                          GoogleFonts.sarala(fontSize: 14, color: kGreyerish),
+                      style: GoogleFonts.sen(fontSize: 14, color: kGreyerish),
                     ),
                   ),
                   Container(
@@ -156,11 +154,11 @@ class _AnswerWidgetState extends State<AnswerWidget> {
                     child: Row(
                       children: [
                         SizedBox(
-                          width: ScreenSize.width * 0.42,
+                          width: ScreenSize.width * 0.4,
                         ),
                         Text(
                           widget.answer.date,
-                          style: GoogleFonts.sarala(
+                          style: GoogleFonts.sen(
                               fontSize: 13, color: kColorScheme[4]),
                         ),
                       ],

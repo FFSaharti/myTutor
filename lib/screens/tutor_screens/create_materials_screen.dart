@@ -689,10 +689,14 @@ class _CreateMaterialsScreenState extends State<CreateMaterialsScreen> {
                                         correctAnswer);
                                     setParentState;
                                     setParentState(tempQuestion);
+                                    Fluttertoast.showToast(
+                                        msg: "Question Created");
                                     Navigator.pop(context);
                                   } else {
                                     print("invalid parameters");
                                     //TODO: Show error message cannot leave empty...
+                                    Fluttertoast.showToast(
+                                        msg: "Invalid Question");
                                   }
                                 },
                               ),

@@ -1,5 +1,6 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:mytutor/classes/question.dart';
@@ -234,9 +235,14 @@ class _AnswerScreenQuestionDetailsState
                                         .then((value) =>
                                             {Navigator.pop(context)});
                                     //TODO: Show dialog for answering message successfully
+                                    Fluttertoast.showToast(msg: 'Answer sent!');
+                                    Navigator.pop(context);
+                                    Navigator.pop(context);
                                   } else {
                                     print("empty parameters");
                                     //TODO: Show error message cannot leave empty...
+                                    Fluttertoast.showToast(
+                                        msg: 'Please provide an answer');
                                   }
                                 },
                               ),

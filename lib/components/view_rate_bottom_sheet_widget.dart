@@ -63,7 +63,7 @@ class ViewRateBottomSheet {
                                 rating:
                                     Rate.getAverageRateForTeachingSkills(rates),
                                 size: 40.0,
-                                isReadOnly: false,
+                                isReadOnly: true,
                                 color: kColorScheme[2],
                                 borderColor: kColorScheme[1],
                                 spacing: 0.0),
@@ -91,7 +91,7 @@ class ViewRateBottomSheet {
                                 rating:
                                     Rate.getAverageRateForCommunication(rates),
                                 size: 40.0,
-                                isReadOnly: false,
+                                isReadOnly: true,
                                 color: kColorScheme[2],
                                 borderColor: kColorScheme[1],
                                 spacing: 0.0),
@@ -118,7 +118,7 @@ class ViewRateBottomSheet {
                                 starCount: 5,
                                 rating: Rate.getAverageRateForCreativity(rates),
                                 size: 40.0,
-                                isReadOnly: false,
+                                isReadOnly: true,
                                 color: kColorScheme[2],
                                 borderColor: kColorScheme[1],
                                 spacing: 0.0),
@@ -146,7 +146,7 @@ class ViewRateBottomSheet {
                                 rating:
                                     Rate.getAverageRateForFriendliness(rates),
                                 size: 40.0,
-                                isReadOnly: false,
+                                isReadOnly: true,
                                 color: kColorScheme[2],
                                 borderColor: kColorScheme[1],
                                 spacing: 0.0),
