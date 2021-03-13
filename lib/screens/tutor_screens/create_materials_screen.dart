@@ -244,8 +244,10 @@ class _CreateMaterialsScreenState extends State<CreateMaterialsScreen> {
                             Center(
                               child: RaisedButton(
                                 onPressed: () {
-                                  _file == null ? Fluttertoast.showToast(msg: "please attached file first") :
-                                  createMaterials();
+                                  _file == null
+                                      ? Fluttertoast.showToast(
+                                          msg: "please attached file first")
+                                      : createMaterials();
                                 },
                                 child: Text(
                                   "Create",
@@ -486,26 +488,30 @@ class _CreateMaterialsScreenState extends State<CreateMaterialsScreen> {
               });
     }
   }
-  showProgressDialog(BuildContext context){
-    AlertDialog alert=AlertDialog(
-      content:  Container(
+
+  showProgressDialog(BuildContext context) {
+    AlertDialog alert = AlertDialog(
+      content: Container(
         child: Row(
           children: [
-            CircularProgressIndicator(backgroundColor: Colors.white,
-          valueColor:
-          AlwaysStoppedAnimation<Color>(kColorScheme[3]),
+            CircularProgressIndicator(
+              backgroundColor: Colors.white,
+              valueColor: AlwaysStoppedAnimation<Color>(kColorScheme[3]),
+            ),
+            Container(child: Text("     please wait..")),
+          ],
         ),
-            Container(child:Text("     please wait.." )),
-          ],),
       ),
     );
-    showDialog(barrierDismissible: false,
-      context:context,
-      builder:(BuildContext context){
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
         return alert;
       },
     );
   }
+
   void createMaterials() {
     String filetype = _file.path.split('/').last.split('.').last;
     if (_descController.text.isNotEmpty &&
@@ -693,7 +699,7 @@ class _CreateMaterialsScreenState extends State<CreateMaterialsScreen> {
                             ],
                           ),
                           SizedBox(
-                            height: 15,
+                            height: ScreenSize.height * 0.05,
                           ),
                           Padding(
                             padding: const EdgeInsets.all(8.0),

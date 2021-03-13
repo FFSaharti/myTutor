@@ -1,8 +1,9 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:mytutor/classes/quiz.dart';
 import 'package:mytutor/classes/quiz_question.dart';
-import 'package:mytutor/components/ez_button.dart';
+import 'package:mytutor/components/circular_button.dart';
 import 'package:mytutor/utilities/constants.dart';
 import 'package:mytutor/utilities/database_api.dart';
 import 'package:mytutor/utilities/screen_size.dart';
@@ -66,52 +67,35 @@ class _TakeQuizScreenState extends State<TakeQuizScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
+    return WillPopScope(
+      onWillPop: () async => false,
       child: Scaffold(
+        appBar: buildAppBar(context, kColorScheme[3],
+            finish ? ("Quiz : " + widget.quiz.title) : "Loading"),
         body: Container(
           color: Colors.white,
           height: ScreenSize.height,
           child: Column(
             children: [
               SizedBox(
-                height: ScreenSize.height * 0.03,
-              ),
-              Center(
-                child: Text(
-                  finish ? ("Quiz : " + widget.quiz.title) : "Loading",
-                  style:
-                      kTitleStyle.copyWith(color: Colors.black, fontSize: 30),
-                ),
-              ),
-              SizedBox(
-                height: ScreenSize.height * 0.01,
-              ),
-              SizedBox(
                 height: ScreenSize.height * 0.1,
               ),
-              Container(
-                height: ScreenSize.height * 0.5,
-                width: ScreenSize.width * 0.9,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    color: Colors.grey),
-                //color: Colors.white,
-                child: NotificationListener<OverscrollIndicatorNotification>(
-                  onNotification: (overscroll) {
-                    overscroll.disallowGlow();
-                  },
-                  child: PageView(
-                    controller: _pageController,
-                    children: finish
-                        ? getListOfQuestions(widget.quiz)
-                        : [
-                            // Center(
-                            //     child: Text(
-                            //   "Loading Questions",
-                            //   style: kTitleStyle.copyWith(
-                            //       fontSize: 25, color: Colors.black),
-                            // ))
-                          ],
+              Center(
+                child: Container(
+                  height: ScreenSize.height * 0.5,
+                  width: ScreenSize.width * 0.9,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: Colors.white),
+                  //color: Colors.white,
+                  child: NotificationListener<OverscrollIndicatorNotification>(
+                    onNotification: (overscroll) {
+                      overscroll.disallowGlow();
+                    },
+                    child: PageView(
+                      controller: _pageController,
+                      children: finish ? getListOfQuestions(widget.quiz) : [],
+                    ),
                   ),
                 ),
               ),
@@ -132,9 +116,9 @@ class _TakeQuizScreenState extends State<TakeQuizScreen> {
                     : Container(),
               ),
               SizedBox(
-                height: ScreenSize.height * 0.02,
+                height: ScreenSize.height * 0.1,
               ),
-              EZButton(
+              CircularButton(
                 width: ScreenSize.width * 0.5,
                 buttonColor: Colors.white,
                 textColor: Colors.white,
@@ -156,18 +140,6 @@ class _TakeQuizScreenState extends State<TakeQuizScreen> {
                         numOfCorrectAnswers.toString() +
                         " out of " +
                         widget.quiz.questions.length.toString(),
-                    // body: Padding(
-                    //   padding: const EdgeInsets.all(8.0),
-                    //   child: Center(
-                    //     child: Text(
-                    //       'quiz updated',
-                    //       style: kTitleStyle.copyWith(
-                    //           color: kBlackish,
-                    //           fontSize: 14,
-                    //           fontWeight: FontWeight.normal),
-                    //     ),
-                    //   ),
-                    // ),
                     btnOkOnPress: () {
                       int count = 0;
                       Navigator.popUntil(context, (route) {
@@ -188,7 +160,8 @@ class _TakeQuizScreenState extends State<TakeQuizScreen> {
     List<Widget> widgets = [];
     for (int i = 0; i < quiz.questions.length; i++) {
       groupValues.add(0);
-      widgets.add(QuizQuestionWidget(quiz.questions[i], i, groupValues));
+      widgets.add(QuizQuestionWidget(
+          quiz.questions[i], i, groupValues, quiz.questions.length.toString()));
     }
 
     return widgets;
@@ -209,8 +182,10 @@ class QuizQuestionWidget extends StatefulWidget {
   final QuizQuestion question;
   final questionIndex;
   List<int> groupValue;
+  final numOfQuestions;
 
-  QuizQuestionWidget(this.question, this.questionIndex, this.groupValue);
+  QuizQuestionWidget(
+      this.question, this.questionIndex, this.groupValue, this.numOfQuestions);
 
   @override
   _QuizQuestionWidgetState createState() => _QuizQuestionWidgetState();
@@ -234,12 +209,28 @@ class _QuizQuestionWidgetState extends State<QuizQuestionWidget> {
     return Container(
       child: Column(
         children: [
+          Text(
+            "Question " +
+                (widget.questionIndex + 1).toString() +
+                " out of " +
+                widget.numOfQuestions,
+            style: GoogleFonts.sen(fontSize: 17),
+          ),
           SizedBox(
             height: ScreenSize.height * 0.02,
           ),
-          Text(
-            widget.question.question,
-            style: kTitleStyle.copyWith(fontSize: 25, color: Colors.black),
+          Padding(
+            padding: const EdgeInsets.only(left: 10),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                widget.question.question,
+                style: kTitleStyle.copyWith(fontSize: 40, color: Colors.black),
+              ),
+            ),
+          ),
+          SizedBox(
+            height: ScreenSize.height * 0.02,
           ),
           Column(
             children: getListOfAnswers(widget.question, setQuestionState),
@@ -255,20 +246,41 @@ class _QuizQuestionWidgetState extends State<QuizQuestionWidget> {
 
     for (int k = 0; k < question.answers.length; k++) {
       widgets.add(
-        Row(
-          children: [
-            Radio(
-              onChanged: (value) {
-                setState(() {
-                  widget.groupValue[widget.questionIndex] = value;
-                });
-                setQuestionState();
-              },
-              value: k,
-              groupValue: widget.groupValue[widget.questionIndex],
+        Padding(
+          padding: const EdgeInsets.all(4.0),
+          child: GestureDetector(
+            onTap: () {
+              setState(() {
+                widget.groupValue[widget.questionIndex] = k;
+              });
+              setQuestionState();
+            },
+            child: Card(
+              shape: RoundedRectangleBorder(
+                side: BorderSide(color: Colors.white70, width: 1),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              color: widget.groupValue[widget.questionIndex] == k
+                  ? kColorScheme[1]
+                  : kWhiteish,
+              elevation: 0,
+              child: Container(
+                width: ScreenSize.width * 0.85,
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Text(
+                    widget.question.answers[k],
+                    style: GoogleFonts.sen(
+                        fontSize: 20,
+                        color: widget.groupValue[widget.questionIndex] == k
+                            ? Colors.white
+                            : Colors.black,
+                        fontWeight: FontWeight.normal),
+                  ),
+                ),
+              ),
             ),
-            Text(widget.question.answers[k])
-          ],
+          ),
         ),
       );
     }
@@ -276,3 +288,14 @@ class _QuizQuestionWidgetState extends State<QuizQuestionWidget> {
     return widgets;
   }
 }
+
+// Radio(
+// onChanged: (value) {
+// setState(() {
+// widget.groupValue[widget.questionIndex] = value;
+// });
+// setQuestionState();
+// },
+// value: k,
+// groupValue: widget.groupValue[widget.questionIndex],
+// ),
