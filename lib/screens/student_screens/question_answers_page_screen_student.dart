@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mytutor/classes/answer.dart';
 import 'package:mytutor/classes/question.dart';
-import 'package:mytutor/classes/tutor.dart';
 import 'package:mytutor/screens/student_screens/view_answer_screen.dart';
 import 'package:mytutor/utilities/constants.dart';
 import 'package:mytutor/utilities/screen_size.dart';
@@ -21,13 +20,33 @@ class QuestionAnswersScreenStudent extends StatefulWidget {
 
 class _QuestionAnswersScreenStudentState
     extends State<QuestionAnswersScreenStudent> {
-  List<Tutor> tutorsAnswers = [];
   bool finish = false;
-
+  TextEditingController _searchController = TextEditingController();
   _QuestionAnswersScreenStudentState(this.question);
+
+  List<Answer> searchedAnswers;
 
   @override
   final Question question;
+
+  void applySearch(String searchValue) {
+    setState(() {
+      if (searchValue == '' || searchValue.isEmpty) {
+        searchedAnswers = widget.question.answers;
+      } else {
+        searchedAnswers = widget.question.answers
+            .where((answer) => answer.tutor.name.contains(searchValue))
+            .toList();
+      }
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    searchedAnswers = widget.question.answers;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,12 +59,38 @@ class _QuestionAnswersScreenStudentState
             child: Center(
               child: Column(
                 children: [
+                  ListTile(
+                    title: TextField(
+                      controller: _searchController,
+                      onChanged: (value) {
+                        setState(() {
+                          applySearch(_searchController.text);
+                        });
+                      },
+                      style: TextStyle(
+                        color: kBlackish,
+                      ),
+                      textAlignVertical: TextAlignVertical.center,
+                      decoration: InputDecoration(
+                        contentPadding: EdgeInsets.all(0),
+                        filled: true,
+                        hintText: 'Search By Tutor Name',
+                        prefixIcon: Icon(Icons.search, color: kColorScheme[2]),
+                        enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide.none,
+                            borderRadius: BorderRadius.circular(15)),
+                        focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide.none,
+                            borderRadius: BorderRadius.circular(15)),
+                      ),
+                    ),
+                  ),
                   SizedBox(
                     height: ScreenSize.height * 0.02,
                   ),
                   Container(
                     child: Column(
-                      children: getAnswers(question.answers),
+                      children: getAnswers(searchedAnswers),
                     ),
                   ),
                 ],

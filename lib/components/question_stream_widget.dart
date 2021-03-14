@@ -23,6 +23,7 @@ class QuestionStream extends StatelessWidget {
         List<Widget> UserQuestions = [];
         if (snapshot.hasData) {
           List<QueryDocumentSnapshot> questions = snapshot.data.docs;
+
           for (var question in questions) {
             String SessionStatus = question.data()["state"];
 

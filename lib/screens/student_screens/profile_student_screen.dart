@@ -197,7 +197,7 @@ class _ProfileStudentState extends State<ProfileStudent> {
                     ),
                     Center(
                       child: Container(
-                        width: ScreenSize.width * 0.2,
+                        width: ScreenSize.width * 0.24,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(50),
                           color: kColorScheme[3],
