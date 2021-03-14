@@ -18,11 +18,98 @@ class AskScreenStudent extends StatefulWidget {
 
 class _AskScreenStudentState extends State<AskScreenStudent> {
   PageController _pageController = PageController();
+  TextEditingController _searchController = TextEditingController();
+  int _dropDownMenuController = 0;
+
+  viewFilters() {
+    showModalBottomSheet(
+        isScrollControlled: true,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(top: Radius.circular(25.0))),
+        context: context,
+        builder: (context) {
+          return StatefulBuilder(builder: (BuildContext context,
+              StateSetter setModalState /*You can rename this!*/) {
+            return Container(
+              height: ScreenSize.height * 0.40,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        IconButton(
+                            icon: Icon(Icons.cancel),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            }),
+                        Text(
+                          "Filter Options",
+                          style: kTitleStyle.copyWith(
+                              color: Colors.black, fontSize: 17),
+                        ),
+                        IconButton(
+                            icon: Icon(Icons.check),
+                            onPressed: () {
+                              Navigator.pop(context);
+                            }),
+                      ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: Row(
+                        children: [
+                          Text(
+                            "Subject",
+                            style: GoogleFonts.sen(fontSize: 17),
+                          ),
+                          Spacer(),
+                          DropdownButton(
+                            value: _dropDownMenuController,
+                            items: fetchSubjects(),
+                            onChanged: (value) {
+                              setState(() {
+                                setModalState(() {
+                                  _dropDownMenuController = value;
+                                  print("subject chosen is --> " +
+                                      _dropDownMenuController.toString());
+                                });
+                              });
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          });
+        });
+  }
+
+  List<DropdownMenuItem> fetchSubjects() {
+    List<DropdownMenuItem> items = [];
+    items.add(DropdownMenuItem(
+      child: Text("All Subjects"),
+      value: 0,
+    ));
+    for (int i = 0; i < subjects.length; i++) {
+      items.add(DropdownMenuItem(
+        child: Text(subjects.elementAt(i).title),
+        value: i + 1,
+      ));
+    }
+    return items;
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           actions: [
             IconButton(
@@ -57,6 +144,49 @@ class _AskScreenStudentState extends State<AskScreenStudent> {
               child: Center(
                 child: Column(
                   children: [
+                    ListTile(
+                      title: TextField(
+                        controller: _searchController,
+                        onChanged: (value) {
+                          setState(() {});
+                        },
+                        style: TextStyle(
+                          color: kBlackish,
+                        ),
+                        textAlignVertical: TextAlignVertical.center,
+                        decoration: InputDecoration(
+                          contentPadding: EdgeInsets.all(0),
+                          filled: true,
+                          hintText: 'Search',
+                          prefixIcon:
+                              Icon(Icons.search, color: kColorScheme[2]),
+                          enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide.none,
+                              borderRadius: BorderRadius.circular(15)),
+                          focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide.none,
+                              borderRadius: BorderRadius.circular(15)),
+                        ),
+                      ),
+                      trailing: GestureDetector(
+                        onTap: () {
+                          viewFilters();
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: kWhiteish),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Icon(
+                              Icons.sort,
+                              size: 28,
+                              color: kColorScheme[2],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
                     SizedBox(
                       height: ScreenSize.height * 0.02,
                     ),
@@ -74,11 +204,15 @@ class _AskScreenStudentState extends State<AskScreenStudent> {
                             mainScreenPage(
                                 QuestionStream(
                                   status: "Active",
+                                  searchTitle: _searchController.text,
+                                  chosenSubject: _dropDownMenuController,
                                 ),
                                 "Active Questions"),
                             mainScreenPage(
                                 QuestionStream(
                                   status: "Closed",
+                                  searchTitle: _searchController.text,
+                                  chosenSubject: _dropDownMenuController,
                                 ),
                                 "Closed Questions"),
                           ],
@@ -117,35 +251,11 @@ class _AskScreenStudentState extends State<AskScreenStudent> {
         ),
         StreamWidget,
         SizedBox(
-          height: ScreenSize.height * 0.05,
+          height: ScreenSize.height * 0.06,
         ),
       ],
     );
   }
-
-  // List<Widget> getQuestions() {
-  //   List<Widget> widgets = [];
-  //
-  //   for (int i = 0; i < SessionManager.loggedInStudent.questions.length; i++) {
-  //     widgets.add(GestureDetector(
-  //       onTap: () {
-  //         Navigator.push(
-  //           context,
-  //           MaterialPageRoute(
-  //               builder: (context) => QuestionAnswersScreenStudent(
-  //                   SessionManager.loggedInStudent.questions[i])),
-  //         );
-  //       },
-  //       child: QuestionWidget(
-  //           question: SessionManager.loggedInStudent.questions[i]),
-  //     ));
-  //     widgets.add(SizedBox(
-  //       height: 5,
-  //     ));
-  //   }
-  //
-  //   return widgets;
-  // }
 }
 
 void showAddQuestion() {

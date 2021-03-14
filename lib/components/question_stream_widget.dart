@@ -9,8 +9,10 @@ import 'package:mytutor/utilities/session_manager.dart';
 
 class QuestionStream extends StatelessWidget {
   final String status;
+  String searchTitle;
+  int chosenSubject;
 
-  const QuestionStream({@required this.status});
+  QuestionStream({@required this.status, this.searchTitle, this.chosenSubject});
 
   @override
   Widget build(BuildContext context) {
@@ -36,23 +38,53 @@ class QuestionStream extends StatelessWidget {
               List<Answer> qAnswers = [];
 
               print(qTitle.toString());
-              UserQuestions.add(
-                GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => QuestionAnswersScreenStudent(
-                                Question(qTitle, question.id, qDesc, qDOS,
-                                    qIssuer, qAnswers, qSubject, qState),
-                              )),
+
+              if (searchTitle != null) {
+                if (chosenSubject != 0) {
+                  if (qTitle.contains(searchTitle) &&
+                      qSubject == (chosenSubject - 1).toString()) {
+                    UserQuestions.add(
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    QuestionAnswersScreenStudent(
+                                      Question(qTitle, question.id, qDesc, qDOS,
+                                          qIssuer, qAnswers, qSubject, qState),
+                                    )),
+                          );
+                        },
+                        child: QuestionWidget(
+                            question: Question(qTitle, question.id, qDesc, qDOS,
+                                qIssuer, qAnswers, qSubject, qState)),
+                      ),
                     );
-                  },
-                  child: QuestionWidget(
-                      question: Question(qTitle, question.id, qDesc, qDOS,
-                          qIssuer, qAnswers, qSubject, qState)),
-                ),
-              );
+                  }
+                } else {
+                  if (qTitle.contains(searchTitle)) {
+                    UserQuestions.add(
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    QuestionAnswersScreenStudent(
+                                      Question(qTitle, question.id, qDesc, qDOS,
+                                          qIssuer, qAnswers, qSubject, qState),
+                                    )),
+                          );
+                        },
+                        child: QuestionWidget(
+                            question: Question(qTitle, question.id, qDesc, qDOS,
+                                qIssuer, qAnswers, qSubject, qState)),
+                      ),
+                    );
+                  }
+                }
+              }
             }
           }
         }
