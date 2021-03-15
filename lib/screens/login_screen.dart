@@ -47,7 +47,10 @@ class _LoginScreenState extends State<LoginScreen> {
     return Container(
       height: ScreenSize.height,
       decoration: BoxDecoration(
-        gradient: kBackgroundGradient,
+        gradient: !(Theme.of(context).scaffoldBackgroundColor ==
+            Color(0xff29273d))
+            ? kBackgroundGradient
+            : null,
       ),
       child: WillPopScope(
         onWillPop: () async => false,
@@ -61,7 +64,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     duration: Duration(milliseconds: 500),
                     child: WelcomeScreen()));
           }),
-          backgroundColor: Colors.transparent,
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor == Colors.white ? Colors.transparent : Theme.of(context).scaffoldBackgroundColor,
           body: SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.all(25.0),
@@ -99,7 +102,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       isPassword: false,
                       obscureText: false,
                       prefixIconData: Icons.mail_outline,
-                      colorScheme: kColorScheme[4],
+                      colorScheme: Theme.of(context).primaryColorDark,
                       suffixIconData:
                           Validator.isValidEmail(email) ? Icons.check : null,
                       onChanged: (value) {
@@ -125,7 +128,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       suffixIconData: LoginScreen.passwordVisible
                           ? Icons.visibility
                           : Icons.visibility_off,
-                      colorScheme: kColorScheme[4],
+                      colorScheme: Theme.of(context).primaryColorDark,
                       isPassword: true,
                       onChanged: (value) {
                         setState(() {
@@ -157,8 +160,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   CircularButton(
                       width: ScreenSize.width * 0.9,
-                      buttonColor: Colors.white,
-                      textColor: kColorScheme[2],
+                      buttonColor: Theme.of(context).cardColor,
+                      textColor: Theme.of(context).accentColor,
                       isGradient: false,
                       colors: [
                         kColorScheme[1],
@@ -168,7 +171,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ],
                       buttonText: 'Sign In',
                       hasBorder: true,
-                      borderColor: kColorScheme[3],
+                      borderColor: Theme.of(context).primaryColor,
                       onPressed: () {
                         beginLoading();
                         DatabaseAPI.userLogin(email, password).then((value) => {

@@ -189,7 +189,7 @@ class _ProfileStudentState extends State<ProfileStudent> {
                       child: Text(
                         DatabaseAPI.tempStudent.name,
                         style:
-                            GoogleFonts.sen(color: Colors.black, fontSize: 30),
+                            GoogleFonts.sen(color: Theme.of(context).buttonColor, fontSize: 30),
                       ),
                     ),
                     SizedBox(
@@ -232,7 +232,7 @@ class _ProfileStudentState extends State<ProfileStudent> {
                               "About Me",
                               style: TextStyle(
                                   fontSize: 18,
-                                  color: Theme.of(context).primaryColor),
+                                  color: Theme.of(context).buttonColor),
                             ),
                             Spacer(),
                             (SessionManager.loggedInStudent.aboutMe == '')
@@ -243,7 +243,7 @@ class _ProfileStudentState extends State<ProfileStudent> {
                                     child: Icon(
                                       Icons.edit,
                                       size: 20,
-                                      color: Theme.of(context).iconTheme.color,
+                                      color: Theme.of(context).buttonColor,
                                     ),
                                   )
                                 : Container()
@@ -263,7 +263,7 @@ class _ProfileStudentState extends State<ProfileStudent> {
                                       style: TextStyle(
                                           fontSize: 16.5,
                                           color:
-                                              Theme.of(context).primaryColor),
+                                          Theme.of(context).buttonColor),
                                     ),
                                   ),
                                   Spacer(),
@@ -274,7 +274,7 @@ class _ProfileStudentState extends State<ProfileStudent> {
                                     child: Icon(
                                       Icons.edit,
                                       size: 20,
-                                      color: Theme.of(context).iconTheme.color,
+                                      color: Theme.of(context).buttonColor,
                                     ),
                                   ),
                                   SizedBox(
@@ -324,7 +324,7 @@ class _ProfileStudentState extends State<ProfileStudent> {
                                 "Bookmarked Materials",
                                 style: TextStyle(
                                     fontSize: 18,
-                                    color: Theme.of(context).primaryColor),
+                                    color: Theme.of(context).buttonColor),
                               )
                             ],
                           ),
@@ -467,9 +467,8 @@ class _ProfileStudentState extends State<ProfileStudent> {
     TextEditingController aboutMeController = TextEditingController();
     showModalBottomSheet(
         shape: RoundedRectangleBorder(
-            // borderRadius: BorderRadius.vertical(top: Radius.circular(2.0))
-            ),
-        backgroundColor: Colors.transparent,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(25.0))),
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         enableDrag: true,
         isScrollControlled: true,
         context: ScreenSize.context,
@@ -477,113 +476,107 @@ class _ProfileStudentState extends State<ProfileStudent> {
           return StatefulBuilder(
               builder: (BuildContext context, StateSetter setModalState) {
             return Container(
-              height: ScreenSize.height * 0.50,
-              child: Scaffold(
-                body: Container(
-                  //     padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-                  height: ScreenSize.height * 0.50,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(50)
-                      //   topRight: Radius.circular(100),
-                      //   topLeft: Radius.circular(100),
-                      // )
-                      ,
-                      color: Colors.white),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              IconButton(
-                                  icon: Icon(Icons.cancel),
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  }),
-                              Text(
-                                "About Me",
-                                style: TextStyle(fontSize: 20),
-                              ),
-                              IconButton(
-                                icon: Icon(Icons.check),
+                //     padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                height: ScreenSize.height * 0.50,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(25),
+                      topRight: Radius.circular(25)),
+                  color: Theme.of(context).scaffoldBackgroundColor,
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            IconButton(
+                                icon: Icon(Icons.cancel),
                                 onPressed: () {
-                                  // ADD NEW QUESTION
-                                  if (aboutMeController.text.isNotEmpty) {
-                                    // ADD ABOUT ME TO STUDENT...
-                                    DatabaseAPI.addAboutMeToStudent(
-                                            SessionManager.loggedInStudent,
-                                            aboutMeController.text)
-                                        .then((value) => {
-                                              if (value == "Success")
-                                                {
-                                                  SessionManager.loggedInStudent
-                                                          .aboutMe =
-                                                      aboutMeController.text,
-                                                  setParentState(
-                                                      aboutMeController.text),
-                                                  Navigator.pop(context),
-                                                },
-                                              print(value.toString()),
-                                            });
-                                    print("POP...");
-                                  } else {
-                                    print("empty parameters");
-                                    //TODO: Show error message cannot leave empty...
-                                  }
-                                },
+                                  Navigator.of(context).pop();
+                                }),
+                            Text(
+                              "About Me",
+                              style: TextStyle(fontSize: 20, color:Theme.of(context).buttonColor),
+                            ),
+                            IconButton(
+                              icon: Icon(Icons.check),
+                              onPressed: () {
+                                // ADD NEW QUESTION
+                                if (aboutMeController.text.isNotEmpty) {
+                                  // ADD ABOUT ME TO STUDENT...
+                                  DatabaseAPI.addAboutMeToStudent(
+                                          SessionManager.loggedInStudent,
+                                          aboutMeController.text)
+                                      .then((value) => {
+                                            if (value == "Success")
+                                              {
+                                                SessionManager.loggedInStudent
+                                                        .aboutMe =
+                                                    aboutMeController.text,
+                                                setParentState(
+                                                    aboutMeController.text),
+                                                Navigator.pop(context),
+                                              },
+                                            print(value.toString()),
+                                          });
+                                  print("POP...");
+                                } else {
+                                  print("empty parameters");
+                                  //TODO: Show error message cannot leave empty...
+                                }
+                              },
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: ScreenSize.height*0.01,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            children: [
+                              Align(
+                                alignment: Alignment.topLeft,
+                                child: Text(
+                                  "About Me",
+                                  style: GoogleFonts.secularOne(
+                                      textStyle: TextStyle(
+                                          fontSize: 17,
+                                          fontWeight: FontWeight.bold,
+                                          color: Theme.of(context).buttonColor)),
+                                ),
+                              ),
+                              TextField(
+                                controller: aboutMeController,
+                                keyboardType: TextInputType.multiline,
+                                maxLines: null,
+                                decoration: InputDecoration(
+                                  hintText: !(SessionManager.loggedInStudent
+                                              .aboutMe.isNotEmpty ||
+                                          SessionManager
+                                                  .loggedInStudent.aboutMe ==
+                                              '')
+                                      ? 'Describe yourself briefly...'
+                                      : SessionManager
+                                          .loggedInStudent.aboutMe,
+                                  hintStyle: TextStyle(
+                                      fontSize: 17.0, color: Colors.grey),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 20,
                               ),
                             ],
                           ),
-                          SizedBox(
-                            height: 15,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              children: [
-                                Align(
-                                  alignment: Alignment.topLeft,
-                                  child: Text(
-                                    "About Me",
-                                    style: GoogleFonts.secularOne(
-                                        textStyle: TextStyle(
-                                            fontSize: 17,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.black)),
-                                  ),
-                                ),
-                                TextField(
-                                  controller: aboutMeController,
-                                  keyboardType: TextInputType.multiline,
-                                  maxLines: null,
-                                  decoration: InputDecoration(
-                                    hintText: !(SessionManager.loggedInStudent
-                                                .aboutMe.isNotEmpty ||
-                                            SessionManager
-                                                    .loggedInStudent.aboutMe ==
-                                                '')
-                                        ? 'Describe yourself briefly...'
-                                        : SessionManager
-                                            .loggedInStudent.aboutMe,
-                                    hintStyle: TextStyle(
-                                        fontSize: 17.0, color: Colors.grey),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 20,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
-              ),
-            );
+              );
           });
         });
   }

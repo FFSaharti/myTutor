@@ -75,16 +75,18 @@ class _MessageScreenState extends State<MessageScreen> {
                       });
                     }
                   },
-                  style: TextStyle(
-                    color: kBlackish,
-                  ),
+                  style: TextStyle(color: Theme.of(context).accentColor),
                   textAlignVertical: TextAlignVertical.center,
                   decoration: InputDecoration(
                     contentPadding: EdgeInsets.all(0),
                     filled: true,
+                    fillColor: Theme.of(context)
+                        .primaryColorLight
+                        .withOpacity(0.6),
+
                     hintText: 'Search by Session Name',
-                    hintStyle: TextStyle(color: Theme.of(context).primaryColor),
-                    prefixIcon: Icon(Icons.search, color: kColorScheme[2]),
+                    hintStyle: TextStyle(color: Theme.of(context).accentColor),
+                    prefixIcon: Icon(Icons.search,color: Theme.of(context).accentColor),
                     enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide.none,
                         borderRadius: BorderRadius.circular(15)),
@@ -97,7 +99,9 @@ class _MessageScreenState extends State<MessageScreen> {
               SizedBox(
                 height: ScreenSize.height * 0.009,
               ),
-              Divider(),
+              Divider(
+                color: Theme.of(context).dividerColor,
+              ),
               search
                   ? Expanded(
                       child:
@@ -111,7 +115,6 @@ class _MessageScreenState extends State<MessageScreen> {
                       ),
                     )
                   : StreamBuilder(
-                      //TODO: need to create signout function and clear the objects in SessionManager class.
                       stream: stream,
                       builder: (context, snapshot) {
                         // List to fill up with all the session the user has.
@@ -365,18 +368,18 @@ class _MessageListTileState extends State<MessageListTile> {
             child: Text(
               widget.avatar.toUpperCase(),
               style: TextStyle(
-                  color: Theme.of(context).primaryColor,
+                  color: Theme.of(context).buttonColor,
                   fontWeight: FontWeight.bold),
             )),
         title: Text(widget.nameHelper,
             style: TextStyle(
-                color: Theme.of(context).primaryColor,
+                color: Theme.of(context).buttonColor,
                 fontWeight: FontWeight.bold,
                 fontSize: 20)),
         subtitle: Text(
           widget.session.lastMessage,
           style: TextStyle(
-              color: Theme.of(context).primaryColor,
+              color: Theme.of(context).buttonColor,
               fontWeight: FontWeight.normal,
               fontSize: 16),
           maxLines: 1,
@@ -384,7 +387,7 @@ class _MessageListTileState extends State<MessageListTile> {
         ),
         trailing: Text(
           widget.session.timeOfLastMessage,
-          style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 17),
+          style: TextStyle(color: Theme.of(context).buttonColor, fontSize: 17),
         ),
       ),
     );

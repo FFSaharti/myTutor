@@ -57,6 +57,7 @@ class _SessionCardWidgetState extends State<SessionCardWidget> {
     DateTime tempDate = new DateFormat("yyyy-MM-dd").parse("2021-12-1");
     print(tempDate);
     showModalBottomSheet(
+      backgroundColor: Theme.of(context).cardColor,
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(top: Radius.circular(25.0))),
         context: context,
@@ -73,7 +74,7 @@ class _SessionCardWidgetState extends State<SessionCardWidget> {
                       }),
                   Text(
                     "Schedule",
-                    style: TextStyle(fontSize: 20),
+                    style: TextStyle(fontSize: 20, color: Theme.of(context).buttonColor),
                   ),
                   IconButton(
                       icon: Icon(Icons.check),
@@ -93,7 +94,7 @@ class _SessionCardWidgetState extends State<SessionCardWidget> {
                                             child: Text(
                                               'the session status has been changed now to active, please navigate to home screen or messages screen to start tutoring',
                                               style: kTitleStyle.copyWith(
-                                                  color: kBlackish,
+                                                  color: Theme.of(context).buttonColor,
                                                   fontSize: 14,
                                                   fontWeight:
                                                       FontWeight.normal),
@@ -148,7 +149,7 @@ class _SessionCardWidgetState extends State<SessionCardWidget> {
                           "Date",
                           style: kTitleStyle.copyWith(
                               fontSize: 19,
-                              color: Colors.black,
+                              color: Theme.of(context).buttonColor,
                               fontWeight: FontWeight.normal),
                         ),
                         Text(
@@ -157,7 +158,7 @@ class _SessionCardWidgetState extends State<SessionCardWidget> {
                                     .parse(session.date.toString())),
                             style: kTitleStyle.copyWith(
                                 fontSize: 19,
-                                color: Colors.black,
+                                color: Theme.of(context).buttonColor,
                                 fontWeight: FontWeight.normal)),
                         Icon(Icons.date_range),
                       ],
@@ -173,13 +174,13 @@ class _SessionCardWidgetState extends State<SessionCardWidget> {
                           "Time",
                           style: kTitleStyle.copyWith(
                               fontSize: 19,
-                              color: Colors.black,
+                              color: Theme.of(context).buttonColor,
                               fontWeight: FontWeight.normal),
                         ),
                         Text(session.time,
                             style: kTitleStyle.copyWith(
                                 fontSize: 19,
-                                color: Colors.black,
+                                color: Theme.of(context).buttonColor,
                                 fontWeight: FontWeight.normal)),
                         Icon(Icons.alarm),
                       ],
@@ -191,19 +192,20 @@ class _SessionCardWidgetState extends State<SessionCardWidget> {
                           "Session Description",
                           style: kTitleStyle.copyWith(
                               fontSize: 19,
-                              color: Colors.black,
+                              color: Theme.of(context).buttonColor,
                               fontWeight: FontWeight.normal),
                         ),
                       ],
                     ),
+                    SizedBox(height: ScreenSize.height *0.01,),
                     Align(
                       alignment: Alignment.topLeft,
                       child: Container(
-                        color: Colors.white10,
+                        color: Colors.transparent,
                         child: Text(
                           session.desc,
                           style: kTitleStyle.copyWith(
-                              color: kGreyerish,
+                              color: Theme.of(context).buttonColor,
                               fontWeight: FontWeight.w100,
                               fontSize: 17),
                           overflow: TextOverflow.ellipsis,
@@ -222,7 +224,7 @@ class _SessionCardWidgetState extends State<SessionCardWidget> {
                       child: Text("click here to read the full description",
                           style: kTitleStyle.copyWith(
                               fontSize: 19,
-                              color: Colors.black,
+                              color: Theme.of(context).buttonColor,
                               fontWeight: FontWeight.normal)),
                     ),
                   ],
@@ -289,7 +291,7 @@ class _SessionCardWidgetState extends State<SessionCardWidget> {
                           textStyle: TextStyle(
                               fontSize: 21,
                               fontWeight: FontWeight.normal,
-                              color: Theme.of(context).primaryColor),
+                              color: Theme.of(context).buttonColor),
                         ),
                       ),
                     ),
@@ -329,7 +331,7 @@ class _SessionCardWidgetState extends State<SessionCardWidget> {
                           textStyle: TextStyle(
                               fontSize: 21,
                               fontWeight: FontWeight.normal,
-                              color: Theme.of(context).primaryColor),
+                              color: Theme.of(context).buttonColor),
                         ),
                       ),
                     ),

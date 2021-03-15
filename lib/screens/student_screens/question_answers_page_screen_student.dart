@@ -22,6 +22,7 @@ class _QuestionAnswersScreenStudentState
     extends State<QuestionAnswersScreenStudent> {
   bool finish = false;
   TextEditingController _searchController = TextEditingController();
+
   _QuestionAnswersScreenStudentState(this.question);
 
   List<Answer> searchedAnswers;
@@ -53,7 +54,7 @@ class _QuestionAnswersScreenStudentState
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
-        appBar: buildAppBar(context, kColorScheme[3], "Question Answers"),
+        appBar: buildAppBar(context, Theme.of(context).accentColor, "Question Answers"),
         body: SafeArea(
           child: Container(
             child: Center(
@@ -61,21 +62,23 @@ class _QuestionAnswersScreenStudentState
                 children: [
                   ListTile(
                     title: TextField(
+                      style: TextStyle(color: Theme.of(context).accentColor),
                       controller: _searchController,
                       onChanged: (value) {
                         setState(() {
                           applySearch(_searchController.text);
                         });
                       },
-                      style: TextStyle(
-                        color: kBlackish,
-                      ),
                       textAlignVertical: TextAlignVertical.center,
                       decoration: InputDecoration(
                         contentPadding: EdgeInsets.all(0),
+                        fillColor: Theme.of(context)
+                            .primaryColorLight
+                            .withOpacity(0.6),
                         filled: true,
                         hintText: 'Search By Tutor Name',
-                        prefixIcon: Icon(Icons.search, color: kColorScheme[2]),
+                        hintStyle: TextStyle(color: Theme.of(context).accentColor),
+                        prefixIcon: Icon(Icons.search, color: Theme.of(context).accentColor),
                         enabledBorder: OutlineInputBorder(
                             borderSide: BorderSide.none,
                             borderRadius: BorderRadius.circular(15)),
@@ -146,16 +149,16 @@ class _AnswerWidgetState extends State<AnswerWidget> {
         height: ScreenSize.height * 0.15,
         width: ScreenSize.width * 0.9,
         decoration: BoxDecoration(
-          color: kWhiteish,
+          color: Theme.of(context).cardColor,
           borderRadius: BorderRadius.circular(30),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.3),
-              spreadRadius: 1,
-              blurRadius: 15,
-              offset: Offset(0, 6), // changes position of shadow
-            ),
-          ],
+          // boxShadow: [
+          //   BoxShadow(
+          //     color: Colors.grey.withOpacity(0.3),
+          //     spreadRadius: 1,
+          //     blurRadius: 15,
+          //     offset: Offset(0, 6), // changes position of shadow
+          //   ),
+          // ],
         ),
         child: Padding(
           padding: const EdgeInsets.all(15.0),
@@ -182,7 +185,7 @@ class _AnswerWidgetState extends State<AnswerWidget> {
                     height: ScreenSize.height * 0.05,
                     child: Text(
                       widget.answer.tutor.name,
-                      style: GoogleFonts.sen(fontSize: 25, color: kBlackish),
+                      style: GoogleFonts.sen(fontSize: 25, color: Theme.of(context).buttonColor),
                     ),
                   ),
                   Container(
@@ -191,7 +194,7 @@ class _AnswerWidgetState extends State<AnswerWidget> {
                       widget.answer.answer,
                       overflow: TextOverflow.ellipsis,
                       softWrap: false,
-                      style: GoogleFonts.sen(fontSize: 14, color: kGreyerish),
+                      style: GoogleFonts.sen(fontSize: 14, color: Theme.of(context).buttonColor),
                     ),
                   ),
                   Container(
@@ -204,7 +207,7 @@ class _AnswerWidgetState extends State<AnswerWidget> {
                         Text(
                           widget.answer.date,
                           style: GoogleFonts.sen(
-                              fontSize: 13, color: kColorScheme[4]),
+                              fontSize: 13, color: Theme.of(context).buttonColor),
                         ),
                       ],
                     ),

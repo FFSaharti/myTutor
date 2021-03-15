@@ -16,7 +16,7 @@ class ViewAnswerScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: buildAppBar(context, kColorScheme[3], "View Answer"),
+      appBar: buildAppBar(context, Theme.of(context).buttonColor, "View Answer"),
       body: Container(
         child: Column(
           children: <Widget>[
@@ -39,12 +39,12 @@ class ViewAnswerScreen extends StatelessWidget {
                             size: 40,
                           ),
                           SizedBox(
-                            width: 5,
+                            width: ScreenSize.width * 0.03,
                           ),
                           Text(
                             answer.tutor.name,
                             style: kTitleStyle.copyWith(
-                                fontSize: 20, color: Colors.black),
+                                fontSize: 20, color: Theme.of(context).buttonColor),
                           )
                         ],
                       ),
@@ -55,13 +55,13 @@ class ViewAnswerScreen extends StatelessWidget {
                             size: 40,
                           ),
                           SizedBox(
-                            width: 5,
+                            width: ScreenSize.width * 0.03,
                           ),
                           Container(
                             child: Text(
                               answer.date,
                               style: kTitleStyle.copyWith(
-                                  fontSize: 20, color: Colors.black),
+                                  fontSize: 20, color: Theme.of(context).buttonColor),
                             ),
                           ),
                         ],
@@ -85,7 +85,7 @@ class ViewAnswerScreen extends StatelessWidget {
               alignment: Alignment.center,
               child: Text(
                 "Provided Answer ",
-                style: kTitleStyle.copyWith(fontSize: 20, color: Colors.black),
+                style: kTitleStyle.copyWith(fontSize: 20, color: Theme.of(context).buttonColor),
               ),
             ),
             Padding(
@@ -104,7 +104,7 @@ class ViewAnswerScreen extends StatelessWidget {
                     child: Text(
                       answer.answer,
                       style: kTitleStyle.copyWith(
-                          color: kGreyerish,
+                          color: Theme.of(context).buttonColor,
                           fontSize: 15,
                           fontWeight: FontWeight.normal),
                     ),
@@ -117,7 +117,7 @@ class ViewAnswerScreen extends StatelessWidget {
                     width: ScreenSize.width * 0.5,
                     fontSize: 15,
                     buttonColor: kColorScheme[2],
-                    textColor: Colors.white,
+                    textColor: Theme.of(context).buttonColor,
                     isGradient: true,
                     colors: [kColorScheme[0], kColorScheme[3]],
                     buttonText: "Close Question",

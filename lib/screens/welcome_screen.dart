@@ -19,7 +19,7 @@ class WelcomeScreen extends StatelessWidget {
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor == Colors.white ? Colors.transparent : Theme.of(context).scaffoldBackgroundColor,
         body: Container(
           // color: Colors.white,
           width: ScreenSize.width,

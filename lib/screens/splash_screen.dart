@@ -43,10 +43,13 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        gradient: kBackgroundGradient,
+        gradient:  !(Theme.of(context).scaffoldBackgroundColor ==
+            Color(0xff29273d))
+            ? kBackgroundGradient
+            : null,
       ),
       child: Scaffold(
-          backgroundColor: Colors.transparent,
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor == Colors.white ? Colors.transparent : Theme.of(context).scaffoldBackgroundColor,
           body: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [

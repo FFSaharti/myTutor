@@ -12,6 +12,7 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class AskScreenStudent extends StatefulWidget {
   static String id = 'ask_screen_student';
+
   @override
   _AskScreenStudentState createState() => _AskScreenStudentState();
 }
@@ -32,6 +33,12 @@ class _AskScreenStudentState extends State<AskScreenStudent> {
               StateSetter setModalState /*You can rename this!*/) {
             return Container(
               height: ScreenSize.height * 0.40,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(25),
+                    topRight: Radius.circular(25)),
+                color: Theme.of(context).scaffoldBackgroundColor,
+              ),
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
@@ -47,7 +54,8 @@ class _AskScreenStudentState extends State<AskScreenStudent> {
                         Text(
                           "Filter Options",
                           style: kTitleStyle.copyWith(
-                              color: Colors.black, fontSize: 17),
+                              color: Theme.of(context).buttonColor,
+                              fontSize: 17),
                         ),
                         IconButton(
                             icon: Icon(Icons.check),
@@ -62,10 +70,13 @@ class _AskScreenStudentState extends State<AskScreenStudent> {
                         children: [
                           Text(
                             "Subject",
-                            style: GoogleFonts.sen(fontSize: 17),
+                            style: GoogleFonts.sen(
+                                fontSize: 17,
+                                color: Theme.of(context).buttonColor),
                           ),
                           Spacer(),
                           DropdownButton(
+                            dropdownColor: Theme.of(context).scaffoldBackgroundColor,
                             value: _dropDownMenuController,
                             items: fetchSubjects(),
                             onChanged: (value) {
@@ -92,12 +103,15 @@ class _AskScreenStudentState extends State<AskScreenStudent> {
   List<DropdownMenuItem> fetchSubjects() {
     List<DropdownMenuItem> items = [];
     items.add(DropdownMenuItem(
-      child: Text("All Subjects"),
+      child: Text("All Subjects",   style: TextStyle(color: Theme.of(context).buttonColor),),
       value: 0,
     ));
     for (int i = 0; i < subjects.length; i++) {
       items.add(DropdownMenuItem(
-        child: Text(subjects.elementAt(i).title),
+        child: Text(
+          subjects.elementAt(i).title,
+          style: TextStyle(color: Theme.of(context).buttonColor),
+        ),
         value: i + 1,
       ));
     }
@@ -113,14 +127,15 @@ class _AskScreenStudentState extends State<AskScreenStudent> {
         appBar: AppBar(
           actions: [
             IconButton(
-              icon: Icon(Icons.add, color: kColorScheme[3]),
+              icon: Icon(Icons.add, color: Theme.of(context).accentColor),
               onPressed: () => showAddQuestion(),
             ),
           ],
           centerTitle: true,
           title: Text(
             "Ask",
-            style: GoogleFonts.sen(color: Colors.black, fontSize: 25),
+            style: GoogleFonts.sen(
+                color: Theme.of(context).buttonColor, fontSize: 25),
           ),
           leading: Villain(
             villainAnimation: VillainAnimation.fade(
@@ -128,7 +143,8 @@ class _AskScreenStudentState extends State<AskScreenStudent> {
               to: Duration(milliseconds: 700),
             ),
             child: IconButton(
-              icon: Icon(Icons.arrow_back_ios_sharp, color: kColorScheme[3]),
+              icon: Icon(Icons.arrow_back_ios_sharp,
+                  color: Theme.of(context).accentColor),
               onPressed: () => Navigator.of(context).pop(),
             ),
           ),
@@ -150,16 +166,19 @@ class _AskScreenStudentState extends State<AskScreenStudent> {
                         onChanged: (value) {
                           setState(() {});
                         },
-                        style: TextStyle(
-                          color: kBlackish,
-                        ),
+                        style: TextStyle(color: Theme.of(context).accentColor),
                         textAlignVertical: TextAlignVertical.center,
                         decoration: InputDecoration(
+                          fillColor: Theme.of(context)
+                              .primaryColorLight
+                              .withOpacity(0.6),
                           contentPadding: EdgeInsets.all(0),
                           filled: true,
                           hintText: 'Search',
-                          prefixIcon:
-                              Icon(Icons.search, color: kColorScheme[2]),
+                          hintStyle:
+                              TextStyle(color: Theme.of(context).accentColor),
+                          prefixIcon: Icon(Icons.search,
+                              color: Theme.of(context).accentColor),
                           enabledBorder: OutlineInputBorder(
                               borderSide: BorderSide.none,
                               borderRadius: BorderRadius.circular(15)),
@@ -175,13 +194,15 @@ class _AskScreenStudentState extends State<AskScreenStudent> {
                         child: Container(
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
-                              color: kWhiteish),
+                              color: Theme.of(context)
+                                  .primaryColorLight
+                                  .withOpacity(0.6)),
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Icon(
                               Icons.sort,
                               size: 28,
-                              color: kColorScheme[2],
+                              color: Theme.of(context).accentColor,
                             ),
                           ),
                         ),
@@ -275,195 +296,193 @@ void showAddQuestion() {
       builder: (context) {
         return StatefulBuilder(
             builder: (BuildContext context, StateSetter setModalState) {
-          return Container(
-              height: ScreenSize.height * 0.9,
-              child: NotificationListener<OverscrollIndicatorNotification>(
-                onNotification: (overscroll) {
-                  overscroll.disallowGlow();
-                },
-                child: Scaffold(
-                  body: Container(
-                    //     padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-                    height: ScreenSize.height * 0.70,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(50)
-                        //   topRight: Radius.circular(100),
-                        //   topLeft: Radius.circular(100),
-                        // )
-                        ,
-                        color: Colors.white),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: SingleChildScrollView(
-                        child: Column(
+          return NotificationListener<OverscrollIndicatorNotification>(
+            onNotification: (overscroll) {
+              overscroll.disallowGlow();
+            },
+            child: Container(
+                //     padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                height: ScreenSize.height * 0.90,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(25),
+                    topRight: Radius.circular(25)),
+                color: Theme.of(context).scaffoldBackgroundColor,
+              ),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                IconButton(
-                                    icon: Icon(Icons.cancel),
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    }),
-                                Text(
-                                  "Add New Question",
-                                  style: TextStyle(fontSize: 20),
-                                ),
-                                IconButton(
-                                  icon: Icon(Icons.check),
-                                  onPressed: () {
-                                    // ADD NEW QUESTION
-                                    if (titleController.text.isNotEmpty &&
-                                        problemController.text.isNotEmpty &&
-                                        getChosenSubject() != -1) {
-                                      DatabaseAPI.addQuestionToStudent(
-                                          titleController.text,
-                                          problemController.text,
-                                          SessionManager.loggedInStudent,
-                                          getChosenSubject());
-                                      Fluttertoast.showToast(
-                                          msg: 'Question Added!');
-                                      print("POP...");
-                                      Navigator.pop(context);
-                                    } else {
-                                      print("empty parameters");
-                                      Fluttertoast.showToast(
-                                          msg: 'Missing/Invalid Information');
-                                    }
-                                  },
-                                ),
-                              ],
+                            IconButton(
+                                icon: Icon(Icons.cancel),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                }),
+                            Text(
+                              "Add New Question",
+                              style: TextStyle(fontSize: 20, color: Theme.of(context).buttonColor),
                             ),
-                            SizedBox(
-                              height: 15,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Column(
-                                children: [
-                                  Align(
-                                    alignment: Alignment.topLeft,
-                                    child: Text(
-                                      "Question Title",
-                                      style: GoogleFonts.secularOne(
-                                          textStyle: TextStyle(
-                                              fontSize: 17,
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.black)),
-                                    ),
-                                  ),
-                                  TextField(
-                                    controller: titleController,
-                                    decoration: InputDecoration(
-                                      hintText: 'Type something...',
-                                      hintStyle: TextStyle(
-                                          fontSize: 17.0, color: Colors.grey),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: 20,
-                                  ),
-                                  Align(
-                                    alignment: Alignment.topLeft,
-                                    child: Text(
-                                      "Question Description",
-                                      style: GoogleFonts.secularOne(
-                                          textStyle: TextStyle(
-                                              fontSize: 17,
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.black)),
-                                    ),
-                                  ),
-                                  TextField(
-                                    controller: problemController,
-                                    keyboardType: TextInputType.multiline,
-                                    maxLines: null,
-                                    decoration: InputDecoration(
-                                      hintText: 'Type something...',
-                                      hintStyle: TextStyle(
-                                          fontSize: 17.0, color: Colors.grey),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: 20,
-                                  ),
-                                  Align(
-                                    alignment: Alignment.topLeft,
-                                    child: Text(
-                                      "Subject",
-                                      style: GoogleFonts.secularOne(
-                                          textStyle: TextStyle(
-                                              fontSize: 17,
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.black)),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: 10,
-                                  ),
-                                  Column(
-                                    children: [
-                                      TextField(
-                                        onChanged: (value) {
-                                          setModalState(() {
-                                            searchBox = value;
-                                            getSubjects(searchBox);
-                                            // getSelectedSubjects(selectedInterests);
-                                          });
-                                        },
-                                        style: TextStyle(
-                                          color: kBlackish,
-                                        ),
-                                        textAlignVertical:
-                                            TextAlignVertical.center,
-                                        decoration: InputDecoration(
-                                          contentPadding: EdgeInsets.all(0),
-                                          filled: true,
-                                          hintText: 'Search',
-                                          prefixIcon: Icon(Icons.search,
-                                              color: kColorScheme[2]),
-                                          enabledBorder: OutlineInputBorder(
-                                              borderSide: BorderSide.none,
-                                              borderRadius:
-                                                  BorderRadius.circular(15)),
-                                          focusedBorder: OutlineInputBorder(
-                                              borderSide: BorderSide.none,
-                                              borderRadius:
-                                                  BorderRadius.circular(15)),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 15,
-                                      ),
-                                      Container(
-                                        width: double.infinity,
-                                        decoration: BoxDecoration(
-                                          color: Colors.transparent,
-                                        ),
-                                        height: 50,
-                                        child: GestureDetector(
-                                          onTap: () {
-                                            setModalState(() {
-                                              print("Entered Set State new");
-                                            });
-                                          },
-                                          child: ListView(
-                                              scrollDirection: Axis.horizontal,
-                                              children: getSubjects(searchBox)),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
+                            IconButton(
+                              icon: Icon(Icons.check),
+                              onPressed: () {
+                                // ADD NEW QUESTION
+                                if (titleController.text.isNotEmpty &&
+                                    problemController.text.isNotEmpty &&
+                                    getChosenSubject() != -1) {
+                                  DatabaseAPI.addQuestionToStudent(
+                                      titleController.text,
+                                      problemController.text,
+                                      SessionManager.loggedInStudent,
+                                      getChosenSubject());
+                                  Fluttertoast.showToast(
+                                      msg: 'Question Added!');
+                                  print("POP...");
+                                  Navigator.pop(context);
+                                } else {
+                                  print("empty parameters");
+                                  Fluttertoast.showToast(
+                                      msg: 'Missing/Invalid Information');
+                                }
+                              },
                             ),
                           ],
                         ),
-                      ),
+                        SizedBox(
+                          height: ScreenSize.height*0.015,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            children: [
+                              Align(
+                                alignment: Alignment.topLeft,
+                                child: Text(
+                                  "Question Title",
+                                  style: GoogleFonts.secularOne(
+                                      textStyle: TextStyle(
+                                          fontSize: 17,
+                                          fontWeight: FontWeight.bold,
+                                          color: Theme.of(context).buttonColor)),
+                                ),
+                              ),
+                              TextField(
+                                controller: titleController,
+                                decoration: InputDecoration(
+                                  hintText: 'Type something...',
+                                  hintStyle: TextStyle(
+                                      fontSize: 17.0, color: Theme.of(context).buttonColor.withOpacity(0.6)),
+                                ),
+                              ),
+                              SizedBox(
+                                height: ScreenSize.height*0.020,
+                              ),
+                              Align(
+                                alignment: Alignment.topLeft,
+                                child: Text(
+                                  "Question Description",
+                                  style: GoogleFonts.secularOne(
+                                      textStyle: TextStyle(
+                                          fontSize: 17,
+                                          fontWeight: FontWeight.bold,
+                                          color: Theme.of(context).buttonColor)),
+                                ),
+                              ),
+                              TextField(
+                                controller: problemController,
+                                keyboardType: TextInputType.multiline,
+                                maxLines: null,
+                                decoration: InputDecoration(
+                                  hintText: 'Type something...',
+                                  hintStyle: TextStyle(
+                                      fontSize: 17.0, color: Theme.of(context).buttonColor.withOpacity(0.6)),
+                                ),
+                              ),
+                              SizedBox(
+                                height: ScreenSize.height*0.020,
+                              ),
+                              Align(
+                                alignment: Alignment.topLeft,
+                                child: Text(
+                                  "Subject",
+                                  style: GoogleFonts.secularOne(
+                                      textStyle: TextStyle(
+                                          fontSize: 17,
+                                          fontWeight: FontWeight.bold,
+                                          color: Theme.of(context).buttonColor)),
+                                ),
+                              ),
+                              SizedBox(
+                                height: ScreenSize.height*0.010,
+                              ),
+                              Column(
+                                children: [
+                                  TextField(
+                                    onChanged: (value) {
+                                      setModalState(() {
+                                        searchBox = value;
+                                        getSubjects(searchBox);
+                                        // getSelectedSubjects(selectedInterests);
+                                      });
+                                    },
+                                    style: TextStyle(color: Theme.of(context).accentColor),
+                                    textAlignVertical:
+                                        TextAlignVertical.center,
+                                    decoration: InputDecoration(
+                                      contentPadding: EdgeInsets.all(0),
+                                      filled: true,
+                                      fillColor:Theme.of(context)
+                                          .primaryColorLight
+                                          .withOpacity(0.6),
+                                      hintText: 'Search',
+                                      hintStyle:  TextStyle(color: Theme.of(context).accentColor),
+                                      prefixIcon: Icon(Icons.search,
+                                          color: Theme.of(context).accentColor),
+                                      enabledBorder: OutlineInputBorder(
+                                          borderSide: BorderSide.none,
+                                          borderRadius:
+                                              BorderRadius.circular(15)),
+                                      focusedBorder: OutlineInputBorder(
+                                          borderSide: BorderSide.none,
+                                          borderRadius:
+                                              BorderRadius.circular(15)),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: ScreenSize.height*0.010,
+                                  ),
+                                  Container(
+                                    width: double.infinity,
+                                    decoration: BoxDecoration(
+                                      color: Colors.transparent,
+                                    ),
+                                    height: ScreenSize.height*0.050,
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        setModalState(() {
+                                          print("Entered Set State new");
+                                        });
+                                      },
+                                      child: ListView(
+                                          scrollDirection: Axis.horizontal,
+                                          children: getSubjects(searchBox)),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
-              ));
+              ),
+
+          );
         });
       });
 }

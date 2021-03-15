@@ -49,7 +49,7 @@ class _HomepageScreenStudentState extends State<HomepageScreenStudent> {
       onWillPop: () async => false,
       child: Scaffold(
         bottomNavigationBar: BottomNavyBar(
-          backgroundColor: Theme.of(context).bottomAppBarColor,
+          backgroundColor: Theme.of(context).cardColor,
           selectedIndex: _currentIndex,
           showElevation: true,
           itemCornerRadius: 24,
@@ -69,75 +69,75 @@ class _HomepageScreenStudentState extends State<HomepageScreenStudent> {
             BottomNavyBarItem(
               icon: Icon(
                 Icons.home,
-                color: Theme.of(context).textSelectionColor,
+                color: Theme.of(context).appBarTheme.iconTheme.color,
               ),
               title: Text(
                 'Home',
                 style: TextStyle(
-                    color: Theme.of(context).textSelectionColor,
+                    color: Theme.of(context).appBarTheme.textTheme.bodyText1.color,
                     fontWeight: FontWeight.bold),
               ),
-              activeColor: kColorScheme[2],
+              activeColor: Theme.of(context).focusColor,
               inactiveColor: Colors.grey,
               textAlign: TextAlign.center,
             ),
             BottomNavyBarItem(
               icon: Icon(
                 FontAwesomeIcons.chalkboardTeacher,
-                color: Theme.of(context).textSelectionColor,
+                color: Theme.of(context).appBarTheme.iconTheme.color,
               ),
               title: Text(
                 'Student',
                 style: TextStyle(
-                    color: Theme.of(context).textSelectionColor,
+                    color: Theme.of(context).appBarTheme.textTheme.bodyText1.color,
                     fontWeight: FontWeight.bold),
               ),
-              activeColor: kColorScheme[2],
+              activeColor: Theme.of(context).focusColor,
               inactiveColor: Colors.grey,
               textAlign: TextAlign.center,
             ),
             BottomNavyBarItem(
               icon: Icon(
                 Icons.message,
-                color: Theme.of(context).textSelectionColor,
+                color: Theme.of(context).appBarTheme.iconTheme.color,
               ),
               title: Text(
                 'Messages',
                 style: TextStyle(
-                    color: Theme.of(context).textSelectionColor,
+                    color: Theme.of(context).appBarTheme.textTheme.bodyText1.color,
                     fontWeight: FontWeight.bold),
               ),
-              activeColor: kColorScheme[2],
+              activeColor: Theme.of(context).focusColor,
               inactiveColor: Colors.grey,
               textAlign: TextAlign.center,
             ),
             BottomNavyBarItem(
               icon: Icon(
                 Icons.person,
-                color: Theme.of(context).textSelectionColor,
+                color: Theme.of(context).appBarTheme.iconTheme.color,
               ),
               title: Text(
                 'Profile',
                 style: TextStyle(
-                    color: Theme.of(context).textSelectionColor,
+                    color: Theme.of(context).appBarTheme.textTheme.bodyText1.color,
                     fontWeight: FontWeight.bold),
               ),
-              activeColor: kColorScheme[2],
+              activeColor: Theme.of(context).focusColor,
               inactiveColor: Colors.grey,
               textAlign: TextAlign.center,
             ),
             BottomNavyBarItem(
               icon: Icon(
                 Icons.settings,
-                color: Theme.of(context).textSelectionColor,
+                color: Theme.of(context).appBarTheme.iconTheme.color,
               ),
               title: Text(
                 'Settings',
                 style: TextStyle(
-                    color: Theme.of(context).textSelectionColor,
+                    color: Theme.of(context).appBarTheme.textTheme.bodyText1.color,
                     fontWeight: FontWeight.bold),
               ),
-              activeColor: kColorScheme[2],
+              activeColor: Theme.of(context).focusColor,
               inactiveColor: Colors.grey,
               textAlign: TextAlign.center,
             ),
@@ -188,7 +188,7 @@ class _HomePageStudentState extends State<HomePageStudent> {
                             textStyle: TextStyle(
                           fontSize: 36,
                           fontWeight: FontWeight.normal,
-                          color: Theme.of(context).primaryColor,
+                          color: Theme.of(context).buttonColor,
                         )),
                       ),
                       TextSpan(
@@ -197,7 +197,7 @@ class _HomePageStudentState extends State<HomePageStudent> {
                             textStyle: TextStyle(
                           fontSize: 36,
                           fontWeight: FontWeight.bold,
-                          color: Theme.of(context).primaryColor,
+                          color: Theme.of(context).buttonColor,
                         )),
                       ),
                     ]),
@@ -284,7 +284,7 @@ class _HomePageStudentState extends State<HomePageStudent> {
                 textStyle: TextStyle(
                     fontSize: 21,
                     fontWeight: FontWeight.normal,
-                    color: Theme.of(context).primaryColor)),
+                    color: Theme.of(context).buttonColor)),
           ),
         ),
         SizedBox(

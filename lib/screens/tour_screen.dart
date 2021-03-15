@@ -24,7 +24,8 @@ class _TourScreenState extends State<TourScreen> {
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
-        appBar: buildAppBar(context, kColorScheme[2], ""),
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        appBar: buildAppBar(context, Theme.of(context).accentColor, ""),
         body: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
@@ -62,6 +63,9 @@ class _TourScreenState extends State<TourScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
+                SizedBox(
+                  width: ScreenSize.width * 0.01,
+                ),
                 SmoothPageIndicator(
                     controller: _pageController, // PageController
                     count: 3,
@@ -74,22 +78,36 @@ class _TourScreenState extends State<TourScreen> {
                   width: ScreenSize.width * 0.2,
                 ),
                 Container(
-                  child: FloatingActionButton(
-                    backgroundColor: Colors.black,
+                  child: MaterialButton(
+                    onPressed: () {},
+                    color: Theme.of(context).floatingActionButtonTheme.backgroundColor,
+                    textColor: Colors.white,
                     child: Icon(
                       Icons.arrow_forward_ios_sharp,
-                      size: 25,
+                      size: 24,
                     ),
-                    elevation: 1,
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          PageTransition(
-                              type: PageTransitionType.rightToLeftWithFade,
-                              duration: Duration(milliseconds: 200),
-                              child: SignupScreen()));
-                    },
-                  ),
+                    padding: EdgeInsets.all(16),
+                    shape: CircleBorder(),
+                  )
+
+
+                  // FloatingActionButton(
+                  //   backgroundColor: Colors.black,
+                  //   child: Icon(
+                  //     Icons.arrow_forward_ios_sharp,
+                  //     size: 25,
+                  //     //color: Colors.white,
+                  //   ),
+                  //   elevation: 1,
+                  //   onPressed: () {
+                  //     Navigator.push(
+                  //         context,
+                  //         PageTransition(
+                  //             type: PageTransitionType.rightToLeftWithFade,
+                  //             duration: Duration(milliseconds: 200),
+                  //             child: SignupScreen()));
+                  //   },
+                  // ),
                 ),
               ],
             ),
@@ -125,7 +143,7 @@ class _TourScreenState extends State<TourScreen> {
                 textStyle: TextStyle(
                     fontSize: 30,
                     fontWeight: FontWeight.bold,
-                    color: kBlackish)),
+                    color: Theme.of(context).buttonColor)),
           ),
         ),
         SizedBox(
@@ -145,7 +163,7 @@ class _TourScreenState extends State<TourScreen> {
                   textStyle: TextStyle(
                       height: 1.5,
                       fontSize: 15,
-                      color: kGreyish,
+                      color: Theme.of(context).buttonColor.withOpacity(0.6),
                       fontWeight: FontWeight.w100)),
             ),
           ),

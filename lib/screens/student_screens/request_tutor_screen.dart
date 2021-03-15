@@ -106,7 +106,7 @@ class _RequestTutorScreenState extends State<RequestTutorScreen> {
       onWillPop: () async => false,
       child: SafeArea(
         child: Scaffold(
-          appBar: buildAppBar(context, kColorScheme[3], "Request Tutor"),
+          appBar: buildAppBar(context, Theme.of(context).accentColor, "Request Tutor"),
           //resizeToAvoidBottomInset : false,
           body: Center(
             child: Column(
@@ -125,15 +125,15 @@ class _RequestTutorScreenState extends State<RequestTutorScreen> {
                         // getSelectedSubjects(selectedInterests);
                       });
                     },
-                    style: TextStyle(
-                      color: kBlackish,
-                    ),
+                    style: TextStyle(color: Theme.of(context).accentColor),
                     textAlignVertical: TextAlignVertical.center,
                     decoration: InputDecoration(
                       contentPadding: EdgeInsets.all(0),
                       filled: true,
                       hintText: 'Search',
-                      prefixIcon: Icon(Icons.search, color: kColorScheme[2]),
+                      hintStyle:
+                      TextStyle(color: Theme.of(context).accentColor),
+                      prefixIcon: Icon(Icons.search,      color: Theme.of(context).accentColor),
                       enabledBorder: OutlineInputBorder(
                           borderSide: BorderSide.none,
                           borderRadius: BorderRadius.circular(15)),
@@ -149,13 +149,15 @@ class _RequestTutorScreenState extends State<RequestTutorScreen> {
                     child: Container(
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
-                          color: kWhiteish),
+                          color: Theme.of(context)
+                              .primaryColorLight
+                              .withOpacity(0.6)),
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Icon(
                           Icons.sort,
                           size: 28,
-                          color: kColorScheme[2],
+                          color: Theme.of(context).accentColor,
                         ),
                       ),
                     ),
@@ -253,7 +255,7 @@ class _RequestTutorScreenState extends State<RequestTutorScreen> {
                           Text(
                             "Filters Options",
                             style: kTitleStyle.copyWith(
-                                color: Theme.of(context).primaryColor,
+                                color: Theme.of(context).buttonColor,
                                 fontSize: 17),
                           ),
                           IconButton(
@@ -277,7 +279,7 @@ class _RequestTutorScreenState extends State<RequestTutorScreen> {
                         "filter based on",
                         style: GoogleFonts.openSans(
                             fontSize: 17,
-                            color: Theme.of(context).primaryColor,
+                            color: Theme.of(context).buttonColor,
                             fontWeight: FontWeight.bold),
                         textAlign: TextAlign.center,
                       ),
@@ -298,7 +300,7 @@ class _RequestTutorScreenState extends State<RequestTutorScreen> {
                             " on experience ",
                             style: GoogleFonts.openSans(
                                 fontSize: 18,
-                                color: Theme.of(context).primaryColor,
+                                color: Theme.of(context).buttonColor,
                                 fontWeight: FontWeight.bold),
                             textAlign: TextAlign.center,
                           ),
@@ -307,6 +309,7 @@ class _RequestTutorScreenState extends State<RequestTutorScreen> {
                           ),
                           Expanded(
                             child: DropdownButton(
+                              dropdownColor: Theme.of(context).scaffoldBackgroundColor,
                               isExpanded: true,
                               value: _dropDownMenuController,
                               icon: Icon(
@@ -342,7 +345,7 @@ class _RequestTutorScreenState extends State<RequestTutorScreen> {
                             "average rating above ",
                             style: GoogleFonts.openSans(
                                 fontSize: 18,
-                                color: Theme.of(context).primaryColor,
+                                color: Theme.of(context).buttonColor,
                                 fontWeight: FontWeight.bold),
                             textAlign: TextAlign.center,
                           ),
@@ -351,6 +354,7 @@ class _RequestTutorScreenState extends State<RequestTutorScreen> {
                           ),
                           Expanded(
                             child: DropdownButton(
+                              dropdownColor: Theme.of(context).scaffoldBackgroundColor,
                               isExpanded: true,
                               value: _dropDownMenuControllerForRating,
                               icon: Icon(
@@ -368,7 +372,7 @@ class _RequestTutorScreenState extends State<RequestTutorScreen> {
                                   .map<DropdownMenuItem<int>>((int value) {
                                 return DropdownMenuItem<int>(
                                   value: value,
-                                  child: Center(child: Text(value.toString())),
+                                  child: Center(child: Text(value.toString(), style: TextStyle(color: Theme.of(context).buttonColor),)),
                                 );
                               }).toList(),
                             ),
@@ -391,7 +395,7 @@ class _RequestTutorScreenState extends State<RequestTutorScreen> {
         child: Center(
           child: Text(
             subjects.elementAt(i).title,
-            style: GoogleFonts.openSans(color: Colors.black),
+            style: GoogleFonts.openSans(color: Theme.of(context).buttonColor),
           ),
         ),
         value: i,
@@ -452,7 +456,7 @@ class _TutorWidgetState extends State<TutorWidget> {
       padding: const EdgeInsets.all(5.0),
       child: Card(
         shape: RoundedRectangleBorder(
-          side: BorderSide(color: Colors.white70, width: 1),
+          side: BorderSide(color: Theme.of(context).scaffoldBackgroundColor, width:0.1),
           borderRadius: BorderRadius.circular(20),
         ),
         child: Column(
@@ -473,7 +477,7 @@ class _TutorWidgetState extends State<TutorWidget> {
                               )),
                     );
                   },
-                  child: Icon(Icons.info_outline, color: kGreyerish),
+                  child: Icon(Icons.info_outline, color: Colors.white),
                 ),
               ),
             ),
@@ -507,7 +511,7 @@ class _TutorWidgetState extends State<TutorWidget> {
                   textStyle: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.normal,
-                      color: Colors.black)),
+                      color: Theme.of(context).buttonColor)),
             ),
             SizedBox(
               height: ScreenSize.height * 0.01,

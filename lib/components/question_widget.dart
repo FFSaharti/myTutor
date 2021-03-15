@@ -80,8 +80,10 @@ class _QuestionWidgetState extends State<QuestionWidget> {
     return Padding(
       padding: const EdgeInsets.fromLTRB(15.0, 5, 15, 5),
       child: Card(
+        elevation: 0,
+        color: Theme.of(context).cardColor,
         shape: RoundedRectangleBorder(
-          side: BorderSide(color: Colors.white70, width: 1),
+          side: BorderSide.none,
           borderRadius: BorderRadius.circular(20),
         ),
         child: Padding(
@@ -98,7 +100,7 @@ class _QuestionWidgetState extends State<QuestionWidget> {
                   height: ScreenSize.height * 0.035,
                   child: Text(
                     widget.question.title,
-                    style: GoogleFonts.sen(fontSize: 20, color: kBlackish),
+                    style: GoogleFonts.sen(fontSize: 20, color: Theme.of(context).buttonColor),
                   ),
                 ),
                 Container(
@@ -107,7 +109,7 @@ class _QuestionWidgetState extends State<QuestionWidget> {
                     widget.question.description,
                     overflow: TextOverflow.ellipsis,
                     softWrap: false,
-                    style: GoogleFonts.sen(fontSize: 14, color: kGreyerish),
+                    style: GoogleFonts.sen(fontSize: 14, color: Theme.of(context).buttonColor),
                   ),
                 ),
                 Container(

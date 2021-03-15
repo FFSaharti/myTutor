@@ -37,7 +37,7 @@ class _StudentSectionState extends State<StudentSection> {
                   ),
                   child: Text(
                     "Select an option",
-                    style: GoogleFonts.sarala(fontSize: 25, color: kGreyerish),
+                    style: GoogleFonts.sarala(fontSize: 25, color: Theme.of(context).buttonColor.withOpacity(0.6)),
                   ),
                 ),
                 SizedBox(
@@ -134,7 +134,7 @@ class StudentSectionWidget extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15.0),
           ),
-          color: Theme.of(context).backgroundColor,
+          color: Theme.of(context).cardColor,
           child: Padding(
             padding: const EdgeInsets.all(2.0),
             child: ListTile(
@@ -149,15 +149,15 @@ class StudentSectionWidget extends StatelessWidget {
               ),
               title: Text(
                 title,
-                style: GoogleFonts.sarala(fontSize: 25, color: kBlackish),
+                style: GoogleFonts.sarala(fontSize: 25, color: Theme.of(context).buttonColor),
               ),
               subtitle: Text(
                 description,
-                style: GoogleFonts.sarala(fontSize: 14, color: kGreyerish),
+                style: GoogleFonts.sarala(fontSize: 14, color: Theme.of(context).buttonColor),
               ),
               trailing: Container(
                 height: double.infinity,
-                child: Icon(Icons.arrow_forward_ios_outlined),
+                child: Icon(Icons.arrow_forward_ios_outlined, color: Theme.of(context).buttonColor,),
               ),
             ),
           ),
