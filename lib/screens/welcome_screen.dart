@@ -19,12 +19,15 @@ class WelcomeScreen extends StatelessWidget {
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
-        backgroundColor: Colors.transparent,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         body: Container(
           // color: Colors.white,
           width: ScreenSize.width,
           decoration: BoxDecoration(
-            gradient: kBackgroundGradient,
+            gradient: !(Theme.of(context).scaffoldBackgroundColor ==
+                    Color(0xff29273d))
+                ? kBackgroundGradient
+                : null,
           ),
           child: Column(
             children: [
@@ -128,8 +131,8 @@ class WelcomeScreen extends StatelessWidget {
                                   alignment: Alignment.centerRight,
                                   child: CircularButton(
                                     width: ScreenSize.width * 0.9,
-                                    buttonColor: Colors.black,
-                                    textColor: Colors.white,
+                                    buttonColor: Theme.of(context).buttonColor,
+                                    textColor: Theme.of(context).primaryColor,
                                     isGradient: false,
                                     colors: null,
                                     buttonText: 'Get Started',
@@ -159,7 +162,15 @@ class WelcomeScreen extends StatelessWidget {
                     borderRadius: BorderRadius.only(
                         topRight: Radius.circular(30),
                         topLeft: Radius.circular(30)),
-                    color: Colors.white,
+                    color: Theme.of(context).cardColor,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.03),
+                        spreadRadius: 5,
+                        blurRadius: 7,
+                        offset: Offset(0, 3), // changes position of shadow
+                      ),
+                    ],
                   ),
                 ),
               ),
