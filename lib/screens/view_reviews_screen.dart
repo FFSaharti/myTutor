@@ -14,7 +14,7 @@ class ViewReviewsScreen extends StatelessWidget {
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
-          appBar: buildAppBar(context, kColorScheme[3], "Reviews"),
+          appBar: buildAppBar(context, Theme.of(context).accentColor, "Reviews"),
           body: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(
@@ -32,9 +32,10 @@ class ViewReviewsScreen extends StatelessWidget {
                             : Padding(
                                 padding: const EdgeInsets.all(3.0),
                                 child: Card(
+                                  color: Theme.of(context).cardColor,
                                   shape: RoundedRectangleBorder(
                                     side: BorderSide(
-                                        color: Colors.white70, width: 1),
+                                        color: Theme.of(context).cardColor.withOpacity(0.6), width: 1),
                                     borderRadius: BorderRadius.circular(20),
                                   ),
                                   child: Padding(
@@ -55,12 +56,12 @@ class ViewReviewsScreen extends StatelessWidget {
                                                   .elementAt(index)
                                                   .sessionTitle,
                                               style: GoogleFonts.sen(
-                                                  color: Colors.black,
+                                                  color: Theme.of(context).buttonColor,
                                                   fontSize: 20),
                                             ),
                                             Spacer(),
                                             Text(getRating(
-                                                tutorRates.elementAt(index))),
+                                                tutorRates.elementAt(index)) , style: TextStyle(color: Theme.of(context).buttonColor),),
                                           ],
                                         ),
                                         Align(
@@ -68,7 +69,7 @@ class ViewReviewsScreen extends StatelessWidget {
                                           child: Text(
                                             tutorRates.elementAt(index).review,
                                             style: GoogleFonts.sen(
-                                                color: kGreyerish),
+                                                color: Theme.of(context).buttonColor),
                                           ),
                                         ),
                                       ],

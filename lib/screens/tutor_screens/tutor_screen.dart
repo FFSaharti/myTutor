@@ -35,7 +35,7 @@ class _HomepageScreenTutorState extends State<HomepageScreenTutor> {
       onWillPop: () async => false,
       child: Scaffold(
         bottomNavigationBar: BottomNavyBar(
-          backgroundColor: Theme.of(context).bottomAppBarColor,
+          backgroundColor: Theme.of(context).cardColor,
           selectedIndex: _currentIndex,
           showElevation: true,
           itemCornerRadius: 24,
@@ -55,75 +55,75 @@ class _HomepageScreenTutorState extends State<HomepageScreenTutor> {
             BottomNavyBarItem(
               icon: Icon(
                 Icons.home,
-                color: Theme.of(context).textSelectionColor,
+                color: Theme.of(context).appBarTheme.iconTheme.color,
               ),
               title: Text(
                 'Home',
                 style: TextStyle(
-                    color: Theme.of(context).textSelectionColor,
+                    color: Theme.of(context).appBarTheme.textTheme.bodyText1.color,
                     fontWeight: FontWeight.bold),
               ),
-              activeColor: kColorScheme[2],
+              activeColor: Theme.of(context).focusColor,
               inactiveColor: Colors.grey,
               textAlign: TextAlign.center,
             ),
             BottomNavyBarItem(
               icon: Icon(
                 FontAwesomeIcons.chalkboardTeacher,
-                color: Theme.of(context).textSelectionColor,
+                color: Theme.of(context).appBarTheme.iconTheme.color,
               ),
               title: Text(
                 'Tutor',
                 style: TextStyle(
-                    color: Theme.of(context).textSelectionColor,
+                    color: Theme.of(context).appBarTheme.textTheme.bodyText1.color,
                     fontWeight: FontWeight.bold),
               ),
-              activeColor: kColorScheme[2],
+              activeColor: Theme.of(context).focusColor,
               inactiveColor: Colors.grey,
               textAlign: TextAlign.center,
             ),
             BottomNavyBarItem(
               icon: Icon(
                 Icons.message,
-                color: Theme.of(context).textSelectionColor,
+                color: Theme.of(context).appBarTheme.iconTheme.color,
               ),
               title: Text(
                 'Messages',
                 style: TextStyle(
-                    color: Theme.of(context).textSelectionColor,
+                    color: Theme.of(context).appBarTheme.textTheme.bodyText1.color,
                     fontWeight: FontWeight.bold),
               ),
-              activeColor: kColorScheme[2],
+              activeColor: Theme.of(context).focusColor,
               inactiveColor: Colors.grey,
               textAlign: TextAlign.center,
             ),
             BottomNavyBarItem(
               icon: Icon(
                 Icons.person,
-                color: Theme.of(context).textSelectionColor,
+                color: Theme.of(context).appBarTheme.iconTheme.color,
               ),
               title: Text(
                 'Profile',
                 style: TextStyle(
-                    color: Theme.of(context).textSelectionColor,
+                    color: Theme.of(context).appBarTheme.textTheme.bodyText1.color,
                     fontWeight: FontWeight.bold),
               ),
-              activeColor: kColorScheme[2],
+              activeColor:  Theme.of(context).focusColor,
               inactiveColor: Colors.grey,
               textAlign: TextAlign.center,
             ),
             BottomNavyBarItem(
               icon: Icon(
                 Icons.settings,
-                color: Theme.of(context).textSelectionColor,
+                color: Theme.of(context).appBarTheme.iconTheme.color,
               ),
               title: Text(
                 'Settings',
                 style: TextStyle(
-                    color: Theme.of(context).textSelectionColor,
+                    color: Theme.of(context).appBarTheme.textTheme.bodyText1.color,
                     fontWeight: FontWeight.bold),
               ),
-              activeColor: kColorScheme[2],
+              activeColor: Theme.of(context).focusColor,
               inactiveColor: Colors.grey,
               textAlign: TextAlign.center,
             ),

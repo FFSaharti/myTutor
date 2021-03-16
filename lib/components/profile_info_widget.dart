@@ -24,11 +24,11 @@ class ProfileInfoWidget extends StatelessWidget {
             children: [
               Text(
                 infoTitle,
-                style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 18,fontWeight: FontWeight.bold),
+                style: TextStyle(color: Theme.of(context).buttonColor, fontSize: 18,fontWeight: FontWeight.bold),
               ),
               Text(
                 infoNum,
-                style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 18,fontWeight: FontWeight.bold),
+                style: TextStyle(color: Theme.of(context).buttonColor, fontSize: 18,fontWeight: FontWeight.bold),
               ),
             ]),
       ),

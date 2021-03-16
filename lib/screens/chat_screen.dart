@@ -387,8 +387,13 @@ class _ChatScreenState extends State<ChatScreen> {
         context: context,
         builder: (context) {
           return Container(
-              color: Theme.of(context).scaffoldBackgroundColor,
               height: ScreenSize.height * 0.70,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(25),
+                    topRight: Radius.circular(25)),
+                color: Theme.of(context).scaffoldBackgroundColor,
+              ),
               child: NotificationListener<OverscrollIndicatorNotification>(
                 // ignore: missing_return
                 onNotification: (overscroll) {
@@ -649,6 +654,12 @@ class _ChatScreenState extends State<ChatScreen> {
         context: context,
         builder: (context) {
           return Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(25),
+                    topRight: Radius.circular(25)),
+                color: Theme.of(context).scaffoldBackgroundColor,
+              ),
               height: ScreenSize.height * 0.30,
               child: Padding(
                 padding: const EdgeInsets.all(15.0),
@@ -657,7 +668,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     Text(
                       "title : " + widget.currentsession.title,
                       style: GoogleFonts.openSans(
-                          color: Colors.black, fontSize: 17),
+                          color: Theme.of(context).buttonColor, fontSize: 17),
                     ),
                     Text(
                       "Subject : " +
@@ -665,12 +676,12 @@ class _ChatScreenState extends State<ChatScreen> {
                               .elementAt(widget.currentsession.subject)
                               .title,
                       style: GoogleFonts.openSans(
-                          color: Colors.black, fontSize: 17),
+                          color: Theme.of(context).buttonColor, fontSize: 17),
                     ),
                     Text(
                       "Description : " + widget.currentsession.desc,
                       style: GoogleFonts.openSans(
-                          color: Colors.black, fontSize: 17),
+                          color: Theme.of(context).buttonColor, fontSize: 17),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -702,7 +713,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                               child: Text(
                                                 'the session has been successfully closed ',
                                                 style: kTitleStyle.copyWith(
-                                                    color: kBlackish,
+                                                    color: Theme.of(context).buttonColor,
                                                     fontSize: 14,
                                                     fontWeight:
                                                         FontWeight.normal),

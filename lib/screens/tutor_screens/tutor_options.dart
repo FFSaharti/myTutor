@@ -37,7 +37,7 @@ class _TutorOptionsState extends State<TutorOptions> {
                   ),
                   child: Text(
                     "Select an option",
-                    style: GoogleFonts.sarala(fontSize: 25, color: kGreyerish),
+                    style: GoogleFonts.sarala(fontSize: 25, color: Theme.of(context).buttonColor.withOpacity(0.6)),
                   ),
                 ),
                 SizedBox(

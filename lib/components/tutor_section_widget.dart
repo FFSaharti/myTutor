@@ -27,7 +27,7 @@ class TutorSectionWidget extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20.0),
           ),
-          color: Theme.of(context).backgroundColor,
+          color: Theme.of(context).cardColor,
           elevation: 3,
           child: Padding(
             padding: const EdgeInsets.all(10.0),
@@ -44,18 +44,18 @@ class TutorSectionWidget extends StatelessWidget {
               title: Text(
                 title,
                 style: GoogleFonts.sarala(
-                    fontSize: 25, color: Theme.of(context).primaryColor),
+                    fontSize: 25, color: Theme.of(context).buttonColor),
               ),
               subtitle: Text(
                 description,
                 style: GoogleFonts.sarala(
-                    fontSize: 14, color: Theme.of(context).primaryColor),
+                    fontSize: 14, color:Theme.of(context).buttonColor),
               ),
               trailing: Container(
                 height: double.infinity,
                 child: Icon(
                   Icons.arrow_forward_ios_outlined,
-                  color: Theme.of(context).iconTheme.color,
+                  color: Theme.of(context).buttonColor,
                 ),
               ),
             ),

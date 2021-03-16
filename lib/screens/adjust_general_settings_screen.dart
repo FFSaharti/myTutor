@@ -29,7 +29,7 @@ class AdjustGeneralSettings extends StatelessWidget {
                   ),
                   child: Card(
                     elevation: 2.5,
-                    color: Colors.white,
+                    color: Theme.of(context).cardColor,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15.0),
                     ),
@@ -39,7 +39,7 @@ class AdjustGeneralSettings extends StatelessWidget {
                         children: [
                           Text("Dark mode",
                               style: GoogleFonts.sen(
-                                  color: Theme.of(context).primaryColor,
+                                  color: Theme.of(context).buttonColor,
                                   fontSize: 20)
                               // TextStyle(
                               //     color: Theme.of(context).primaryColor,

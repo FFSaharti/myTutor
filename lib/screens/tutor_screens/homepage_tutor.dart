@@ -42,7 +42,7 @@ class _HomePageTutorState extends State<HomePageTutor> {
                                 textStyle: TextStyle(
                                     fontSize: 36,
                                     fontWeight: FontWeight.normal,
-                                    color: Theme.of(context).primaryColor)),
+                                    color: Theme.of(context).buttonColor)),
                           ),
                           TextSpan(
                             text: SessionManager.loggedInTutor.name,
@@ -50,7 +50,7 @@ class _HomePageTutorState extends State<HomePageTutor> {
                                 textStyle: TextStyle(
                                     fontSize: 36,
                                     fontWeight: FontWeight.bold,
-                                    color: Theme.of(context).primaryColor)),
+                                    color: Theme.of(context).buttonColor)),
                           ),
                         ],
                       ),
@@ -71,7 +71,7 @@ class _HomePageTutorState extends State<HomePageTutor> {
                           textStyle: TextStyle(
                               fontSize: 21,
                               fontWeight: FontWeight.normal,
-                              color: Theme.of(context).primaryColor)),
+                              color: Theme.of(context).buttonColor)),
                     ),
                     //
                   ],

@@ -20,7 +20,7 @@ class _AnswerScreenTutorState extends State<AnswerScreenTutor> {
       onWillPop: () async => false,
       child: Scaffold(
         resizeToAvoidBottomInset: false,
-        appBar: buildAppBar(context, kColorScheme[3], "Answer", false),
+        appBar: buildAppBar(context, Theme.of(context).accentColor, "Answer", false),
         body: SafeArea(
           child: GestureDetector(
             onTap: () {
@@ -41,16 +41,16 @@ class _AnswerScreenTutorState extends State<AnswerScreenTutor> {
                                 VillainController.playAllVillains(context);
                               });
                             },
-                            style: TextStyle(
-                              color: kBlackish,
-                            ),
+                            style: TextStyle(color: Theme.of(context).accentColor),
                             textAlignVertical: TextAlignVertical.center,
                             decoration: InputDecoration(
                               contentPadding: EdgeInsets.all(0),
                               filled: true,
                               hintText: 'Search by problem name or subject',
+                              hintStyle:
+                              TextStyle(color: Theme.of(context).accentColor),
                               prefixIcon:
-                                  Icon(Icons.search, color: kColorScheme[2]),
+                                  Icon(Icons.search, color: Theme.of(context).accentColor),
                               enabledBorder: OutlineInputBorder(
                                   borderSide: BorderSide.none,
                                   borderRadius: BorderRadius.circular(15)),

@@ -25,7 +25,7 @@ class ViewRateBottomSheet {
                     child: Text(
                       "tutor does not have any rate yet :(",
                       style: GoogleFonts.openSans(
-                          color: Theme.of(context).primaryColor, fontSize: 21),
+                          color: Theme.of(context).buttonColor, fontSize: 21),
                       textAlign: TextAlign.center,
                     ),
                   )
@@ -36,7 +36,7 @@ class ViewRateBottomSheet {
                         Text(
                           "Tutor rates",
                           style: kTitleStyle.copyWith(
-                              color: Theme.of(context).primaryColor,
+                              color: Theme.of(context).buttonColor,
                               fontSize: 25),
                         ),
                         Divider(
@@ -50,7 +50,7 @@ class ViewRateBottomSheet {
                             Text(
                               "Teaching Skills :",
                               style: GoogleFonts.openSans(
-                                  color: Theme.of(context).primaryColor,
+                                  color: Theme.of(context).buttonColor,
                                   fontSize: 17),
                             ),
                             Spacer(),
@@ -78,7 +78,7 @@ class ViewRateBottomSheet {
                             Text(
                               "Communication :",
                               style: GoogleFonts.openSans(
-                                  color: Theme.of(context).primaryColor,
+                                  color: Theme.of(context).buttonColor,
                                   fontSize: 17),
                             ),
                             Spacer(),
@@ -106,7 +106,7 @@ class ViewRateBottomSheet {
                             Text(
                               "Creativity : ",
                               style: GoogleFonts.openSans(
-                                  color: Theme.of(context).primaryColor,
+                                  color: Theme.of(context).buttonColor,
                                   fontSize: 17),
                             ),
                             Spacer(),
@@ -133,7 +133,7 @@ class ViewRateBottomSheet {
                             Text(
                               "Friendliness : ",
                               style: GoogleFonts.openSans(
-                                  color: Theme.of(context).primaryColor,
+                                  color: Theme.of(context).buttonColor,
                                   fontSize: 17),
                             ),
                             Spacer(),

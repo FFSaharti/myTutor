@@ -21,7 +21,7 @@ class _QuestionTutorWidgetState extends State<QuestionTutorWidget> {
       child: Container(
         height: ScreenSize.height * 0.15,
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Theme.of(context).cardColor,
           borderRadius: BorderRadius.circular(15),
           boxShadow: [
             BoxShadow(
@@ -51,7 +51,7 @@ class _QuestionTutorWidgetState extends State<QuestionTutorWidget> {
                     height: ScreenSize.height * 0.05,
                     child: Text(
                       widget.question.title,
-                      style: GoogleFonts.sen(fontSize: 25, color: kBlackish),
+                      style: GoogleFonts.sen(fontSize: 25, color: Theme.of(context).buttonColor),
                     ),
                   ),
                   Row(
@@ -61,7 +61,7 @@ class _QuestionTutorWidgetState extends State<QuestionTutorWidget> {
                         child: Icon(
                           Icons.calendar_today_outlined,
                           size: 15,
-                          color: kGreyerish,
+                            color: Theme.of(context).buttonColor,
                         ),
                       ),
                       SizedBox(
@@ -74,7 +74,7 @@ class _QuestionTutorWidgetState extends State<QuestionTutorWidget> {
                           overflow: TextOverflow.ellipsis,
                           softWrap: false,
                           style: GoogleFonts.sarala(
-                              fontSize: 14, color: kGreyerish),
+                              fontSize: 14, color: Theme.of(context).buttonColor),
                         ),
                       ),
                     ],

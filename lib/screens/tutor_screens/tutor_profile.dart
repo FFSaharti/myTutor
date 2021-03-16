@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_villains/villains/villains.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mytutor/classes/rate.dart';
 import 'package:mytutor/classes/subject.dart';
@@ -115,7 +116,7 @@ class _TutorProfileState extends State<TutorProfile> {
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
-        appBar: buildAppBar(context, kColorScheme[3], "Profile", true),
+        appBar: buildAppBar(context, Theme.of(context).accentColor, "Profile", true),
         body: SafeArea(
           child: Center(
             child: Container(
@@ -204,7 +205,7 @@ class _TutorProfileState extends State<TutorProfile> {
                       child: Text(
                         DatabaseAPI.tempTutor.name,
                         style:
-                            GoogleFonts.sen(color: Colors.black, fontSize: 30),
+                            GoogleFonts.sen(color: Theme.of(context).buttonColor, fontSize: 30),
                       ),
                     ),
                     Center(
@@ -283,7 +284,7 @@ class _TutorProfileState extends State<TutorProfile> {
                               "About Me",
                               style: TextStyle(
                                   fontSize: 18,
-                                  color: Theme.of(context).primaryColor),
+                                  color: Theme.of(context).buttonColor),
                             ),
                             Spacer(),
                             (SessionManager.loggedInTutor.aboutMe == '')
@@ -314,7 +315,7 @@ class _TutorProfileState extends State<TutorProfile> {
                                       style: TextStyle(
                                           fontSize: 16.5,
                                           color:
-                                              Theme.of(context).primaryColor),
+                                          Theme.of(context).buttonColor),
                                     ),
                                   ),
                                   Spacer(),
@@ -341,8 +342,7 @@ class _TutorProfileState extends State<TutorProfile> {
                                       child: Text(
                                         "No About Me",
                                         style: GoogleFonts.openSans(
-                                            color: Colors.grey,
-                                            // Theme.of(context).primaryColor,
+                                            color: Theme.of(context).buttonColor,
                                             fontSize: 21),
                                         textAlign: TextAlign.center,
                                       ),
@@ -373,7 +373,7 @@ class _TutorProfileState extends State<TutorProfile> {
                               "Experiences",
                               style: TextStyle(
                                   fontSize: 18,
-                                  color: Theme.of(context).primaryColor),
+                                  color: Theme.of(context).buttonColor),
                             ),
                             Spacer(),
                             GestureDetector(
@@ -422,7 +422,7 @@ class _TutorProfileState extends State<TutorProfile> {
                                 "Materials",
                                 style: TextStyle(
                                     fontSize: 18,
-                                    color: Theme.of(context).primaryColor),
+                                    color: Theme.of(context).buttonColor),
                               )
                             ],
                           ),
@@ -495,140 +495,134 @@ class _TutorProfileState extends State<TutorProfile> {
           return StatefulBuilder(
               builder: (BuildContext context, StateSetter setModalState) {
             return Container(
-              height: ScreenSize.height * 0.75,
-              child: Scaffold(
-                body: Container(
-                  //     padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-                  height: ScreenSize.height * 0.50,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(50)
-                      //   topRight: Radius.circular(100),
-                      //   topLeft: Radius.circular(100),
-                      // )
-                      ,
-                      color: Colors.white),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              IconButton(
-                                  icon: Icon(Icons.cancel),
-                                  onPressed: () {
-                                    resetInterests();
-                                    Navigator.of(context).pop();
-                                  }),
-                              Text(
-                                "Add Experiences",
-                                style: TextStyle(fontSize: 20),
-                              ),
-                              IconButton(
-                                icon: Icon(Icons.check),
+                //     padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                height: ScreenSize.height * 0.70,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(25),
+                    topRight: Radius.circular(25)),
+                color: Theme.of(context).scaffoldBackgroundColor,
+              ),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            IconButton(
+                                icon: Icon(Icons.cancel),
                                 onPressed: () {
-                                  // ADD EXPERIENCE
-                                  printNewChosen();
-                                  DatabaseAPI.editExperiences()
-                                      .then((value) => {
-                                            if (value == "done")
-                                              {
-                                                setParentStateEx(),
-                                                Navigator.of(context).pop()
-                                              }
-                                          });
-                                },
+                                  resetInterests();
+                                  Navigator.of(context).pop();
+                                }),
+                            Text(
+                              "Add Experiences",
+                              style: TextStyle(fontSize: 20, color: Theme.of(context).buttonColor),
+                            ),
+                            IconButton(
+                              icon: Icon(Icons.check),
+                              onPressed: () {
+                                // ADD EXPERIENCE
+                                printNewChosen();
+                                DatabaseAPI.editExperiences()
+                                    .then((value) => {
+                                          if (value == "done")
+                                            {
+                                              setParentStateEx(),
+                                              Navigator.of(context).pop()
+                                            }
+                                        });
+                              },
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 15,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            children: [
+                              Align(
+                                alignment: Alignment.topLeft,
+                                child: Text(
+                                  "Subject",
+                                  style: GoogleFonts.secularOne(
+                                      textStyle: TextStyle(
+                                          fontSize: 17,
+                                          fontWeight: FontWeight.bold,
+                                          color: Theme.of(context).buttonColor)),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 15,
+                              ),
+                              Column(
+                                children: [
+                                  TextField(
+                                    onChanged: (value) {
+                                      setModalState(() {
+                                        searchBox = value;
+                                        getSubjects(searchBox);
+                                        // getSelectedSubjects(selectedInterests);
+                                      });
+                                    },
+                                    style: TextStyle(color: Theme.of(context).accentColor),
+                                    textAlignVertical:
+                                        TextAlignVertical.center,
+                                    decoration: InputDecoration(
+                                      contentPadding: EdgeInsets.all(0),
+                                      filled: true,
+                                      hintText: 'Search',
+                                      hintStyle:
+                                      TextStyle(color: Theme.of(context).accentColor),
+                                      prefixIcon: Icon(Icons.search,
+                                         color: Theme.of(context).accentColor),
+                                      enabledBorder: OutlineInputBorder(
+                                          borderSide: BorderSide.none,
+                                          borderRadius:
+                                              BorderRadius.circular(15)),
+                                      focusedBorder: OutlineInputBorder(
+                                          borderSide: BorderSide.none,
+                                          borderRadius:
+                                              BorderRadius.circular(15)),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 15,
+                                  ),
+                                  Container(
+                                    width: double.infinity,
+                                    decoration: BoxDecoration(
+                                      color: Colors.transparent,
+                                    ),
+                                    height: 50,
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        setModalState(() {
+                                          print("Entered Set State new");
+                                        });
+                                      },
+                                      child: ListView(
+                                          scrollDirection: Axis.horizontal,
+                                          children: getSubjects(searchBox)),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(
+                                height: 20,
                               ),
                             ],
                           ),
-                          SizedBox(
-                            height: 15,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              children: [
-                                Align(
-                                  alignment: Alignment.topLeft,
-                                  child: Text(
-                                    "Subject",
-                                    style: GoogleFonts.secularOne(
-                                        textStyle: TextStyle(
-                                            fontSize: 17,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.black)),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 15,
-                                ),
-                                Column(
-                                  children: [
-                                    TextField(
-                                      onChanged: (value) {
-                                        setModalState(() {
-                                          searchBox = value;
-                                          getSubjects(searchBox);
-                                          // getSelectedSubjects(selectedInterests);
-                                        });
-                                      },
-                                      style: TextStyle(
-                                        color: kBlackish,
-                                      ),
-                                      textAlignVertical:
-                                          TextAlignVertical.center,
-                                      decoration: InputDecoration(
-                                        contentPadding: EdgeInsets.all(0),
-                                        filled: true,
-                                        hintText: 'Search',
-                                        prefixIcon: Icon(Icons.search,
-                                            color: kColorScheme[2]),
-                                        enabledBorder: OutlineInputBorder(
-                                            borderSide: BorderSide.none,
-                                            borderRadius:
-                                                BorderRadius.circular(15)),
-                                        focusedBorder: OutlineInputBorder(
-                                            borderSide: BorderSide.none,
-                                            borderRadius:
-                                                BorderRadius.circular(15)),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 15,
-                                    ),
-                                    Container(
-                                      width: double.infinity,
-                                      decoration: BoxDecoration(
-                                        color: Colors.transparent,
-                                      ),
-                                      height: 50,
-                                      child: GestureDetector(
-                                        onTap: () {
-                                          setModalState(() {
-                                            print("Entered Set State new");
-                                          });
-                                        },
-                                        child: ListView(
-                                            scrollDirection: Axis.horizontal,
-                                            children: getSubjects(searchBox)),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 20,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
-              ),
-            );
+              );
           });
         });
   }
@@ -652,9 +646,7 @@ class _TutorProfileState extends State<TutorProfile> {
   void showAboutMe(Function setParentState) {
     TextEditingController aboutMeController = TextEditingController();
     showModalBottomSheet(
-        shape: RoundedRectangleBorder(
-            // borderRadius: BorderRadius.vertical(top: Radius.circular(2.0))
-            ),
+
         backgroundColor: Colors.transparent,
         enableDrag: true,
         isScrollControlled: true,
@@ -663,112 +655,108 @@ class _TutorProfileState extends State<TutorProfile> {
           return StatefulBuilder(
               builder: (BuildContext context, StateSetter setModalState) {
             return Container(
-              height: ScreenSize.height * 0.50,
-              child: Scaffold(
-                body: Container(
-                  //     padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-                  height: ScreenSize.height * 0.50,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(50)
-                      //   topRight: Radius.circular(100),
-                      //   topLeft: Radius.circular(100),
-                      // )
-                      ,
-                      color: Colors.white),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              IconButton(
-                                  icon: Icon(Icons.cancel),
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  }),
-                              Text(
-                                "About Me",
-                                style: TextStyle(fontSize: 20),
-                              ),
-                              IconButton(
-                                icon: Icon(Icons.check),
+                //     padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                height: ScreenSize.height * 0.65,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(25),
+                    topRight: Radius.circular(25)),
+                color: Theme.of(context).scaffoldBackgroundColor,
+              ),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            IconButton(
+                                icon: Icon(Icons.cancel),
                                 onPressed: () {
-                                  // ADD NEW QUESTION
-                                  if (aboutMeController.text.isNotEmpty) {
-                                    // ADD ABOUT ME TO STUDENT...
-                                    DatabaseAPI.addAboutMeToTutor(
-                                            SessionManager.loggedInTutor,
-                                            aboutMeController.text)
-                                        .then((value) => {
-                                              if (value == "Success")
-                                                {
-                                                  SessionManager.loggedInTutor
-                                                          .aboutMe =
-                                                      aboutMeController.text,
-                                                  setParentState(
-                                                      aboutMeController.text),
-                                                  Navigator.pop(context),
-                                                },
-                                              print(value.toString()),
-                                            });
-                                    print("POP...");
-                                  } else {
-                                    print("empty parameters");
-                                  }
-                                },
+                                  Navigator.of(context).pop();
+                                }),
+                            Text(
+                              "About Me",
+                              style: TextStyle(fontSize: 20, color: Theme.of(context).buttonColor),
+                            ),
+                            IconButton(
+                              icon: Icon(Icons.check),
+                              onPressed: () {
+                                // ADD NEW QUESTION
+                                if (aboutMeController.text.isNotEmpty) {
+                                  // ADD ABOUT ME TO STUDENT...
+                                  DatabaseAPI.addAboutMeToTutor(
+                                          SessionManager.loggedInTutor,
+                                          aboutMeController.text)
+                                      .then((value) => {
+                                            if (value == "Success")
+                                              {
+                                                SessionManager.loggedInTutor
+                                                        .aboutMe =
+                                                    aboutMeController.text,
+                                                setParentState(
+                                                    aboutMeController.text),
+                                                Navigator.pop(context),
+                                                Fluttertoast.showToast(msg: "About me has been changed successful")
+                                              },
+                                    Fluttertoast.showToast(msg: "Something went wrong. Please try again later..")
+                                          });
+                                  print("POP...");
+                                } else {
+                                  Fluttertoast.showToast(msg: "Please fill up About me field");
+                                }
+                              },
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: ScreenSize.height*0.015,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            children: [
+                              Align(
+                                alignment: Alignment.topLeft,
+                                child: Text(
+                                  "About Me",
+                                  style: GoogleFonts.secularOne(
+                                      textStyle: TextStyle(
+                                          fontSize: 17,
+                                          fontWeight: FontWeight.bold,
+                                          color: Theme.of(context).buttonColor)),
+                                ),
+                              ),
+                              TextField(
+                                style: TextStyle(color: Theme.of(context).buttonColor),
+                                controller: aboutMeController,
+                                keyboardType: TextInputType.multiline,
+                                maxLines: null,
+                                //
+                                decoration: InputDecoration(
+                                  hintText: !(SessionManager.loggedInTutor
+                                              .aboutMe.isNotEmpty ||
+                                          SessionManager
+                                                  .loggedInTutor.aboutMe ==
+                                              '')
+                                      ? 'Describe yourself briefly...'
+                                      : SessionManager.loggedInTutor.aboutMe,
+                                  hintStyle: TextStyle(
+                                      fontSize: 17.0, color: Colors.grey),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 20,
                               ),
                             ],
                           ),
-                          SizedBox(
-                            height: 15,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              children: [
-                                Align(
-                                  alignment: Alignment.topLeft,
-                                  child: Text(
-                                    "About Me",
-                                    style: GoogleFonts.secularOne(
-                                        textStyle: TextStyle(
-                                            fontSize: 17,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.black)),
-                                  ),
-                                ),
-                                TextField(
-                                  controller: aboutMeController,
-                                  keyboardType: TextInputType.multiline,
-                                  maxLines: null,
-                                  //
-                                  decoration: InputDecoration(
-                                    hintText: !(SessionManager.loggedInTutor
-                                                .aboutMe.isNotEmpty ||
-                                            SessionManager
-                                                    .loggedInTutor.aboutMe ==
-                                                '')
-                                        ? 'Describe yourself briefly...'
-                                        : SessionManager.loggedInTutor.aboutMe,
-                                    hintStyle: TextStyle(
-                                        fontSize: 17.0, color: Colors.grey),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 20,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
-              ),
-            );
+              );
           });
         });
   }
@@ -810,7 +798,7 @@ class _SubjectWidgetState extends State<SubjectWidget> {
       width: 50,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
-        color: Colors.white,
+        color: Theme.of(context).cardColor,
         boxShadow: [
           BoxShadow(
             color: Colors.grey.withOpacity(0.1),

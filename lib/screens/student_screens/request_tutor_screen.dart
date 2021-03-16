@@ -133,7 +133,7 @@ class _RequestTutorScreenState extends State<RequestTutorScreen> {
                       hintText: 'Search',
                       hintStyle:
                       TextStyle(color: Theme.of(context).accentColor),
-                      prefixIcon: Icon(Icons.search,      color: Theme.of(context).accentColor),
+                      prefixIcon: Icon(Icons.search, color: Theme.of(context).accentColor),
                       enabledBorder: OutlineInputBorder(
                           borderSide: BorderSide.none,
                           borderRadius: BorderRadius.circular(15)),

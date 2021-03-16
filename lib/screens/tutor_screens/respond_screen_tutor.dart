@@ -2,6 +2,7 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:mytutor/classes/session.dart';
@@ -18,17 +19,21 @@ class RespondScreenTutor extends StatelessWidget {
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
-        appBar: buildAppBar(context, kColorScheme[3], "Respond"),
+        appBar: buildAppBar(context, Theme.of(context).accentColor, "Respond"),
         body: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
             children: [
+
               StreamBuilder<QuerySnapshot>(
                 stream: DatabaseAPI.fetchSessionData(1, true),
                 builder: (context, snapshot) {
                   // List to fill up with all the session the user has.
                   List<Widget> UserSessions = [];
-                  if (snapshot.hasData) {
+                  if (snapshot.data == null){
+                    return Center(child: Text("Have some Rest. there is no request for you till now!", style: TextStyle(color: Theme.of(context).buttonColor, fontSize: 30),),);
+
+                  }else if (snapshot.hasData) {
                     List<QueryDocumentSnapshot> Sessions = snapshot.data.docs;
                     for (var session in Sessions) {
                       String SessionStatus = session.data()["status"];
@@ -60,7 +65,7 @@ class RespondScreenTutor extends StatelessWidget {
                       }
                     }
                   }
-                  return Expanded(
+                  return !snapshot.hasData == true ? Center(child: Text("Have some Rest. there is no request for you till now!", style: TextStyle(color: Theme.of(context).buttonColor),),) : Expanded(
                     child: ListView(
                       reverse: false,
                       padding: EdgeInsets.symmetric(
@@ -129,17 +134,17 @@ class _RespondSessionWidgetState extends State<RespondSessionWidget> {
             child: Container(
               height: widget.height * 0.24,
               decoration: new BoxDecoration(
-                color: Color(0xFFefefef),
+                color: Theme.of(context).cardColor,
                 shape: BoxShape.rectangle,
-                borderRadius: new BorderRadius.circular(11.0),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.3),
-                    spreadRadius: 1,
-                    blurRadius: 15,
-                    offset: Offset(0, 6), // changes position of shadow
-                  ),
-                ],
+                borderRadius: new BorderRadius.circular(25.0),
+                // boxShadow: [
+                //   BoxShadow(
+                //     color: Colors.grey.withOpacity(0.3),
+                //     spreadRadius: 1,
+                //     blurRadius: 15,
+                //     offset: Offset(0, 6), // changes position of shadow
+                //   ),
+                // ],
               ),
               child: Padding(
                 padding: const EdgeInsets.all(5.0),
@@ -147,7 +152,7 @@ class _RespondSessionWidgetState extends State<RespondSessionWidget> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Image.asset(
-                      "images/Sub-Icons/Java.png",
+                      subjects.elementAt(widget.session.subject).path,
                       height: ScreenSize.width * 0.15,
                     ),
                     Padding(
@@ -165,7 +170,7 @@ class _RespondSessionWidgetState extends State<RespondSessionWidget> {
                                 textStyle: TextStyle(
                                     fontSize: 21,
                                     fontWeight: FontWeight.normal,
-                                    color: Colors.black),
+                                    color: Theme.of(context).buttonColor),
                               ),
                             ),
                           ),
@@ -206,7 +211,7 @@ class _RespondSessionWidgetState extends State<RespondSessionWidget> {
                                   textStyle: TextStyle(
                                       fontSize: 21,
                                       fontWeight: FontWeight.normal,
-                                      color: Colors.grey),
+                                      color: Theme.of(context).buttonColor),
                                 ),
                               ),
                             ),
@@ -221,7 +226,20 @@ class _RespondSessionWidgetState extends State<RespondSessionWidget> {
                                     onPressed: () {
                                       DatabaseAPI.changeSessionsStatus("active",
                                               widget.session.session_id)
-                                          .then((value) => print(value));
+                                          .then((value) => {
+                                                if (value == "success")
+                                                  {
+                                                    Fluttertoast.showToast(
+                                                        msg:
+                                                            "the session status has been changed to Active")
+                                                  }
+                                                else
+                                                  {
+                                                    Fluttertoast.showToast(
+                                                        msg:
+                                                            "Something went wrong. please try again later")
+                                                  }
+                                              });
                                     },
                                     child: Text(
                                       "Accept",
@@ -248,7 +266,20 @@ class _RespondSessionWidgetState extends State<RespondSessionWidget> {
                                       DatabaseAPI.changeSessionsStatus(
                                               "decline",
                                               widget.session.session_id)
-                                          .then((value) => print(value));
+                                          .then((value) => {
+                                                if (value == "success")
+                                                  {
+                                                    Fluttertoast.showToast(
+                                                        msg:
+                                                            "the session status has been changed to Declined")
+                                                  }
+                                                else
+                                                  {
+                                                    Fluttertoast.showToast(
+                                                        msg:
+                                                            "Something went wrong. please try again later")
+                                                  }
+                                              });
                                     },
                                     child: Text(
                                       "Decline",
@@ -286,6 +317,7 @@ class _RespondSessionWidgetState extends State<RespondSessionWidget> {
     DateTime tempDate = new DateFormat("yyyy-MM-dd").parse("2021-12-1");
     print(tempDate);
     showModalBottomSheet(
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(top: Radius.circular(25.0))),
         context: context,
@@ -302,7 +334,8 @@ class _RespondSessionWidgetState extends State<RespondSessionWidget> {
                       }),
                   Text(
                     "Schedule",
-                    style: GoogleFonts.sen(fontSize: 20),
+                    style: GoogleFonts.sen(
+                        fontSize: 20, color: Theme.of(context).buttonColor),
                   ),
                   IconButton(
                       icon: Icon(Icons.check),
@@ -319,7 +352,8 @@ class _RespondSessionWidgetState extends State<RespondSessionWidget> {
                                       child: Text(
                                         'Session is active now!',
                                         style: GoogleFonts.sen(
-                                            color: kBlackish,
+                                            color:
+                                                Theme.of(context).buttonColor,
                                             fontSize: 14,
                                             fontWeight: FontWeight.normal),
                                       ),
@@ -347,7 +381,7 @@ class _RespondSessionWidgetState extends State<RespondSessionWidget> {
                           "Date",
                           style: GoogleFonts.sen(
                               fontSize: 19,
-                              color: Colors.black,
+                              color: Theme.of(context).buttonColor,
                               fontWeight: FontWeight.bold),
                         ),
                         Text(
@@ -356,7 +390,7 @@ class _RespondSessionWidgetState extends State<RespondSessionWidget> {
                                     .parse(session.date.toString())),
                             style: GoogleFonts.sen(
                                 fontSize: 19,
-                                color: Colors.black,
+                                color: Theme.of(context).buttonColor,
                                 fontWeight: FontWeight.normal)),
                         Icon(Icons.date_range),
                       ],
@@ -372,13 +406,13 @@ class _RespondSessionWidgetState extends State<RespondSessionWidget> {
                           "Time",
                           style: GoogleFonts.sen(
                               fontSize: 19,
-                              color: Colors.black,
+                              color: Theme.of(context).buttonColor,
                               fontWeight: FontWeight.bold),
                         ),
                         Text(session.time,
                             style: GoogleFonts.sen(
                                 fontSize: 19,
-                                color: Colors.black,
+                                color: Theme.of(context).buttonColor,
                                 fontWeight: FontWeight.normal)),
                         Icon(Icons.alarm),
                       ],
@@ -390,7 +424,7 @@ class _RespondSessionWidgetState extends State<RespondSessionWidget> {
                           "Session Description",
                           style: GoogleFonts.sen(
                               fontSize: 19,
-                              color: Colors.black,
+                              color: Theme.of(context).buttonColor,
                               fontWeight: FontWeight.bold),
                         ),
                       ],
@@ -398,11 +432,10 @@ class _RespondSessionWidgetState extends State<RespondSessionWidget> {
                     Align(
                       alignment: Alignment.topLeft,
                       child: Container(
-                        color: Colors.white10,
                         child: Text(
                           session.desc,
                           style: GoogleFonts.sen(
-                              color: kGreyerish,
+                              color: Theme.of(context).buttonColor,
                               fontWeight: FontWeight.w100,
                               fontSize: 17),
                           overflow: TextOverflow.ellipsis,
@@ -448,6 +481,7 @@ class _RespondSessionWidgetState extends State<RespondSessionWidget> {
 
   ReadFullDescription(String desc) {
     showModalBottomSheet(
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(top: Radius.circular(25.0))),
         context: context,
@@ -466,7 +500,7 @@ class _RespondSessionWidgetState extends State<RespondSessionWidget> {
                     "Session Description",
                     style: GoogleFonts.sen(
                         fontSize: 19,
-                        color: Colors.black,
+                        color: Theme.of(context).buttonColor,
                         fontWeight: FontWeight.normal),
                   ),
                   IconButton(
@@ -485,11 +519,10 @@ class _RespondSessionWidgetState extends State<RespondSessionWidget> {
                 child: Column(
                   children: [
                     Container(
-                      color: Colors.white10,
                       child: Text(
                         desc,
                         style: GoogleFonts.sen(
-                            color: kGreyerish,
+                            color: Theme.of(context).buttonColor,
                             fontSize: 17,
                             fontWeight: FontWeight.normal),
                         //overflow: TextOverflow.ellipsis,
