@@ -133,7 +133,8 @@ AppBar buildAppBar(BuildContext context, Color buttonColor, String title,
     centerTitle: true,
     title: Text(
       title,
-      style: GoogleFonts.sen(color: Colors.black, fontSize: 25),
+      style:
+          GoogleFonts.sen(color: Theme.of(context).buttonColor, fontSize: 25),
     ),
     leading: Villain(
       villainAnimation: VillainAnimation.fade(

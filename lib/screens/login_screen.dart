@@ -47,10 +47,10 @@ class _LoginScreenState extends State<LoginScreen> {
     return Container(
       height: ScreenSize.height,
       decoration: BoxDecoration(
-        gradient: !(Theme.of(context).scaffoldBackgroundColor ==
-            Color(0xff29273d))
-            ? kBackgroundGradient
-            : null,
+        gradient:
+            !(Theme.of(context).scaffoldBackgroundColor == Color(0xff29273d))
+                ? kBackgroundGradient
+                : null,
       ),
       child: WillPopScope(
         onWillPop: () async => false,
@@ -64,7 +64,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     duration: Duration(milliseconds: 500),
                     child: WelcomeScreen()));
           }),
-          backgroundColor: Theme.of(context).scaffoldBackgroundColor == Colors.white ? Colors.transparent : Theme.of(context).scaffoldBackgroundColor,
+          backgroundColor:
+              Theme.of(context).scaffoldBackgroundColor == Colors.white
+                  ? Colors.transparent
+                  : Theme.of(context).scaffoldBackgroundColor,
           body: SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.all(25.0),
@@ -391,7 +394,7 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
     return TextField(
       obscureText: widget.obscureText,
       onChanged: widget.onChanged,
-      style: TextStyle(color: kColorScheme[4], fontSize: 18),
+      style: TextStyle(color: Theme.of(context).primaryColorDark, fontSize: 18),
       decoration: InputDecoration(
         labelText: widget.hintText,
         prefixIcon: Icon(

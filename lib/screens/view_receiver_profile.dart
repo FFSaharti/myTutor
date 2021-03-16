@@ -85,7 +85,8 @@ class _ViewReceiverProfileState extends State<ViewReceiverProfile> {
           overscroll.disallowGlow();
         },
         child: Scaffold(
-          appBar: buildAppBar(context, Theme.of(context).accentColor, "Profile"),
+          appBar:
+              buildAppBar(context, Theme.of(context).accentColor, "Profile"),
           body: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -281,7 +282,7 @@ class _ViewProfileTutorState extends State<ViewProfileTutor> {
                 color: kGreyish,
               ),
               SizedBox(
-                height: ScreenSize.height * 0.06,
+                height: ScreenSize.height * 0.01,
               ),
               Column(
                 children: [
@@ -296,9 +297,13 @@ class _ViewProfileTutorState extends State<ViewProfileTutor> {
                       ),
                       Text(
                         "About Me",
-                        style: TextStyle(fontSize: 18, color: Theme.of(context).buttonColor),
+                        style: TextStyle(
+                            fontSize: 18, color: Theme.of(context).buttonColor),
                       )
                     ],
+                  ),
+                  SizedBox(
+                    height: ScreenSize.height * 0.01,
                   ),
                   !(widget.tutor.aboutMe == '')
                       ? Row(
@@ -309,7 +314,8 @@ class _ViewProfileTutorState extends State<ViewProfileTutor> {
                               child: Text(
                                 widget.tutor.aboutMe,
                                 style: TextStyle(
-                                    fontSize: 16.5, color: Theme.of(context).buttonColor),
+                                    fontSize: 16.5,
+                                    color: Theme.of(context).buttonColor),
                               ),
                             ),
                             Spacer(),
@@ -326,7 +332,8 @@ class _ViewProfileTutorState extends State<ViewProfileTutor> {
                                 child: Text(
                                   "the tutor does not have a \"About me\" :( ",
                                   style: TextStyle(
-                                      fontSize: 16.5, color: Theme.of(context).buttonColor),
+                                      fontSize: 16.5,
+                                      color: Theme.of(context).buttonColor),
                                 ),
                               ),
                               SizedBox(
@@ -341,7 +348,7 @@ class _ViewProfileTutorState extends State<ViewProfileTutor> {
                 color: kGreyish,
               ),
               SizedBox(
-                  height: ScreenSize.height * 0.05,
+                height: ScreenSize.height * 0.01,
               ),
               Column(
                 children: [
@@ -356,9 +363,13 @@ class _ViewProfileTutorState extends State<ViewProfileTutor> {
                       ),
                       Text(
                         "Experiences",
-                        style: TextStyle(fontSize: 18, color: Theme.of(context).buttonColor),
+                        style: TextStyle(
+                            fontSize: 18, color: Theme.of(context).buttonColor),
                       ),
                     ],
+                  ),
+                  SizedBox(
+                    height: ScreenSize.height * 0.01,
                   ),
                   widget.tutor.experiences.isEmpty == true
                       ? Container(
@@ -372,11 +383,12 @@ class _ViewProfileTutorState extends State<ViewProfileTutor> {
                                 child: Text(
                                   "the tutor does not have any experience yet ",
                                   style: TextStyle(
-                                      fontSize: 16.5, color: Theme.of(context).buttonColor),
+                                      fontSize: 16.5,
+                                      color: Theme.of(context).buttonColor),
                                 ),
                               ),
                               SizedBox(
-                                height:ScreenSize.height*0.020,
+                                height: ScreenSize.height * 0.020,
                               ),
                             ],
                           ),
@@ -389,7 +401,7 @@ class _ViewProfileTutorState extends State<ViewProfileTutor> {
                           ),
                         ),
                   SizedBox(
-                    height: ScreenSize.height*0.05,
+                    height: ScreenSize.height * 0.01,
                   ),
                 ],
               ),
@@ -407,16 +419,18 @@ class _ViewProfileTutorState extends State<ViewProfileTutor> {
                           size: 18,
                         ),
                         SizedBox(
-                          width: ScreenSize.width*0.05,
+                          width: ScreenSize.width * 0.05,
                         ),
                         Text(
                           "Materials",
-                          style: TextStyle(fontSize: 18, color: Theme.of(context).buttonColor),
+                          style: TextStyle(
+                              fontSize: 18,
+                              color: Theme.of(context).buttonColor),
                         )
                       ],
                     ),
                     SizedBox(
-                      height: ScreenSize.height*0.05,
+                      height: ScreenSize.height * 0.01,
                     ),
                     MaterialStreamTutor(
                       tutorId: widget.tutor.userId,
@@ -584,7 +598,8 @@ class _ViewProfileStudentState extends State<ViewProfileStudent> {
                 Center(
                   child: Text(
                     widget.student.name,
-                    style: GoogleFonts.sen(color: Theme.of(context).buttonColor, fontSize: 30),
+                    style: GoogleFonts.sen(
+                        color: Theme.of(context).buttonColor, fontSize: 30),
                   ),
                 ),
                 SizedBox(
@@ -592,7 +607,7 @@ class _ViewProfileStudentState extends State<ViewProfileStudent> {
                 ),
                 Center(
                   child: Container(
-                    width: ScreenSize.width * 0.2,
+                    width: ScreenSize.width * 0.25,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(50),
                       color: kColorScheme[3],
@@ -607,7 +622,7 @@ class _ViewProfileStudentState extends State<ViewProfileStudent> {
                   height: ScreenSize.height * 0.01,
                 ),
                 Divider(
-                  color: kGreyish,
+                  color: Theme.of(context).dividerColor,
                 ),
                 SizedBox(
                   height: ScreenSize.height * 0.01,
@@ -669,7 +684,7 @@ class _ViewProfileStudentState extends State<ViewProfileStudent> {
                   ],
                 ),
                 Divider(
-                  color: kGreyish,
+                  color: Theme.of(context).dividerColor,
                 ),
                 SizedBox(
                   height: ScreenSize.height * 0.01,
@@ -723,25 +738,30 @@ class _ViewProfileStudentState extends State<ViewProfileStudent> {
         Container(
           child: Card(
             shape: RoundedRectangleBorder(
-              side: BorderSide(color: Colors.white70, width: 1),
+              side: BorderSide.none,
               borderRadius: BorderRadius.circular(20),
             ),
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(5.0, 10, 5, 10),
+              padding: const EdgeInsets.fromLTRB(5.0, 15, 5, 15),
               child: ListTile(
                 leading: Image.asset(subjects[favDocs[i].subjectID].path),
                 title: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(favDocs[i].title),
+                    Text(
+                      favDocs[i].title,
+                      style: TextStyle(color: Theme.of(context).buttonColor),
+                    ),
                     favDocs[i].type == 1
                         ? Text(
                             (favDocs[i] as Document).fileType.toUpperCase(),
-                            style: GoogleFonts.sen(),
+                            style: GoogleFonts.sen(
+                                color: Theme.of(context).buttonColor),
                           )
                         : Text(
                             "QUIZ",
-                            style: GoogleFonts.sen(),
+                            style: GoogleFonts.sen(
+                                color: Theme.of(context).buttonColor),
                           )
                   ],
                 ),
@@ -777,7 +797,10 @@ class _ViewProfileStudentState extends State<ViewProfileStudent> {
                       );
                     }
                   },
-                  child: Icon(Icons.arrow_forward_ios),
+                  child: Icon(
+                    Icons.arrow_forward_ios,
+                    color: Theme.of(context).buttonColor,
+                  ),
                 ),
               ),
             ),

@@ -104,120 +104,121 @@ class _RequestTutorScreenState extends State<RequestTutorScreen> {
     int toDurationAnimationConter = 400;
     return WillPopScope(
       onWillPop: () async => false,
-      child: SafeArea(
-        child: Scaffold(
-          appBar: buildAppBar(context, Theme.of(context).accentColor, "Request Tutor"),
-          //resizeToAvoidBottomInset : false,
-          body: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ListTile(
-                  title: TextField(
-                    controller: searchController,
-                    onChanged: (value) {
-                      VillainController.playAllVillains(context);
-                      setState(() {
-                        _filterTutors(value);
-                        if (searchController.text.isEmpty) {
-                          searchedTutors = [];
-                        }
-                        // getSelectedSubjects(selectedInterests);
-                      });
-                    },
-                    style: TextStyle(color: Theme.of(context).accentColor),
-                    textAlignVertical: TextAlignVertical.center,
-                    decoration: InputDecoration(
-                      contentPadding: EdgeInsets.all(0),
-                      filled: true,
-                      hintText: 'Search',
-                      hintStyle:
-                      TextStyle(color: Theme.of(context).accentColor),
-                      prefixIcon: Icon(Icons.search, color: Theme.of(context).accentColor),
-                      enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide.none,
-                          borderRadius: BorderRadius.circular(15)),
-                      focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide.none,
-                          borderRadius: BorderRadius.circular(15)),
-                    ),
-                  ),
-                  trailing: GestureDetector(
-                    onTap: () {
-                      showFilterOptions();
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Theme.of(context)
-                              .primaryColorLight
-                              .withOpacity(0.6)),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Icon(
-                          Icons.sort,
-                          size: 28,
-                          color: Theme.of(context).accentColor,
-                        ),
-                      ),
-                    ),
+      child: Scaffold(
+        appBar: buildAppBar(
+            context, Theme.of(context).accentColor, "Request Tutor"),
+        //resizeToAvoidBottomInset : false,
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ListTile(
+                title: TextField(
+                  controller: searchController,
+                  onChanged: (value) {
+                    VillainController.playAllVillains(context);
+                    setState(() {
+                      _filterTutors(value);
+                      if (searchController.text.isEmpty) {
+                        searchedTutors = [];
+                      }
+                      // getSelectedSubjects(selectedInterests);
+                    });
+                  },
+                  style: TextStyle(color: Theme.of(context).accentColor),
+                  textAlignVertical: TextAlignVertical.center,
+                  decoration: InputDecoration(
+                    contentPadding: EdgeInsets.all(0),
+                    filled: true,
+                    fillColor:
+                        Theme.of(context).primaryColorLight.withOpacity(0.6),
+                    hintText: 'Search',
+                    hintStyle: TextStyle(color: Theme.of(context).accentColor),
+                    prefixIcon: Icon(Icons.search,
+                        color: Theme.of(context).accentColor),
+                    enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide.none,
+                        borderRadius: BorderRadius.circular(15)),
+                    focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide.none,
+                        borderRadius: BorderRadius.circular(15)),
                   ),
                 ),
-                Container(
-                  width: ScreenSize.width * 0.9,
-                  child: Divider(),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                searchedTutors.length > 0
-                    ? Text(
-                        "Showing " +
-                            searchedTutors.length.toString() +
-                            " Results",
-                        style: GoogleFonts.sen(fontSize: 18))
-                    : Text(""),
-                Expanded(
-                  child: NotificationListener<OverscrollIndicatorNotification>(
-                    onNotification: (overscroll) {
-                      overscroll.disallowGlow();
-                    },
+                trailing: GestureDetector(
+                  onTap: () {
+                    showFilterOptions();
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Theme.of(context)
+                            .primaryColorLight
+                            .withOpacity(0.6)),
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: GridView.builder(
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          childAspectRatio: 0.9,
-                          crossAxisCount: 2,
-                          crossAxisSpacing: .0,
-                          mainAxisSpacing: 5.0,
-                        ),
-                        shrinkWrap: true,
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 0.0, vertical: 15.0),
-                        // scrollDirection: Axis.horizontal,
-                        itemCount: searchedTutors.length,
-                        itemBuilder: (context, index) {
-                          fromDurationAnimationConter += 100;
-                          toDurationAnimationConter += 100;
-                          return Villain(
-                            villainAnimation: VillainAnimation.fromBottom(
-                              from: Duration(
-                                  milliseconds: fromDurationAnimationConter),
-                              to: Duration(
-                                  milliseconds: toDurationAnimationConter),
-                            ),
-                            child: TutorWidget(
-                                tutor: searchedTutors.elementAt(index)),
-                          );
-                        },
+                      child: Icon(
+                        Icons.sort,
+                        size: 28,
+                        color: Theme.of(context).accentColor,
                       ),
                     ),
                   ),
                 ),
-                // SizedBox(height: 150,),
-                //Temp solution
-              ],
-            ),
+              ),
+              Container(
+                width: ScreenSize.width * 0.9,
+                child: Divider(),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              searchedTutors.length > 0
+                  ? Text(
+                      "Showing " +
+                          searchedTutors.length.toString() +
+                          " Results",
+                      style: GoogleFonts.sen(fontSize: 18))
+                  : Text(""),
+              Expanded(
+                child: NotificationListener<OverscrollIndicatorNotification>(
+                  onNotification: (overscroll) {
+                    overscroll.disallowGlow();
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: GridView.builder(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        childAspectRatio: 0.9,
+                        crossAxisCount: 2,
+                        crossAxisSpacing: .0,
+                        mainAxisSpacing: 5.0,
+                      ),
+                      shrinkWrap: true,
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 0.0, vertical: 15.0),
+                      // scrollDirection: Axis.horizontal,
+                      itemCount: searchedTutors.length,
+                      itemBuilder: (context, index) {
+                        fromDurationAnimationConter += 100;
+                        toDurationAnimationConter += 100;
+                        return Villain(
+                          villainAnimation: VillainAnimation.fromBottom(
+                            from: Duration(
+                                milliseconds: fromDurationAnimationConter),
+                            to: Duration(
+                                milliseconds: toDurationAnimationConter),
+                          ),
+                          child: TutorWidget(
+                              tutor: searchedTutors.elementAt(index)),
+                        );
+                      },
+                    ),
+                  ),
+                ),
+              ),
+              // SizedBox(height: 150,),
+              //Temp solution
+            ],
           ),
         ),
       ),
@@ -309,7 +310,8 @@ class _RequestTutorScreenState extends State<RequestTutorScreen> {
                           ),
                           Expanded(
                             child: DropdownButton(
-                              dropdownColor: Theme.of(context).scaffoldBackgroundColor,
+                              dropdownColor:
+                                  Theme.of(context).scaffoldBackgroundColor,
                               isExpanded: true,
                               value: _dropDownMenuController,
                               icon: Icon(
@@ -354,7 +356,8 @@ class _RequestTutorScreenState extends State<RequestTutorScreen> {
                           ),
                           Expanded(
                             child: DropdownButton(
-                              dropdownColor: Theme.of(context).scaffoldBackgroundColor,
+                              dropdownColor:
+                                  Theme.of(context).scaffoldBackgroundColor,
                               isExpanded: true,
                               value: _dropDownMenuControllerForRating,
                               icon: Icon(
@@ -372,7 +375,12 @@ class _RequestTutorScreenState extends State<RequestTutorScreen> {
                                   .map<DropdownMenuItem<int>>((int value) {
                                 return DropdownMenuItem<int>(
                                   value: value,
-                                  child: Center(child: Text(value.toString(), style: TextStyle(color: Theme.of(context).buttonColor),)),
+                                  child: Center(
+                                      child: Text(
+                                    value.toString(),
+                                    style: TextStyle(
+                                        color: Theme.of(context).buttonColor),
+                                  )),
                                 );
                               }).toList(),
                             ),
@@ -456,7 +464,8 @@ class _TutorWidgetState extends State<TutorWidget> {
       padding: const EdgeInsets.all(5.0),
       child: Card(
         shape: RoundedRectangleBorder(
-          side: BorderSide(color: Theme.of(context).scaffoldBackgroundColor, width:0.1),
+          side: BorderSide(
+              color: Theme.of(context).scaffoldBackgroundColor, width: 0.1),
           borderRadius: BorderRadius.circular(20),
         ),
         child: Column(
@@ -580,7 +589,9 @@ class _TutorWidgetState extends State<TutorWidget> {
                               }),
                           Text(
                             "Session details",
-                            style: TextStyle(fontSize: 20),
+                            style: TextStyle(
+                                fontSize: 20,
+                                color: Theme.of(context).buttonColor),
                           ),
                           IconButton(
                               icon: Icon(Icons.check),
@@ -669,7 +680,7 @@ class _TutorWidgetState extends State<TutorWidget> {
                           style: TextStyle(
                               fontSize: 22,
                               fontWeight: FontWeight.normal,
-                              color: Colors.black)),
+                              color: Theme.of(context).buttonColor)),
                       widget.tutor.profileImag == ""
                           ? Container(
                               width: ScreenSize.width * 0.20,
@@ -701,7 +712,7 @@ class _TutorWidgetState extends State<TutorWidget> {
                             textStyle: TextStyle(
                                 fontSize: 24,
                                 fontWeight: FontWeight.bold,
-                                color: Colors.blueGrey)),
+                                color: Theme.of(context).buttonColor)),
                       ),
                       SizedBox(
                         height: 15,
@@ -718,7 +729,7 @@ class _TutorWidgetState extends State<TutorWidget> {
                                     textStyle: TextStyle(
                                         fontSize: 17,
                                         fontWeight: FontWeight.bold,
-                                        color: Colors.black)),
+                                        color: Theme.of(context).buttonColor)),
                               ),
                             ),
                             TextField(
@@ -740,7 +751,7 @@ class _TutorWidgetState extends State<TutorWidget> {
                                     textStyle: TextStyle(
                                         fontSize: 17,
                                         fontWeight: FontWeight.bold,
-                                        color: Colors.black)),
+                                        color: Theme.of(context).buttonColor)),
                               ),
                             ),
                             TextField(
@@ -762,7 +773,7 @@ class _TutorWidgetState extends State<TutorWidget> {
                                     textStyle: TextStyle(
                                         fontSize: 17,
                                         fontWeight: FontWeight.bold,
-                                        color: Colors.black)),
+                                        color: Theme.of(context).buttonColor)),
                               ),
                             ),
                             TextField(
@@ -770,7 +781,10 @@ class _TutorWidgetState extends State<TutorWidget> {
                               controller: dateController,
                               decoration: InputDecoration(
                                 suffixIcon: GestureDetector(
-                                  child: Icon(Icons.date_range),
+                                  child: Icon(
+                                    Icons.date_range,
+                                    color: Theme.of(context).buttonColor,
+                                  ),
                                   onTap: () {
                                     showDatePicker(
                                             context: context,
@@ -803,7 +817,7 @@ class _TutorWidgetState extends State<TutorWidget> {
                                     textStyle: TextStyle(
                                         fontSize: 17,
                                         fontWeight: FontWeight.bold,
-                                        color: Colors.black)),
+                                        color: Theme.of(context).buttonColor)),
                               ),
                             ),
                             TextField(
@@ -875,7 +889,10 @@ class _TutorWidgetState extends State<TutorWidget> {
                                               }
                                           });
                                     },
-                                    child: Icon(Icons.access_time)),
+                                    child: Icon(
+                                      Icons.access_time,
+                                      color: Theme.of(context).buttonColor,
+                                    )),
                                 hintText: '12:01 pm...',
                                 hintStyle: TextStyle(
                                     fontSize: 17.0, color: Colors.grey),

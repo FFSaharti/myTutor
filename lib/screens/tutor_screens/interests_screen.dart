@@ -55,7 +55,8 @@ class _InterestsScreenState extends State<InterestsScreen> {
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
-          appBar: buildAppBar(context, kColorScheme[3], "Pick Interests"),
+          appBar: buildAppBar(
+              context, Theme.of(context).accentColor, "Pick Interests"),
           resizeToAvoidBottomInset: false,
           body: Padding(
             padding: const EdgeInsets.only(left: 20.0, right: 20),
@@ -75,20 +76,25 @@ class _InterestsScreenState extends State<InterestsScreen> {
                       });
                     },
                     style: TextStyle(
-                      color: kBlackish,
+                      color: Theme.of(context).accentColor,
                     ),
                     textAlignVertical: TextAlignVertical.center,
                     decoration: InputDecoration(
                       contentPadding: EdgeInsets.all(0),
                       filled: true,
+                      fillColor:
+                          Theme.of(context).primaryColorLight.withOpacity(0.6),
                       hintText: 'Search',
-                      prefixIcon: Icon(Icons.search, color: kColorScheme[2]),
+                      hintStyle:
+                          TextStyle(color: Theme.of(context).accentColor),
+                      prefixIcon: Icon(Icons.search,
+                          color: Theme.of(context).accentColor),
                       enabledBorder: OutlineInputBorder(
                           borderSide: BorderSide.none,
-                          borderRadius: BorderRadius.circular(30)),
+                          borderRadius: BorderRadius.circular(15)),
                       focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide.none,
-                          borderRadius: BorderRadius.circular(30)),
+                          borderRadius: BorderRadius.circular(15)),
                     ),
                   ),
                 ),
@@ -156,9 +162,11 @@ class _InterestsScreenState extends State<InterestsScreen> {
                 ),
                 CircularButton(
                   width: ScreenSize.width * 0.7,
-                  buttonColor: kColorScheme[1],
+                  buttonColor: Theme.of(context).primaryColorLight,
                   textColor: Colors.white,
-                  isGradient: true,
+                  isGradient: Theme.of(context).primaryColorLight == kWhiteish
+                      ? true
+                      : false,
                   colors: [
                     kColorScheme[1],
                     kColorScheme[2],
@@ -175,7 +183,8 @@ class _InterestsScreenState extends State<InterestsScreen> {
                         .then((value) => {
                               if (value == "Success")
                                 {
-                                  Fluttertoast.showToast(msg: "welcome to myTutor :)"),
+                                  Fluttertoast.showToast(
+                                      msg: "welcome to myTutor :)"),
                                   Future.delayed(Duration(milliseconds: 500),
                                       () {
                                     Navigator.push(
@@ -219,9 +228,9 @@ class _InterestsScreenState extends State<InterestsScreen> {
                 ),
                 loading
                     ? Loader4(
-                        dotOneColor: kColorScheme[1],
-                        dotTwoColor: kColorScheme[1],
-                        dotThreeColor: kColorScheme[1],
+                        dotOneColor: Theme.of(context).accentColor,
+                        dotTwoColor: Theme.of(context).accentColor,
+                        dotThreeColor: Theme.of(context).accentColor,
                       )
                     : Container(),
               ],

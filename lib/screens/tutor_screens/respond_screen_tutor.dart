@@ -24,16 +24,14 @@ class RespondScreenTutor extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: Column(
             children: [
-
               StreamBuilder<QuerySnapshot>(
                 stream: DatabaseAPI.fetchSessionData(1, true),
                 builder: (context, snapshot) {
                   // List to fill up with all the session the user has.
                   List<Widget> UserSessions = [];
-                  if (snapshot.data == null){
-                    return Center(child: Text("Have some Rest. there is no request for you till now!", style: TextStyle(color: Theme.of(context).buttonColor, fontSize: 30),),);
-
-                  }else if (snapshot.hasData) {
+                  if (snapshot.data == null) {
+                    return Text("EMPTY");
+                  } else if (snapshot.hasData) {
                     List<QueryDocumentSnapshot> Sessions = snapshot.data.docs;
                     for (var session in Sessions) {
                       String SessionStatus = session.data()["status"];
@@ -65,7 +63,7 @@ class RespondScreenTutor extends StatelessWidget {
                       }
                     }
                   }
-                  return !snapshot.hasData == true ? Center(child: Text("Have some Rest. there is no request for you till now!", style: TextStyle(color: Theme.of(context).buttonColor),),) : Expanded(
+                  return Expanded(
                     child: ListView(
                       reverse: false,
                       padding: EdgeInsets.symmetric(

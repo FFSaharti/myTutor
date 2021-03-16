@@ -98,7 +98,8 @@ class _EditQuizScreenState extends State<EditQuizScreen> {
                           child: Text(
                             "List Of Questions : ",
                             style: kTitleStyle.copyWith(
-                                color: Colors.black, fontSize: 15),
+                                color: Theme.of(context).buttonColor,
+                                fontSize: 15),
                           ),
                         ),
                         SizedBox(
@@ -121,7 +122,8 @@ class _EditQuizScreenState extends State<EditQuizScreen> {
                                             Text(
                                               "Loading ",
                                               style: kTitleStyle.copyWith(
-                                                  color: Colors.black,
+                                                  color: Theme.of(context)
+                                                      .buttonColor,
                                                   fontSize: 15),
                                             )
                                           ],
@@ -136,7 +138,8 @@ class _EditQuizScreenState extends State<EditQuizScreen> {
                             Text(
                               "Question",
                               style: kTitleStyle.copyWith(
-                                  color: Colors.black, fontSize: 17),
+                                  color: Theme.of(context).buttonColor,
+                                  fontSize: 17),
                             ),
                             Spacer(),
                             Padding(
@@ -266,9 +269,6 @@ class _EditQuizScreenState extends State<EditQuizScreen> {
     }
 
     showModalBottomSheet(
-        shape: RoundedRectangleBorder(
-            // borderRadius: BorderRadius.vertical(top: Radius.circular(2.0))
-            ),
         backgroundColor: Colors.transparent,
         enableDrag: true,
         isScrollControlled: true,
@@ -277,405 +277,422 @@ class _EditQuizScreenState extends State<EditQuizScreen> {
           return StatefulBuilder(
               builder: (BuildContext context, StateSetter setModalState) {
             return Container(
-              height: ScreenSize.height * 0.70,
-              child: Scaffold(
-                body: Container(
-                  //     padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-                  height: ScreenSize.height * 0.70,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(50)
-                      //   topRight: Radius.circular(100),
-                      //   topLeft: Radius.circular(100),
-                      // )
-                      ,
-                      color: Colors.white),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: SingleChildScrollView(
-                      child: Column(
+              //     padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+              height: ScreenSize.height * 0.93,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                    topRight: Radius.circular(25),
+                    topLeft: Radius.circular(25),
+                  ),
+                  color: Theme.of(context).scaffoldBackgroundColor),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              IconButton(
-                                  icon: Icon(Icons.cancel),
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  }),
-                              Text(
-                                "Add New Question",
-                                style: TextStyle(fontSize: 20),
-                              ),
-                              IconButton(
-                                icon: Icon(Icons.check),
-                                onPressed: () {
-                                  // ADD NEW QUESTION
-                                  if (questionTitleController.text.isNotEmpty &&
-                                      getCorrectAnswers() &&
-                                      correctAnswer != -1 &&
-                                      answersCounter >= 2) {
-                                    print("POP...");
-                                    // Fluttertoast.showToast(
-                                    //     msg: "Question Added");
-                                    tempQuestion = createQuestion(
-                                        questionTitleController.text,
-                                        answerOneController.text,
-                                        answerTwoController.text,
-                                        answerThreeController.text,
-                                        answerFourController.text,
-                                        correctAnswer,
-                                        null);
-                                    setParentState;
-                                    setParentState(tempQuestion, -1);
-                                    Navigator.pop(context);
-                                  } else {
-                                    print("invalid parameters");
-                                    //TODO: Show error message cannot leave empty...
-                                    Fluttertoast.showToast(
-                                        msg:
-                                            "Please fill all the nessecary information");
-                                  }
-                                },
-                              ),
-                            ],
+                          IconButton(
+                              icon: Icon(Icons.cancel),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              }),
+                          Text(
+                            "Add New Question",
+                            style: TextStyle(
+                                fontSize: 20,
+                                color: Theme.of(context).buttonColor),
                           ),
-                          SizedBox(
-                            height: 15,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              children: [
-                                Align(
-                                  alignment: Alignment.topLeft,
-                                  child: Text(
-                                    "Question Title",
-                                    style: GoogleFonts.secularOne(
-                                        textStyle: TextStyle(
-                                            fontSize: 17,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.black)),
-                                  ),
-                                ),
-                                TextField(
-                                  controller: questionTitleController,
-                                  decoration: InputDecoration(
-                                    hintText: 'Type something...',
-                                    hintStyle: TextStyle(
-                                        fontSize: 17.0, color: Colors.grey),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 20,
-                                ),
-                                (answersCounter < 1)
-                                    ? Row(
-                                        children: [
-                                          Text(
-                                            "Answer",
-                                            style: kTitleStyle.copyWith(
-                                                color: Colors.black,
-                                                fontSize: 17),
-                                          ),
-                                          Spacer(),
-                                          Padding(
-                                            padding: const EdgeInsets.only(
-                                                right: 12.0),
-                                            child: GestureDetector(
-                                              onTap: () {
-                                                // ADD ANSWER
-                                                print("pressed add answer ==> " +
-                                                    answersCounter.toString() +
-                                                    "  showAddAnswer[0] is ==> " +
-                                                    showAddAnswer[0]
-                                                        .toString());
-                                                setModalState(() {
-                                                  answersCounter++;
-                                                  showAddAnswer[1] = true;
-                                                });
-                                              },
-                                              child: Container(
-                                                child: Icon(
-                                                    Icons.add_circle_outline),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      )
-                                    : (showAddAnswer[0])
-                                        ? Container(
-                                            child: Column(
-                                              children: [
-                                                ListTile(
-                                                  title: TextField(
-                                                    controller:
-                                                        answerOneController,
-                                                    decoration: InputDecoration(
-                                                      hintText:
-                                                          'Type Answer...',
-                                                      hintStyle: TextStyle(
-                                                          fontSize: 17.0,
-                                                          color: Colors.grey),
-                                                    ),
-                                                  ),
-                                                  trailing: (correctAnswer == 1)
-                                                      ? IconButton(
-                                                          icon: Icon(
-                                                            Icons.check,
-                                                            color: Colors.green,
-                                                          ),
-                                                          onPressed: () {})
-                                                      : IconButton(
-                                                          icon: Icon(
-                                                            Icons.cancel,
-                                                            color: Colors.red,
-                                                          ),
-                                                          onPressed: () {
-                                                            setModalState(() {
-                                                              correctAnswer = 1;
-                                                            });
-                                                          }),
-                                                ),
-                                                SizedBox(
-                                                  height: 15,
-                                                ),
-                                                (answersCounter < 2)
-                                                    ? Row(
-                                                        children: [
-                                                          Text(
-                                                            "Answer",
-                                                            style: kTitleStyle
-                                                                .copyWith(
-                                                                    color: Colors
-                                                                        .black,
-                                                                    fontSize:
-                                                                        17),
-                                                          ),
-                                                          Spacer(),
-                                                          Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                        .only(
-                                                                    right:
-                                                                        12.0),
-                                                            child:
-                                                                GestureDetector(
-                                                              onTap: () {
-                                                                // ADD ANSWER
-                                                                print(
-                                                                    "pressed add answer");
-                                                                setModalState(
-                                                                    () {
-                                                                  answersCounter++;
-                                                                  showAddAnswer[
-                                                                      2] = true;
-                                                                });
-                                                              },
-                                                              child: Container(
-                                                                child: Icon(Icons
-                                                                    .add_circle_outline),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      )
-                                                    : (showAddAnswer[1])
-                                                        ? Container(
-                                                            child: Column(
-                                                              children: [
-                                                                ListTile(
-                                                                  title:
-                                                                      TextField(
-                                                                    controller:
-                                                                        answerTwoController,
-                                                                    decoration:
-                                                                        InputDecoration(
-                                                                      hintText:
-                                                                          'Type Answer...',
-                                                                      hintStyle: TextStyle(
-                                                                          fontSize:
-                                                                              17.0,
-                                                                          color:
-                                                                              Colors.grey),
-                                                                    ),
-                                                                  ),
-                                                                  trailing: (correctAnswer ==
-                                                                          2)
-                                                                      ? IconButton(
-                                                                          icon:
-                                                                              Icon(
-                                                                            Icons.check,
-                                                                            color:
-                                                                                Colors.green,
-                                                                          ),
-                                                                          onPressed:
-                                                                              () {})
-                                                                      : IconButton(
-                                                                          icon:
-                                                                              Icon(
-                                                                            Icons.cancel,
-                                                                            color:
-                                                                                Colors.red,
-                                                                          ),
-                                                                          onPressed:
-                                                                              () {
-                                                                            setModalState(() {
-                                                                              correctAnswer = 2;
-                                                                            });
-                                                                          }),
-                                                                ),
-                                                                SizedBox(
-                                                                  height: 15,
-                                                                ),
-                                                                // NEW QUESTON HERE
-                                                                (answersCounter <
-                                                                        3)
-                                                                    ? Row(
-                                                                        children: [
-                                                                          Text(
-                                                                            "Answer",
-                                                                            style:
-                                                                                kTitleStyle.copyWith(color: Colors.black, fontSize: 17),
-                                                                          ),
-                                                                          Spacer(),
-                                                                          Padding(
-                                                                            padding:
-                                                                                const EdgeInsets.only(right: 12.0),
-                                                                            child:
-                                                                                GestureDetector(
-                                                                              onTap: () {
-                                                                                // ADD ANSWER
-                                                                                print("pressed add answer");
-                                                                                setModalState(() {
-                                                                                  answersCounter++;
-                                                                                  showAddAnswer[2] = true;
-                                                                                });
-                                                                              },
-                                                                              child: Container(
-                                                                                child: Icon(Icons.add_circle_outline),
-                                                                              ),
-                                                                            ),
-                                                                          ),
-                                                                        ],
-                                                                      )
-                                                                    : (showAddAnswer[
-                                                                            2])
-                                                                        ? Container(
-                                                                            child:
-                                                                                Column(
-                                                                              children: [
-                                                                                ListTile(
-                                                                                  title: TextField(
-                                                                                    controller: answerThreeController,
-                                                                                    decoration: InputDecoration(
-                                                                                      hintText: 'Type Answer...',
-                                                                                      hintStyle: TextStyle(fontSize: 17.0, color: Colors.grey),
-                                                                                    ),
-                                                                                  ),
-                                                                                  trailing: (correctAnswer == 3)
-                                                                                      ? IconButton(
-                                                                                          icon: Icon(
-                                                                                            Icons.check,
-                                                                                            color: Colors.green,
-                                                                                          ),
-                                                                                          onPressed: () {})
-                                                                                      : IconButton(
-                                                                                          icon: Icon(
-                                                                                            Icons.cancel,
-                                                                                            color: Colors.red,
-                                                                                          ),
-                                                                                          onPressed: () {
-                                                                                            setModalState(() {
-                                                                                              correctAnswer = 3;
-                                                                                            });
-                                                                                          }),
-                                                                                ),
-                                                                                SizedBox(
-                                                                                  height: 15,
-                                                                                ),
-                                                                                // NEW QUESTON HERE
-                                                                                (answersCounter < 4)
-                                                                                    ? Row(
-                                                                                        children: [
-                                                                                          Text(
-                                                                                            "Answer",
-                                                                                            style: kTitleStyle.copyWith(color: Colors.black, fontSize: 17),
-                                                                                          ),
-                                                                                          Spacer(),
-                                                                                          Padding(
-                                                                                            padding: const EdgeInsets.only(right: 12.0),
-                                                                                            child: GestureDetector(
-                                                                                              onTap: () {
-                                                                                                // ADD ANSWER
-                                                                                                print("pressed add answer");
-                                                                                                setModalState(() {
-                                                                                                  answersCounter++;
-                                                                                                  showAddAnswer[3] = true;
-                                                                                                });
-                                                                                              },
-                                                                                              child: Container(
-                                                                                                child: Icon(Icons.add_circle_outline),
-                                                                                              ),
-                                                                                            ),
-                                                                                          ),
-                                                                                        ],
-                                                                                      )
-                                                                                    : (showAddAnswer[3])
-                                                                                        ? Container(
-                                                                                            child: Column(
-                                                                                              children: [
-                                                                                                ListTile(
-                                                                                                  title: TextField(
-                                                                                                    controller: answerFourController,
-                                                                                                    decoration: InputDecoration(
-                                                                                                      hintText: 'Type Answer...',
-                                                                                                      hintStyle: TextStyle(fontSize: 17.0, color: Colors.grey),
-                                                                                                    ),
-                                                                                                  ),
-                                                                                                  trailing: (correctAnswer == 4)
-                                                                                                      ? IconButton(
-                                                                                                          icon: Icon(
-                                                                                                            Icons.check,
-                                                                                                            color: Colors.green,
-                                                                                                          ),
-                                                                                                          onPressed: () {})
-                                                                                                      : IconButton(
-                                                                                                          icon: Icon(
-                                                                                                            Icons.cancel,
-                                                                                                            color: Colors.red,
-                                                                                                          ),
-                                                                                                          onPressed: () {
-                                                                                                            setModalState(() {
-                                                                                                              correctAnswer = 4;
-                                                                                                            });
-                                                                                                          }),
-                                                                                                ),
-                                                                                                SizedBox(
-                                                                                                  height: 15,
-                                                                                                ),
-                                                                                                // NEW QUESTON HERE
-                                                                                              ],
-                                                                                            ),
-                                                                                          )
-                                                                                        : Container()
-                                                                              ],
-                                                                            ),
-                                                                          )
-                                                                        : Container()
-                                                              ],
-                                                            ),
-                                                          )
-                                                        : Container()
-                                              ],
-                                            ),
-                                          )
-                                        : Container(),
-                              ],
-                            ),
+                          IconButton(
+                            icon: Icon(Icons.check),
+                            onPressed: () {
+                              // ADD NEW QUESTION
+                              if (questionTitleController.text.isNotEmpty &&
+                                  getCorrectAnswers() &&
+                                  correctAnswer != -1 &&
+                                  answersCounter >= 2) {
+                                print("POP...");
+                                // Fluttertoast.showToast(
+                                //     msg: "Question Added");
+                                tempQuestion = createQuestion(
+                                    questionTitleController.text,
+                                    answerOneController.text,
+                                    answerTwoController.text,
+                                    answerThreeController.text,
+                                    answerFourController.text,
+                                    correctAnswer,
+                                    null);
+                                setParentState;
+                                setParentState(tempQuestion, -1);
+                                Navigator.pop(context);
+                              } else {
+                                print("invalid parameters");
+                                //TODO: Show error message cannot leave empty...
+                                Fluttertoast.showToast(
+                                    msg:
+                                        "Please fill all the nessecary information");
+                              }
+                            },
                           ),
                         ],
                       ),
-                    ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          children: [
+                            Align(
+                              alignment: Alignment.topLeft,
+                              child: Text(
+                                "Question Title",
+                                style: GoogleFonts.secularOne(
+                                    textStyle: TextStyle(
+                                        fontSize: 17,
+                                        fontWeight: FontWeight.bold,
+                                        color: Theme.of(context).buttonColor)),
+                              ),
+                            ),
+                            TextField(
+                              controller: questionTitleController,
+                              style: TextStyle(
+                                  color: Theme.of(context).buttonColor),
+                              decoration: InputDecoration(
+                                hintText: 'Type something...',
+                                hintStyle: TextStyle(
+                                    fontSize: 17.0,
+                                    color: Theme.of(context)
+                                        .buttonColor
+                                        .withOpacity(0.6)),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            (answersCounter < 1)
+                                ? Row(
+                                    children: [
+                                      Text(
+                                        "Answer",
+                                        style: kTitleStyle.copyWith(
+                                            color:
+                                                Theme.of(context).buttonColor,
+                                            fontSize: 17),
+                                      ),
+                                      Spacer(),
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(right: 12.0),
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            // ADD ANSWER
+                                            print("pressed add answer ==> " +
+                                                answersCounter.toString() +
+                                                "  showAddAnswer[0] is ==> " +
+                                                showAddAnswer[0].toString());
+                                            setModalState(() {
+                                              answersCounter++;
+                                              showAddAnswer[1] = true;
+                                            });
+                                          },
+                                          child: Container(
+                                            child:
+                                                Icon(Icons.add_circle_outline),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                : (showAddAnswer[0])
+                                    ? Container(
+                                        child: Column(
+                                          children: [
+                                            ListTile(
+                                              title: TextField(
+                                                controller: answerOneController,
+                                                style: TextStyle(
+                                                    color: Theme.of(context)
+                                                        .buttonColor),
+                                                decoration: InputDecoration(
+                                                  hintText: 'Type Answer...',
+                                                  hintStyle: TextStyle(
+                                                      fontSize: 17.0,
+                                                      color: Theme.of(context)
+                                                          .buttonColor
+                                                          .withOpacity(0.6)),
+                                                ),
+                                              ),
+                                              trailing: (correctAnswer == 1)
+                                                  ? IconButton(
+                                                      icon: Icon(
+                                                        Icons.check,
+                                                        color: Colors.green,
+                                                      ),
+                                                      onPressed: () {})
+                                                  : IconButton(
+                                                      icon: Icon(
+                                                        Icons.cancel,
+                                                        color: Colors.red,
+                                                      ),
+                                                      onPressed: () {
+                                                        setModalState(() {
+                                                          correctAnswer = 1;
+                                                        });
+                                                      }),
+                                            ),
+                                            SizedBox(
+                                              height: 15,
+                                            ),
+                                            (answersCounter < 2)
+                                                ? Row(
+                                                    children: [
+                                                      Text(
+                                                        "Answer",
+                                                        style: kTitleStyle
+                                                            .copyWith(
+                                                                color: Theme.of(
+                                                                        context)
+                                                                    .buttonColor,
+                                                                fontSize: 17),
+                                                      ),
+                                                      Spacer(),
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                    .only(
+                                                                right: 12.0),
+                                                        child: GestureDetector(
+                                                          onTap: () {
+                                                            // ADD ANSWER
+                                                            print(
+                                                                "pressed add answer");
+                                                            setModalState(() {
+                                                              answersCounter++;
+                                                              showAddAnswer[2] =
+                                                                  true;
+                                                            });
+                                                          },
+                                                          child: Container(
+                                                            child: Icon(Icons
+                                                                .add_circle_outline),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  )
+                                                : (showAddAnswer[1])
+                                                    ? Container(
+                                                        child: Column(
+                                                          children: [
+                                                            ListTile(
+                                                              title: TextField(
+                                                                controller:
+                                                                    answerTwoController,
+                                                                style: TextStyle(
+                                                                    color: Theme.of(
+                                                                            context)
+                                                                        .buttonColor),
+                                                                decoration:
+                                                                    InputDecoration(
+                                                                  hintText:
+                                                                      'Type Answer...',
+                                                                  hintStyle: TextStyle(
+                                                                      fontSize:
+                                                                          17.0,
+                                                                      color: Theme.of(
+                                                                              context)
+                                                                          .buttonColor
+                                                                          .withOpacity(
+                                                                              0.6)),
+                                                                ),
+                                                              ),
+                                                              trailing: (correctAnswer ==
+                                                                      2)
+                                                                  ? IconButton(
+                                                                      icon:
+                                                                          Icon(
+                                                                        Icons
+                                                                            .check,
+                                                                        color: Colors
+                                                                            .green,
+                                                                      ),
+                                                                      onPressed:
+                                                                          () {})
+                                                                  : IconButton(
+                                                                      icon:
+                                                                          Icon(
+                                                                        Icons
+                                                                            .cancel,
+                                                                        color: Colors
+                                                                            .red,
+                                                                      ),
+                                                                      onPressed:
+                                                                          () {
+                                                                        setModalState(
+                                                                            () {
+                                                                          correctAnswer =
+                                                                              2;
+                                                                        });
+                                                                      }),
+                                                            ),
+                                                            SizedBox(
+                                                              height: 15,
+                                                            ),
+                                                            // NEW QUESTON HERE
+                                                            (answersCounter < 3)
+                                                                ? Row(
+                                                                    children: [
+                                                                      Text(
+                                                                        "Answer",
+                                                                        style: kTitleStyle.copyWith(
+                                                                            color:
+                                                                                Theme.of(context).buttonColor,
+                                                                            fontSize: 17),
+                                                                      ),
+                                                                      Spacer(),
+                                                                      Padding(
+                                                                        padding:
+                                                                            const EdgeInsets.only(right: 12.0),
+                                                                        child:
+                                                                            GestureDetector(
+                                                                          onTap:
+                                                                              () {
+                                                                            // ADD ANSWER
+                                                                            print("pressed add answer");
+                                                                            setModalState(() {
+                                                                              answersCounter++;
+                                                                              showAddAnswer[2] = true;
+                                                                            });
+                                                                          },
+                                                                          child:
+                                                                              Container(
+                                                                            child:
+                                                                                Icon(Icons.add_circle_outline),
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                    ],
+                                                                  )
+                                                                : (showAddAnswer[
+                                                                        2])
+                                                                    ? Container(
+                                                                        child:
+                                                                            Column(
+                                                                          children: [
+                                                                            ListTile(
+                                                                              title: TextField(
+                                                                                controller: answerThreeController,
+                                                                                style: TextStyle(color: Theme.of(context).buttonColor),
+                                                                                decoration: InputDecoration(
+                                                                                  hintText: 'Type Answer...',
+                                                                                  hintStyle: TextStyle(fontSize: 17.0, color: Theme.of(context).buttonColor.withOpacity(0.6)),
+                                                                                ),
+                                                                              ),
+                                                                              trailing: (correctAnswer == 3)
+                                                                                  ? IconButton(
+                                                                                      icon: Icon(
+                                                                                        Icons.check,
+                                                                                        color: Colors.green,
+                                                                                      ),
+                                                                                      onPressed: () {})
+                                                                                  : IconButton(
+                                                                                      icon: Icon(
+                                                                                        Icons.cancel,
+                                                                                        color: Colors.red,
+                                                                                      ),
+                                                                                      onPressed: () {
+                                                                                        setModalState(() {
+                                                                                          correctAnswer = 3;
+                                                                                        });
+                                                                                      }),
+                                                                            ),
+                                                                            SizedBox(
+                                                                              height: 15,
+                                                                            ),
+                                                                            // NEW QUESTON HERE
+                                                                            (answersCounter < 4)
+                                                                                ? Row(
+                                                                                    children: [
+                                                                                      Text(
+                                                                                        "Answer",
+                                                                                        style: kTitleStyle.copyWith(color: Theme.of(context).buttonColor, fontSize: 17),
+                                                                                      ),
+                                                                                      Spacer(),
+                                                                                      Padding(
+                                                                                        padding: const EdgeInsets.only(right: 12.0),
+                                                                                        child: GestureDetector(
+                                                                                          onTap: () {
+                                                                                            // ADD ANSWER
+                                                                                            print("pressed add answer");
+                                                                                            setModalState(() {
+                                                                                              answersCounter++;
+                                                                                              showAddAnswer[3] = true;
+                                                                                            });
+                                                                                          },
+                                                                                          child: Container(
+                                                                                            child: Icon(Icons.add_circle_outline),
+                                                                                          ),
+                                                                                        ),
+                                                                                      ),
+                                                                                    ],
+                                                                                  )
+                                                                                : (showAddAnswer[3])
+                                                                                    ? Container(
+                                                                                        child: Column(
+                                                                                          children: [
+                                                                                            ListTile(
+                                                                                              title: TextField(
+                                                                                                controller: answerFourController,
+                                                                                                style: TextStyle(color: Theme.of(context).buttonColor),
+                                                                                                decoration: InputDecoration(
+                                                                                                  hintText: 'Type Answer...',
+                                                                                                  hintStyle: TextStyle(fontSize: 17.0, color: Theme.of(context).buttonColor.withOpacity(0.6)),
+                                                                                                ),
+                                                                                              ),
+                                                                                              trailing: (correctAnswer == 4)
+                                                                                                  ? IconButton(
+                                                                                                      icon: Icon(
+                                                                                                        Icons.check,
+                                                                                                        color: Colors.green,
+                                                                                                      ),
+                                                                                                      onPressed: () {})
+                                                                                                  : IconButton(
+                                                                                                      icon: Icon(
+                                                                                                        Icons.cancel,
+                                                                                                        color: Colors.red,
+                                                                                                      ),
+                                                                                                      onPressed: () {
+                                                                                                        setModalState(() {
+                                                                                                          correctAnswer = 4;
+                                                                                                        });
+                                                                                                      }),
+                                                                                            ),
+                                                                                            SizedBox(
+                                                                                              height: 15,
+                                                                                            ),
+                                                                                            // NEW QUESTON HERE
+                                                                                          ],
+                                                                                        ),
+                                                                                      )
+                                                                                    : Container()
+                                                                          ],
+                                                                        ),
+                                                                      )
+                                                                    : Container()
+                                                          ],
+                                                        ),
+                                                      )
+                                                    : Container()
+                                          ],
+                                        ),
+                                      )
+                                    : Container(),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -693,7 +710,8 @@ class _EditQuizScreenState extends State<EditQuizScreen> {
           children: [
             Text(
               tempQuiz.questions[i].question,
-              style: kTitleStyle.copyWith(color: Colors.black, fontSize: 17),
+              style: kTitleStyle.copyWith(
+                  color: Theme.of(context).buttonColor, fontSize: 17),
             ),
             Spacer(),
             GestureDetector(
@@ -711,7 +729,7 @@ class _EditQuizScreenState extends State<EditQuizScreen> {
         ),
       );
       widgets.add(Divider(
-        color: Colors.grey,
+        color: Theme.of(context).dividerColor,
       ));
     }
 
@@ -825,9 +843,6 @@ class _EditQuizScreenState extends State<EditQuizScreen> {
     }
 
     showModalBottomSheet(
-        shape: RoundedRectangleBorder(
-            // borderRadius: BorderRadius.vertical(top: Radius.circular(2.0))
-            ),
         backgroundColor: Colors.transparent,
         enableDrag: true,
         isScrollControlled: true,
@@ -836,409 +851,425 @@ class _EditQuizScreenState extends State<EditQuizScreen> {
           return StatefulBuilder(
               builder: (BuildContext context, StateSetter setModalState) {
             return Container(
-              height: ScreenSize.height * 0.70,
-              child: Scaffold(
-                body: Container(
-                  //     padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-                  height: ScreenSize.height * 0.70,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(50)
-                      //   topRight: Radius.circular(100),
-                      //   topLeft: Radius.circular(100),
-                      // )
-                      ,
-                      color: Colors.white),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: SingleChildScrollView(
-                      child: Column(
+              //     padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+              height: ScreenSize.height * 0.93,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                    topRight: Radius.circular(25),
+                    topLeft: Radius.circular(25),
+                  ),
+                  color: Theme.of(context).scaffoldBackgroundColor),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              IconButton(
-                                  icon: Icon(Icons.cancel),
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  }),
-                              Text(
-                                "Edit [" + tempQuestion.question + "]",
-                                style: TextStyle(fontSize: 20),
-                              ),
-                              IconButton(
-                                icon: Icon(Icons.check),
-                                onPressed: () {
-                                  // EDIT QUESTION
-                                  if (getCorrectAnswers() &&
-                                      tempQuestion.correctAnswerIndex != -1 &&
-                                      answersCounter >= 2) {
-                                    print("POP...");
-                                    // String questionTitlePass = '';
-                                    // String answerOnePass = '';
-                                    // String answerTwoPass = '';
-                                    // String answerThreePass = '';
-                                    // String answerFourPass = '';
-                                    tempQuestion = createQuestion(
-                                        questionTitleController.text,
-                                        answerOneController.text,
-                                        answerTwoController.text,
-                                        answerThreeController.text,
-                                        answerFourController.text,
-                                        tempQuestion.correctAnswerIndex,
-                                        tempQuestion);
-                                    setParentState;
-                                    setParentState(tempQuestion, index);
-                                    Navigator.pop(context);
-                                  } else {
-                                    print("invalid parameters");
-                                    //TODO: Show error message cannot leave empty...
-                                  }
-                                },
-                              ),
-                            ],
+                          IconButton(
+                              icon: Icon(Icons.cancel),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              }),
+                          Text(
+                            "Edit [" + tempQuestion.question + "]",
+                            style: TextStyle(
+                                fontSize: 20,
+                                color: Theme.of(context).buttonColor),
                           ),
-                          SizedBox(
-                            height: 15,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              children: [
-                                Align(
-                                  alignment: Alignment.topLeft,
-                                  child: Text(
-                                    "Question Title",
-                                    style: GoogleFonts.secularOne(
-                                        textStyle: TextStyle(
-                                            fontSize: 17,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.black)),
-                                  ),
-                                ),
-                                TextField(
-                                  controller: questionTitleController,
-                                  decoration: InputDecoration(
-                                    hintText: tempQuestion.question,
-                                    hintStyle: TextStyle(
-                                        fontSize: 17.0, color: Colors.grey),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 20,
-                                ),
-                                (answersCounter < 1)
-                                    ? Row(
-                                        children: [
-                                          Text(
-                                            "Answer",
-                                            style: kTitleStyle.copyWith(
-                                                color: Colors.black,
-                                                fontSize: 17),
-                                          ),
-                                          Spacer(),
-                                          Padding(
-                                            padding: const EdgeInsets.only(
-                                                right: 12.0),
-                                            child: GestureDetector(
-                                              onTap: () {
-                                                // ADD ANSWER
-                                                print("pressed add answer ==> " +
-                                                    answersCounter.toString() +
-                                                    "  showAddAnswer[0] is ==> " +
-                                                    showAddAnswer[0]
-                                                        .toString());
-                                                setModalState(() {
-                                                  answersCounter++;
-                                                  showAddAnswer[1] = true;
-                                                });
-                                              },
-                                              child: Container(
-                                                child: Icon(
-                                                    Icons.add_circle_outline),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      )
-                                    : (showAddAnswer[0])
-                                        ? Container(
-                                            child: Column(
-                                              children: [
-                                                ListTile(
-                                                  title: TextField(
-                                                    controller:
-                                                        answerOneController,
-                                                    decoration: InputDecoration(
-                                                      hintText: tempQuestion
-                                                          .answers[0],
-                                                      hintStyle: TextStyle(
-                                                          fontSize: 17.0,
-                                                          color: Colors.grey),
-                                                    ),
-                                                  ),
-                                                  trailing: (tempQuestion
-                                                              .correctAnswerIndex ==
-                                                          (1 - 1))
-                                                      ? IconButton(
-                                                          icon: Icon(
-                                                            Icons.check,
-                                                            color: Colors.green,
-                                                          ),
-                                                          onPressed: () {})
-                                                      : IconButton(
-                                                          icon: Icon(
-                                                            Icons.cancel,
-                                                            color: Colors.red,
-                                                          ),
-                                                          onPressed: () {
-                                                            setModalState(() {
-                                                              tempQuestion
-                                                                  .correctAnswerIndex = 0;
-                                                            });
-                                                          }),
-                                                ),
-                                                SizedBox(
-                                                  height: 15,
-                                                ),
-                                                (answersCounter < 2)
-                                                    ? Row(
-                                                        children: [
-                                                          Text(
-                                                            "Answer",
-                                                            style: kTitleStyle
-                                                                .copyWith(
-                                                                    color: Colors
-                                                                        .black,
-                                                                    fontSize:
-                                                                        17),
-                                                          ),
-                                                          Spacer(),
-                                                          Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                        .only(
-                                                                    right:
-                                                                        12.0),
-                                                            child:
-                                                                GestureDetector(
-                                                              onTap: () {
-                                                                // ADD ANSWER
-                                                                print(
-                                                                    "pressed add answer");
-                                                                setModalState(
-                                                                    () {
-                                                                  answersCounter++;
-                                                                  showAddAnswer[
-                                                                      2] = true;
-                                                                });
-                                                              },
-                                                              child: Container(
-                                                                child: Icon(Icons
-                                                                    .add_circle_outline),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      )
-                                                    : (showAddAnswer[1])
-                                                        ? Container(
-                                                            child: Column(
-                                                              children: [
-                                                                ListTile(
-                                                                  title:
-                                                                      TextField(
-                                                                    controller:
-                                                                        answerTwoController,
-                                                                    decoration:
-                                                                        InputDecoration(
-                                                                      hintText:
-                                                                          tempQuestion
-                                                                              .answers[1],
-                                                                      hintStyle: TextStyle(
-                                                                          fontSize:
-                                                                              17.0,
-                                                                          color:
-                                                                              Colors.grey),
-                                                                    ),
-                                                                  ),
-                                                                  trailing: (tempQuestion
-                                                                              .correctAnswerIndex ==
-                                                                          2 - 1)
-                                                                      ? IconButton(
-                                                                          icon:
-                                                                              Icon(
-                                                                            Icons.check,
-                                                                            color:
-                                                                                Colors.green,
-                                                                          ),
-                                                                          onPressed:
-                                                                              () {})
-                                                                      : IconButton(
-                                                                          icon:
-                                                                              Icon(
-                                                                            Icons.cancel,
-                                                                            color:
-                                                                                Colors.red,
-                                                                          ),
-                                                                          onPressed:
-                                                                              () {
-                                                                            setModalState(() {
-                                                                              tempQuestion.correctAnswerIndex = 2 - 1;
-                                                                            });
-                                                                          }),
-                                                                ),
-                                                                SizedBox(
-                                                                  height: 15,
-                                                                ),
-                                                                // NEW QUESTON HERE
-                                                                (answersCounter <
-                                                                        3)
-                                                                    ? Row(
-                                                                        children: [
-                                                                          Text(
-                                                                            "Answer",
-                                                                            style:
-                                                                                kTitleStyle.copyWith(color: Colors.black, fontSize: 17),
-                                                                          ),
-                                                                          Spacer(),
-                                                                          Padding(
-                                                                            padding:
-                                                                                const EdgeInsets.only(right: 12.0),
-                                                                            child:
-                                                                                GestureDetector(
-                                                                              onTap: () {
-                                                                                // ADD ANSWER
-                                                                                print("pressed add answer");
-                                                                                setModalState(() {
-                                                                                  answersCounter++;
-                                                                                  showAddAnswer[2] = true;
-                                                                                });
-                                                                              },
-                                                                              child: Container(
-                                                                                child: Icon(Icons.add_circle_outline),
-                                                                              ),
-                                                                            ),
-                                                                          ),
-                                                                        ],
-                                                                      )
-                                                                    : (showAddAnswer[
-                                                                            2])
-                                                                        ? Container(
-                                                                            child:
-                                                                                Column(
-                                                                              children: [
-                                                                                ListTile(
-                                                                                  title: TextField(
-                                                                                    controller: answerThreeController,
-                                                                                    decoration: InputDecoration(
-                                                                                      hintText: tempQuestion.answers.length > 2 ? tempQuestion.answers[2] : 'Type Answer...',
-                                                                                      hintStyle: TextStyle(fontSize: 17.0, color: Colors.grey),
-                                                                                    ),
-                                                                                  ),
-                                                                                  trailing: (tempQuestion.correctAnswerIndex == 3 - 1)
-                                                                                      ? IconButton(
-                                                                                          icon: Icon(
-                                                                                            Icons.check,
-                                                                                            color: Colors.green,
-                                                                                          ),
-                                                                                          onPressed: () {})
-                                                                                      : IconButton(
-                                                                                          icon: Icon(
-                                                                                            Icons.cancel,
-                                                                                            color: Colors.red,
-                                                                                          ),
-                                                                                          onPressed: () {
-                                                                                            setModalState(() {
-                                                                                              tempQuestion.correctAnswerIndex = 3 - 1;
-                                                                                            });
-                                                                                          }),
-                                                                                ),
-                                                                                SizedBox(
-                                                                                  height: 15,
-                                                                                ),
-                                                                                // NEW QUESTON HERE
-                                                                                (answersCounter < 4)
-                                                                                    ? Row(
-                                                                                        children: [
-                                                                                          Text(
-                                                                                            "Answer",
-                                                                                            style: kTitleStyle.copyWith(color: Colors.black, fontSize: 17),
-                                                                                          ),
-                                                                                          Spacer(),
-                                                                                          Padding(
-                                                                                            padding: const EdgeInsets.only(right: 12.0),
-                                                                                            child: GestureDetector(
-                                                                                              onTap: () {
-                                                                                                // ADD ANSWER
-                                                                                                print("pressed add answer");
-                                                                                                setModalState(() {
-                                                                                                  answersCounter++;
-                                                                                                  showAddAnswer[3] = true;
-                                                                                                });
-                                                                                              },
-                                                                                              child: Container(
-                                                                                                child: Icon(Icons.add_circle_outline),
-                                                                                              ),
-                                                                                            ),
-                                                                                          ),
-                                                                                        ],
-                                                                                      )
-                                                                                    : (showAddAnswer[3])
-                                                                                        ? Container(
-                                                                                            child: Column(
-                                                                                              children: [
-                                                                                                ListTile(
-                                                                                                  title: TextField(
-                                                                                                    controller: answerFourController,
-                                                                                                    decoration: InputDecoration(
-                                                                                                      hintText: tempQuestion.answers.length > 3 ? tempQuestion.answers[3] : 'Type Answer...',
-                                                                                                      hintStyle: TextStyle(fontSize: 17.0, color: Colors.grey),
-                                                                                                    ),
-                                                                                                  ),
-                                                                                                  trailing: (tempQuestion.correctAnswerIndex == 4 - 1)
-                                                                                                      ? IconButton(
-                                                                                                          icon: Icon(
-                                                                                                            Icons.check,
-                                                                                                            color: Colors.green,
-                                                                                                          ),
-                                                                                                          onPressed: () {})
-                                                                                                      : IconButton(
-                                                                                                          icon: Icon(
-                                                                                                            Icons.cancel,
-                                                                                                            color: Colors.red,
-                                                                                                          ),
-                                                                                                          onPressed: () {
-                                                                                                            setModalState(() {
-                                                                                                              tempQuestion.correctAnswerIndex = 4 - 1;
-                                                                                                            });
-                                                                                                          }),
-                                                                                                ),
-                                                                                                SizedBox(
-                                                                                                  height: 15,
-                                                                                                ),
-                                                                                                // NEW QUESTON HERE
-                                                                                              ],
-                                                                                            ),
-                                                                                          )
-                                                                                        : Container()
-                                                                              ],
-                                                                            ),
-                                                                          )
-                                                                        : Container()
-                                                              ],
-                                                            ),
-                                                          )
-                                                        : Container()
-                                              ],
-                                            ),
-                                          )
-                                        : Container(),
-                              ],
-                            ),
+                          IconButton(
+                            icon: Icon(Icons.check),
+                            onPressed: () {
+                              // EDIT QUESTION
+                              if (getCorrectAnswers() &&
+                                  tempQuestion.correctAnswerIndex != -1 &&
+                                  answersCounter >= 2) {
+                                print("POP...");
+                                // String questionTitlePass = '';
+                                // String answerOnePass = '';
+                                // String answerTwoPass = '';
+                                // String answerThreePass = '';
+                                // String answerFourPass = '';
+                                tempQuestion = createQuestion(
+                                    questionTitleController.text,
+                                    answerOneController.text,
+                                    answerTwoController.text,
+                                    answerThreeController.text,
+                                    answerFourController.text,
+                                    tempQuestion.correctAnswerIndex,
+                                    tempQuestion);
+                                setParentState;
+                                setParentState(tempQuestion, index);
+                                Navigator.pop(context);
+                              } else {
+                                print("invalid parameters");
+                                //TODO: Show error message cannot leave empty...
+                              }
+                            },
                           ),
                         ],
                       ),
-                    ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          children: [
+                            Align(
+                              alignment: Alignment.topLeft,
+                              child: Text(
+                                "Question Title",
+                                style: GoogleFonts.secularOne(
+                                    textStyle: TextStyle(
+                                        fontSize: 17,
+                                        fontWeight: FontWeight.bold,
+                                        color: Theme.of(context).buttonColor)),
+                              ),
+                            ),
+                            TextField(
+                              controller: questionTitleController,
+                              style: TextStyle(
+                                  color: Theme.of(context).buttonColor),
+                              decoration: InputDecoration(
+                                hintText: tempQuestion.question,
+                                hintStyle: TextStyle(
+                                    fontSize: 17.0,
+                                    color: Theme.of(context).buttonColor),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            (answersCounter < 1)
+                                ? Row(
+                                    children: [
+                                      Text(
+                                        "Answer",
+                                        style: kTitleStyle.copyWith(
+                                            color:
+                                                Theme.of(context).buttonColor,
+                                            fontSize: 17),
+                                      ),
+                                      Spacer(),
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(right: 12.0),
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            // ADD ANSWER
+                                            print("pressed add answer ==> " +
+                                                answersCounter.toString() +
+                                                "  showAddAnswer[0] is ==> " +
+                                                showAddAnswer[0].toString());
+                                            setModalState(() {
+                                              answersCounter++;
+                                              showAddAnswer[1] = true;
+                                            });
+                                          },
+                                          child: Container(
+                                            child:
+                                                Icon(Icons.add_circle_outline),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                : (showAddAnswer[0])
+                                    ? Container(
+                                        child: Column(
+                                          children: [
+                                            ListTile(
+                                              title: TextField(
+                                                controller: answerOneController,
+                                                style: TextStyle(
+                                                    color: Theme.of(context)
+                                                        .buttonColor),
+                                                decoration: InputDecoration(
+                                                  hintText:
+                                                      tempQuestion.answers[0],
+                                                  hintStyle: TextStyle(
+                                                      fontSize: 17.0,
+                                                      color: Theme.of(context)
+                                                          .buttonColor
+                                                          .withOpacity(0.6)),
+                                                ),
+                                              ),
+                                              trailing: (tempQuestion
+                                                          .correctAnswerIndex ==
+                                                      (1 - 1))
+                                                  ? IconButton(
+                                                      icon: Icon(
+                                                        Icons.check,
+                                                        color: Colors.green,
+                                                      ),
+                                                      onPressed: () {})
+                                                  : IconButton(
+                                                      icon: Icon(
+                                                        Icons.cancel,
+                                                        color: Colors.red,
+                                                      ),
+                                                      onPressed: () {
+                                                        setModalState(() {
+                                                          tempQuestion
+                                                              .correctAnswerIndex = 0;
+                                                        });
+                                                      }),
+                                            ),
+                                            SizedBox(
+                                              height: 15,
+                                            ),
+                                            (answersCounter < 2)
+                                                ? Row(
+                                                    children: [
+                                                      Text(
+                                                        "Answer",
+                                                        style: kTitleStyle
+                                                            .copyWith(
+                                                                color: Theme.of(
+                                                                        context)
+                                                                    .buttonColor,
+                                                                fontSize: 17),
+                                                      ),
+                                                      Spacer(),
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                    .only(
+                                                                right: 12.0),
+                                                        child: GestureDetector(
+                                                          onTap: () {
+                                                            // ADD ANSWER
+                                                            print(
+                                                                "pressed add answer");
+                                                            setModalState(() {
+                                                              answersCounter++;
+                                                              showAddAnswer[2] =
+                                                                  true;
+                                                            });
+                                                          },
+                                                          child: Container(
+                                                            child: Icon(Icons
+                                                                .add_circle_outline),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  )
+                                                : (showAddAnswer[1])
+                                                    ? Container(
+                                                        child: Column(
+                                                          children: [
+                                                            ListTile(
+                                                              title: TextField(
+                                                                controller:
+                                                                    answerTwoController,
+                                                                style: TextStyle(
+                                                                    color: Theme.of(
+                                                                            context)
+                                                                        .buttonColor),
+                                                                decoration:
+                                                                    InputDecoration(
+                                                                  hintText:
+                                                                      tempQuestion
+                                                                          .answers[0],
+                                                                  hintStyle: TextStyle(
+                                                                      fontSize:
+                                                                          17.0,
+                                                                      color: Theme.of(
+                                                                              context)
+                                                                          .buttonColor
+                                                                          .withOpacity(
+                                                                              0.6)),
+                                                                ),
+                                                              ),
+                                                              trailing: (tempQuestion
+                                                                          .correctAnswerIndex ==
+                                                                      2 - 1)
+                                                                  ? IconButton(
+                                                                      icon:
+                                                                          Icon(
+                                                                        Icons
+                                                                            .check,
+                                                                        color: Colors
+                                                                            .green,
+                                                                      ),
+                                                                      onPressed:
+                                                                          () {})
+                                                                  : IconButton(
+                                                                      icon:
+                                                                          Icon(
+                                                                        Icons
+                                                                            .cancel,
+                                                                        color: Colors
+                                                                            .red,
+                                                                      ),
+                                                                      onPressed:
+                                                                          () {
+                                                                        setModalState(
+                                                                            () {
+                                                                          tempQuestion.correctAnswerIndex =
+                                                                              2 - 1;
+                                                                        });
+                                                                      }),
+                                                            ),
+                                                            SizedBox(
+                                                              height: 15,
+                                                            ),
+                                                            // NEW QUESTON HERE
+                                                            (answersCounter < 3)
+                                                                ? Row(
+                                                                    children: [
+                                                                      Text(
+                                                                        "Answer",
+                                                                        style: kTitleStyle.copyWith(
+                                                                            color:
+                                                                                Theme.of(context).buttonColor,
+                                                                            fontSize: 17),
+                                                                      ),
+                                                                      Spacer(),
+                                                                      Padding(
+                                                                        padding:
+                                                                            const EdgeInsets.only(right: 12.0),
+                                                                        child:
+                                                                            GestureDetector(
+                                                                          onTap:
+                                                                              () {
+                                                                            // ADD ANSWER
+                                                                            print("pressed add answer");
+                                                                            setModalState(() {
+                                                                              answersCounter++;
+                                                                              showAddAnswer[2] = true;
+                                                                            });
+                                                                          },
+                                                                          child:
+                                                                              Container(
+                                                                            child:
+                                                                                Icon(Icons.add_circle_outline),
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                    ],
+                                                                  )
+                                                                : (showAddAnswer[
+                                                                        2])
+                                                                    ? Container(
+                                                                        child:
+                                                                            Column(
+                                                                          children: [
+                                                                            ListTile(
+                                                                              title: TextField(
+                                                                                controller: answerThreeController,
+                                                                                style: TextStyle(color: Theme.of(context).buttonColor),
+                                                                                decoration: InputDecoration(
+                                                                                  hintText: tempQuestion.answers.length > 2 ? tempQuestion.answers[2] : 'Type Answer...',
+                                                                                  hintStyle: TextStyle(fontSize: 17.0, color: Theme.of(context).buttonColor.withOpacity(0.6)),
+                                                                                ),
+                                                                              ),
+                                                                              trailing: (tempQuestion.correctAnswerIndex == 3 - 1)
+                                                                                  ? IconButton(
+                                                                                      icon: Icon(
+                                                                                        Icons.check,
+                                                                                        color: Colors.green,
+                                                                                      ),
+                                                                                      onPressed: () {})
+                                                                                  : IconButton(
+                                                                                      icon: Icon(
+                                                                                        Icons.cancel,
+                                                                                        color: Colors.red,
+                                                                                      ),
+                                                                                      onPressed: () {
+                                                                                        setModalState(() {
+                                                                                          tempQuestion.correctAnswerIndex = 3 - 1;
+                                                                                        });
+                                                                                      }),
+                                                                            ),
+                                                                            SizedBox(
+                                                                              height: 15,
+                                                                            ),
+                                                                            // NEW QUESTON HERE
+                                                                            (answersCounter < 4)
+                                                                                ? Row(
+                                                                                    children: [
+                                                                                      Text(
+                                                                                        "Answer",
+                                                                                        style: kTitleStyle.copyWith(color: Theme.of(context).buttonColor, fontSize: 17),
+                                                                                      ),
+                                                                                      Spacer(),
+                                                                                      Padding(
+                                                                                        padding: const EdgeInsets.only(right: 12.0),
+                                                                                        child: GestureDetector(
+                                                                                          onTap: () {
+                                                                                            // ADD ANSWER
+                                                                                            print("pressed add answer");
+                                                                                            setModalState(() {
+                                                                                              answersCounter++;
+                                                                                              showAddAnswer[3] = true;
+                                                                                            });
+                                                                                          },
+                                                                                          child: Container(
+                                                                                            child: Icon(Icons.add_circle_outline),
+                                                                                          ),
+                                                                                        ),
+                                                                                      ),
+                                                                                    ],
+                                                                                  )
+                                                                                : (showAddAnswer[3])
+                                                                                    ? Container(
+                                                                                        child: Column(
+                                                                                          children: [
+                                                                                            ListTile(
+                                                                                              title: TextField(
+                                                                                                controller: answerFourController,
+                                                                                                style: TextStyle(color: Theme.of(context).buttonColor),
+                                                                                                decoration: InputDecoration(
+                                                                                                  hintText: tempQuestion.answers.length > 3 ? tempQuestion.answers[3] : 'Type Answer...',
+                                                                                                  hintStyle: TextStyle(fontSize: 17.0, color: Theme.of(context).buttonColor.withOpacity(0.6)),
+                                                                                                ),
+                                                                                              ),
+                                                                                              trailing: (tempQuestion.correctAnswerIndex == 4 - 1)
+                                                                                                  ? IconButton(
+                                                                                                      icon: Icon(
+                                                                                                        Icons.check,
+                                                                                                        color: Colors.green,
+                                                                                                      ),
+                                                                                                      onPressed: () {})
+                                                                                                  : IconButton(
+                                                                                                      icon: Icon(
+                                                                                                        Icons.cancel,
+                                                                                                        color: Colors.red,
+                                                                                                      ),
+                                                                                                      onPressed: () {
+                                                                                                        setModalState(() {
+                                                                                                          tempQuestion.correctAnswerIndex = 4 - 1;
+                                                                                                        });
+                                                                                                      }),
+                                                                                            ),
+                                                                                            SizedBox(
+                                                                                              height: 15,
+                                                                                            ),
+                                                                                            // NEW QUESTON HERE
+                                                                                          ],
+                                                                                        ),
+                                                                                      )
+                                                                                    : Container()
+                                                                          ],
+                                                                        ),
+                                                                      )
+                                                                    : Container()
+                                                          ],
+                                                        ),
+                                                      )
+                                                    : Container()
+                                          ],
+                                        ),
+                                      )
+                                    : Container(),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),

@@ -44,7 +44,6 @@ class _QuestionAnswersScreenStudentState
 
   @override
   void initState() {
-    // TODO: implement initState
     searchedAnswers = widget.question.answers;
     super.initState();
   }
@@ -54,7 +53,8 @@ class _QuestionAnswersScreenStudentState
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
-        appBar: buildAppBar(context, Theme.of(context).accentColor, "Question Answers"),
+        appBar: buildAppBar(
+            context, Theme.of(context).accentColor, "Question Answers"),
         body: SafeArea(
           child: Container(
             child: Center(
@@ -77,8 +77,10 @@ class _QuestionAnswersScreenStudentState
                             .withOpacity(0.6),
                         filled: true,
                         hintText: 'Search By Tutor Name',
-                        hintStyle: TextStyle(color: Theme.of(context).accentColor),
-                        prefixIcon: Icon(Icons.search, color: Theme.of(context).accentColor),
+                        hintStyle:
+                            TextStyle(color: Theme.of(context).accentColor),
+                        prefixIcon: Icon(Icons.search,
+                            color: Theme.of(context).accentColor),
                         enabledBorder: OutlineInputBorder(
                             borderSide: BorderSide.none,
                             borderRadius: BorderRadius.circular(15)),
@@ -185,7 +187,8 @@ class _AnswerWidgetState extends State<AnswerWidget> {
                     height: ScreenSize.height * 0.05,
                     child: Text(
                       widget.answer.tutor.name,
-                      style: GoogleFonts.sen(fontSize: 25, color: Theme.of(context).buttonColor),
+                      style: GoogleFonts.sen(
+                          fontSize: 25, color: Theme.of(context).buttonColor),
                     ),
                   ),
                   Container(
@@ -194,7 +197,8 @@ class _AnswerWidgetState extends State<AnswerWidget> {
                       widget.answer.answer,
                       overflow: TextOverflow.ellipsis,
                       softWrap: false,
-                      style: GoogleFonts.sen(fontSize: 14, color: Theme.of(context).buttonColor),
+                      style: GoogleFonts.sen(
+                          fontSize: 14, color: Theme.of(context).buttonColor),
                     ),
                   ),
                   Container(
@@ -207,7 +211,8 @@ class _AnswerWidgetState extends State<AnswerWidget> {
                         Text(
                           widget.answer.date,
                           style: GoogleFonts.sen(
-                              fontSize: 13, color: Theme.of(context).buttonColor),
+                              fontSize: 13,
+                              color: Theme.of(context).buttonColor),
                         ),
                       ],
                     ),

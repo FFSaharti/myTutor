@@ -64,8 +64,9 @@ class _SpecifyRoleScreenState extends State<SpecifyRoleScreen> {
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
-        appBar: buildAppBar(context, kColorScheme[3], "Specify Role"),
-        backgroundColor: Colors.white,
+        appBar:
+            buildAppBar(context, Theme.of(context).accentColor, "Specify Role"),
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -90,7 +91,7 @@ class _SpecifyRoleScreenState extends State<SpecifyRoleScreen> {
                 },
                 child: Expanded(
                   child: CupertinoPicker(
-                    backgroundColor: Colors.white,
+                    backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                     itemExtent: 35,
                     onSelectedItemChanged: (selectedIndex) {
                       setState(() {
@@ -105,14 +106,14 @@ class _SpecifyRoleScreenState extends State<SpecifyRoleScreen> {
                       Text(
                         'Tutor',
                         style: GoogleFonts.sen(
-                            color: Colors.black,
+                            color: Theme.of(context).buttonColor,
                             fontSize: 25,
                             fontWeight: FontWeight.normal),
                       ),
                       Text(
                         'Student',
                         style: GoogleFonts.sen(
-                            color: Colors.black,
+                            color: Theme.of(context).buttonColor,
                             fontSize: 25,
                             fontWeight: FontWeight.normal),
                       ),
@@ -127,9 +128,11 @@ class _SpecifyRoleScreenState extends State<SpecifyRoleScreen> {
                 ),
                 child: CircularButton(
                     width: ScreenSize.width * 0.8,
-                    buttonColor: kColorScheme[1],
+                    buttonColor: Theme.of(context).primaryColorLight,
                     textColor: Colors.white,
-                    isGradient: true,
+                    isGradient: Theme.of(context).primaryColorLight == kWhiteish
+                        ? true
+                        : false,
                     colors: [
                       kColorScheme[1],
                       kColorScheme[2],
@@ -138,13 +141,14 @@ class _SpecifyRoleScreenState extends State<SpecifyRoleScreen> {
                     ],
                     buttonText: "Sign Up",
                     hasBorder: false,
-                    borderColor: null,
+                    borderColor: Theme.of(context).primaryColor,
                     onPressed: () {
                       if (selectedWidget == studentWidget) {
                         DatabaseAPI.createStudent().then((value) => {
                               if (value == "Success")
                                 {
-                                  Fluttertoast.showToast(msg: "Welcome to MyTutor :)"),
+                                  Fluttertoast.showToast(
+                                      msg: "Welcome to MyTutor :)"),
                                   Navigator.push(
                                       context,
                                       PageTransition(
@@ -152,10 +156,12 @@ class _SpecifyRoleScreenState extends State<SpecifyRoleScreen> {
                                               .leftToRightWithFade,
                                           duration: Duration(milliseconds: 500),
                                           child: LoginScreen()))
-                                } else{
-                                Fluttertoast.showToast(msg: value),
-                                Navigator.pop(context),
-                              }
+                                }
+                              else
+                                {
+                                  Fluttertoast.showToast(msg: value),
+                                  Navigator.pop(context),
+                                }
                             });
                       } else {
                         // Chosen Tutor

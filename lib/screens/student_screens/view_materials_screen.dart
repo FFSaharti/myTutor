@@ -138,6 +138,7 @@ class _ViewMaterialsScreenState extends State<ViewMaterialsScreen> {
               StateSetter setModalState /*You can rename this!*/) {
             return Container(
               height: ScreenSize.height * 0.40,
+              color: Theme.of(context).scaffoldBackgroundColor,
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
@@ -153,7 +154,8 @@ class _ViewMaterialsScreenState extends State<ViewMaterialsScreen> {
                         Text(
                           "Filter Options",
                           style: kTitleStyle.copyWith(
-                              color: Colors.black, fontSize: 17),
+                              color: Theme.of(context).buttonColor,
+                              fontSize: 17),
                         ),
                         IconButton(
                             icon: Icon(Icons.check),
@@ -169,11 +171,15 @@ class _ViewMaterialsScreenState extends State<ViewMaterialsScreen> {
                         children: [
                           Text(
                             "Subject",
-                            style: GoogleFonts.sen(fontSize: 17),
+                            style: GoogleFonts.sen(
+                                fontSize: 17,
+                                color: Theme.of(context).buttonColor),
                           ),
                           Spacer(),
                           DropdownButton(
                             value: _dropDownMenuController,
+                            dropdownColor:
+                                Theme.of(context).scaffoldBackgroundColor,
                             items: fetchSubjects(),
                             onChanged: (value) {
                               setState(() {
@@ -194,11 +200,15 @@ class _ViewMaterialsScreenState extends State<ViewMaterialsScreen> {
                         children: [
                           Text(
                             "Type",
-                            style: GoogleFonts.sen(fontSize: 17),
+                            style: GoogleFonts.sen(
+                                fontSize: 17,
+                                color: Theme.of(context).buttonColor),
                           ),
                           Spacer(),
                           DropdownButton(
                             value: _typeDownMenuController,
+                            dropdownColor:
+                                Theme.of(context).scaffoldBackgroundColor,
                             items: fetchTypes(),
                             onChanged: (value) {
                               setState(() {
@@ -248,7 +258,10 @@ class _ViewMaterialsScreenState extends State<ViewMaterialsScreen> {
     List<DropdownMenuItem> items = [];
     for (int i = 0; i < subjects.length; i++) {
       items.add(DropdownMenuItem(
-        child: Text(subjects.elementAt(i).title),
+        child: Text(
+          subjects.elementAt(i).title,
+          style: TextStyle(color: Theme.of(context).buttonColor),
+        ),
         value: i,
       ));
     }
@@ -259,19 +272,28 @@ class _ViewMaterialsScreenState extends State<ViewMaterialsScreen> {
     List<DropdownMenuItem> items = [];
     items.add(
       DropdownMenuItem(
-        child: Text("All Types"),
+        child: Text(
+          "All Types",
+          style: TextStyle(color: Theme.of(context).buttonColor),
+        ),
         value: 0,
       ),
     );
     items.add(
       DropdownMenuItem(
-        child: Text("File"),
+        child: Text(
+          "File",
+          style: TextStyle(color: Theme.of(context).buttonColor),
+        ),
         value: 1,
       ),
     );
     items.add(
       DropdownMenuItem(
-        child: Text("Quiz"),
+        child: Text(
+          "Quiz",
+          style: TextStyle(color: Theme.of(context).buttonColor),
+        ),
         value: 2,
       ),
     );
@@ -288,6 +310,7 @@ class _ViewMaterialsScreenState extends State<ViewMaterialsScreen> {
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: buildAppBar(context, kColorScheme[3], "View Materials"),
         body: SafeArea(
           child: Column(
@@ -300,14 +323,18 @@ class _ViewMaterialsScreenState extends State<ViewMaterialsScreen> {
                     if (_searchController.text.isEmpty) searchedMaterials = [];
                   },
                   style: TextStyle(
-                    color: kBlackish,
+                    color: Theme.of(context).accentColor,
                   ),
                   textAlignVertical: TextAlignVertical.center,
                   decoration: InputDecoration(
                     contentPadding: EdgeInsets.all(0),
                     filled: true,
+                    fillColor:
+                        Theme.of(context).primaryColorLight.withOpacity(0.6),
                     hintText: 'Search',
-                    prefixIcon: Icon(Icons.search, color: kColorScheme[2]),
+                    hintStyle: TextStyle(color: Theme.of(context).accentColor),
+                    prefixIcon: Icon(Icons.search,
+                        color: Theme.of(context).accentColor),
                     enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide.none,
                         borderRadius: BorderRadius.circular(15)),
@@ -323,13 +350,15 @@ class _ViewMaterialsScreenState extends State<ViewMaterialsScreen> {
                   child: Container(
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
-                        color: kWhiteish),
+                        color: Theme.of(context)
+                            .primaryColorLight
+                            .withOpacity(0.6)),
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Icon(
                         Icons.sort,
                         size: 28,
-                        color: kColorScheme[2],
+                        color: Theme.of(context).accentColor,
                       ),
                     ),
                   ),
@@ -349,7 +378,9 @@ class _ViewMaterialsScreenState extends State<ViewMaterialsScreen> {
                             "Showing " +
                                 searchedMaterials.length.toString() +
                                 " Results",
-                            style: GoogleFonts.sen(fontSize: 15),
+                            style: GoogleFonts.sen(
+                                fontSize: 15,
+                                color: Theme.of(context).buttonColor),
                           ),
                           SizedBox(
                             height: ScreenSize.height * 0.015,
@@ -376,8 +407,7 @@ class _ViewMaterialsScreenState extends State<ViewMaterialsScreen> {
                                     child: Card(
                                       elevation: 0.4,
                                       shape: RoundedRectangleBorder(
-                                        side: BorderSide(
-                                            color: Colors.white70, width: 1),
+                                        side: BorderSide.none,
                                         borderRadius: BorderRadius.circular(20),
                                       ),
                                       child: Padding(
@@ -398,7 +428,9 @@ class _ViewMaterialsScreenState extends State<ViewMaterialsScreen> {
                                                     .elementAt(index)
                                                     .title,
                                                 style: GoogleFonts.sen(
-                                                    fontSize: 18),
+                                                    fontSize: 18,
+                                                    color: Theme.of(context)
+                                                        .buttonColor),
                                               ),
                                               searchedMaterials
                                                           .elementAt(index)
@@ -413,13 +445,21 @@ class _ViewMaterialsScreenState extends State<ViewMaterialsScreen> {
                                                           .toUpperCase(),
                                                       style: GoogleFonts.sen(
                                                           fontSize: 18,
-                                                          color: Colors.grey),
+                                                          color:
+                                                              Theme.of(context)
+                                                                  .buttonColor
+                                                                  .withOpacity(
+                                                                      0.6)),
                                                     )
                                                   : Text(
                                                       "QUIZ",
                                                       style: GoogleFonts.sen(
                                                           fontSize: 18,
-                                                          color: Colors.grey),
+                                                          color:
+                                                              Theme.of(context)
+                                                                  .buttonColor
+                                                                  .withOpacity(
+                                                                      0.6)),
                                                     )
                                             ],
                                           ),
@@ -430,7 +470,9 @@ class _ViewMaterialsScreenState extends State<ViewMaterialsScreen> {
                                               Container(
                                                 child: GestureDetector(
                                                   child: Icon(
-                                                      Icons.arrow_forward_ios),
+                                                      Icons.arrow_forward_ios,
+                                                      color: Theme.of(context)
+                                                          .accentColor),
                                                   onTap: () {
                                                     // open the file reader if the file is pdf, else let the user download the file
                                                     if (searchedMaterials
@@ -472,7 +514,9 @@ class _ViewMaterialsScreenState extends State<ViewMaterialsScreen> {
                                               ),
                                               Container(
                                                 child: GestureDetector(
-                                                  child: Icon(Icons.favorite),
+                                                  child: Icon(Icons.favorite,
+                                                      color: Theme.of(context)
+                                                          .accentColor),
                                                   onTap: () {
                                                     // open the file reader if the file is pdf, else let the user download the file
                                                     print("DOC ID IS --> " +
@@ -493,8 +537,24 @@ class _ViewMaterialsScreenState extends State<ViewMaterialsScreen> {
                                                         dialogType:
                                                             DialogType.ERROR,
                                                         title: "ERROR",
-                                                        desc:
-                                                            "Material already in favorites",
+                                                        body: Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(8.0),
+                                                          child: Center(
+                                                            child: Text(
+                                                              'material already in favorites',
+                                                              style: kTitleStyle.copyWith(
+                                                                  color: Theme.of(
+                                                                          context)
+                                                                      .buttonColor,
+                                                                  fontSize: 14,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .normal),
+                                                            ),
+                                                          ),
+                                                        ),
                                                         btnOkOnPress: () {},
                                                       ).show();
                                                     } else {
@@ -527,7 +587,7 @@ class _ViewMaterialsScreenState extends State<ViewMaterialsScreen> {
                                                                             child:
                                                                                 Text(
                                                                               'material added to favorites',
-                                                                              style: kTitleStyle.copyWith(color: kBlackish, fontSize: 14, fontWeight: FontWeight.normal),
+                                                                              style: kTitleStyle.copyWith(color: Theme.of(context).buttonColor, fontSize: 14, fontWeight: FontWeight.normal),
                                                                             ),
                                                                           ),
                                                                         ),

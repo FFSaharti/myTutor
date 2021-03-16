@@ -7,7 +7,6 @@ import 'package:mytutor/components/animated_solveproblem_widget.dart';
 import 'package:mytutor/screens/signup_screen.dart';
 import 'package:mytutor/utilities/constants.dart';
 import 'package:mytutor/utilities/screen_size.dart';
-import 'package:page_transition/page_transition.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class TourScreen extends StatefulWidget {
@@ -78,37 +77,40 @@ class _TourScreenState extends State<TourScreen> {
                   width: ScreenSize.width * 0.2,
                 ),
                 Container(
-                  child: MaterialButton(
-                    onPressed: () {},
-                    color: Theme.of(context).floatingActionButtonTheme.backgroundColor,
-                    textColor: Colors.white,
-                    child: Icon(
-                      Icons.arrow_forward_ios_sharp,
-                      size: 24,
+                    child: MaterialButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, SignupScreen.id);
+                  },
+                  color: Theme.of(context)
+                      .floatingActionButtonTheme
+                      .backgroundColor,
+                  textColor: Colors.white,
+                  child: Icon(
+                    Icons.arrow_forward_ios_sharp,
+                    size: 24,
+                  ),
+                  padding: EdgeInsets.all(16),
+                  shape: CircleBorder(),
+                )
+
+                    // FloatingActionButton(
+                    //   backgroundColor: Colors.black,
+                    //   child: Icon(
+                    //     Icons.arrow_forward_ios_sharp,
+                    //     size: 25,
+                    //     //color: Colors.white,
+                    //   ),
+                    //   elevation: 1,
+                    //   onPressed: () {
+                    //     Navigator.push(
+                    //         context,
+                    //         PageTransition(
+                    //             type: PageTransitionType.rightToLeftWithFade,
+                    //             duration: Duration(milliseconds: 200),
+                    //             child: SignupScreen()));
+                    //   },
+                    // ),
                     ),
-                    padding: EdgeInsets.all(16),
-                    shape: CircleBorder(),
-                  )
-
-
-                  // FloatingActionButton(
-                  //   backgroundColor: Colors.black,
-                  //   child: Icon(
-                  //     Icons.arrow_forward_ios_sharp,
-                  //     size: 25,
-                  //     //color: Colors.white,
-                  //   ),
-                  //   elevation: 1,
-                  //   onPressed: () {
-                  //     Navigator.push(
-                  //         context,
-                  //         PageTransition(
-                  //             type: PageTransitionType.rightToLeftWithFade,
-                  //             duration: Duration(milliseconds: 200),
-                  //             child: SignupScreen()));
-                  //   },
-                  // ),
-                ),
               ],
             ),
           ],

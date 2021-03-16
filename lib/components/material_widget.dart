@@ -22,93 +22,77 @@ class _MaterialWidgetState extends State<MaterialWidget> {
   Widget build(BuildContext context) {
     print(widget.material.subjectID);
 
-    return Padding(
-      padding: const EdgeInsets.all(7.0),
-      child: Container(
-        height: ScreenSize.height * 0.14,
-        decoration: BoxDecoration(
-          color: kWhiteish,
-          borderRadius: BorderRadius.circular(25),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.18),
-              spreadRadius: 1,
-              blurRadius: 15,
-              offset: Offset(0, 6), // changes position of shadow
+    return Card(
+      color: Theme.of(context).cardColor,
+      shape: RoundedRectangleBorder(
+        side: BorderSide.none,
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(13.0),
+        child: ListTile(
+          trailing: Padding(
+            padding: const EdgeInsets.fromLTRB(30, 8, 0, 8),
+            child: Icon(
+              Icons.arrow_forward_ios,
+              color: Colors.grey,
             ),
-          ],
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(15.0),
-          child: Row(
+          ),
+          leading: Image.asset(
+            subjects[widget.material.subjectID].path,
+            height: 50,
+          ),
+          title: Column(
             mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Image.asset(
-                subjects[widget.material.subjectID].path,
-                width: 50,
+              Container(
+                height: ScreenSize.height * 0.03,
+                child: Container(
+                  // width: ScreenSize.width * 0.45,
+                  child: Text(
+                    widget.material.title,
+                    overflow: TextOverflow.ellipsis,
+                    softWrap: false,
+                    style: GoogleFonts.sarabun(
+                      textStyle: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.normal,
+                          color: Theme.of(context).buttonColor),
+                    ),
+                  ),
+                ),
               ),
-              SizedBox(
-                width: ScreenSize.width * 0.03,
+              Container(
+                height: ScreenSize.height * 0.03,
+                child: Text(
+                  widget.material.desc,
+                  overflow: TextOverflow.ellipsis,
+                  softWrap: false,
+                  style: GoogleFonts.sarala(
+                      fontSize: 14,
+                      color: Theme.of(context).buttonColor.withOpacity(0.6)),
+                ),
               ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    height: ScreenSize.height * 0.005,
-                  ),
-                  Container(
-                    height: ScreenSize.height * 0.03,
-                    child: Container(
-                      width: ScreenSize.width * 0.50,
-                      child: Text(
-                        widget.material.title,
-                        overflow: TextOverflow.ellipsis,
-                        softWrap: false,
-                        style: GoogleFonts.sarabun(
-                          textStyle: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.normal,
-                              color: Colors.black),
-                        ),
-                      ),
+              Container(
+                decoration: new BoxDecoration(
+                  color: kColorScheme[1],
+                  borderRadius: new BorderRadius.circular(50.0),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 11.0, right: 11.0),
+                  child: Text(
+                    (widget.material.type == 1)
+                        ? (widget.material as Document).fileType
+                        : "Quiz",
+                    style: GoogleFonts.sarabun(
+                      textStyle: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.normal,
+                          color: Colors.white),
                     ),
                   ),
-                  Container(
-                    height: ScreenSize.height * 0.03,
-                    child: Text(
-                      widget.material.desc,
-                      overflow: TextOverflow.ellipsis,
-                      softWrap: false,
-                      style:
-                          GoogleFonts.sarala(fontSize: 14, color: kGreyerish),
-                    ),
-                  ),
-                  Container(
-                    decoration: new BoxDecoration(
-                      color: kColorScheme[1],
-                      borderRadius: new BorderRadius.circular(50.0),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 11.0, right: 11.0),
-                      child: Text(
-                        (widget.material.type == 1)
-                            ? (widget.material as Document).fileType
-                            : "Quiz",
-                        style: GoogleFonts.sarabun(
-                          textStyle: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.normal,
-                              color: Colors.white),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Icon(
-                Icons.arrow_forward_ios,
-                color: Colors.grey,
+                ),
               ),
             ],
           ),

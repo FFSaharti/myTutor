@@ -35,12 +35,18 @@ class _SignupScreenState extends State<SignupScreen> {
       onWillPop: () async => false,
       child: Container(
         decoration: BoxDecoration(
-          gradient: kBackgroundGradient,
+          gradient:
+              !(Theme.of(context).scaffoldBackgroundColor == Color(0xff29273d))
+                  ? kBackgroundGradient
+                  : null,
         ),
         child: Scaffold(
           appBar: buildAppBar(context, Colors.white, ""),
           resizeToAvoidBottomInset: true,
-          backgroundColor: Colors.transparent,
+          backgroundColor:
+              Theme.of(context).scaffoldBackgroundColor == Colors.white
+                  ? Colors.transparent
+                  : Theme.of(context).scaffoldBackgroundColor,
           body: SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.all(25.0),
@@ -77,7 +83,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         child: FloatingActionButton(
                           child: Icon(
                             Icons.upload_outlined,
-                            color: kColorScheme[4],
+                            color: Theme.of(context).primaryColorDark,
                             size: ScreenSize.height * 0.05,
                           ),
                           backgroundColor: Colors.white,
@@ -125,7 +131,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       hintText: 'Full Name',
                       obscureText: false,
                       prefixIconData: Icons.person,
-                      colorScheme: kColorScheme[4],
+                      colorScheme: Theme.of(context).primaryColorDark,
                       suffixIconData:
                           Validator.isValidName(name) ? Icons.check : null,
                       onChanged: (value) {
@@ -150,7 +156,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       hintText: 'Email',
                       obscureText: false,
                       prefixIconData: Icons.mail_outline,
-                      colorScheme: kColorScheme[4],
+                      colorScheme: Theme.of(context).primaryColorDark,
                       suffixIconData:
                           Validator.isValidEmail(email) ? Icons.check : null,
                       onChanged: (value) {
@@ -180,7 +186,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       hintText: 'Password',
                       obscureText: SignupScreen.passwordVisible,
                       prefixIconData: Icons.lock,
-                      colorScheme: kColorScheme[4],
+                      colorScheme: Theme.of(context).primaryColorDark,
                       isPassword: true,
                       // isVisible: passwordVisible,
                     ),
@@ -199,7 +205,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     child: CircularButton(
                         width: ScreenSize.width * 0.9,
                         buttonColor: Colors.white,
-                        textColor: kColorScheme[2],
+                        textColor: Theme.of(context).primaryColorDark,
                         isGradient: false,
                         colors: [
                           kColorScheme[1],
@@ -209,7 +215,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         ],
                         buttonText: 'Next',
                         hasBorder: true,
-                        borderColor: kColorScheme[3],
+                        borderColor: Theme.of(context).primaryColorDark,
                         onPressed: () {
                           if (Validator.isValidName(name) &&
                               Validator.isValidEmail(email) &&
@@ -279,7 +285,7 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
     return TextField(
       obscureText: widget.obscureText,
       onChanged: widget.onChanged,
-      style: TextStyle(color: kColorScheme[4], fontSize: 18),
+      style: TextStyle(color: Theme.of(context).primaryColorDark, fontSize: 18),
       decoration: InputDecoration(
         labelText: widget.hintText,
         prefixIcon: Icon(

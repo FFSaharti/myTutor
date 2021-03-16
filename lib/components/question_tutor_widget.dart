@@ -18,41 +18,34 @@ class _QuestionTutorWidgetState extends State<QuestionTutorWidget> {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 8, 20, 8),
-      child: Container(
-        height: ScreenSize.height * 0.15,
-        decoration: BoxDecoration(
-          color: Theme.of(context).cardColor,
-          borderRadius: BorderRadius.circular(15),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.2),
-              spreadRadius: 1,
-              blurRadius: 15,
-              offset: Offset(0, 6), // changes position of shadow
-            ),
-          ],
+      child: Card(
+        elevation: 2,
+        shape: RoundedRectangleBorder(
+          side: BorderSide.none,
+          borderRadius: BorderRadius.circular(20),
         ),
         child: Padding(
-          padding: const EdgeInsets.all(15.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Image.asset(
-                subjects[int.parse(widget.question.subject)].path,
-                width: ScreenSize.width * 0.15,
-              ),
-              SizedBox(
-                width: ScreenSize.width * 0.03,
-              ),
-              Column(
+          padding: const EdgeInsets.all(8.0),
+          child: ListTile(
+            trailing: Icon(
+              Icons.arrow_forward_ios,
+              color: Theme.of(context).buttonColor,
+            ),
+            leading: Image.asset(
+              subjects[int.parse(widget.question.subject)].path,
+              // width: ScreenSize.width * 0.14,
+              height: ScreenSize.height * 0.15,
+            ),
+            title: Padding(
+              padding: const EdgeInsets.fromLTRB(3, 10, 3, 10),
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    height: ScreenSize.height * 0.05,
-                    child: Text(
-                      widget.question.title,
-                      style: GoogleFonts.sen(fontSize: 25, color: Theme.of(context).buttonColor),
-                    ),
+                  Text(
+                    widget.question.title,
+                    maxLines: 1,
+                    style: GoogleFonts.sen(
+                        fontSize: 18, color: Theme.of(context).buttonColor),
                   ),
                   Row(
                     children: [
@@ -61,7 +54,7 @@ class _QuestionTutorWidgetState extends State<QuestionTutorWidget> {
                         child: Icon(
                           Icons.calendar_today_outlined,
                           size: 15,
-                            color: Theme.of(context).buttonColor,
+                          color: Theme.of(context).buttonColor,
                         ),
                       ),
                       SizedBox(
@@ -74,14 +67,15 @@ class _QuestionTutorWidgetState extends State<QuestionTutorWidget> {
                           overflow: TextOverflow.ellipsis,
                           softWrap: false,
                           style: GoogleFonts.sarala(
-                              fontSize: 14, color: Theme.of(context).buttonColor),
+                              fontSize: 14,
+                              color: Theme.of(context).buttonColor),
                         ),
                       ),
                     ],
                   ),
                 ],
               ),
-            ],
+            ),
           ),
         ),
       ),

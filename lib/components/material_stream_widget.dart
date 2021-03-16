@@ -77,7 +77,11 @@ class _MaterialStreamTutorState extends State<MaterialStreamTutor> {
                                         MainAxisAlignment.spaceBetween,
                                     children: [
                                       IconButton(
-                                          icon: Icon(Icons.cancel),
+                                          icon: Icon(
+                                            Icons.cancel,
+                                            color:
+                                                Theme.of(context).buttonColor,
+                                          ),
                                           onPressed: () {
                                             Navigator.of(context).pop();
                                           }),
@@ -217,14 +221,19 @@ class _MaterialStreamTutorState extends State<MaterialStreamTutor> {
                           material.id);
 
                       showModalBottomSheet(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.vertical(
-                                  top: Radius.circular(25.0))),
+                          backgroundColor: Colors.transparent,
                           context: context,
                           builder: (context) {
                             return Container(
                               height: ScreenSize.height * 0.20,
                               width: ScreenSize.width,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(25),
+                                    topRight: Radius.circular(25)),
+                                color:
+                                    Theme.of(context).scaffoldBackgroundColor,
+                              ),
                               child: Column(
                                 children: [
                                   Row(
@@ -240,7 +249,8 @@ class _MaterialStreamTutorState extends State<MaterialStreamTutor> {
                                         tempQuiz.title,
                                         style: kTitleStyle.copyWith(
                                             fontSize: 19,
-                                            color: Colors.black,
+                                            color:
+                                                Theme.of(context).buttonColor,
                                             fontWeight: FontWeight.normal),
                                       ),
                                       IconButton(
@@ -378,6 +388,7 @@ class _MaterialStreamTutorState extends State<MaterialStreamTutor> {
       builder: (context) {
         return Container(
             height: ScreenSize.height * 0.50,
+            color: Theme.of(context).scaffoldBackgroundColor,
             child: Padding(
               padding: const EdgeInsets.all(15.0),
               child: Column(
@@ -392,7 +403,7 @@ class _MaterialStreamTutorState extends State<MaterialStreamTutor> {
                       style: kTitleStyle.copyWith(
                           fontSize: 17,
                           fontWeight: FontWeight.normal,
-                          color: Colors.black),
+                          color: Theme.of(context).buttonColor),
                     ),
                   ),
                   SizedBox(
@@ -403,15 +414,19 @@ class _MaterialStreamTutorState extends State<MaterialStreamTutor> {
                     style: kTitleStyle.copyWith(
                         fontSize: 17,
                         fontWeight: FontWeight.normal,
-                        color: Colors.black),
+                        color: Theme.of(context).buttonColor),
                   ),
                   TextField(
                     controller: titleController,
+                    style: TextStyle(color: Theme.of(context).buttonColor),
                     onChanged: (value) {
                       print(value);
                     },
                     decoration: InputDecoration(
                       hintText: 'Type your new title here....',
+                      hintStyle: TextStyle(
+                          color:
+                              Theme.of(context).buttonColor.withOpacity(0.6)),
                       border: InputBorder.none,
                     ),
                   ),
@@ -421,13 +436,17 @@ class _MaterialStreamTutorState extends State<MaterialStreamTutor> {
                     style: kTitleStyle.copyWith(
                         fontSize: 17,
                         fontWeight: FontWeight.normal,
-                        color: Colors.black),
+                        color: Theme.of(context).buttonColor),
                   ),
                   TextField(
                     controller: descController,
+                    style: TextStyle(color: Theme.of(context).buttonColor),
                     onChanged: (value) {},
                     decoration: InputDecoration(
                       hintText: 'Type your new description here....',
+                      hintStyle: TextStyle(
+                          color:
+                              Theme.of(context).buttonColor.withOpacity(0.6)),
                       border: InputBorder.none,
                     ),
                   ),
@@ -459,7 +478,9 @@ class _MaterialStreamTutorState extends State<MaterialStreamTutor> {
                                                       'Updated successfully',
                                                       style:
                                                           kTitleStyle.copyWith(
-                                                              color: kBlackish,
+                                                              color: Theme.of(
+                                                                      context)
+                                                                  .buttonColor,
                                                               fontSize: 20,
                                                               fontWeight:
                                                                   FontWeight
@@ -483,7 +504,9 @@ class _MaterialStreamTutorState extends State<MaterialStreamTutor> {
                                                       'erorr',
                                                       style:
                                                           kTitleStyle.copyWith(
-                                                              color: kBlackish,
+                                                              color: Theme.of(
+                                                                      context)
+                                                                  .buttonColor,
                                                               fontSize: 20,
                                                               fontWeight:
                                                                   FontWeight
@@ -531,7 +554,8 @@ class _MaterialStreamTutorState extends State<MaterialStreamTutor> {
                                                   child: Text(
                                                     'Deleted successfully',
                                                     style: kTitleStyle.copyWith(
-                                                        color: kBlackish,
+                                                        color: Theme.of(context)
+                                                            .buttonColor,
                                                         fontSize: 20,
                                                         fontWeight:
                                                             FontWeight.normal),
@@ -557,7 +581,8 @@ class _MaterialStreamTutorState extends State<MaterialStreamTutor> {
                                                   child: Text(
                                                     'erorr',
                                                     style: kTitleStyle.copyWith(
-                                                        color: kBlackish,
+                                                        color: Theme.of(context)
+                                                            .buttonColor,
                                                         fontSize: 20,
                                                         fontWeight:
                                                             FontWeight.normal),
@@ -604,6 +629,7 @@ class _MaterialStreamTutorState extends State<MaterialStreamTutor> {
       context: context,
       builder: (context) {
         return Container(
+            color: Theme.of(context).scaffoldBackgroundColor,
             height: ScreenSize.height * 0.50,
             child: Padding(
               padding: const EdgeInsets.all(15.0),
@@ -621,7 +647,7 @@ class _MaterialStreamTutorState extends State<MaterialStreamTutor> {
                         style: kTitleStyle.copyWith(
                             fontSize: 17,
                             fontWeight: FontWeight.normal,
-                            color: Colors.black),
+                            color: Theme.of(context).buttonColor),
                       ),
                     ),
                   ),
@@ -633,15 +659,18 @@ class _MaterialStreamTutorState extends State<MaterialStreamTutor> {
                     style: kTitleStyle.copyWith(
                         fontSize: 17,
                         fontWeight: FontWeight.normal,
-                        color: Colors.black),
+                        color: Theme.of(context).buttonColor),
                   ),
                   TextField(
                     controller: titleController,
+                    style: TextStyle(color: Theme.of(context).buttonColor),
                     onChanged: (value) {
                       print(value);
                     },
                     decoration: InputDecoration(
                       hintText: 'Type your new title here....',
+                      hintStyle:
+                          TextStyle(color: Theme.of(context).buttonColor),
                       border: InputBorder.none,
                     ),
                   ),
@@ -651,13 +680,16 @@ class _MaterialStreamTutorState extends State<MaterialStreamTutor> {
                     style: kTitleStyle.copyWith(
                         fontSize: 17,
                         fontWeight: FontWeight.normal,
-                        color: Colors.black),
+                        color: Theme.of(context).buttonColor),
                   ),
                   TextField(
                     controller: descController,
+                    style: TextStyle(color: Theme.of(context).buttonColor),
                     onChanged: (value) {},
                     decoration: InputDecoration(
                       hintText: 'Type your new description here....',
+                      hintStyle:
+                          TextStyle(color: Theme.of(context).buttonColor),
                       border: InputBorder.none,
                     ),
                   ),
@@ -671,7 +703,7 @@ class _MaterialStreamTutorState extends State<MaterialStreamTutor> {
                         style: kTitleStyle.copyWith(
                             fontSize: 17,
                             fontWeight: FontWeight.normal,
-                            color: Colors.black),
+                            color: Theme.of(context).buttonColor),
                       ),
                       Spacer(),
                       GestureDetector(
@@ -688,7 +720,7 @@ class _MaterialStreamTutorState extends State<MaterialStreamTutor> {
                         child: Icon(
                           Icons.edit,
                           size: 15,
-                          color: Colors.black,
+                          color: Theme.of(context).buttonColor,
                         ),
                       )
                     ],

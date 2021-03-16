@@ -177,8 +177,7 @@ class _ProfileStudentState extends State<ProfileStudent> {
                                     child: Align(
                                       child: Icon(
                                         Icons.edit,
-                                        color:
-                                            Theme.of(context).iconTheme.color,
+                                        color: Theme.of(context).buttonColor,
                                       ),
                                       alignment: Alignment.bottomRight,
                                     )),
@@ -188,8 +187,8 @@ class _ProfileStudentState extends State<ProfileStudent> {
                     Center(
                       child: Text(
                         DatabaseAPI.tempStudent.name,
-                        style:
-                            GoogleFonts.sen(color: Theme.of(context).buttonColor, fontSize: 30),
+                        style: GoogleFonts.sen(
+                            color: Theme.of(context).buttonColor, fontSize: 30),
                       ),
                     ),
                     SizedBox(
@@ -212,7 +211,7 @@ class _ProfileStudentState extends State<ProfileStudent> {
                       height: ScreenSize.height * 0.01,
                     ),
                     Divider(
-                      color: kGreyish,
+                      color: Theme.of(context).dividerColor,
                     ),
                     SizedBox(
                       height: ScreenSize.height * 0.01,
@@ -262,8 +261,7 @@ class _ProfileStudentState extends State<ProfileStudent> {
                                       SessionManager.loggedInStudent.aboutMe,
                                       style: TextStyle(
                                           fontSize: 16.5,
-                                          color:
-                                          Theme.of(context).buttonColor),
+                                          color: Theme.of(context).buttonColor),
                                     ),
                                   ),
                                   Spacer(),
@@ -290,7 +288,8 @@ class _ProfileStudentState extends State<ProfileStudent> {
                                       child: Text(
                                         "No About Me",
                                         style: GoogleFonts.openSans(
-                                            color: Colors.grey,
+                                            color:
+                                                Theme.of(context).accentColor,
                                             // Theme.of(context).primaryColor,
                                             fontSize: 21),
                                         textAlign: TextAlign.center,
@@ -302,7 +301,7 @@ class _ProfileStudentState extends State<ProfileStudent> {
                       ],
                     ),
                     Divider(
-                      color: kGreyish,
+                      color: Theme.of(context).dividerColor,
                     ),
                     SizedBox(
                       height: ScreenSize.height * 0.01,
@@ -358,7 +357,7 @@ class _ProfileStudentState extends State<ProfileStudent> {
         Container(
           child: Card(
             shape: RoundedRectangleBorder(
-              side: BorderSide(color: Colors.white70, width: 1),
+              side: BorderSide.none,
               borderRadius: BorderRadius.circular(20),
             ),
             child: Padding(
@@ -368,15 +367,20 @@ class _ProfileStudentState extends State<ProfileStudent> {
                 title: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(favDocs[i].title),
+                    Text(
+                      favDocs[i].title,
+                      style: TextStyle(color: Theme.of(context).buttonColor),
+                    ),
                     favDocs[i].type == 1
                         ? Text(
                             (favDocs[i] as Document).fileType.toUpperCase(),
-                            style: GoogleFonts.sen(),
+                            style: GoogleFonts.sen(
+                                color: Theme.of(context).buttonColor),
                           )
                         : Text(
                             "QUIZ",
-                            style: GoogleFonts.sen(),
+                            style: GoogleFonts.sen(
+                                color: Theme.of(context).buttonColor),
                           )
                   ],
                 ),
@@ -412,7 +416,10 @@ class _ProfileStudentState extends State<ProfileStudent> {
                       );
                     }
                   },
-                  child: Icon(Icons.arrow_forward_ios),
+                  child: Icon(
+                    Icons.arrow_forward_ios,
+                    color: Theme.of(context).buttonColor,
+                  ),
                 ),
               ),
             ),
@@ -476,107 +483,108 @@ class _ProfileStudentState extends State<ProfileStudent> {
           return StatefulBuilder(
               builder: (BuildContext context, StateSetter setModalState) {
             return Container(
-                //     padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-                height: ScreenSize.height * 0.50,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(25),
-                      topRight: Radius.circular(25)),
-                  color: Theme.of(context).scaffoldBackgroundColor,
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            IconButton(
-                                icon: Icon(Icons.cancel),
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                }),
-                            Text(
-                              "About Me",
-                              style: TextStyle(fontSize: 20, color:Theme.of(context).buttonColor),
-                            ),
-                            IconButton(
-                              icon: Icon(Icons.check),
+              //     padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+              height: ScreenSize.height * 0.50,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(25),
+                    topRight: Radius.circular(25)),
+                color: Theme.of(context).scaffoldBackgroundColor,
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          IconButton(
+                              icon: Icon(Icons.cancel),
                               onPressed: () {
-                                // ADD NEW QUESTION
-                                if (aboutMeController.text.isNotEmpty) {
-                                  // ADD ABOUT ME TO STUDENT...
-                                  DatabaseAPI.addAboutMeToStudent(
-                                          SessionManager.loggedInStudent,
-                                          aboutMeController.text)
-                                      .then((value) => {
-                                            if (value == "Success")
-                                              {
-                                                SessionManager.loggedInStudent
-                                                        .aboutMe =
-                                                    aboutMeController.text,
-                                                setParentState(
-                                                    aboutMeController.text),
-                                                Navigator.pop(context),
-                                              },
-                                            print(value.toString()),
-                                          });
-                                  print("POP...");
-                                } else {
-                                  print("empty parameters");
-                                  //TODO: Show error message cannot leave empty...
-                                }
-                              },
+                                Navigator.of(context).pop();
+                              }),
+                          Text(
+                            "About Me",
+                            style: TextStyle(
+                                fontSize: 20,
+                                color: Theme.of(context).buttonColor),
+                          ),
+                          IconButton(
+                            icon: Icon(Icons.check),
+                            onPressed: () {
+                              // ADD NEW QUESTION
+                              if (aboutMeController.text.isNotEmpty) {
+                                // ADD ABOUT ME TO STUDENT...
+                                DatabaseAPI.addAboutMeToStudent(
+                                        SessionManager.loggedInStudent,
+                                        aboutMeController.text)
+                                    .then((value) => {
+                                          if (value == "Success")
+                                            {
+                                              SessionManager
+                                                      .loggedInStudent.aboutMe =
+                                                  aboutMeController.text,
+                                              setParentState(
+                                                  aboutMeController.text),
+                                              Navigator.pop(context),
+                                            },
+                                          print(value.toString()),
+                                        });
+                                print("POP...");
+                              } else {
+                                print("empty parameters");
+                                //TODO: Show error message cannot leave empty...
+                              }
+                            },
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: ScreenSize.height * 0.01,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          children: [
+                            Align(
+                              alignment: Alignment.topLeft,
+                              child: Text(
+                                "About Me",
+                                style: GoogleFonts.secularOne(
+                                    textStyle: TextStyle(
+                                        fontSize: 17,
+                                        fontWeight: FontWeight.bold,
+                                        color: Theme.of(context).buttonColor)),
+                              ),
+                            ),
+                            TextField(
+                              controller: aboutMeController,
+                              keyboardType: TextInputType.multiline,
+                              maxLines: null,
+                              decoration: InputDecoration(
+                                hintText: !(SessionManager.loggedInStudent
+                                            .aboutMe.isNotEmpty ||
+                                        SessionManager
+                                                .loggedInStudent.aboutMe ==
+                                            '')
+                                    ? 'Describe yourself briefly...'
+                                    : SessionManager.loggedInStudent.aboutMe,
+                                hintStyle: TextStyle(
+                                    fontSize: 17.0, color: Colors.grey),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 20,
                             ),
                           ],
                         ),
-                        SizedBox(
-                          height: ScreenSize.height*0.01,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            children: [
-                              Align(
-                                alignment: Alignment.topLeft,
-                                child: Text(
-                                  "About Me",
-                                  style: GoogleFonts.secularOne(
-                                      textStyle: TextStyle(
-                                          fontSize: 17,
-                                          fontWeight: FontWeight.bold,
-                                          color: Theme.of(context).buttonColor)),
-                                ),
-                              ),
-                              TextField(
-                                controller: aboutMeController,
-                                keyboardType: TextInputType.multiline,
-                                maxLines: null,
-                                decoration: InputDecoration(
-                                  hintText: !(SessionManager.loggedInStudent
-                                              .aboutMe.isNotEmpty ||
-                                          SessionManager
-                                                  .loggedInStudent.aboutMe ==
-                                              '')
-                                      ? 'Describe yourself briefly...'
-                                      : SessionManager
-                                          .loggedInStudent.aboutMe,
-                                  hintStyle: TextStyle(
-                                      fontSize: 17.0, color: Colors.grey),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 20,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
-              );
+              ),
+            );
           });
         });
   }

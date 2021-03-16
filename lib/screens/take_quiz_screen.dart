@@ -70,10 +70,10 @@ class _TakeQuizScreenState extends State<TakeQuizScreen> {
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
-        appBar: buildAppBar(context, kColorScheme[3],
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        appBar: buildAppBar(context, Theme.of(context).accentColor,
             finish ? ("Quiz : " + widget.quiz.title) : "Loading"),
         body: Container(
-          color: Colors.white,
           height: ScreenSize.height,
           child: Column(
             children: [
@@ -94,7 +94,14 @@ class _TakeQuizScreenState extends State<TakeQuizScreen> {
                     },
                     child: PageView(
                       controller: _pageController,
-                      children: finish ? getListOfQuestions(widget.quiz) : [],
+                      children: finish
+                          ? getListOfQuestions(widget.quiz)
+                          : [
+                              Container(
+                                color:
+                                    Theme.of(context).scaffoldBackgroundColor,
+                              )
+                            ],
                     ),
                   ),
                 ),
@@ -135,11 +142,33 @@ class _TakeQuizScreenState extends State<TakeQuizScreen> {
                     context: context,
                     animType: AnimType.SCALE,
                     dialogType: DialogType.SUCCES,
-                    title: "Completed Quiz [" + widget.quiz.title + "]",
-                    desc: "You got " +
-                        numOfCorrectAnswers.toString() +
-                        " out of " +
-                        widget.quiz.questions.length.toString(),
+                    body: Center(
+                      child: Column(
+                        children: [
+                          Text(
+                            "Completed Quiz [" + widget.quiz.title + "]",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: Theme.of(context).buttonColor,
+                                fontSize: 23,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          SizedBox(
+                            height: ScreenSize.height * 0.01,
+                          ),
+                          Text(
+                            "You got " +
+                                numOfCorrectAnswers.toString() +
+                                " out of " +
+                                widget.quiz.questions.length.toString(),
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: Theme.of(context).buttonColor,
+                                fontSize: 20),
+                          )
+                        ],
+                      ),
+                    ),
                     btnOkOnPress: () {
                       int count = 0;
                       Navigator.popUntil(context, (route) {
@@ -207,14 +236,20 @@ class _QuizQuestionWidgetState extends State<QuizQuestionWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      color: Theme.of(context).scaffoldBackgroundColor,
       child: Column(
         children: [
+          // Theme.of(context).buttonColor
+          SizedBox(
+            height: ScreenSize.height * 0.02,
+          ),
           Text(
             "Question " +
                 (widget.questionIndex + 1).toString() +
                 " out of " +
                 widget.numOfQuestions,
-            style: GoogleFonts.sen(fontSize: 17),
+            style: GoogleFonts.sen(
+                fontSize: 17, color: Theme.of(context).buttonColor),
           ),
           SizedBox(
             height: ScreenSize.height * 0.02,
@@ -225,7 +260,8 @@ class _QuizQuestionWidgetState extends State<QuizQuestionWidget> {
               alignment: Alignment.centerLeft,
               child: Text(
                 widget.question.question,
-                style: kTitleStyle.copyWith(fontSize: 40, color: Colors.black),
+                style: kTitleStyle.copyWith(
+                    fontSize: 40, color: Theme.of(context).buttonColor),
               ),
             ),
           ),
@@ -257,7 +293,7 @@ class _QuizQuestionWidgetState extends State<QuizQuestionWidget> {
             },
             child: Card(
               shape: RoundedRectangleBorder(
-                side: BorderSide(color: Colors.white70, width: 1),
+                side: BorderSide.none,
                 borderRadius: BorderRadius.circular(20),
               ),
               color: widget.groupValue[widget.questionIndex] == k
