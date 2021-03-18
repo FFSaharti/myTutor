@@ -550,8 +550,8 @@ class _CreateMaterialsScreenState extends State<CreateMaterialsScreen> {
     if (_descController.text.isNotEmpty &&
         _titleController.text.isNotEmpty &&
         _file != null) {
-      if (filetype == "pdf" || filetype == "pptx") {
-        // uplode the file
+      if (filetype.toLowerCase() == "pdf" || filetype.toLowerCase() == "pptx") {
+        // upload the file
         showProgressDialog(context);
         DatabaseAPI.uploadFileToStorage(Document(
                 _titleController.text,

@@ -414,6 +414,7 @@ class _RequestTutorScreenState extends State<RequestTutorScreen> {
 
   void applyFilter() {
     if (checkedExperineceFilter == true && checkedRateFilter == true) {
+
       for (int i = 0; i < tutors.length; i++) {
         for (int j = 0; j < tutors.elementAt(i).experiences.length; j++) {
           if (tutors.elementAt(i).experiences.elementAt(j) ==
@@ -427,6 +428,7 @@ class _RequestTutorScreenState extends State<RequestTutorScreen> {
         }
       }
     } else if (checkedExperineceFilter == true) {
+
       setState(() {
         for (int i = 0; i < tutors.length; i++) {
           for (int j = 0; j < tutors.elementAt(i).experiences.length; j++) {
@@ -440,7 +442,7 @@ class _RequestTutorScreenState extends State<RequestTutorScreen> {
       });
     } else if (checkedRateFilter == true) {
       for (var tutor in tutors) {
-        Rate.getAverageRate(tutor.rates) > _dropDownMenuControllerForRating
+        Rate.getAverageRate(tutor.rates) >= _dropDownMenuControllerForRating
             ? searchedTutors.add(tutor)
             : Text("");
       }

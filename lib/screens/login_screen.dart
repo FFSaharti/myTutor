@@ -6,6 +6,7 @@ import 'package:flutter_villains/villains/villains.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mytutor/components/circular_button.dart';
+import 'package:mytutor/components/disable_default_pop.dart';
 import 'package:mytutor/screens/student_screens/homepage_screen_student.dart';
 import 'package:mytutor/screens/welcome_screen.dart';
 import 'package:mytutor/utilities/constants.dart';
@@ -15,7 +16,6 @@ import 'package:mytutor/utilities/screen_size.dart';
 import 'package:mytutor/utilities/session_manager.dart';
 import 'package:page_transition/page_transition.dart';
 
-import 'file:///C:/Users/faisa/Desktop/Developer/AndroidStudioProjects/mytutor/lib/components/disable_default_pop.dart';
 
 import 'tutor_screens/tutor_screen.dart';
 

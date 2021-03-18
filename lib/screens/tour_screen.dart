@@ -4,12 +4,12 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:mytutor/components/animated_materials_widget.dart';
 import 'package:mytutor/components/animated_resume_widget.dart';
 import 'package:mytutor/components/animated_solveproblem_widget.dart';
+import 'package:mytutor/components/disable_default_pop.dart';
 import 'package:mytutor/screens/signup_screen.dart';
 import 'package:mytutor/utilities/constants.dart';
 import 'package:mytutor/utilities/screen_size.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
-import 'file:///C:/Users/faisa/Desktop/Developer/AndroidStudioProjects/mytutor/lib/components/disable_default_pop.dart';
 
 class TourScreen extends StatefulWidget {
   static String id = 'tour_screen';
