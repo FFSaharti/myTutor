@@ -173,7 +173,7 @@ class _MessageScreenState extends State<MessageScreen> {
                                   Text(
                                     "no tutor session available. start one by requesting a tutor  ",
                                     style: GoogleFonts.openSans(
-                                        color: Theme.of(context).primaryColor,
+                                        color: Theme.of(context).buttonColor,
                                         fontSize: 21),
                                     textAlign: TextAlign.center,
                                   ),

@@ -237,41 +237,43 @@ class _QuizQuestionWidgetState extends State<QuizQuestionWidget> {
   Widget build(BuildContext context) {
     return Container(
       color: Theme.of(context).scaffoldBackgroundColor,
-      child: Column(
-        children: [
-          // Theme.of(context).buttonColor
-          SizedBox(
-            height: ScreenSize.height * 0.02,
-          ),
-          Text(
-            "Question " +
-                (widget.questionIndex + 1).toString() +
-                " out of " +
-                widget.numOfQuestions,
-            style: GoogleFonts.sen(
-                fontSize: 17, color: Theme.of(context).buttonColor),
-          ),
-          SizedBox(
-            height: ScreenSize.height * 0.02,
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 10),
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                widget.question.question,
-                style: kTitleStyle.copyWith(
-                    fontSize: 40, color: Theme.of(context).buttonColor),
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            // Theme.of(context).buttonColor
+            SizedBox(
+              height: ScreenSize.height * 0.02,
+            ),
+            Text(
+              "Question " +
+                  (widget.questionIndex + 1).toString() +
+                  " out of " +
+                  widget.numOfQuestions,
+              style: GoogleFonts.sen(
+                  fontSize: 17, color: Theme.of(context).buttonColor),
+            ),
+            SizedBox(
+              height: ScreenSize.height * 0.02,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 10),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  widget.question.question,
+                  style: kTitleStyle.copyWith(
+                      fontSize: 40, color: Theme.of(context).buttonColor),
+                ),
               ),
             ),
-          ),
-          SizedBox(
-            height: ScreenSize.height * 0.02,
-          ),
-          Column(
-            children: getListOfAnswers(widget.question, setQuestionState),
-          )
-        ],
+            SizedBox(
+              height: ScreenSize.height * 0.02,
+            ),
+            Column(
+              children: getListOfAnswers(widget.question, setQuestionState),
+            )
+          ],
+        ),
       ),
     );
   }

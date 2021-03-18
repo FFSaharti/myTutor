@@ -62,15 +62,14 @@ List<Subject> subjects = [
       ['Microsoft Powerpoint', 'Powerpoint', 'Microsoft Office', 'MS'], false),
   Subject(13, 'Microsoft Excel', 'images/Sub-Icons/MSExcel.png',
       ['Microsoft Excel', 'Excel', 'Microsoft Office', 'MS'], false),
-  Subject(14, '', 'images/Sub-Icons/React.png', [], false),
-  Subject(15, 'JavaScript', 'images/Sub-Icons/JavaScript.png',
-      ['Web Development', 'JS', 'Javascript', 'JavaScript'], false),
   Subject(
-      15,
+      14,
       'Node JS',
       'images/Sub-Icons/NodeJS.png',
       ['Web Development', 'JS', 'Javascript', 'JavaScript', 'Node JS', 'Node'],
       false),
+  Subject(15, 'JavaScript', 'images/Sub-Icons/JavaScript.png',
+      ['Web Development', 'JS', 'Javascript', 'JavaScript'], false),
   Subject(16, 'Matlab', 'images/Sub-Icons/Matlab.png',
       ['Matlab', 'Programming'], false),
   Subject(

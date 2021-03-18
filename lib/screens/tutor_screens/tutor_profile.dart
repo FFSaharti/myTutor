@@ -449,10 +449,13 @@ class _TutorProfileState extends State<TutorProfile> {
   List<Widget> getExperiences() {
     List<Widget> widgets = [];
     List<Subject> experiences = [];
+print("----");
 
     for (int i = 0; i < SessionManager.loggedInTutor.experiences.length; i++) {
       for (int j = 0; j < subjects.length; j++) {
+
         if (SessionManager.loggedInTutor.experiences[i] == subjects[j].id) {
+          print(subjects[j].title);
           subjects[j].chosen = true;
           experiences.add(subjects[j]);
         }

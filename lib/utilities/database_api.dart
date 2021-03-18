@@ -89,13 +89,13 @@ class DatabaseAPI {
           // the user didn't pick any image
           tempUser.profileImag = "";
           uploadUser();
-          _tempStudent = Student(tempUser.name, tempUser.email, tempUser.pass,
+          _tempStudent = Student(tempUser.name, tempUser.email, "none",
               "", "", [], tempUser.profileImag);
           SessionManager.loggedInStudent = _tempStudent;
         } else {
           await uploadUserProfileImage();
           uploadUser();
-          _tempStudent = Student(tempUser.name, tempUser.email, tempUser.pass,
+          _tempStudent = Student(tempUser.name, tempUser.email, "none",
               "", "", [], tempUser.profileImag);
           SessionManager.loggedInStudent = _tempStudent;
         }
@@ -109,8 +109,7 @@ class DatabaseAPI {
 
   static void uploadUser() {
     _firestore.collection("Student").add({
-      "email": tempUser.email,
-      "pass": tempUser.pass,
+      "email": tempUser.email.toLowerCase(),
       "name": tempUser.name,
       "questions": [],
       "aboutMe": "",
@@ -203,7 +202,7 @@ class DatabaseAPI {
     try {
       await _firestore
           .collection("Student")
-          .where("email", isEqualTo: email)
+          .where("email", isEqualTo: email.toLowerCase())
           .get()
           .then((value) async => {
                 if (value.docs.isNotEmpty)
@@ -211,7 +210,7 @@ class DatabaseAPI {
                     tempStudent = Student(
                         value.docs.single.data()['name'],
                         email,
-                        pass,
+                        "none",
                         value.docs.single.data()['aboutMe'],
                         value.docs.single.id,
                         [],
@@ -231,13 +230,13 @@ class DatabaseAPI {
                   {
                     await _firestore
                         .collection("Tutor")
-                        .where("email", isEqualTo: email)
+                        .where("email", isEqualTo: email.toLowerCase())
                         .get()
                         .then((value) => {
                               _tempTutor = Tutor(
                                   value.docs.single.data()['name'],
                                   email,
-                                  pass,
+                                 "none",
                                   value.docs.single.data()['aboutMe'],
                                   value.docs.single.id,
                                   [],
@@ -367,7 +366,7 @@ class DatabaseAPI {
           tempTutor = Tutor(
               value.data()['name'],
               value.data()['email'],
-              value.data()['pass'],
+              "none",
               "",
               value.id,
               [],
@@ -399,14 +398,13 @@ class DatabaseAPI {
       if (user != null) {
         try {
           await _firestore.collection("Tutor").add({
-            "email": tempUser.email,
-            "pass": tempUser.pass,
+            "email": tempUser.email.toLowerCase(),
             "name": tempUser.name,
             "experiences": subjectIDs,
             "profileImg": tempUser.profileImag,
             "aboutMe": "",
           });
-          _tempTutor = Tutor(tempUser.name, tempUser.email, tempUser.pass, "",
+          _tempTutor = Tutor(tempUser.name, tempUser.email, "none", "",
               "", subjectIDs, tempUser.profileImag);
           SessionManager.loggedInTutor = _tempTutor;
           return "Success";

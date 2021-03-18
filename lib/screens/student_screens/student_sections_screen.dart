@@ -16,91 +16,94 @@ class StudentSection extends StatefulWidget {
 }
 
 class _StudentSectionState extends State<StudentSection> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: true,
+      resizeToAvoidBottomInset: false,
       body: SafeArea(
-        child: Container(
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                SizedBox(
-                  height: ScreenSize.height * 0.07,
-                ),
-                Villain(
-                  villainAnimation: VillainAnimation.fade(
-                    from: Duration(milliseconds: 0),
-                    to: Duration(milliseconds: 500),
+        child: SingleChildScrollView(
+          child: Container(
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    height: ScreenSize.height * 0.07,
                   ),
-                  child: Text(
-                    "Select an option",
-                    style: GoogleFonts.sarala(fontSize: 25, color: Theme.of(context).buttonColor.withOpacity(0.6)),
+                  Villain(
+                    villainAnimation: VillainAnimation.fade(
+                      from: Duration(milliseconds: 0),
+                      to: Duration(milliseconds: 500),
+                    ),
+                    child: Text(
+                      "Select an option",
+                      style: GoogleFonts.sarala(
+                          fontSize: 25,
+                          color: Theme.of(context).buttonColor.withOpacity(0.6)),
+                    ),
                   ),
-                ),
-                SizedBox(
-                  height: ScreenSize.height * 0.01,
-                ),
-                Villain(
-                  villainAnimation: VillainAnimation.fromBottom(
-                    from: Duration(milliseconds: 0),
-                    to: Duration(milliseconds: 600),
+                  SizedBox(
+                    height: ScreenSize.height * 0.01,
                   ),
-                  child: StudentSectionWidget(
-                    widget: widget,
-                    onClick: () {
-                      print("clicked ASK");
-                      Navigator.pushNamed(context, AskScreenStudent.id);
-                    },
-                    imgPath: "images/Student_Section/Ask_Logo.png",
-                    title: "Ask",
-                    description:
-                    "Post questions that can be viewed and \nanswered by tutors!",
+                  Villain(
+                    villainAnimation: VillainAnimation.fromBottom(
+                      from: Duration(milliseconds: 0),
+                      to: Duration(milliseconds: 600),
+                    ),
+                    child: StudentSectionWidget(
+                      widget: widget,
+                      onClick: () {
+                        print("clicked ASK");
+                        Navigator.pushNamed(context, AskScreenStudent.id);
+                      },
+                      imgPath: "images/Student_Section/Ask_Logo.png",
+                      title: "Ask",
+                      description:
+                          "Post questions that can be viewed and \nanswered by tutors!",
+                    ),
                   ),
-                ),
-                SizedBox(
-                  height: ScreenSize.height * 0.01,
-                ),
-                Villain(
-                  villainAnimation: VillainAnimation.fromBottom(
-                    from: Duration(milliseconds: 300),
-                    to: Duration(milliseconds: 700),
+                  SizedBox(
+                    height: ScreenSize.height * 0.01,
                   ),
-                  child: StudentSectionWidget(
-                    widget: widget,
-                    onClick: () {
-                      print("clicked REQUEST");
-                      Navigator.pushNamed(context, RequestTutorScreen.id);
-                    },
-                    imgPath: "images/Student_Section/Request_Logo.png",
-                    title: "Request",
-                    description:
-                    "Search for Tutors with a variety of \nfilters and request them!",
+                  Villain(
+                    villainAnimation: VillainAnimation.fromBottom(
+                      from: Duration(milliseconds: 300),
+                      to: Duration(milliseconds: 700),
+                    ),
+                    child: StudentSectionWidget(
+                      widget: widget,
+                      onClick: () {
+                        print("clicked REQUEST");
+                        Navigator.pushNamed(context, RequestTutorScreen.id);
+                      },
+                      imgPath: "images/Student_Section/Request_Logo.png",
+                      title: "Request",
+                      description:
+                          "Search for Tutors with a variety of \nfilters and request them!",
+                    ),
                   ),
-                ),
-                SizedBox(
-                  height: ScreenSize.height * 0.01,
-                ),
-                Villain(
-                  villainAnimation: VillainAnimation.fromBottom(
-                    from: Duration(milliseconds: 300),
-                    to: Duration(milliseconds: 700),
+                  SizedBox(
+                    height: ScreenSize.height * 0.01,
                   ),
-                  child: StudentSectionWidget(
-                    widget: widget,
-                    onClick: () {
-                      print("clicked MATERIALS");
-                      Navigator.pushNamed(context, ViewMaterialsScreen.id);
-                    },
-                    imgPath: "images/Student_Section/Materials_Logo.png",
-                    title: "Materials",
-                    description:
-                    "Search for Materials posted by \nother Tutors and bookmark them",
-                  ),
-                )
-              ],
+                  Villain(
+                    villainAnimation: VillainAnimation.fromBottom(
+                      from: Duration(milliseconds: 300),
+                      to: Duration(milliseconds: 700),
+                    ),
+                    child: StudentSectionWidget(
+                      widget: widget,
+                      onClick: () {
+                        print("clicked MATERIALS");
+                        Navigator.pushNamed(context, ViewMaterialsScreen.id);
+                      },
+                      imgPath: "images/Student_Section/Materials_Logo.png",
+                      title: "Materials",
+                      description:
+                          "Search for Materials posted by \nother Tutors and bookmark them",
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
         ),
@@ -112,10 +115,10 @@ class _StudentSectionState extends State<StudentSection> {
 class StudentSectionWidget extends StatelessWidget {
   StudentSectionWidget(
       {@required this.widget,
-        @required this.onClick,
-        @required this.imgPath,
-        @required this.title,
-        @required this.description});
+      @required this.onClick,
+      @required this.imgPath,
+      @required this.title,
+      @required this.description});
 
   final StudentSection widget;
   final Function onClick;
@@ -149,15 +152,20 @@ class StudentSectionWidget extends StatelessWidget {
               ),
               title: Text(
                 title,
-                style: GoogleFonts.sarala(fontSize: 25, color: Theme.of(context).buttonColor),
+                style: GoogleFonts.sarala(
+                    fontSize: 25, color: Theme.of(context).buttonColor),
               ),
               subtitle: Text(
                 description,
-                style: GoogleFonts.sarala(fontSize: 14, color: Theme.of(context).buttonColor),
+                style: GoogleFonts.sarala(
+                    fontSize: 14, color: Theme.of(context).buttonColor),
               ),
               trailing: Container(
                 height: double.infinity,
-                child: Icon(Icons.arrow_forward_ios_outlined, color: Theme.of(context).buttonColor,),
+                child: Icon(
+                  Icons.arrow_forward_ios_outlined,
+                  color: Theme.of(context).buttonColor,
+                ),
               ),
             ),
           ),

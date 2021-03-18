@@ -311,7 +311,7 @@ class _ViewMaterialsScreenState extends State<ViewMaterialsScreen> {
       onWillPop: () async => false,
       child: Scaffold(
         resizeToAvoidBottomInset: false,
-        appBar: buildAppBar(context, kColorScheme[3], "View Materials"),
+        appBar: buildAppBar(context, Theme.of(context).accentColor, "View Materials"),
         body: SafeArea(
           child: Column(
             children: [
