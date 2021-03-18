@@ -142,7 +142,10 @@ class _ChatScreenState extends State<ChatScreen> {
                                             )
                                           : print('wait to load');
                                     },
-                                    child: CircleAvatar(
+                                    child: receiver.profileImag == "" ? Icon(
+                                      Icons.account_circle_sharp,
+                                      size: ScreenSize.height *0.080,
+                                    ): CircleAvatar(
                                       backgroundImage:
                                           NetworkImage(receiver.profileImag),
                                       backgroundColor: kColorScheme[1],
@@ -699,7 +702,7 @@ class _ChatScreenState extends State<ChatScreen> {
                         borderColor: null,
                         onPressed: () {
                           DatabaseAPI.changeSessionsStatus(
-                                  "close", widget.currentsession.session_id)
+                                  "closed", widget.currentsession.session_id)
                               .then((value) => {
                                     if (value == 'success')
                                       {
