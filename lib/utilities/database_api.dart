@@ -817,6 +817,7 @@ class DatabaseAPI {
 
     await _firestore.collection("Answer").add({
       "Tutor": SessionManager.loggedInTutor.userId,
+      "questionId": question.id,
       "answer": text,
       "date": formatted,
     }).then((value) => {
@@ -1015,6 +1016,13 @@ class DatabaseAPI {
 
   static Future<DocumentSnapshot> fetchQuestion(question) async {
     return await _firestore.collection("QuizQuestion").doc(question).get();
+  }
+
+  static Stream<QuerySnapshot> fetchQuestionAnswers(Question question){
+    return _firestore
+        .collection("Answer")
+        .where("questionId", isEqualTo: question.id)
+        .snapshots();
   }
 
   static Future<String> updateQuizQuestions(
