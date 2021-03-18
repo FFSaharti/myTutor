@@ -4,6 +4,7 @@ import 'package:flutter_villains/villains/villains.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mytutor/components/circular_button.dart';
+import 'package:mytutor/components/disable_default_pop.dart';
 import 'package:mytutor/screens/login_screen.dart';
 import 'package:mytutor/screens/tutor_screens/interests_screen.dart';
 import 'package:mytutor/utilities/constants.dart';
@@ -13,7 +14,6 @@ import 'package:page_transition/page_transition.dart';
 
 class SpecifyRoleScreen extends StatefulWidget {
   static String id = 'specify_role_screen';
-  static bool passwordVisible = true;
 
   @override
   _SpecifyRoleScreenState createState() => _SpecifyRoleScreenState();
@@ -61,8 +61,7 @@ class _SpecifyRoleScreenState extends State<SpecifyRoleScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async => false,
+    return DisableDefaultPop(
       child: Scaffold(
         appBar:
             buildAppBar(context, Theme.of(context).accentColor, "Specify Role"),
@@ -76,20 +75,14 @@ class _SpecifyRoleScreenState extends State<SpecifyRoleScreen> {
               ),
               AnimatedSwitcher(
                 duration: Duration(milliseconds: 350),
-                // child: Image.asset(
-                //   selectedPath,
-                //   width: 250,
-                // ),
                 child: selectedWidget,
                 transitionBuilder: (Widget child, Animation<double> animation) {
                   return ScaleTransition(child: child, scale: animation);
                 },
               ),
-              NotificationListener<OverscrollIndicatorNotification>(
-                onNotification: (overscroll) {
-                  overscroll.disallowGlow();
-                },
-                child: Expanded(
+              disableBlueOverflow(
+                context,
+                Expanded(
                   child: CupertinoPicker(
                     backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                     itemExtent: 35,

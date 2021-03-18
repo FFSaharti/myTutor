@@ -26,13 +26,14 @@ class _SplashScreenState extends State<SplashScreen> {
               Future.delayed(
                 Duration(seconds: 1),
                 () {
-                  //Navigator.pushNamed(context, WelcomeScreen.id);
                   Navigator.push(
-                      context,
-                      PageTransition(
-                          type: PageTransitionType.bottomToTop,
-                          duration: Duration(milliseconds: 500),
-                          child: WelcomeScreen()));
+                    context,
+                    PageTransition(
+                      type: PageTransitionType.bottomToTop,
+                      duration: Duration(milliseconds: 500),
+                      child: WelcomeScreen(),
+                    ),
+                  );
                 },
               ),
             }
@@ -43,13 +44,16 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        gradient:  !(Theme.of(context).scaffoldBackgroundColor ==
-            Color(0xff29273d))
-            ? kBackgroundGradient
-            : null,
+        gradient:
+            !(Theme.of(context).scaffoldBackgroundColor == Color(0xff29273d))
+                ? kBackgroundGradient
+                : null,
       ),
       child: Scaffold(
-          backgroundColor: Theme.of(context).scaffoldBackgroundColor == Colors.white ? Colors.transparent : Theme.of(context).scaffoldBackgroundColor,
+          backgroundColor:
+              Theme.of(context).scaffoldBackgroundColor == Colors.white
+                  ? Colors.transparent
+                  : Theme.of(context).scaffoldBackgroundColor,
           body: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [

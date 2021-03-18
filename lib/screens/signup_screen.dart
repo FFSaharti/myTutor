@@ -14,6 +14,8 @@ import 'package:mytutor/utilities/database_api.dart';
 import 'package:mytutor/utilities/regEx.dart';
 import 'package:mytutor/utilities/screen_size.dart';
 
+import 'file:///C:/Users/faisa/Desktop/Developer/AndroidStudioProjects/mytutor/lib/components/disable_default_pop.dart';
+
 class SignupScreen extends StatefulWidget {
   static String id = 'signup_screen';
   static bool passwordVisible = true;
@@ -31,8 +33,7 @@ class _SignupScreenState extends State<SignupScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async => false,
+    return DisableDefaultPop(
       child: Container(
         decoration: BoxDecoration(
           gradient:
@@ -117,7 +118,9 @@ class _SignupScreenState extends State<SignupScreen> {
                     height: ScreenSize.height * 0.015,
                   ),
                   Divider(
-                    color: Colors.white,
+                    color: Theme.of(context).dividerColor == Colors.transparent
+                        ? Colors.white
+                        : Theme.of(context).dividerColor,
                   ),
                   SizedBox(
                     height: ScreenSize.height * 0.015,
@@ -132,8 +135,10 @@ class _SignupScreenState extends State<SignupScreen> {
                       obscureText: false,
                       prefixIconData: Icons.person,
                       colorScheme: Theme.of(context).primaryColorDark,
-                      suffixIconData:
-                          Validator.isValidName(name) ? Icons.check : null,
+                      suffixIcon: Validator.isValidName(name)
+                          ? Icon(Icons.check,
+                              color: Theme.of(context).primaryColorDark)
+                          : Icon(Icons.check, color: Colors.transparent),
                       onChanged: (value) {
                         setState(() {
                           name = value;
@@ -157,8 +162,10 @@ class _SignupScreenState extends State<SignupScreen> {
                       obscureText: false,
                       prefixIconData: Icons.mail_outline,
                       colorScheme: Theme.of(context).primaryColorDark,
-                      suffixIconData:
-                          Validator.isValidEmail(email) ? Icons.check : null,
+                      suffixIcon: Validator.isValidEmail(email)
+                          ? Icon(Icons.check,
+                              color: Theme.of(context).primaryColorDark)
+                          : Icon(Icons.check, color: Colors.transparent),
                       onChanged: (value) {
                         setState(() {
                           email = value;
@@ -192,10 +199,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     ),
                   ),
                   SizedBox(
-                    height: ScreenSize.height * 0.02,
-                  ),
-                  SizedBox(
-                    height: ScreenSize.height * 0.04,
+                    height: ScreenSize.height * 0.06,
                   ),
                   Villain(
                     villainAnimation: VillainAnimation.fromBottom(
@@ -260,7 +264,7 @@ class _SignupScreenState extends State<SignupScreen> {
 class TextFieldWidget extends StatefulWidget {
   final String hintText;
   final IconData prefixIconData;
-  final IconData suffixIconData;
+  final Icon suffixIcon;
   bool obscureText;
   final Function onChanged;
   final Color colorScheme;
@@ -271,7 +275,7 @@ class TextFieldWidget extends StatefulWidget {
       this.obscureText,
       this.onChanged,
       this.prefixIconData,
-      this.suffixIconData,
+      this.suffixIcon,
       this.colorScheme,
       this.isPassword});
 
@@ -307,12 +311,14 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
             padding: const EdgeInsets.only(right: 10.0, bottom: 11),
             child: Icon(
               (!widget.isPassword)
-                  ? widget.suffixIconData
+                  ? widget.suffixIcon.icon
                   : !SignupScreen.passwordVisible
                       ? Icons.visibility
                       : Icons.visibility_off,
               size: 21,
-              color: widget.colorScheme,
+              color: (!widget.isPassword)
+                  ? widget.suffixIcon.color
+                  : widget.colorScheme,
             ),
           ),
           onTap: () {

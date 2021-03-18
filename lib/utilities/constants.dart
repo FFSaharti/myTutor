@@ -123,6 +123,32 @@ List<Subject> subjects = [
       false),
 ];
 
+NotificationListener<OverscrollIndicatorNotification> disableBlueOverflow(
+    BuildContext context, Widget child) {
+  return NotificationListener<OverscrollIndicatorNotification>(
+      // ignore: missing_return
+      onNotification: (overscroll) {
+        overscroll.disallowGlow();
+      },
+      child: child);
+}
+
+BoxDecoration kCurvedShapeDecoration(Color cardColor) {
+  return BoxDecoration(
+    borderRadius: BorderRadius.only(
+        topRight: Radius.circular(30), topLeft: Radius.circular(30)),
+    color: cardColor,
+    boxShadow: [
+      BoxShadow(
+        color: Colors.black.withOpacity(0.03),
+        spreadRadius: 5,
+        blurRadius: 7,
+        offset: Offset(0, 3), // changes position of shadow
+      ),
+    ],
+  );
+}
+
 AppBar buildAppBar(BuildContext context, Color buttonColor, String title,
     [bool removeBackButton, Function onBack]) {
   if (removeBackButton == null) {

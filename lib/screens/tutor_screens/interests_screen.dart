@@ -6,6 +6,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mytutor/classes/subject.dart';
 import 'package:mytutor/components/circular_button.dart';
+import 'package:mytutor/components/disable_default_pop.dart';
 import 'package:mytutor/screens/login_screen.dart';
 import 'package:mytutor/utilities/constants.dart';
 import 'package:mytutor/utilities/database_api.dart';
@@ -52,8 +53,7 @@ class _InterestsScreenState extends State<InterestsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async => false,
+    return DisableDefaultPop(
       child: Scaffold(
           appBar: buildAppBar(
               context, Theme.of(context).accentColor, "Pick Interests"),
@@ -76,7 +76,7 @@ class _InterestsScreenState extends State<InterestsScreen> {
                       });
                     },
                     style: TextStyle(
-                      color: Theme.of(context).accentColor,
+                      color: Theme.of(context).buttonColor,
                     ),
                     textAlignVertical: TextAlignVertical.center,
                     decoration: InputDecoration(
@@ -121,9 +121,12 @@ class _InterestsScreenState extends State<InterestsScreen> {
                     color: Colors.transparent,
                   ),
                   height: ScreenSize.height * 0.07,
-                  child: ListView(
-                    scrollDirection: Axis.horizontal,
-                    children: searchResults,
+                  child: disableBlueOverflow(
+                    context,
+                    ListView(
+                      scrollDirection: Axis.horizontal,
+                      children: searchResults,
+                    ),
                   ),
                 ),
                 SizedBox(
@@ -144,7 +147,7 @@ class _InterestsScreenState extends State<InterestsScreen> {
                   ),
                 ),
                 SizedBox(
-                  height: 8,
+                  height: ScreenSize.height * 0.01,
                 ),
                 Container(
                   width: double.infinity,
@@ -152,9 +155,12 @@ class _InterestsScreenState extends State<InterestsScreen> {
                     color: Colors.transparent,
                   ),
                   height: ScreenSize.height * 0.07,
-                  child: ListView(
-                    scrollDirection: Axis.horizontal,
-                    children: selectedInterests,
+                  child: disableBlueOverflow(
+                    context,
+                    ListView(
+                      scrollDirection: Axis.horizontal,
+                      children: selectedInterests,
+                    ),
                   ),
                 ),
                 SizedBox(
@@ -205,18 +211,6 @@ class _InterestsScreenState extends State<InterestsScreen> {
                                   Navigator.popUntil(context, (route) {
                                     return count++ == 2;
                                   }),
-
-                                  Future.delayed(Duration(milliseconds: 500),
-                                      () {
-                                    // Navigator.push(
-                                    //     context,
-                                    //     PageTransition(
-                                    //         type: PageTransitionType
-                                    //             .leftToRightWithFade,
-                                    //         duration:
-                                    //         Duration(milliseconds: 500),
-                                    //         child: LoginScreen()));
-                                  })
                                 },
                               stopLoading()
                             });

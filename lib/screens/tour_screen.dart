@@ -9,6 +9,8 @@ import 'package:mytutor/utilities/constants.dart';
 import 'package:mytutor/utilities/screen_size.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
+import 'file:///C:/Users/faisa/Desktop/Developer/AndroidStudioProjects/mytutor/lib/components/disable_default_pop.dart';
+
 class TourScreen extends StatefulWidget {
   static String id = 'tour_screen';
   @override
@@ -20,8 +22,7 @@ class _TourScreenState extends State<TourScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async => false,
+    return DisableDefaultPop(
       child: Scaffold(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         appBar: buildAppBar(context, Theme.of(context).accentColor, ""),
@@ -31,12 +32,9 @@ class _TourScreenState extends State<TourScreen> {
             Container(
               height: ScreenSize.height * 0.65,
               width: double.infinity,
-              child: NotificationListener<OverscrollIndicatorNotification>(
-                // ignore: missing_return
-                onNotification: (overscroll) {
-                  overscroll.disallowGlow();
-                },
-                child: PageView(
+              child: disableBlueOverflow(
+                context,
+                PageView(
                   controller: _pageController,
                   onPageChanged: (int) {
                     VillainController.playAllVillains(context);
@@ -50,7 +48,6 @@ class _TourScreenState extends State<TourScreen> {
                         "Explain your problem, and find solution responses from other Tutors!"),
                     TourPages(AnimatedmMaterialsWidget(), "Find Materials",
                         "View materials posted by Tutors that could really assist you."),
-                    // TourPages("images/myTutorLogo.png", "Find Materials",
                     //     "View materials posted by other users that could really assist you."),
                   ],
                 ),
@@ -77,40 +74,22 @@ class _TourScreenState extends State<TourScreen> {
                   width: ScreenSize.width * 0.2,
                 ),
                 Container(
-                    child: MaterialButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, SignupScreen.id);
-                  },
-                  color: Theme.of(context)
-                      .floatingActionButtonTheme
-                      .backgroundColor,
-                  textColor: Colors.white,
-                  child: Icon(
-                    Icons.arrow_forward_ios_sharp,
-                    size: 24,
-                  ),
-                  padding: EdgeInsets.all(16),
-                  shape: CircleBorder(),
-                )
-
-                    // FloatingActionButton(
-                    //   backgroundColor: Colors.black,
-                    //   child: Icon(
-                    //     Icons.arrow_forward_ios_sharp,
-                    //     size: 25,
-                    //     //color: Colors.white,
-                    //   ),
-                    //   elevation: 1,
-                    //   onPressed: () {
-                    //     Navigator.push(
-                    //         context,
-                    //         PageTransition(
-                    //             type: PageTransitionType.rightToLeftWithFade,
-                    //             duration: Duration(milliseconds: 200),
-                    //             child: SignupScreen()));
-                    //   },
-                    // ),
+                  child: MaterialButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, SignupScreen.id);
+                    },
+                    color: Theme.of(context)
+                        .floatingActionButtonTheme
+                        .backgroundColor,
+                    textColor: Colors.white,
+                    child: Icon(
+                      Icons.arrow_forward_ios_sharp,
+                      size: 24,
                     ),
+                    padding: EdgeInsets.all(16),
+                    shape: CircleBorder(),
+                  ),
+                ),
               ],
             ),
           ],
@@ -141,7 +120,7 @@ class _TourScreenState extends State<TourScreen> {
           ),
           child: Text(
             title,
-            style: GoogleFonts.secularOne(
+            style: GoogleFonts.sen(
                 textStyle: TextStyle(
                     fontSize: 30,
                     fontWeight: FontWeight.bold,
@@ -161,7 +140,7 @@ class _TourScreenState extends State<TourScreen> {
             child: Text(
               desc,
               textAlign: TextAlign.center,
-              style: GoogleFonts.secularOne(
+              style: GoogleFonts.sen(
                   textStyle: TextStyle(
                       height: 1.5,
                       fontSize: 15,

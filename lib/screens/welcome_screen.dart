@@ -8,6 +8,8 @@ import 'package:mytutor/utilities/constants.dart';
 import 'package:mytutor/utilities/screen_size.dart';
 import 'package:page_transition/page_transition.dart';
 
+import 'file:///C:/Users/faisa/Desktop/Developer/AndroidStudioProjects/mytutor/lib/components/disable_default_pop.dart';
+
 import 'login_screen.dart';
 
 // ignore: must_be_immutable
@@ -16,10 +18,12 @@ class WelcomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ScreenSize.createScreen(context);
-    return WillPopScope(
-      onWillPop: () async => false,
+    return DisableDefaultPop(
       child: Scaffold(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor == Colors.white ? Colors.transparent : Theme.of(context).scaffoldBackgroundColor,
+        backgroundColor:
+            Theme.of(context).scaffoldBackgroundColor == Colors.white
+                ? Colors.transparent
+                : Theme.of(context).scaffoldBackgroundColor,
         body: Container(
           // color: Colors.white,
           width: ScreenSize.width,
@@ -43,7 +47,7 @@ class WelcomeScreen extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                width: 250.0,
+                width: ScreenSize.width,
                 child: TypewriterAnimatedTextKit(
                   speed: Duration(milliseconds: 200),
                   text: [
@@ -85,8 +89,6 @@ class WelcomeScreen extends StatelessWidget {
                                   to: Duration(milliseconds: 400),
                                 ),
                                 animateExit: false,
-                                // secondaryVillainAnimation:
-                                //     VillainAnimation.fade(),
                                 child: Align(
                                   alignment: Alignment.centerLeft,
                                   child: CircularButton(
@@ -158,20 +160,8 @@ class WelcomeScreen extends StatelessWidget {
                     ),
                   ),
                   width: ScreenSize.width,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                        topRight: Radius.circular(30),
-                        topLeft: Radius.circular(30)),
-                    color: Theme.of(context).cardColor,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.03),
-                        spreadRadius: 5,
-                        blurRadius: 7,
-                        offset: Offset(0, 3), // changes position of shadow
-                      ),
-                    ],
-                  ),
+                  decoration:
+                      kCurvedShapeDecoration(Theme.of(context).cardColor),
                 ),
               ),
             ],

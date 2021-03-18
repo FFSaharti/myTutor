@@ -15,6 +15,8 @@ import 'package:mytutor/utilities/screen_size.dart';
 import 'package:mytutor/utilities/session_manager.dart';
 import 'package:page_transition/page_transition.dart';
 
+import 'file:///C:/Users/faisa/Desktop/Developer/AndroidStudioProjects/mytutor/lib/components/disable_default_pop.dart';
+
 import 'tutor_screens/tutor_screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -52,12 +54,11 @@ class _LoginScreenState extends State<LoginScreen> {
                 ? kBackgroundGradient
                 : null,
       ),
-      child: WillPopScope(
-        onWillPop: () async => false,
+      child: DisableDefaultPop(
         child: Scaffold(
           resizeToAvoidBottomInset: true,
           appBar: buildAppBar(context, Colors.white, "", false, () {
-            Navigator.pushReplacement(
+            Navigator.push(
                 context,
                 PageTransition(
                     type: PageTransitionType.bottomToTop,
@@ -106,8 +107,10 @@ class _LoginScreenState extends State<LoginScreen> {
                       obscureText: false,
                       prefixIconData: Icons.mail_outline,
                       colorScheme: Theme.of(context).primaryColorDark,
-                      suffixIconData:
-                          Validator.isValidEmail(email) ? Icons.check : null,
+                      suffixIcon: Validator.isValidEmail(email)
+                          ? Icon(Icons.check,
+                              color: Theme.of(context).primaryColorDark)
+                          : Icon(Icons.check, color: Colors.transparent),
                       onChanged: (value) {
                         setState(() {
                           email = value;
@@ -128,9 +131,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       hintText: 'Password',
                       obscureText: LoginScreen.passwordVisible,
                       prefixIconData: Icons.lock,
-                      suffixIconData: LoginScreen.passwordVisible
-                          ? Icons.visibility
-                          : Icons.visibility_off,
+                      suffixIcon: LoginScreen.passwordVisible
+                          ? Icon(Icons.visibility)
+                          : Icon(Icons.visibility_off),
                       colorScheme: Theme.of(context).primaryColorDark,
                       isPassword: true,
                       onChanged: (value) {
@@ -237,8 +240,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
     showModalBottomSheet(
         isScrollControlled: true,
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.vertical(top: Radius.circular(25.0))),
+        backgroundColor: Colors.transparent,
+        // shape: RoundedRectangleBorder(
+        //     borderRadius: BorderRadius.vertical(top: Radius.circular(25.0))),
         context: context,
         builder: (context) {
           return Padding(
@@ -246,6 +250,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 bottom: MediaQuery.of(context).viewInsets.bottom),
             child: Container(
               height: ScreenSize.height * 0.30,
+              decoration: kCurvedShapeDecoration(Theme.of(context).cardColor),
               child: Column(
                 children: [
                   SizedBox(
@@ -256,7 +261,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     style: GoogleFonts.sen(
                         fontSize: 17,
                         fontWeight: FontWeight.bold,
-                        color: Colors.black),
+                        color: Theme.of(context).buttonColor),
                   ),
                   SizedBox(
                     height: ScreenSize.height * 0.0180,
@@ -264,10 +269,13 @@ class _LoginScreenState extends State<LoginScreen> {
                   TextField(
                     controller: EmailController,
                     textAlign: TextAlign.left,
+                    style: TextStyle(color: Theme.of(context).buttonColor),
                     decoration: InputDecoration(
                       contentPadding: EdgeInsets.symmetric(
                           vertical: 10.0, horizontal: 20.0),
                       hintText: 'Type Your E-mail here....',
+                      hintStyle:
+                          TextStyle(color: Theme.of(context).buttonColor),
                       border: InputBorder.none,
                     ),
                   ),
@@ -369,7 +377,7 @@ class _LoginScreenState extends State<LoginScreen> {
 class TextFieldWidget extends StatefulWidget {
   final String hintText;
   final IconData prefixIconData;
-  final IconData suffixIconData;
+  final Icon suffixIcon;
   bool obscureText;
   final Function onChanged;
   final Color colorScheme;
@@ -380,7 +388,7 @@ class TextFieldWidget extends StatefulWidget {
       this.obscureText,
       this.onChanged,
       this.prefixIconData,
-      this.suffixIconData,
+      this.suffixIcon,
       this.colorScheme,
       this.isPassword});
 
@@ -416,12 +424,14 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
             padding: const EdgeInsets.only(right: 10.0, bottom: 11),
             child: Icon(
               (!widget.isPassword)
-                  ? widget.suffixIconData
+                  ? widget.suffixIcon.icon
                   : !LoginScreen.passwordVisible
                       ? Icons.visibility
                       : Icons.visibility_off,
               size: 21,
-              color: widget.colorScheme,
+              color: (!widget.isPassword)
+                  ? widget.suffixIcon.color
+                  : widget.colorScheme,
             ),
           ),
           onTap: () {
