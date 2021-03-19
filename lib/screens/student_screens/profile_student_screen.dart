@@ -561,6 +561,9 @@ class _ProfileStudentState extends State<ProfileStudent> {
                             TextField(
                               controller: aboutMeController,
                               keyboardType: TextInputType.multiline,
+                              style: TextStyle(
+                                  fontSize: 16.5,
+                                  color: Theme.of(context).buttonColor),
                               maxLines: null,
                               decoration: InputDecoration(
                                 hintText: !(SessionManager.loggedInStudent

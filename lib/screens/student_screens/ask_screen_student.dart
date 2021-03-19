@@ -76,7 +76,8 @@ class _AskScreenStudentState extends State<AskScreenStudent> {
                           ),
                           Spacer(),
                           DropdownButton(
-                            dropdownColor: Theme.of(context).scaffoldBackgroundColor,
+                            dropdownColor:
+                                Theme.of(context).scaffoldBackgroundColor,
                             value: _dropDownMenuController,
                             items: fetchSubjects(),
                             onChanged: (value) {
@@ -103,7 +104,10 @@ class _AskScreenStudentState extends State<AskScreenStudent> {
   List<DropdownMenuItem> fetchSubjects() {
     List<DropdownMenuItem> items = [];
     items.add(DropdownMenuItem(
-      child: Text("All Subjects",   style: TextStyle(color: Theme.of(context).buttonColor),),
+      child: Text(
+        "All Subjects",
+        style: TextStyle(color: Theme.of(context).buttonColor),
+      ),
       value: 0,
     ));
     for (int i = 0; i < subjects.length; i++) {
@@ -301,187 +305,198 @@ void showAddQuestion() {
               overscroll.disallowGlow();
             },
             child: Container(
-                //     padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-                height: ScreenSize.height * 0.90,
+              //     padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+              height: ScreenSize.height * 0.90,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(25),
                     topRight: Radius.circular(25)),
                 color: Theme.of(context).scaffoldBackgroundColor,
               ),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            IconButton(
-                                icon: Icon(Icons.cancel),
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                }),
-                            Text(
-                              "Add New Question",
-                              style: TextStyle(fontSize: 20, color: Theme.of(context).buttonColor),
-                            ),
-                            IconButton(
-                              icon: Icon(Icons.check),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          IconButton(
+                              icon: Icon(Icons.cancel),
                               onPressed: () {
-                                // ADD NEW QUESTION
-                                if (titleController.text.isNotEmpty &&
-                                    problemController.text.isNotEmpty &&
-                                    getChosenSubject() != -1) {
-                                  DatabaseAPI.addQuestionToStudent(
-                                      titleController.text,
-                                      problemController.text,
-                                      SessionManager.loggedInStudent,
-                                      getChosenSubject());
-                                  Fluttertoast.showToast(
-                                      msg: 'Question Added!');
-                                  print("POP...");
-                                  Navigator.pop(context);
-                                } else {
-                                  print("empty parameters");
-                                  Fluttertoast.showToast(
-                                      msg: 'Missing/Invalid Information');
-                                }
-                              },
+                                Navigator.of(context).pop();
+                              }),
+                          Text(
+                            "Add New Question",
+                            style: TextStyle(
+                                fontSize: 20,
+                                color: Theme.of(context).buttonColor),
+                          ),
+                          IconButton(
+                            icon: Icon(Icons.check),
+                            onPressed: () {
+                              // ADD NEW QUESTION
+                              if (titleController.text.isNotEmpty &&
+                                  problemController.text.isNotEmpty &&
+                                  getChosenSubject() != -1) {
+                                DatabaseAPI.addQuestionToStudent(
+                                    titleController.text,
+                                    problemController.text,
+                                    SessionManager.loggedInStudent,
+                                    getChosenSubject());
+                                Fluttertoast.showToast(msg: 'Question Added!');
+                                print("POP...");
+                                Navigator.pop(context);
+                              } else {
+                                print("empty parameters");
+                                Fluttertoast.showToast(
+                                    msg: 'Missing/Invalid Information');
+                              }
+                            },
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: ScreenSize.height * 0.015,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          children: [
+                            Align(
+                              alignment: Alignment.topLeft,
+                              child: Text(
+                                "Question Title",
+                                style: GoogleFonts.secularOne(
+                                    textStyle: TextStyle(
+                                        fontSize: 17,
+                                        fontWeight: FontWeight.bold,
+                                        color: Theme.of(context).buttonColor)),
+                              ),
+                            ),
+                            TextField(
+                              controller: titleController,
+                              style: TextStyle(
+                                  color: Theme.of(context).buttonColor),
+                              decoration: InputDecoration(
+                                hintText: 'Type something...',
+                                hintStyle: TextStyle(
+                                    fontSize: 17.0,
+                                    color: Theme.of(context)
+                                        .buttonColor
+                                        .withOpacity(0.6)),
+                              ),
+                            ),
+                            SizedBox(
+                              height: ScreenSize.height * 0.020,
+                            ),
+                            Align(
+                              alignment: Alignment.topLeft,
+                              child: Text(
+                                "Question Description",
+                                style: GoogleFonts.secularOne(
+                                    textStyle: TextStyle(
+                                        fontSize: 17,
+                                        fontWeight: FontWeight.bold,
+                                        color: Theme.of(context).buttonColor)),
+                              ),
+                            ),
+                            TextField(
+                              controller: problemController,
+                              keyboardType: TextInputType.multiline,
+                              style: TextStyle(
+                                  color: Theme.of(context).buttonColor),
+                              maxLines: null,
+                              decoration: InputDecoration(
+                                hintText: 'Type something...',
+                                hintStyle: TextStyle(
+                                    fontSize: 17.0,
+                                    color: Theme.of(context)
+                                        .buttonColor
+                                        .withOpacity(0.6)),
+                              ),
+                            ),
+                            SizedBox(
+                              height: ScreenSize.height * 0.020,
+                            ),
+                            Align(
+                              alignment: Alignment.topLeft,
+                              child: Text(
+                                "Subject",
+                                style: GoogleFonts.secularOne(
+                                    textStyle: TextStyle(
+                                        fontSize: 17,
+                                        fontWeight: FontWeight.bold,
+                                        color: Theme.of(context).buttonColor)),
+                              ),
+                            ),
+                            SizedBox(
+                              height: ScreenSize.height * 0.010,
+                            ),
+                            Column(
+                              children: [
+                                TextField(
+                                  onChanged: (value) {
+                                    setModalState(() {
+                                      searchBox = value;
+                                      getSubjects(searchBox);
+                                      // getSelectedSubjects(selectedInterests);
+                                    });
+                                  },
+                                  style: TextStyle(
+                                      color: Theme.of(context).accentColor),
+                                  textAlignVertical: TextAlignVertical.center,
+                                  decoration: InputDecoration(
+                                    contentPadding: EdgeInsets.all(0),
+                                    filled: true,
+                                    fillColor: Theme.of(context)
+                                        .primaryColorLight
+                                        .withOpacity(0.6),
+                                    hintText: 'Search',
+                                    hintStyle: TextStyle(
+                                        color: Theme.of(context).accentColor),
+                                    prefixIcon: Icon(Icons.search,
+                                        color: Theme.of(context).accentColor),
+                                    enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide.none,
+                                        borderRadius:
+                                            BorderRadius.circular(15)),
+                                    focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide.none,
+                                        borderRadius:
+                                            BorderRadius.circular(15)),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: ScreenSize.height * 0.010,
+                                ),
+                                Container(
+                                  width: double.infinity,
+                                  decoration: BoxDecoration(
+                                    color: Colors.transparent,
+                                  ),
+                                  height: ScreenSize.height * 0.065,
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      setModalState(() {
+                                        print("Entered Set State new");
+                                      });
+                                    },
+                                    child: ListView(
+                                        scrollDirection: Axis.horizontal,
+                                        children: getSubjects(searchBox)),
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
                         ),
-                        SizedBox(
-                          height: ScreenSize.height*0.015,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            children: [
-                              Align(
-                                alignment: Alignment.topLeft,
-                                child: Text(
-                                  "Question Title",
-                                  style: GoogleFonts.secularOne(
-                                      textStyle: TextStyle(
-                                          fontSize: 17,
-                                          fontWeight: FontWeight.bold,
-                                          color: Theme.of(context).buttonColor)),
-                                ),
-                              ),
-                              TextField(
-                                controller: titleController,
-                                decoration: InputDecoration(
-                                  hintText: 'Type something...',
-                                  hintStyle: TextStyle(
-                                      fontSize: 17.0, color: Theme.of(context).buttonColor.withOpacity(0.6)),
-                                ),
-                              ),
-                              SizedBox(
-                                height: ScreenSize.height*0.020,
-                              ),
-                              Align(
-                                alignment: Alignment.topLeft,
-                                child: Text(
-                                  "Question Description",
-                                  style: GoogleFonts.secularOne(
-                                      textStyle: TextStyle(
-                                          fontSize: 17,
-                                          fontWeight: FontWeight.bold,
-                                          color: Theme.of(context).buttonColor)),
-                                ),
-                              ),
-                              TextField(
-                                controller: problemController,
-                                keyboardType: TextInputType.multiline,
-                                maxLines: null,
-                                decoration: InputDecoration(
-                                  hintText: 'Type something...',
-                                  hintStyle: TextStyle(
-                                      fontSize: 17.0, color: Theme.of(context).buttonColor.withOpacity(0.6)),
-                                ),
-                              ),
-                              SizedBox(
-                                height: ScreenSize.height*0.020,
-                              ),
-                              Align(
-                                alignment: Alignment.topLeft,
-                                child: Text(
-                                  "Subject",
-                                  style: GoogleFonts.secularOne(
-                                      textStyle: TextStyle(
-                                          fontSize: 17,
-                                          fontWeight: FontWeight.bold,
-                                          color: Theme.of(context).buttonColor)),
-                                ),
-                              ),
-                              SizedBox(
-                                height: ScreenSize.height*0.010,
-                              ),
-                              Column(
-                                children: [
-                                  TextField(
-                                    onChanged: (value) {
-                                      setModalState(() {
-                                        searchBox = value;
-                                        getSubjects(searchBox);
-                                        // getSelectedSubjects(selectedInterests);
-                                      });
-                                    },
-                                    style: TextStyle(color: Theme.of(context).accentColor),
-                                    textAlignVertical:
-                                        TextAlignVertical.center,
-                                    decoration: InputDecoration(
-                                      contentPadding: EdgeInsets.all(0),
-                                      filled: true,
-                                      fillColor:Theme.of(context)
-                                          .primaryColorLight
-                                          .withOpacity(0.6),
-                                      hintText: 'Search',
-                                      hintStyle:  TextStyle(color: Theme.of(context).accentColor),
-                                      prefixIcon: Icon(Icons.search,
-                                          color: Theme.of(context).accentColor),
-                                      enabledBorder: OutlineInputBorder(
-                                          borderSide: BorderSide.none,
-                                          borderRadius:
-                                              BorderRadius.circular(15)),
-                                      focusedBorder: OutlineInputBorder(
-                                          borderSide: BorderSide.none,
-                                          borderRadius:
-                                              BorderRadius.circular(15)),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: ScreenSize.height*0.010,
-                                  ),
-                                  Container(
-                                    width: double.infinity,
-                                    decoration: BoxDecoration(
-                                      color: Colors.transparent,
-                                    ),
-                                    height: ScreenSize.height*0.050,
-                                    child: GestureDetector(
-                                      onTap: () {
-                                        setModalState(() {
-                                          print("Entered Set State new");
-                                        });
-                                      },
-                                      child: ListView(
-                                          scrollDirection: Axis.horizontal,
-                                          children: getSubjects(searchBox)),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
               ),
-
+            ),
           );
         });
       });

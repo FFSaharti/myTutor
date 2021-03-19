@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:mytutor/classes/answer.dart';
 import 'package:mytutor/classes/document.dart';
@@ -89,14 +88,14 @@ class DatabaseAPI {
           // the user didn't pick any image
           tempUser.profileImag = "";
           uploadUser();
-          _tempStudent = Student(tempUser.name, tempUser.email, "none",
-              "", "", [], tempUser.profileImag);
+          _tempStudent = Student(tempUser.name, tempUser.email, "none", "", "",
+              [], tempUser.profileImag);
           SessionManager.loggedInStudent = _tempStudent;
         } else {
           await uploadUserProfileImage();
           uploadUser();
-          _tempStudent = Student(tempUser.name, tempUser.email, "none",
-              "", "", [], tempUser.profileImag);
+          _tempStudent = Student(tempUser.name, tempUser.email, "none", "", "",
+              [], tempUser.profileImag);
           SessionManager.loggedInStudent = _tempStudent;
         }
 
@@ -118,26 +117,29 @@ class DatabaseAPI {
     });
   }
 
-  static Future<String> checkIfEmailExists(String email) async{
-
-    try{
-       QuerySnapshot doc = await _firestore.collection('Student').where('email',isEqualTo: email).get();
-       if(doc.docs.isNotEmpty){
-         return 'Exists';
-       } else{
-         QuerySnapshot doc = await _firestore.collection('Tutor').where('email',isEqualTo: email).get();
-         if(doc.docs.isNotEmpty){
-           return 'Exists';
-         }
-       }
-       return 'available';
+  static Future<String> checkIfEmailExists(String email) async {
+    try {
+      QuerySnapshot doc = await _firestore
+          .collection('Student')
+          .where('email', isEqualTo: email)
+          .get();
+      if (doc.docs.isNotEmpty) {
+        return 'Exists';
+      } else {
+        QuerySnapshot doc = await _firestore
+            .collection('Tutor')
+            .where('email', isEqualTo: email)
+            .get();
+        if (doc.docs.isNotEmpty) {
+          return 'Exists';
+        }
+      }
+      return 'available';
     } on FirebaseException catch (e) {
-
       return e.message;
     }
-
-
   }
+
   static Future<String> resetUserPassword(String email) async {
     try {
       await _auth.sendPasswordResetEmail(email: email);
@@ -187,8 +189,6 @@ class DatabaseAPI {
     }
 
     return url;
-
-
   }
 
   static Future<String> userLogin(String email, String pass) async {
@@ -236,7 +236,7 @@ class DatabaseAPI {
                               _tempTutor = Tutor(
                                   value.docs.single.data()['name'],
                                   email,
-                                 "none",
+                                  "none",
                                   value.docs.single.data()['aboutMe'],
                                   value.docs.single.id,
                                   [],
@@ -363,14 +363,8 @@ class DatabaseAPI {
   static Future<Tutor> buildTutor(String tutorID) async {
     await _firestore.collection("Tutor").doc(tutorID).get().then((value) => {
           print("TUTOR IS ....... " + value.data()['name']),
-          tempTutor = Tutor(
-              value.data()['name'],
-              value.data()['email'],
-              "none",
-              "",
-              value.id,
-              [],
-              value.data()["profileImg"]),
+          tempTutor = Tutor(value.data()['name'], value.data()['email'], "none",
+              "", value.id, [], value.data()["profileImg"]),
           List.from(value.data()['experiences']).forEach((element) {
             print(
                 "EXPERIENCES OF TUTOR ARE PRINTING ... " + element.toString());
@@ -404,8 +398,8 @@ class DatabaseAPI {
             "profileImg": tempUser.profileImag,
             "aboutMe": "",
           });
-          _tempTutor = Tutor(tempUser.name, tempUser.email, "none", "",
-              "", subjectIDs, tempUser.profileImag);
+          _tempTutor = Tutor(tempUser.name, tempUser.email, "none", "", "",
+              subjectIDs, tempUser.profileImag);
           SessionManager.loggedInTutor = _tempTutor;
           return "Success";
         } on FirebaseAuthException catch (e) {
@@ -435,7 +429,7 @@ class DatabaseAPI {
   static Future<String> createNewSession(String title, String problemDesc,
       String prefDate, MyUser tutor, String time, int subject) async {
     DateTime tempDate = new DateFormat("yyyy-MM-dd").parse(prefDate);
-    try{
+    try {
       await _firestore.collection("session").add({
         'student': SessionManager.loggedInStudent.userId,
         'description': problemDesc,
@@ -448,11 +442,10 @@ class DatabaseAPI {
         'timeOfLastMessage': DateTime.now(),
         'subject': subject,
       });
-     return "success";
+      return "success";
     } on FirebaseException catch (e) {
       return e.message;
     }
-
   }
 
   static Future<String> scheduleWithStudent(Session session) async {

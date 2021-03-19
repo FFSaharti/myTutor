@@ -275,8 +275,9 @@ class InterestWidget extends StatefulWidget {
   Subject subject;
   bool chosen = false;
   Function setParentState;
+  Function setModalState;
 
-  InterestWidget(this.subject, this.setParentState);
+  InterestWidget(this.subject, this.setParentState, [this.setModalState]);
 
   @override
   _InterestWidgetState createState() => _InterestWidgetState();
@@ -304,10 +305,19 @@ class _InterestWidgetState extends State<InterestWidget> {
       child: GestureDetector(
         onTap: () {
           setState(() {
-            widget.chosen = !widget.chosen;
-            widget.subject.toggleChosen();
-            widget.setParentState();
-            widget.setParentState;
+            if (widget.setModalState != null) {
+              widget.setModalState(() {
+                widget.chosen = !widget.chosen;
+                widget.subject.toggleChosen();
+                widget.setParentState();
+                widget.setParentState;
+              });
+            } else {
+              widget.chosen = !widget.chosen;
+              widget.subject.toggleChosen();
+              widget.setParentState();
+              widget.setParentState;
+            }
           });
         },
         child: Padding(

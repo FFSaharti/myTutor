@@ -33,10 +33,10 @@ class _AnswerScreenQuestionDetailsState
       onWillPop: () async => false,
       child: Scaffold(
         resizeToAvoidBottomInset: false,
-        appBar: buildAppBar(context, Theme.of(context).accentColor, "View Question"),
+        appBar: buildAppBar(
+            context, Theme.of(context).accentColor, "View Question"),
         body: Container(
           child: Column(
-
             children: <Widget>[
               Center(
                 child: Container(
@@ -75,7 +75,7 @@ class _AnswerScreenQuestionDetailsState
                                     widget.question.title,
                                     style: GoogleFonts.sen(
                                         fontSize: 15,
-                                       color: Theme.of(context).buttonColor,
+                                        color: Theme.of(context).buttonColor,
                                         fontWeight: FontWeight.bold),
                                   )
                                 ],
@@ -202,91 +202,99 @@ class _AnswerScreenQuestionDetailsState
           return StatefulBuilder(
               builder: (BuildContext context, StateSetter setModalState) {
             return Container(
-                //     padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-                height: ScreenSize.height * 0.70,
+              //     padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+              height: ScreenSize.height * 0.70,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(25),
                     topRight: Radius.circular(25)),
                 color: Theme.of(context).scaffoldBackgroundColor,
               ),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: SingleChildScrollView(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            IconButton(
-                                icon: Icon(Icons.cancel),
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                }),
-                            Text(
-                              "Answer",
-                              style: GoogleFonts.sen(fontSize: 20, color: Theme.of(context).buttonColor),
-                            ),
-                            IconButton(
-                              icon: Icon(Icons.check),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          IconButton(
+                              icon: Icon(Icons.cancel),
                               onPressed: () {
-                                if (answerController.text.isNotEmpty) {
-                                  print("adding answer");
-                                  DatabaseAPI.answerQuestion(widget.question,
-                                          answerController.text)
-                                      .then((value) =>
-                                          {Navigator.pop(context)});
-                                  //TODO: Show dialog for answering message successfully
-                                  Fluttertoast.showToast(msg: 'Answer sent!');
-                                  Navigator.pop(context);
-                                  Navigator.pop(context);
-                                } else {
-                                  print("empty parameters");
-                                  //TODO: Show error message cannot leave empty...
-                                  Fluttertoast.showToast(
-                                      msg: 'Please provide an answer');
-                                }
-                              },
+                                Navigator.of(context).pop();
+                              }),
+                          Text(
+                            "Answer",
+                            style: GoogleFonts.sen(
+                                fontSize: 20,
+                                color: Theme.of(context).buttonColor),
+                          ),
+                          IconButton(
+                            icon: Icon(Icons.check),
+                            onPressed: () {
+                              if (answerController.text.isNotEmpty) {
+                                print("adding answer");
+                                DatabaseAPI.answerQuestion(
+                                        widget.question, answerController.text)
+                                    .then((value) => {
+                                          Navigator.pop(context),
+                                          Fluttertoast.showToast(
+                                              msg: 'Answer sent!')
+                                        });
+                                //TODO: Show dialog for answering message successfully
+
+                              } else {
+                                print("empty parameters");
+                                //TODO: Show error message cannot leave empty...
+                                Fluttertoast.showToast(
+                                    msg: 'Please provide an answer');
+                              }
+                            },
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: ScreenSize.height * 0.01,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          children: [
+                            Align(
+                              alignment: Alignment.topLeft,
+                              child: Text(
+                                "Provide an answer",
+                                style: GoogleFonts.sen(
+                                    textStyle: TextStyle(
+                                        fontSize: 17,
+                                        fontWeight: FontWeight.bold,
+                                        color: Theme.of(context).buttonColor)),
+                              ),
+                            ),
+                            TextField(
+                              controller: answerController,
+                              keyboardType: TextInputType.multiline,
+                              style: TextStyle(
+                                  color: Theme.of(context).buttonColor),
+                              maxLines: null,
+                              decoration: InputDecoration(
+                                hintText: 'Type something...',
+                                hintStyle: GoogleFonts.sen(
+                                    fontSize: 17.0,
+                                    color: Theme.of(context)
+                                        .buttonColor
+                                        .withOpacity(0.6)),
+                              ),
                             ),
                           ],
                         ),
-                        SizedBox(
-                          height: ScreenSize.height * 0.01,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            children: [
-                              Align(
-                                alignment: Alignment.topLeft,
-                                child: Text(
-                                  "Provide an answer",
-                                  style: GoogleFonts.sen(
-                                      textStyle: TextStyle(
-                                          fontSize: 17,
-                                          fontWeight: FontWeight.bold,
-                                          color: Theme.of(context).buttonColor)),
-                                ),
-                              ),
-                              TextField(
-                                controller: answerController,
-                                keyboardType: TextInputType.multiline,
-                                maxLines: null,
-                                decoration: InputDecoration(
-                                  hintText: 'Type something...',
-                                  hintStyle: GoogleFonts.sen(
-                                      fontSize: 17.0, color: Colors.grey),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
-              );
+              ),
+            );
           });
         });
   }
@@ -316,8 +324,7 @@ class _AnswerScreenQuestionDetailsState
             height: height * 0.95,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(25),
-                  topRight: Radius.circular(25)),
+                  topLeft: Radius.circular(25), topRight: Radius.circular(25)),
               color: Theme.of(context).scaffoldBackgroundColor,
             ),
             child: Padding(
@@ -336,7 +343,9 @@ class _AnswerScreenQuestionDetailsState
                             }),
                         Text(
                           "Session Details",
-                          style: GoogleFonts.sen(fontSize: 20, color: Theme.of(context).buttonColor),
+                          style: GoogleFonts.sen(
+                              fontSize: 20,
+                              color: Theme.of(context).buttonColor),
                         ),
                         IconButton(
                             icon: Icon(Icons.check),
@@ -361,26 +370,23 @@ class _AnswerScreenQuestionDetailsState
                                               ? AwesomeDialog(
                                                   context: context,
                                                   animType: AnimType.SCALE,
-                                                  dialogType:
-                                                      DialogType.SUCCES,
+                                                  dialogType: DialogType.SUCCES,
                                                   body: Center(
                                                     child: Text(
                                                       'Session sent to student!',
                                                       style: TextStyle(
-                                                          fontStyle: FontStyle
-                                                              .italic),
+                                                          fontStyle:
+                                                              FontStyle.italic),
                                                     ),
                                                   ),
                                                   btnOkOnPress: () {
-                                                    Navigator.of(context)
-                                                        .pop();
+                                                    Navigator.of(context).pop();
                                                   },
                                                 ).show()
                                               : AwesomeDialog(
                                                   context: context,
                                                   animType: AnimType.SCALE,
-                                                  dialogType:
-                                                      DialogType.ERROR,
+                                                  dialogType: DialogType.ERROR,
                                                   body: Center(
                                                     child: Text(
                                                       'Invalid Data',
@@ -393,8 +399,9 @@ class _AnswerScreenQuestionDetailsState
                                                   btnOkOnPress: () {},
                                                 ).show(),
                                         });
-                              } else{
-                                Fluttertoast.showToast(msg: "Please fill up all the Fields");
+                              } else {
+                                Fluttertoast.showToast(
+                                    msg: "Please fill up all the Fields");
                               }
                             }),
                       ],
@@ -432,12 +439,14 @@ class _AnswerScreenQuestionDetailsState
                           ),
                           TextField(
                             style: GoogleFonts.sen(
-                                fontSize: 17.0, color: Theme.of(context).buttonColor),
+                                fontSize: 17.0,
+                                color: Theme.of(context).buttonColor),
                             controller: titleController,
                             decoration: InputDecoration(
                               hintText: 'Type something...',
                               hintStyle: GoogleFonts.sen(
-                                  fontSize: 17.0, color: Theme.of(context).buttonColor),
+                                  fontSize: 17.0,
+                                  color: Theme.of(context).buttonColor),
                             ),
                           ),
                           SizedBox(
@@ -455,13 +464,15 @@ class _AnswerScreenQuestionDetailsState
                             ),
                           ),
                           TextField(
-                            style :GoogleFonts.sen(
-                                fontSize: 17.0, color: Theme.of(context).buttonColor),
+                            style: GoogleFonts.sen(
+                                fontSize: 17.0,
+                                color: Theme.of(context).buttonColor),
                             controller: problemController,
                             decoration: InputDecoration(
                               hintText: 'Type something...',
                               hintStyle: GoogleFonts.sen(
-                                  fontSize: 17.0, color: Theme.of(context).buttonColor),
+                                  fontSize: 17.0,
+                                  color: Theme.of(context).buttonColor),
                             ),
                           ),
                           SizedBox(
@@ -482,7 +493,10 @@ class _AnswerScreenQuestionDetailsState
                             controller: dateController,
                             decoration: InputDecoration(
                               suffixIcon: GestureDetector(
-                                child: Icon(Icons.date_range, color: Theme.of(context).buttonColor,),
+                                child: Icon(
+                                  Icons.date_range,
+                                  color: Theme.of(context).buttonColor,
+                                ),
                                 onTap: () {
                                   showDatePicker(
                                           context: context,
@@ -502,7 +516,8 @@ class _AnswerScreenQuestionDetailsState
                               hintText: 'Type something...',
                               fillColor: Theme.of(context).buttonColor,
                               hintStyle: GoogleFonts.sen(
-                                  fontSize: 17.0, color: Theme.of(context).buttonColor),
+                                  fontSize: 17.0,
+                                  color: Theme.of(context).buttonColor),
                             ),
                           ),
                           SizedBox(
@@ -523,77 +538,79 @@ class _AnswerScreenQuestionDetailsState
                             readOnly: true,
                             controller: timeController,
                             decoration: InputDecoration(
-                              suffixIcon:  GestureDetector(
+                              suffixIcon: GestureDetector(
                                   onTap: () {
-                                    TimeOfDay _PreferredTime =
-                                    TimeOfDay.now();
+                                    TimeOfDay _PreferredTime = TimeOfDay.now();
                                     TimeOfDay _selectedTimeConvFormat;
                                     String dayOrNight = "";
                                     showTimePicker(
                                       context: context,
                                       initialTime: TimeOfDay.now(),
-                                      builder: (BuildContext context,
-                                          Widget child) {
+                                      builder:
+                                          (BuildContext context, Widget child) {
                                         return Theme(
                                           data: Theme.of(context),
                                           child: child,
                                         );
                                       },
                                     ).then((value) => {
-                                      if (value != null)
-                                        {
-                                          _PreferredTime = value,
-                                          _selectedTimeConvFormat =
-                                              _PreferredTime.replacing(
-                                                  hour: _PreferredTime
-                                                      .hourOfPeriod),
-                                          dayOrNight =
-                                          _PreferredTime.period ==
-                                              DayPeriod.am
-                                              ? "AM"
-                                              : "PM",
-                                          print(_selectedTimeConvFormat
-                                              .hour ==
-                                              0 &&
-                                              _PreferredTime.period ==
-                                                  DayPeriod.pm),
-                                          if (_selectedTimeConvFormat
-                                              .hour ==
-                                              0 &&
-                                              _PreferredTime.period ==
-                                                  DayPeriod.pm)
+                                          if (value != null)
                                             {
-                                              // unique case where the system view 12pm as 0 so we will set it manually
-                                              timeController.text = "12" +
-                                                  ":" +
-                                                  _selectedTimeConvFormat
-                                                      .minute
-                                                      .toString() +
-                                                  " " +
-                                                  dayOrNight,
-                                            }
-                                          else
-                                            {
-                                              timeController.text =
-                                                  _selectedTimeConvFormat
-                                                      .hour
-                                                      .toString() +
+                                              _PreferredTime = value,
+                                              _selectedTimeConvFormat =
+                                                  _PreferredTime.replacing(
+                                                      hour: _PreferredTime
+                                                          .hourOfPeriod),
+                                              dayOrNight =
+                                                  _PreferredTime.period ==
+                                                          DayPeriod.am
+                                                      ? "AM"
+                                                      : "PM",
+                                              print(_selectedTimeConvFormat
+                                                          .hour ==
+                                                      0 &&
+                                                  _PreferredTime.period ==
+                                                      DayPeriod.pm),
+                                              if (_selectedTimeConvFormat
+                                                          .hour ==
+                                                      0 &&
+                                                  _PreferredTime.period ==
+                                                      DayPeriod.pm)
+                                                {
+                                                  // unique case where the system view 12pm as 0 so we will set it manually
+                                                  timeController.text = "12" +
                                                       ":" +
                                                       _selectedTimeConvFormat
                                                           .minute
                                                           .toString() +
                                                       " " +
                                                       dayOrNight,
+                                                }
+                                              else
+                                                {
+                                                  timeController.text =
+                                                      _selectedTimeConvFormat
+                                                              .hour
+                                                              .toString() +
+                                                          ":" +
+                                                          _selectedTimeConvFormat
+                                                              .minute
+                                                              .toString() +
+                                                          " " +
+                                                          dayOrNight,
+                                                }
                                             }
-                                        }
-                                    });
+                                        });
                                   },
-                                  child: Icon(Icons.access_time, color: Theme.of(context).buttonColor,)),
+                                  child: Icon(
+                                    Icons.access_time,
+                                    color: Theme.of(context).buttonColor,
+                                  )),
                               hintText: 'Type something...',
                               hintStyle: GoogleFonts.sen(
-                                  fontSize: 17.0, color: Theme.of(context).buttonColor),
+                                  fontSize: 17.0,
+                                  color: Theme.of(context).buttonColor),
                             ),
-
                           ),
                         ],
                       ),

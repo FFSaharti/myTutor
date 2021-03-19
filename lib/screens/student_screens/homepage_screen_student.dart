@@ -74,7 +74,8 @@ class _HomepageScreenStudentState extends State<HomepageScreenStudent> {
               title: Text(
                 'Home',
                 style: TextStyle(
-                    color: Theme.of(context).appBarTheme.textTheme.bodyText1.color,
+                    color:
+                        Theme.of(context).appBarTheme.textTheme.bodyText1.color,
                     fontWeight: FontWeight.bold),
               ),
               activeColor: Theme.of(context).focusColor,
@@ -89,7 +90,8 @@ class _HomepageScreenStudentState extends State<HomepageScreenStudent> {
               title: Text(
                 'Student',
                 style: TextStyle(
-                    color: Theme.of(context).appBarTheme.textTheme.bodyText1.color,
+                    color:
+                        Theme.of(context).appBarTheme.textTheme.bodyText1.color,
                     fontWeight: FontWeight.bold),
               ),
               activeColor: Theme.of(context).focusColor,
@@ -104,7 +106,8 @@ class _HomepageScreenStudentState extends State<HomepageScreenStudent> {
               title: Text(
                 'Messages',
                 style: TextStyle(
-                    color: Theme.of(context).appBarTheme.textTheme.bodyText1.color,
+                    color:
+                        Theme.of(context).appBarTheme.textTheme.bodyText1.color,
                     fontWeight: FontWeight.bold),
               ),
               activeColor: Theme.of(context).focusColor,
@@ -119,7 +122,8 @@ class _HomepageScreenStudentState extends State<HomepageScreenStudent> {
               title: Text(
                 'Profile',
                 style: TextStyle(
-                    color: Theme.of(context).appBarTheme.textTheme.bodyText1.color,
+                    color:
+                        Theme.of(context).appBarTheme.textTheme.bodyText1.color,
                     fontWeight: FontWeight.bold),
               ),
               activeColor: Theme.of(context).focusColor,
@@ -134,7 +138,8 @@ class _HomepageScreenStudentState extends State<HomepageScreenStudent> {
               title: Text(
                 'Settings',
                 style: TextStyle(
-                    color: Theme.of(context).appBarTheme.textTheme.bodyText1.color,
+                    color:
+                        Theme.of(context).appBarTheme.textTheme.bodyText1.color,
                     fontWeight: FontWeight.bold),
               ),
               activeColor: Theme.of(context).focusColor,
@@ -180,27 +185,29 @@ class _HomePageStudentState extends State<HomePageStudent> {
                     from: Duration(milliseconds: 30),
                     to: Duration(milliseconds: 300),
                   ),
-                  child: RichText(
-                    text: TextSpan(children: [
-                      TextSpan(
-                        text: "Welcome,\nStudent ",
-                        style: GoogleFonts.sarabun(
-                            textStyle: TextStyle(
-                          fontSize: 36,
-                          fontWeight: FontWeight.normal,
-                          color: Theme.of(context).buttonColor,
-                        )),
-                      ),
-                      TextSpan(
-                        text: DatabaseAPI.tempStudent.name,
-                        style: GoogleFonts.sarabun(
-                            textStyle: TextStyle(
-                          fontSize: 36,
-                          fontWeight: FontWeight.bold,
-                          color: Theme.of(context).buttonColor,
-                        )),
-                      ),
-                    ]),
+                  child: SingleChildScrollView(
+                    child: RichText(
+                      text: TextSpan(children: [
+                        TextSpan(
+                          text: "Welcome,\nStudent ",
+                          style: GoogleFonts.sarabun(
+                              textStyle: TextStyle(
+                            fontSize: 36,
+                            fontWeight: FontWeight.normal,
+                            color: Theme.of(context).buttonColor,
+                          )),
+                        ),
+                        TextSpan(
+                          text: DatabaseAPI.tempStudent.name,
+                          style: GoogleFonts.sarabun(
+                              textStyle: TextStyle(
+                            fontSize: 36,
+                            fontWeight: FontWeight.bold,
+                            color: Theme.of(context).buttonColor,
+                          )),
+                        ),
+                      ]),
+                    ),
                   ),
                 ),
               ),
@@ -208,53 +215,55 @@ class _HomePageStudentState extends State<HomePageStudent> {
             SizedBox(
               height: ScreenSize.height * 0.02,
             ),
-            Container(
-              height: ScreenSize.height * 0.54,
-              child: NotificationListener<OverscrollIndicatorNotification>(
-                // ignore: missing_return
-                onNotification: (overscroll) {
-                  overscroll.disallowGlow();
-                },
-                child: PageView(
-                  controller: _pageController,
-                  children: [
-                    mainScreenPage(
-                        SessionStream(
-                          status: "active",
-                          type: 0,
-                          checkexpire: false,
-                          isStudent: true,
-                          expiredSessionView: false,
-                        ),
-                        "Upcoming Sessions"),
-                    mainScreenPage(
-                        SessionStream(
-                          status: "pending",
-                          type: 0,
-                          checkexpire: false,
-                          isStudent: true,
-                          expiredSessionView: false,
-                        ),
-                        "Pending Sessions"),
-                    mainScreenPage(
-                        SessionStream(
-                          status: "waiting for student",
-                          type: 0,
-                          checkexpire: false,
-                          isStudent: true,
-                          expiredSessionView: false,
-                        ),
-                        "Waiting for your response"),
-                    mainScreenPage(
-                        SessionStream(
-                          status: "closed",
-                          type: 0,
-                          checkexpire: false,
-                          isStudent: true,
-                          expiredSessionView: true,
-                        ),
-                        "Closed Sessions"),
-                  ],
+            SingleChildScrollView(
+              child: Container(
+                height: ScreenSize.height * 0.50,
+                child: NotificationListener<OverscrollIndicatorNotification>(
+                  // ignore: missing_return
+                  onNotification: (overscroll) {
+                    overscroll.disallowGlow();
+                  },
+                  child: PageView(
+                    controller: _pageController,
+                    children: [
+                      mainScreenPage(
+                          SessionStream(
+                            status: "active",
+                            type: 0,
+                            checkexpire: false,
+                            isStudent: true,
+                            expiredSessionView: false,
+                          ),
+                          "Upcoming Sessions"),
+                      mainScreenPage(
+                          SessionStream(
+                            status: "pending",
+                            type: 0,
+                            checkexpire: false,
+                            isStudent: true,
+                            expiredSessionView: false,
+                          ),
+                          "Pending Sessions"),
+                      mainScreenPage(
+                          SessionStream(
+                            status: "waiting for student",
+                            type: 0,
+                            checkexpire: false,
+                            isStudent: true,
+                            expiredSessionView: false,
+                          ),
+                          "Waiting for your response"),
+                      mainScreenPage(
+                          SessionStream(
+                            status: "closed",
+                            type: 0,
+                            checkexpire: false,
+                            isStudent: true,
+                            expiredSessionView: true,
+                          ),
+                          "Closed Sessions"),
+                    ],
+                  ),
                 ),
               ),
             ),

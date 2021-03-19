@@ -12,7 +12,7 @@ import 'package:mytutor/classes/session.dart';
 import 'package:mytutor/classes/student.dart';
 import 'package:mytutor/classes/tutor.dart';
 import 'package:mytutor/classes/user.dart';
-import 'package:mytutor/components/ez_button.dart';
+import 'package:mytutor/components/circular_button.dart';
 import 'package:mytutor/components/messages_stream_widget.dart';
 import 'package:mytutor/screens/view_receiver_profile.dart';
 import 'package:mytutor/utilities/constants.dart';
@@ -117,12 +117,19 @@ class _ChatScreenState extends State<ChatScreen> {
                             ),
                             ListTile(
                               leading: Row(
-                                  mainAxisSize: MainAxisSize.min,
+                                mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  GestureDetector(onTap: (){
-                                    Navigator.pop(context);
-                                  },child: Icon(Icons.arrow_back , color: Colors.white,)),
-                                  SizedBox(width: ScreenSize.width *0.020,),
+                                  GestureDetector(
+                                      onTap: () {
+                                        Navigator.pop(context);
+                                      },
+                                      child: Icon(
+                                        Icons.arrow_back,
+                                        color: Colors.white,
+                                      )),
+                                  SizedBox(
+                                    width: ScreenSize.width * 0.020,
+                                  ),
                                   GestureDetector(
                                     onTap: () {
                                       receiverDataLoadIndicator == true
@@ -142,16 +149,18 @@ class _ChatScreenState extends State<ChatScreen> {
                                             )
                                           : print('wait to load');
                                     },
-                                    child: receiver.profileImag == "" ? Icon(
-                                      Icons.account_circle_sharp,
-                                      size: ScreenSize.height *0.080,
-                                    ): CircleAvatar(
-                                      backgroundImage:
-                                          NetworkImage(receiver.profileImag),
-                                      backgroundColor: kColorScheme[1],
-                                      foregroundColor: Colors.black,
-                                      radius: 27.0,
-                                    ),
+                                    child: receiver.profileImag == ""
+                                        ? Icon(
+                                            Icons.account_circle_sharp,
+                                            size: ScreenSize.height * 0.080,
+                                          )
+                                        : CircleAvatar(
+                                            backgroundImage: NetworkImage(
+                                                receiver.profileImag),
+                                            backgroundColor: kColorScheme[1],
+                                            foregroundColor: Colors.black,
+                                            radius: 27.0,
+                                          ),
                                   ),
                                 ],
                               ),
@@ -211,17 +220,19 @@ class _ChatScreenState extends State<ChatScreen> {
                                               fontSize: 15,
                                               color:
                                                   userChooseForTypeofChat == 0
-                                                      ? Theme.of(context).disabledColor
-                                                      : Theme.of(context).highlightColor),
+                                                      ? Theme.of(context)
+                                                          .disabledColor
+                                                      : Theme.of(context)
+                                                          .highlightColor),
                                         )),
                                         decoration: new BoxDecoration(
-                                            color: userChooseForTypeofChat == 0
-                                                ? Theme.of(context).highlightColor
-                                                : Theme.of(context).disabledColor,
-                                            shape: BoxShape.rectangle,
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(12.0)),
-                                         ),
+                                          color: userChooseForTypeofChat == 0
+                                              ? Theme.of(context).highlightColor
+                                              : Theme.of(context).disabledColor,
+                                          shape: BoxShape.rectangle,
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(12.0)),
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -245,17 +256,19 @@ class _ChatScreenState extends State<ChatScreen> {
                                               fontSize: 15,
                                               color:
                                                   userChooseForTypeofChat == 1
-                                                      ? Theme.of(context).disabledColor
-                                                      : Theme.of(context).highlightColor),
+                                                      ? Theme.of(context)
+                                                          .disabledColor
+                                                      : Theme.of(context)
+                                                          .highlightColor),
                                         )),
                                         decoration: new BoxDecoration(
-                                            color: userChooseForTypeofChat == 1
-                                                ? Theme.of(context).highlightColor
-                                                : Theme.of(context).disabledColor,
-                                            shape: BoxShape.rectangle,
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(12.0)),
-                                         ),
+                                          color: userChooseForTypeofChat == 1
+                                              ? Theme.of(context).highlightColor
+                                              : Theme.of(context).disabledColor,
+                                          shape: BoxShape.rectangle,
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(12.0)),
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -291,12 +304,13 @@ class _ChatScreenState extends State<ChatScreen> {
                           )
                         : Text(""),
                     Container(
-                    color:Theme.of(context).cardColor,
+                      color: Theme.of(context).cardColor,
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
                           IconButton(
-                            icon: Icon(Icons.attach_file, color: Theme.of(context).iconTheme.color),
+                            icon: Icon(Icons.attach_file,
+                                color: Theme.of(context).iconTheme.color),
                             onPressed: widget.currentsession.status == "closed"
                                 ? null
                                 : () async {
@@ -309,7 +323,8 @@ class _ChatScreenState extends State<ChatScreen> {
                                     try {
                                       file.files.single.path == null
                                           ? print("hello")
-                                          : _file = File(file.files.single.path);
+                                          : _file =
+                                              File(file.files.single.path);
                                       DatabaseAPI.uploadImageToStorage(
                                               _file,
                                               widget.currentsession.session_id,
@@ -325,7 +340,8 @@ class _ChatScreenState extends State<ChatScreen> {
                           ),
                           Expanded(
                             child: TextField(
-                              style: TextStyle(color: Theme.of(context).accentColor),
+                              style: TextStyle(
+                                  color: Theme.of(context).accentColor),
                               readOnly: widget.currentsession.status == "closed"
                                   ? true
                                   : false,
@@ -336,10 +352,12 @@ class _ChatScreenState extends State<ChatScreen> {
                               decoration: InputDecoration(
                                 contentPadding: EdgeInsets.symmetric(
                                     vertical: 10.0, horizontal: 20.0),
-                                hintText: widget.currentsession.status == "closed"
+                                hintText: widget.currentsession.status ==
+                                        "closed"
                                     ? 'the session is ended. its in view Mode only'
                                     : 'Type....',
-                                hintStyle: TextStyle(color: Theme.of(context).iconTheme.color),
+                                hintStyle: TextStyle(
+                                    color: Theme.of(context).iconTheme.color),
                                 border: InputBorder.none,
                               ),
                             ),
@@ -356,14 +374,16 @@ class _ChatScreenState extends State<ChatScreen> {
                                   },
                             child: Row(
                               children: [
-                                Text("Send" , style: TextStyle(color: Theme.of(context).iconTheme.color),),
+                                Text(
+                                  "Send",
+                                  style: TextStyle(
+                                      color: Theme.of(context).iconTheme.color),
+                                ),
                                 SizedBox(
-                                  width: ScreenSize.width *0.005,
+                                  width: ScreenSize.width * 0.005,
                                 ),
-                                Icon(
-                                  Icons.arrow_forward_ios_outlined,
-                                  color: Theme.of(context).iconTheme.color
-                                ),
+                                Icon(Icons.arrow_forward_ios_outlined,
+                                    color: Theme.of(context).iconTheme.color),
                               ],
                             ),
                           ),
@@ -580,12 +600,17 @@ class _ChatScreenState extends State<ChatScreen> {
                           ),
                           TextField(
                             controller: reviewController,
+                            style: TextStyle(
+                                fontSize: 17,
+                                fontWeight: FontWeight.normal,
+                                color: Theme.of(context).buttonColor),
                             onChanged: (value) {},
                             decoration: InputDecoration(
                               contentPadding: EdgeInsets.symmetric(
                                   vertical: 10.0, horizontal: 20.0),
                               hintText: 'Type your Review....',
-                              hintStyle: TextStyle(color: Theme.of(context).buttonColor),
+                              hintStyle: TextStyle(
+                                  color: Theme.of(context).buttonColor),
                               border: InputBorder.none,
                             ),
                           ),
@@ -652,17 +677,14 @@ class _ChatScreenState extends State<ChatScreen> {
 
   showBottomSheetForTutor() {
     showModalBottomSheet(
+        backgroundColor: Colors.transparent,
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(top: Radius.circular(25.0))),
         context: context,
         builder: (context) {
           return Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(25),
-                    topRight: Radius.circular(25)),
-                color: Theme.of(context).scaffoldBackgroundColor,
-              ),
+              decoration: kCurvedShapeDecoration(
+                  Theme.of(context).scaffoldBackgroundColor),
               height: ScreenSize.height * 0.30,
               child: Padding(
                 padding: const EdgeInsets.all(15.0),
@@ -691,12 +713,13 @@ class _ChatScreenState extends State<ChatScreen> {
                     SizedBox(
                       height: ScreenSize.height * 0.030,
                     ),
-                    EZButton(
+                    CircularButton(
                         width: ScreenSize.width * 0.50,
                         buttonColor: kColorScheme[2],
                         textColor: Colors.white,
                         isGradient: false,
                         colors: null,
+                        fontSize: 15,
                         buttonText: "Close the session",
                         hasBorder: false,
                         borderColor: null,
@@ -716,7 +739,8 @@ class _ChatScreenState extends State<ChatScreen> {
                                               child: Text(
                                                 'the session has been successfully closed ',
                                                 style: kTitleStyle.copyWith(
-                                                    color: Theme.of(context).buttonColor,
+                                                    color: Theme.of(context)
+                                                        .buttonColor,
                                                     fontSize: 14,
                                                     fontWeight:
                                                         FontWeight.normal),
