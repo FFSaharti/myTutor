@@ -311,11 +311,17 @@ class _ViewProfileTutorState extends State<ViewProfileTutor> {
                           children: [
                             Padding(
                               padding: const EdgeInsets.all(3.0),
-                              child: Text(
-                                widget.tutor.aboutMe,
-                                style: TextStyle(
-                                    fontSize: 16.5,
-                                    color: Theme.of(context).buttonColor),
+                              child: SizedBox(
+                                width: ScreenSize.width*0.80,
+                                child: Text(
+                                  widget.tutor.aboutMe,
+                                  style: TextStyle(
+                                      fontSize: 16.5,
+                                      color: Theme.of(context).buttonColor),
+                                  maxLines: 3,
+                                  overflow: TextOverflow.ellipsis,
+                                  softWrap: false,
+                                ),
                               ),
                             ),
                             Spacer(),

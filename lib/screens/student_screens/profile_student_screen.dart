@@ -257,11 +257,18 @@ class _ProfileStudentState extends State<ProfileStudent> {
                                 children: [
                                   Padding(
                                     padding: const EdgeInsets.all(3.0),
-                                    child: Text(
-                                      SessionManager.loggedInStudent.aboutMe,
-                                      style: TextStyle(
-                                          fontSize: 16.5,
-                                          color: Theme.of(context).buttonColor),
+                                    child: SizedBox(
+                                      width: ScreenSize.width*0.80,
+                                      child: Text(
+                                        SessionManager.loggedInStudent.aboutMe,
+                                        style: TextStyle(
+                                            fontSize: 16.5,
+                                            color: Theme.of(context).buttonColor),
+                                        maxLines: 3,
+                                        overflow: TextOverflow.ellipsis,
+                                        softWrap: false,
+
+                                      ),
                                     ),
                                   ),
                                   Spacer(),
@@ -578,7 +585,7 @@ class _ProfileStudentState extends State<ProfileStudent> {
                               ),
                             ),
                             SizedBox(
-                              height: 20,
+                              height: ScreenSize.height *0.020,
                             ),
                           ],
                         ),

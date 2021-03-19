@@ -18,82 +18,84 @@ class _HomePageTutorState extends State<HomePageTutor> {
       child: Scaffold(
         body: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Column(
-            children: [
-              SizedBox(
-                height: ScreenSize.height * 0.09,
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 13.0),
-                child: Villain(
-                  villainAnimation: VillainAnimation.fromLeft(
-                    from: Duration(milliseconds: 30),
-                    to: Duration(milliseconds: 300),
-                  ),
-                  animateEntrance: true,
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: RichText(
-                      text: TextSpan(
-                        children: [
-                          TextSpan(
-                            text: "Welcome,\nTutor ",
-                            style: GoogleFonts.sarabun(
-                                textStyle: TextStyle(
-                                    fontSize: 36,
-                                    fontWeight: FontWeight.normal,
-                                    color: Theme.of(context).buttonColor)),
-                          ),
-                          TextSpan(
-                            text: SessionManager.loggedInTutor.name,
-                            style: GoogleFonts.sarabun(
-                                textStyle: TextStyle(
-                                    fontSize: 36,
-                                    fontWeight: FontWeight.bold,
-                                    color: Theme.of(context).buttonColor)),
-                          ),
-                        ],
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                SizedBox(
+                  height: ScreenSize.height * 0.09,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 13.0),
+                  child: Villain(
+                    villainAnimation: VillainAnimation.fromLeft(
+                      from: Duration(milliseconds: 30),
+                      to: Duration(milliseconds: 300),
+                    ),
+                    animateEntrance: true,
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: RichText(
+                        text: TextSpan(
+                          children: [
+                            TextSpan(
+                              text: "Welcome,\nTutor ",
+                              style: GoogleFonts.sarabun(
+                                  textStyle: TextStyle(
+                                      fontSize: 36,
+                                      fontWeight: FontWeight.normal,
+                                      color: Theme.of(context).buttonColor)),
+                            ),
+                            TextSpan(
+                              text: SessionManager.loggedInTutor.name,
+                              style: GoogleFonts.sarabun(
+                                  textStyle: TextStyle(
+                                      fontSize: 36,
+                                      fontWeight: FontWeight.bold,
+                                      color: Theme.of(context).buttonColor)),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-              SizedBox(
-                height: ScreenSize.height * 0.03,
-              ),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Column(
-                  children: [
-                    Text(
-                      "    Active/Upcoming Sessions",
-                      style: GoogleFonts.sarabun(
-                          textStyle: TextStyle(
-                              fontSize: 21,
-                              fontWeight: FontWeight.normal,
-                              color: Theme.of(context).buttonColor)),
-                    ),
-                    //
-                  ],
+                SizedBox(
+                  height: ScreenSize.height * 0.03,
                 ),
-              ),
-              NotificationListener<OverscrollIndicatorNotification>(
-                onNotification: (overscroll) {
-                  overscroll.disallowGlow();
-                },
-                child: SessionStream(
-                  status: "active",
-                  isStudent: false,
-                  type: 1,
-                  checkexpire: false,
-                  expiredSessionView: false,
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Column(
+                    children: [
+                      Text(
+                        "    Active/Upcoming Sessions",
+                        style: GoogleFonts.sarabun(
+                            textStyle: TextStyle(
+                                fontSize: 21,
+                                fontWeight: FontWeight.normal,
+                                color: Theme.of(context).buttonColor)),
+                      ),
+                      //
+                    ],
+                  ),
                 ),
-              ),
-              SizedBox(
-                height: ScreenSize.height * 0.02,
-              ),
-              //SessionWidget(height: height),
-            ],
+                NotificationListener<OverscrollIndicatorNotification>(
+                  onNotification: (overscroll) {
+                    overscroll.disallowGlow();
+                  },
+                  child: SessionStream(
+                    status: "active",
+                    isStudent: false,
+                    type: 1,
+                    checkexpire: false,
+                    expiredSessionView: false,
+                  ),
+                ),
+                SizedBox(
+                  height: ScreenSize.height * 0.02,
+                ),
+                //SessionWidget(height: height),
+              ],
+            ),
           ),
         ),
       ),

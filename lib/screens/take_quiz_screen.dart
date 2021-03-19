@@ -230,7 +230,6 @@ class _QuizQuestionWidgetState extends State<QuizQuestionWidget> {
 
   @override
   void initState() {
-    // TODO: implement initState
   }
 
   @override

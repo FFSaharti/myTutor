@@ -311,12 +311,17 @@ class _TutorProfileState extends State<TutorProfile> {
                                 children: [
                                   Padding(
                                     padding: const EdgeInsets.all(3.0),
-                                    child: Text(
-                                      SessionManager.loggedInTutor.aboutMe,
-                                      maxLines: null,
-                                      style: TextStyle(
-                                          fontSize: 16.5,
-                                          color: Theme.of(context).buttonColor),
+                                    child: SizedBox(
+                                      width: ScreenSize.width*0.80,
+                                      child: Text(
+                                        SessionManager.loggedInTutor.aboutMe,
+                                        maxLines: 3,
+                                        overflow: TextOverflow.ellipsis,
+                                        softWrap: false,
+                                        style: TextStyle(
+                                            fontSize: 16.5,
+                                            color: Theme.of(context).buttonColor),
+                                      ),
                                     ),
                                   ),
                                   Spacer(),

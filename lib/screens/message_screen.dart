@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:mytutor/classes/session.dart';
 import 'package:mytutor/utilities/constants.dart';
+import 'package:mytutor/utilities/dataHelper.dart';
 import 'package:mytutor/utilities/database_api.dart';
 import 'package:mytutor/utilities/screen_size.dart';
 import 'package:mytutor/utilities/session_manager.dart';
@@ -155,7 +156,7 @@ class _MessageScreenState extends State<MessageScreen> {
                               tempSession.lastMessage =
                                   session.data()["lastMessage"];
                               tempSession.timeOfLastMessage =
-                                  calTime(StampOfTheLastMessageTime);
+                                  DateHelper.calTime(StampOfTheLastMessageTime);
                               testSession.add(tempSession);
                               userMessages.add(MessageListTile(
                                 session: tempSession,
@@ -297,33 +298,6 @@ class _MessageScreenState extends State<MessageScreen> {
       return nameSplit.elementAt(0)[0];
     }
   }
-}
-
-//TODO: redundant code can be improve
-String calTime(Timestamp timestamp) {
-  final DateTime dateTime = timestamp.toDate();
-  String time;
-  int num = calculateDifference(dateTime);
-
-  var dateUtc = dateTime.toUtc();
-  var strToDateTime = DateTime.parse(dateUtc.toString());
-  final convertLocal = strToDateTime.toLocal();
-  if (num == 0) {
-    var newFormat = DateFormat("hh:mm");
-    time = newFormat.format(convertLocal);
-  } else {
-    var newFormat = DateFormat("yy-MM");
-    time = newFormat.format(convertLocal);
-  }
-
-  return time;
-}
-
-int calculateDifference(DateTime date) {
-  DateTime now = DateTime.now();
-  return DateTime(date.year, date.month, date.day)
-      .difference(DateTime(now.year, now.month, now.day))
-      .inDays;
 }
 
 class MessageListTile extends StatefulWidget {

@@ -6,10 +6,11 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:mytutor/components/session_stream_widget.dart';
 import 'package:mytutor/screens/adjust_general_settings_screen.dart';
 import 'package:mytutor/screens/student_screens/profile_student_screen.dart';
-import 'package:mytutor/screens/student_screens/student_sections_screen.dart';
+import 'package:mytutor/screens/student_screens/student_options.dart';
 import 'package:mytutor/utilities/constants.dart';
 import 'package:mytutor/utilities/database_api.dart';
 import 'package:mytutor/utilities/screen_size.dart';
+import 'package:mytutor/utilities/session_manager.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../message_screen.dart';
@@ -169,114 +170,119 @@ class _HomePageStudentState extends State<HomePageStudent> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: [
-            SizedBox(
-              height: ScreenSize.height * 0.09,
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 13.0),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Villain(
-                  villainAnimation: VillainAnimation.fromLeft(
-                    from: Duration(milliseconds: 30),
-                    to: Duration(milliseconds: 300),
-                  ),
-                  child: SingleChildScrollView(
-                    child: RichText(
-                      text: TextSpan(children: [
-                        TextSpan(
-                          text: "Welcome,\nStudent ",
-                          style: GoogleFonts.sarabun(
-                              textStyle: TextStyle(
-                            fontSize: 36,
-                            fontWeight: FontWeight.normal,
-                            color: Theme.of(context).buttonColor,
-                          )),
-                        ),
-                        TextSpan(
-                          text: DatabaseAPI.tempStudent.name,
-                          style: GoogleFonts.sarabun(
-                              textStyle: TextStyle(
-                            fontSize: 36,
-                            fontWeight: FontWeight.bold,
-                            color: Theme.of(context).buttonColor,
-                          )),
-                        ),
-                      ]),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              SizedBox(
+                height: ScreenSize.height * 0.09,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 13.0),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Villain(
+                    villainAnimation: VillainAnimation.fromLeft(
+                      from: Duration(milliseconds: 30),
+                      to: Duration(milliseconds: 300),
+                    ),
+                    child: SingleChildScrollView(
+                      child: RichText(
+                      //  maxLines: 4,
+                       //overflow: TextOverflow.ellipsis,
+                        text: TextSpan(children: [
+                          TextSpan(
+                            text: "Welcome,\nStudent ",
+                            style: GoogleFonts.sarabun(
+                                textStyle: TextStyle(
+                              fontSize: 36,
+                              fontWeight: FontWeight.normal,
+                              color: Theme.of(context).buttonColor,
+                            )),
+                          ),
+                          TextSpan(
+                            text: SessionManager.loggedInStudent.name,
+                            style: GoogleFonts.sarabun(
+                                textStyle: TextStyle(
+                              fontSize: 36,
+                              fontWeight: FontWeight.bold,
+                              color: Theme.of(context).buttonColor,
+                            )),
+                          ),
+                        ]),
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-            SizedBox(
-              height: ScreenSize.height * 0.02,
-            ),
-            SingleChildScrollView(
-              child: Container(
-                height: ScreenSize.height * 0.50,
-                child: NotificationListener<OverscrollIndicatorNotification>(
-                  // ignore: missing_return
-                  onNotification: (overscroll) {
-                    overscroll.disallowGlow();
-                  },
-                  child: PageView(
-                    controller: _pageController,
-                    children: [
-                      mainScreenPage(
-                          SessionStream(
-                            status: "active",
-                            type: 0,
-                            checkexpire: false,
-                            isStudent: true,
-                            expiredSessionView: false,
-                          ),
-                          "Upcoming Sessions"),
-                      mainScreenPage(
-                          SessionStream(
-                            status: "pending",
-                            type: 0,
-                            checkexpire: false,
-                            isStudent: true,
-                            expiredSessionView: false,
-                          ),
-                          "Pending Sessions"),
-                      mainScreenPage(
-                          SessionStream(
-                            status: "waiting for student",
-                            type: 0,
-                            checkexpire: false,
-                            isStudent: true,
-                            expiredSessionView: false,
-                          ),
-                          "Waiting for your response"),
-                      mainScreenPage(
-                          SessionStream(
-                            status: "closed",
-                            type: 0,
-                            checkexpire: false,
-                            isStudent: true,
-                            expiredSessionView: true,
-                          ),
-                          "Closed Sessions"),
-                    ],
+              SizedBox(
+                height: ScreenSize.height * 0.02,
+              ),
+              SingleChildScrollView(
+                child: Container(
+                  height: ScreenSize.height * 0.50,
+                  child: NotificationListener<OverscrollIndicatorNotification>(
+                    // ignore: missing_return
+                    onNotification: (overscroll) {
+                      overscroll.disallowGlow();
+                    },
+                    child: PageView(
+                      controller: _pageController,
+                      children: [
+                        mainScreenPage(
+                            SessionStream(
+                              status: "active",
+                              type: 0,
+                              checkexpire: false,
+                              isStudent: true,
+                              expiredSessionView: false,
+                            ),
+                            "Upcoming Sessions"),
+                        mainScreenPage(
+                            SessionStream(
+                              status: "pending",
+                              type: 0,
+                              checkexpire: false,
+                              isStudent: true,
+                              expiredSessionView: false,
+                            ),
+                            "Pending Sessions"),
+                        mainScreenPage(
+                            SessionStream(
+                              status: "waiting for student",
+                              type: 0,
+                              checkexpire: false,
+                              isStudent: true,
+                              expiredSessionView: false,
+                            ),
+                            "Waiting for your response"),
+                        mainScreenPage(
+                            SessionStream(
+                              status: "closed",
+                              type: 0,
+                              checkexpire: false,
+                              isStudent: true,
+                              expiredSessionView: true,
+                            ),
+                            "Closed Sessions"),
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-            SizedBox(
-              height: ScreenSize.height * 0.05,
-            ),
-            SmoothPageIndicator(
-              effect: WormEffect(
-                  dotColor: kGreyish, activeDotColor: kColorScheme[2]),
-              controller: _pageController, // PageController
-              count: 4,
-            ),
-          ],
+              SizedBox(
+                height: ScreenSize.height * 0.07,
+              ),
+              SmoothPageIndicator(
+                effect: WormEffect(
+                    dotColor: kGreyish, activeDotColor: kColorScheme[2]),
+                controller: _pageController, // PageController
+                count: 4,
+              ),
+            ],
+          ),
         ),
       ),
     );
