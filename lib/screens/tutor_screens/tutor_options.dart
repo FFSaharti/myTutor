@@ -1,18 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_villains/villains/villains.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:mytutor/components/tutor_section_widget.dart';
+import 'package:mytutor/components/section_widget.dart';
 import 'package:mytutor/screens/tutor_screens/respond_screen_tutor.dart';
-import 'package:mytutor/utilities/constants.dart';
 import 'package:mytutor/utilities/screen_size.dart';
 
 import 'answer_screen_tutor.dart';
 import 'create_materials_screen.dart';
 
 class TutorOptions extends StatefulWidget {
-  double height;
-  double width;
-
   @override
   _TutorOptionsState createState() => _TutorOptionsState();
 }
@@ -37,7 +33,9 @@ class _TutorOptionsState extends State<TutorOptions> {
                   ),
                   child: Text(
                     "Select an option",
-                    style: GoogleFonts.sarala(fontSize: 25, color: Theme.of(context).buttonColor.withOpacity(0.6)),
+                    style: GoogleFonts.sen(
+                        fontSize: 25,
+                        color: Theme.of(context).buttonColor.withOpacity(0.6)),
                   ),
                 ),
                 SizedBox(
@@ -48,7 +46,7 @@ class _TutorOptionsState extends State<TutorOptions> {
                     from: Duration(milliseconds: 0),
                     to: Duration(milliseconds: 400),
                   ),
-                  child: TutorSectionWidget(
+                  child: SectionWidget(
                     widget: widget,
                     onClick: () {
                       print("clicked answer");
@@ -68,7 +66,7 @@ class _TutorOptionsState extends State<TutorOptions> {
                     from: Duration(milliseconds: 100),
                     to: Duration(milliseconds: 500),
                   ),
-                  child: TutorSectionWidget(
+                  child: SectionWidget(
                     widget: widget,
                     onClick: () {
                       print("clicked Respond");
@@ -88,7 +86,7 @@ class _TutorOptionsState extends State<TutorOptions> {
                     from: Duration(milliseconds: 200),
                     to: Duration(milliseconds: 600),
                   ),
-                  child: TutorSectionWidget(
+                  child: SectionWidget(
                     widget: widget,
                     onClick: () {
                       Navigator.pushNamed(context, CreateMaterialsScreen.id);

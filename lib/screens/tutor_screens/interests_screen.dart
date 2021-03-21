@@ -105,7 +105,7 @@ class _InterestsScreenState extends State<InterestsScreen> {
                   alignment: Alignment.centerLeft,
                   child: Text(
                     ' Search Results',
-                    style: GoogleFonts.sourceSansPro(
+                    style: GoogleFonts.sen(
                         textStyle: TextStyle(
                             fontSize: 17,
                             fontWeight: FontWeight.normal,
@@ -133,13 +133,13 @@ class _InterestsScreenState extends State<InterestsScreen> {
                   height: ScreenSize.height * 0.01,
                 ),
                 Divider(
-                  color: kGreyish,
+                  color: kGreyerish,
                 ),
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
                     ' Selected Interests',
-                    style: GoogleFonts.sourceSansPro(
+                    style: GoogleFonts.sen(
                         textStyle: TextStyle(
                             fontSize: 17,
                             fontWeight: FontWeight.normal,
@@ -287,20 +287,12 @@ class _InterestWidgetState extends State<InterestWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 50,
+      width: ScreenSize.width * 0.125,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
         color: widget.chosen || widget.subject.chosen
             ? Color(0xff99FFB5)
             : Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
-            spreadRadius: 1,
-            blurRadius: 15,
-            offset: Offset(0, 6), // changes position of shadow
-          ),
-        ],
       ),
       child: GestureDetector(
         onTap: () {
@@ -330,7 +322,6 @@ class _InterestWidgetState extends State<InterestWidget> {
                       opacity: 0.3,
                       child: Image.asset(
                         widget.subject.path,
-                        width: 40,
                       ),
                     ),
                     Icon(
@@ -341,7 +332,6 @@ class _InterestWidgetState extends State<InterestWidget> {
                 )
               : Image.asset(
                   widget.subject.path,
-                  width: 40,
                 ),
         ),
       ),

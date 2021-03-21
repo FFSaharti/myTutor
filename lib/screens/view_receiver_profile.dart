@@ -12,6 +12,7 @@ import 'package:mytutor/classes/student.dart';
 import 'package:mytutor/classes/subject.dart';
 import 'package:mytutor/classes/tutor.dart';
 import 'package:mytutor/classes/user.dart';
+import 'package:mytutor/components/disable_default_pop.dart';
 import 'package:mytutor/components/material_stream_widget.dart';
 import 'package:mytutor/components/profile_info_widget.dart';
 import 'package:mytutor/components/view_rate_bottom_sheet_widget.dart';
@@ -78,34 +79,29 @@ class _ViewReceiverProfileState extends State<ViewReceiverProfile> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async => false,
-      child: NotificationListener<OverscrollIndicatorNotification>(
-        onNotification: (overscroll) {
-          overscroll.disallowGlow();
-        },
-        child: Scaffold(
-          appBar:
-              buildAppBar(context, Theme.of(context).accentColor, "Profile"),
-          body: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              loading == false
-                  ? Center(
-                      child: CircularProgressIndicator(),
-                    )
-                  : widget.role == "tutor"
-                      ? ViewProfileTutor(
-                          tutor: user,
-                        )
-                      : ViewProfileStudent(
-                          student: user,
-                        ),
-            ],
-          ),
+    return DisableDefaultPop(
+        child: disableBlueOverflow(
+      context,
+      Scaffold(
+        appBar: buildAppBar(context, Theme.of(context).accentColor, "Profile"),
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            loading == false
+                ? Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : widget.role == "tutor"
+                    ? ViewProfileTutor(
+                        tutor: user,
+                      )
+                    : ViewProfileStudent(
+                        student: user,
+                      ),
+          ],
         ),
       ),
-    );
+    ));
   }
 }
 
@@ -297,7 +293,7 @@ class _ViewProfileTutorState extends State<ViewProfileTutor> {
                       ),
                       Text(
                         "About Me",
-                        style: TextStyle(
+                        style: GoogleFonts.sen(
                             fontSize: 18, color: Theme.of(context).buttonColor),
                       )
                     ],
@@ -312,15 +308,12 @@ class _ViewProfileTutorState extends State<ViewProfileTutor> {
                             Padding(
                               padding: const EdgeInsets.all(3.0),
                               child: SizedBox(
-                                width: ScreenSize.width*0.80,
+                                width: ScreenSize.width * 0.80,
                                 child: Text(
                                   widget.tutor.aboutMe,
-                                  style: TextStyle(
+                                  style: GoogleFonts.sen(
                                       fontSize: 16.5,
                                       color: Theme.of(context).buttonColor),
-                                  maxLines: 3,
-                                  overflow: TextOverflow.ellipsis,
-                                  softWrap: false,
                                 ),
                               ),
                             ),
@@ -337,7 +330,7 @@ class _ViewProfileTutorState extends State<ViewProfileTutor> {
                               Center(
                                 child: Text(
                                   "the tutor does not have a \"About me\" :( ",
-                                  style: TextStyle(
+                                  style: GoogleFonts.sen(
                                       fontSize: 16.5,
                                       color: Theme.of(context).buttonColor),
                                 ),
@@ -661,11 +654,14 @@ class _ViewProfileStudentState extends State<ViewProfileStudent> {
                             children: [
                               Padding(
                                 padding: const EdgeInsets.all(3.0),
-                                child: Text(
-                                  widget.student.aboutMe,
-                                  style: TextStyle(
-                                      fontSize: 16.5,
-                                      color: Theme.of(context).buttonColor),
+                                child: SizedBox(
+                                  width: ScreenSize.width * 0.80,
+                                  child: Text(
+                                    widget.student.aboutMe,
+                                    style: GoogleFonts.sen(
+                                        fontSize: 16.5,
+                                        color: Theme.of(context).buttonColor),
+                                  ),
                                 ),
                               ),
                             ],
@@ -677,7 +673,7 @@ class _ViewProfileStudentState extends State<ViewProfileStudent> {
                                 Center(
                                   child: Text(
                                     "No About Me",
-                                    style: GoogleFonts.openSans(
+                                    style: GoogleFonts.sen(
                                         color: Theme.of(context).buttonColor,
                                         // Theme.of(context).primaryColor,
                                         fontSize: 21),

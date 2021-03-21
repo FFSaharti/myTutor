@@ -15,7 +15,6 @@ import 'package:mytutor/utilities/database_api.dart';
 import 'package:mytutor/utilities/regEx.dart';
 import 'package:mytutor/utilities/screen_size.dart';
 
-
 class SignupScreen extends StatefulWidget {
   static String id = 'signup_screen';
   static bool passwordVisible = true;
@@ -58,7 +57,6 @@ class _SignupScreenState extends State<SignupScreen> {
                     tag: 'logo',
                     child: Image.asset(
                       'images/myTutorLogoWhite.png',
-                      width: double.infinity,
                       height: ScreenSize.height * 0.09,
                     ),
                   ),
@@ -90,7 +88,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           backgroundColor: Colors.white,
                           elevation: 2,
                           onPressed: () async {
-                            //TODO : implement FileHelper class.....
+                            // Prompts a file chooser to choose an image
                             FilePickerResult file = await FilePicker.platform
                                 .pickFiles(type: FileType.image);
                             file == null
@@ -117,11 +115,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   SizedBox(
                     height: ScreenSize.height * 0.015,
                   ),
-                  Divider(
-                    color: Theme.of(context).dividerColor == Colors.transparent
-                        ? Colors.white
-                        : Theme.of(context).dividerColor,
-                  ),
+                  Divider(color: kGreyerish),
                   SizedBox(
                     height: ScreenSize.height * 0.015,
                   ),
@@ -211,12 +205,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         buttonColor: Colors.white,
                         textColor: Theme.of(context).primaryColorDark,
                         isGradient: false,
-                        colors: [
-                          kColorScheme[1],
-                          kColorScheme[2],
-                          kColorScheme[3],
-                          kColorScheme[4]
-                        ],
+                        colors: null,
                         buttonText: 'Next',
                         hasBorder: true,
                         borderColor: Theme.of(context).primaryColorDark,
@@ -230,12 +219,14 @@ class _SignupScreenState extends State<SignupScreen> {
                                 .then((value) => {
                                       if (value == 'Exists')
                                         {
+                                          // if the email exists, show toast msg
                                           Fluttertoast.showToast(
                                               msg:
                                                   "the email already has been used please choose another one")
                                         }
                                       else
                                         {
+                                          // otherwise will proceed
                                           Navigator.pushNamed(
                                               context, SpecifyRoleScreen.id),
                                         }
@@ -246,8 +237,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                     msg:
                                         'Password length should be more then 6')
                                 : Fluttertoast.showToast(
-                                    msg:
-                                        'Please fill up all the information before proceed to next step');
+                                    msg: 'Please fill up all the information');
                           }
                         }),
                   ),

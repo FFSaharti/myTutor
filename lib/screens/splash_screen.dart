@@ -20,9 +20,11 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
+    // Fetching data from the DB to ensure that a connection is established
     DatabaseAPI.loadSystem().then((value) => {
           if (value.docs.isNotEmpty)
             {
+              // When data is fetched successfully, navigate to the welcome screen
               Future.delayed(
                 Duration(seconds: 1),
                 () {

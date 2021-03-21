@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mytutor/screens/tutor_screens/tutor_options.dart';
+import 'package:mytutor/utilities/screen_size.dart';
 
-class TutorSectionWidget extends StatelessWidget {
-  TutorSectionWidget(
+class SectionWidget extends StatelessWidget {
+  SectionWidget(
       {@required this.widget,
       @required this.onClick,
       @required this.imgPath,
@@ -30,26 +31,26 @@ class TutorSectionWidget extends StatelessWidget {
           color: Theme.of(context).cardColor,
           elevation: 3,
           child: Padding(
-            padding: const EdgeInsets.all(10.0),
+            padding: const EdgeInsets.all(15.0),
             child: ListTile(
               leading: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Image.asset(
                     imgPath,
-                    width: 50,
+                    width: ScreenSize.width * 0.1,
                   ),
                 ],
               ),
               title: Text(
                 title,
-                style: GoogleFonts.sarala(
+                style: GoogleFonts.sen(
                     fontSize: 25, color: Theme.of(context).buttonColor),
               ),
               subtitle: Text(
                 description,
-                style: GoogleFonts.sarala(
-                    fontSize: 14, color:Theme.of(context).buttonColor),
+                style: GoogleFonts.sen(
+                    fontSize: 14, color: Theme.of(context).buttonColor),
               ),
               trailing: Container(
                 height: double.infinity,

@@ -62,14 +62,14 @@ class _MaterialStreamTutorState extends State<MaterialStreamTutor> {
                     onTap: () {
                       // view/edit?
                       showModalBottomSheet(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.vertical(
-                                  top: Radius.circular(25.0))),
+                          backgroundColor: Colors.transparent,
                           context: context,
                           builder: (context) {
                             print(widget.isSameUser.toString());
                             return Container(
                               height: ScreenSize.height * 0.20,
+                              decoration: kCurvedShapeDecoration(
+                                  Theme.of(context).scaffoldBackgroundColor),
                               child: Column(
                                 children: [
                                   Row(
@@ -89,7 +89,8 @@ class _MaterialStreamTutorState extends State<MaterialStreamTutor> {
                                         tempDoc.title,
                                         style: kTitleStyle.copyWith(
                                             fontSize: 19,
-                                            color: Colors.black,
+                                            color:
+                                                Theme.of(context).buttonColor,
                                             fontWeight: FontWeight.normal),
                                       ),
                                       IconButton(
@@ -381,14 +382,14 @@ class _MaterialStreamTutorState extends State<MaterialStreamTutor> {
     TextEditingController titleController = TextEditingController();
     TextEditingController descController = TextEditingController();
     showModalBottomSheet(
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(top: Radius.circular(25.0))),
+      backgroundColor: Colors.transparent,
       isScrollControlled: true,
       context: context,
       builder: (context) {
         return Container(
             height: ScreenSize.height * 0.50,
-            color: Theme.of(context).scaffoldBackgroundColor,
+            decoration: kCurvedShapeDecoration(
+                Theme.of(context).scaffoldBackgroundColor),
             child: Padding(
               padding: const EdgeInsets.all(15.0),
               child: Column(

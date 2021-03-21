@@ -16,7 +16,6 @@ import 'package:mytutor/utilities/screen_size.dart';
 import 'package:mytutor/utilities/session_manager.dart';
 import 'package:page_transition/page_transition.dart';
 
-
 import 'tutor_screens/tutor_screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -33,12 +32,14 @@ class _LoginScreenState extends State<LoginScreen> {
   bool loading = false;
 
   void beginLoading() {
+    // A method that gets called to make the loading indicator appear
     setState(() {
       loading = true;
     });
   }
 
   void stopLoading() {
+    // A method that gets called to make the loading indicator stop appearing
     setState(() {
       loading = false;
     });
@@ -79,7 +80,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     tag: 'logo',
                     child: Image.asset(
                       'images/myTutorLogoWhite.png',
-                      width: double.infinity,
                       height: ScreenSize.height * 0.2,
                     ),
                   ),
@@ -181,8 +181,10 @@ class _LoginScreenState extends State<LoginScreen> {
                       onPressed: () {
                         beginLoading();
                         DatabaseAPI.userLogin(email, password).then((value) => {
+                              // Calling the api to login to the system
                               if (value == "Student Login")
                                 {
+                                  // if the information provided belongs to a student, proceed to the student page
                                   Future.delayed(Duration(milliseconds: 100),
                                       () {
                                     Fluttertoast.showToast(
@@ -195,6 +197,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 }
                               else if (value == "Tutor Login")
                                 {
+                                  // if the information provided belongs to a tutor, proceed to the student page
                                   Future.delayed(Duration(milliseconds: 100),
                                       () {
                                     Fluttertoast.showToast(
@@ -206,10 +209,10 @@ class _LoginScreenState extends State<LoginScreen> {
                                 }
                               else
                                 {
-                                  // USER NOT FOUND
+                                  // If the user is not found, show a toast of the message
                                   Future.delayed(Duration(milliseconds: 1000),
                                       () {
-                                    stopLoading();
+                                    stopLoading(); // stops the loading indicator
                                     Fluttertoast.showToast(
                                         msg: 'Invalid Email/Password');
                                   })
@@ -237,7 +240,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
   resetPasswordBottomSheet() {
     TextEditingController EmailController = TextEditingController();
-
     showModalBottomSheet(
         isScrollControlled: true,
         backgroundColor: Colors.transparent,
@@ -259,9 +261,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   Text(
                     "Provide us with your E-mail",
                     style: GoogleFonts.sen(
-                        fontSize: 17,
-                        fontWeight: FontWeight.bold,
-                        color: Theme.of(context).buttonColor),
+                        fontSize: 17, color: Theme.of(context).buttonColor),
                   ),
                   SizedBox(
                     height: ScreenSize.height * 0.0180,
@@ -274,8 +274,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       contentPadding: EdgeInsets.symmetric(
                           vertical: 10.0, horizontal: 20.0),
                       hintText: 'Type Your E-mail here....',
-                      hintStyle:
-                          TextStyle(color: Theme.of(context).buttonColor),
+                      hintStyle: TextStyle(
+                        color: Theme.of(context).buttonColor.withOpacity(0.5),
+                      ),
                       border: InputBorder.none,
                     ),
                   ),

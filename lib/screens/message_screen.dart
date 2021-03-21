@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_villains/villains/villains.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:intl/intl.dart';
 import 'package:mytutor/classes/session.dart';
 import 'package:mytutor/utilities/constants.dart';
 import 'package:mytutor/utilities/dataHelper.dart';
@@ -81,13 +80,12 @@ class _MessageScreenState extends State<MessageScreen> {
                   decoration: InputDecoration(
                     contentPadding: EdgeInsets.all(0),
                     filled: true,
-                    fillColor: Theme.of(context)
-                        .primaryColorLight
-                        .withOpacity(0.6),
-
+                    fillColor:
+                        Theme.of(context).primaryColorLight.withOpacity(0.6),
                     hintText: 'Search by Session Name',
                     hintStyle: TextStyle(color: Theme.of(context).accentColor),
-                    prefixIcon: Icon(Icons.search,color: Theme.of(context).accentColor),
+                    prefixIcon: Icon(Icons.search,
+                        color: Theme.of(context).accentColor),
                     enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide.none,
                         borderRadius: BorderRadius.circular(15)),
@@ -105,12 +103,9 @@ class _MessageScreenState extends State<MessageScreen> {
               ),
               search
                   ? Expanded(
-                      child:
-                          NotificationListener<OverscrollIndicatorNotification>(
-                        onNotification: (overscroll) {
-                          overscroll.disallowGlow();
-                        },
-                        child: ListView(
+                      child: disableBlueOverflow(
+                        context,
+                        ListView(
                           children: Searchtest,
                         ),
                       ),
@@ -172,8 +167,8 @@ class _MessageScreenState extends State<MessageScreen> {
                                     height: ScreenSize.height * 0.30,
                                   ),
                                   Text(
-                                    "no tutor session available. start one by requesting a tutor  ",
-                                    style: GoogleFonts.openSans(
+                                    "No Available/Upcoming Sessions",
+                                    style: GoogleFonts.sen(
                                         color: Theme.of(context).buttonColor,
                                         fontSize: 21),
                                     textAlign: TextAlign.center,
@@ -181,12 +176,9 @@ class _MessageScreenState extends State<MessageScreen> {
                                 ],
                               )
                             : Expanded(
-                                child: NotificationListener<
-                                    OverscrollIndicatorNotification>(
-                                  onNotification: (overscroll) {
-                                    overscroll.disallowGlow();
-                                  },
-                                  child: ListView.builder(
+                                child: disableBlueOverflow(
+                                  context,
+                                  ListView.builder(
                                     itemCount: snapshot.data.docs.length,
                                     itemBuilder: (context, index) {
                                       DocumentSnapshot myDoc =
@@ -341,18 +333,18 @@ class _MessageListTileState extends State<MessageListTile> {
             backgroundColor: kColorScheme[1],
             child: Text(
               widget.avatar.toUpperCase(),
-              style: TextStyle(
+              style: GoogleFonts.sen(
                   color: Theme.of(context).buttonColor,
                   fontWeight: FontWeight.bold),
             )),
         title: Text(widget.nameHelper,
-            style: TextStyle(
+            style: GoogleFonts.sen(
                 color: Theme.of(context).buttonColor,
                 fontWeight: FontWeight.bold,
                 fontSize: 20)),
         subtitle: Text(
           widget.session.lastMessage,
-          style: TextStyle(
+          style: GoogleFonts.sen(
               color: Theme.of(context).buttonColor,
               fontWeight: FontWeight.normal,
               fontSize: 16),
@@ -361,7 +353,8 @@ class _MessageListTileState extends State<MessageListTile> {
         ),
         trailing: Text(
           widget.session.timeOfLastMessage,
-          style: TextStyle(color: Theme.of(context).buttonColor, fontSize: 17),
+          style: GoogleFonts.sen(
+              color: Theme.of(context).buttonColor, fontSize: 17),
         ),
       ),
     );

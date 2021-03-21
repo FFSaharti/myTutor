@@ -10,7 +10,6 @@ import 'package:mytutor/utilities/constants.dart';
 import 'package:mytutor/utilities/screen_size.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
-
 class TourScreen extends StatefulWidget {
   static String id = 'tour_screen';
   @override
@@ -31,12 +30,12 @@ class _TourScreenState extends State<TourScreen> {
           children: [
             Container(
               height: ScreenSize.height * 0.65,
-              width: double.infinity,
               child: disableBlueOverflow(
                 context,
                 PageView(
                   controller: _pageController,
                   onPageChanged: (int) {
+                    // if the page changes, will play all the animations again
                     VillainController.playAllVillains(context);
                   },
                   children: <Widget>[
@@ -149,9 +148,6 @@ class _TourScreenState extends State<TourScreen> {
             ),
           ),
         ),
-        // SizedBox(
-        //   height: height * 0.05,
-        // ),
       ],
     );
   }

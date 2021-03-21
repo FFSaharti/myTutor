@@ -3,10 +3,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_villains/villains/villains.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:mytutor/components/disable_default_pop.dart';
 import 'package:mytutor/screens/adjust_general_settings_screen.dart';
 import 'package:mytutor/screens/tutor_screens/tutor_options.dart';
 import 'package:mytutor/screens/tutor_screens/tutor_profile.dart';
-import 'package:mytutor/utilities/constants.dart';
 
 import '../message_screen.dart';
 import 'homepage_tutor.dart';
@@ -19,20 +20,12 @@ class HomepageScreenTutor extends StatefulWidget {
 }
 
 class _HomepageScreenTutorState extends State<HomepageScreenTutor> {
-  List<Widget> widgets = [
-    HomePageTutor(),
-    TutorOptions(),
-    MessageScreen(),
-    TutorProfile(),
-    AdjustGeneralSettings()
-  ];
   int _currentIndex = 0;
 
   @override
   Widget build(BuildContext context) {
     PageController _pageController = PageController();
-    return WillPopScope(
-      onWillPop: () async => false,
+    return DisableDefaultPop(
       child: Scaffold(
         bottomNavigationBar: BottomNavyBar(
           backgroundColor: Theme.of(context).cardColor,
@@ -59,8 +52,9 @@ class _HomepageScreenTutorState extends State<HomepageScreenTutor> {
               ),
               title: Text(
                 'Home',
-                style: TextStyle(
-                    color: Theme.of(context).appBarTheme.textTheme.bodyText1.color,
+                style: GoogleFonts.sen(
+                    color:
+                        Theme.of(context).appBarTheme.textTheme.bodyText1.color,
                     fontWeight: FontWeight.bold),
               ),
               activeColor: Theme.of(context).focusColor,
@@ -74,8 +68,9 @@ class _HomepageScreenTutorState extends State<HomepageScreenTutor> {
               ),
               title: Text(
                 'Tutor',
-                style: TextStyle(
-                    color: Theme.of(context).appBarTheme.textTheme.bodyText1.color,
+                style: GoogleFonts.sen(
+                    color:
+                        Theme.of(context).appBarTheme.textTheme.bodyText1.color,
                     fontWeight: FontWeight.bold),
               ),
               activeColor: Theme.of(context).focusColor,
@@ -89,8 +84,9 @@ class _HomepageScreenTutorState extends State<HomepageScreenTutor> {
               ),
               title: Text(
                 'Messages',
-                style: TextStyle(
-                    color: Theme.of(context).appBarTheme.textTheme.bodyText1.color,
+                style: GoogleFonts.sen(
+                    color:
+                        Theme.of(context).appBarTheme.textTheme.bodyText1.color,
                     fontWeight: FontWeight.bold),
               ),
               activeColor: Theme.of(context).focusColor,
@@ -104,11 +100,12 @@ class _HomepageScreenTutorState extends State<HomepageScreenTutor> {
               ),
               title: Text(
                 'Profile',
-                style: TextStyle(
-                    color: Theme.of(context).appBarTheme.textTheme.bodyText1.color,
+                style: GoogleFonts.sen(
+                    color:
+                        Theme.of(context).appBarTheme.textTheme.bodyText1.color,
                     fontWeight: FontWeight.bold),
               ),
-              activeColor:  Theme.of(context).focusColor,
+              activeColor: Theme.of(context).focusColor,
               inactiveColor: Colors.grey,
               textAlign: TextAlign.center,
             ),
@@ -119,8 +116,9 @@ class _HomepageScreenTutorState extends State<HomepageScreenTutor> {
               ),
               title: Text(
                 'Settings',
-                style: TextStyle(
-                    color: Theme.of(context).appBarTheme.textTheme.bodyText1.color,
+                style: GoogleFonts.sen(
+                    color:
+                        Theme.of(context).appBarTheme.textTheme.bodyText1.color,
                     fontWeight: FontWeight.bold),
               ),
               activeColor: Theme.of(context).focusColor,
@@ -136,7 +134,6 @@ class _HomepageScreenTutorState extends State<HomepageScreenTutor> {
           onPageChanged: (index) {
             setState(() {
               _currentIndex = index;
-              //VillainController.playAllVillains(context);
             });
           },
           children: [

@@ -73,6 +73,7 @@ class _SpecifyRoleScreenState extends State<SpecifyRoleScreen> {
               SizedBox(
                 height: ScreenSize.height * 0.05,
               ),
+              // Switching between two widgets
               AnimatedSwitcher(
                 duration: Duration(milliseconds: 350),
                 child: selectedWidget,
@@ -141,7 +142,7 @@ class _SpecifyRoleScreenState extends State<SpecifyRoleScreen> {
                               if (value == "Success")
                                 {
                                   Fluttertoast.showToast(
-                                      msg: "Welcome to MyTutor :)"),
+                                      msg: "Sign Up Successful"),
                                   Navigator.push(
                                       context,
                                       PageTransition(

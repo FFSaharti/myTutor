@@ -9,7 +9,6 @@ import 'package:mytutor/utilities/constants.dart';
 import 'package:mytutor/utilities/screen_size.dart';
 import 'package:page_transition/page_transition.dart';
 
-
 import 'login_screen.dart';
 
 // ignore: must_be_immutable
@@ -25,7 +24,6 @@ class WelcomeScreen extends StatelessWidget {
                 ? Colors.transparent
                 : Theme.of(context).scaffoldBackgroundColor,
         body: Container(
-          // color: Colors.white,
           width: ScreenSize.width,
           decoration: BoxDecoration(
             gradient: !(Theme.of(context).scaffoldBackgroundColor ==
@@ -42,8 +40,7 @@ class WelcomeScreen extends StatelessWidget {
                 tag: 'logo',
                 child: Image.asset(
                   'images/myTutorLogoWhite.png',
-                  height: 200,
-                  width: 200,
+                  height: ScreenSize.height * 0.25,
                 ),
               ),
               SizedBox(
@@ -77,7 +74,10 @@ class WelcomeScreen extends StatelessWidget {
                               Text(
                                 "Find the perfect tutor! that will assist in all your problems.",
                                 style: GoogleFonts.sen(
-                                    fontSize: 18, color: Colors.grey),
+                                    fontSize: 18,
+                                    color: Theme.of(context)
+                                        .buttonColor
+                                        .withOpacity(0.4)),
                                 textAlign: TextAlign.center,
                               ),
                               SizedBox(
@@ -106,16 +106,14 @@ class WelcomeScreen extends StatelessWidget {
                                     hasBorder: true,
                                     borderColor: kColorScheme[3],
                                     onPressed: () {
-                                      // Navigator.pushNamed(
-                                      //     context, LoginScreen.id);
                                       Navigator.push(
-                                          context,
-                                          PageTransition(
-                                              type: PageTransitionType
-                                                  .bottomToTop,
-                                              duration:
-                                                  Duration(milliseconds: 200),
-                                              child: LoginScreen()));
+                                        context,
+                                        PageTransition(
+                                          type: PageTransitionType.bottomToTop,
+                                          duration: Duration(milliseconds: 200),
+                                          child: LoginScreen(),
+                                        ),
+                                      );
                                     },
                                   ),
                                 ),

@@ -57,7 +57,7 @@ class _SessionCardWidgetState extends State<SessionCardWidget> {
     DateTime tempDate = new DateFormat("yyyy-MM-dd").parse("2021-12-1");
     print(tempDate);
     showModalBottomSheet(
-      backgroundColor: Theme.of(context).cardColor,
+        backgroundColor: Theme.of(context).cardColor,
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(top: Radius.circular(25.0))),
         context: context,
@@ -74,7 +74,8 @@ class _SessionCardWidgetState extends State<SessionCardWidget> {
                       }),
                   Text(
                     "Schedule",
-                    style: TextStyle(fontSize: 20, color: Theme.of(context).buttonColor),
+                    style: GoogleFonts.sen(
+                        fontSize: 20, color: Theme.of(context).buttonColor),
                   ),
                   IconButton(
                       icon: Icon(Icons.check),
@@ -93,8 +94,9 @@ class _SessionCardWidgetState extends State<SessionCardWidget> {
                                           child: Center(
                                             child: Text(
                                               'the session status has been changed now to active, please navigate to home screen or messages screen to start tutoring',
-                                              style: kTitleStyle.copyWith(
-                                                  color: Theme.of(context).buttonColor,
+                                              style: GoogleFonts.sen(
+                                                  color: Theme.of(context)
+                                                      .buttonColor,
                                                   fontSize: 14,
                                                   fontWeight:
                                                       FontWeight.normal),
@@ -147,7 +149,7 @@ class _SessionCardWidgetState extends State<SessionCardWidget> {
                       children: [
                         Text(
                           "Date",
-                          style: kTitleStyle.copyWith(
+                          style: GoogleFonts.sen(
                               fontSize: 19,
                               color: Theme.of(context).buttonColor,
                               fontWeight: FontWeight.normal),
@@ -156,7 +158,7 @@ class _SessionCardWidgetState extends State<SessionCardWidget> {
                             new DateFormat.yMMMMEEEEd().format(
                                 new DateFormat("yyyy-MM-dd")
                                     .parse(session.date.toString())),
-                            style: kTitleStyle.copyWith(
+                            style: GoogleFonts.sen(
                                 fontSize: 19,
                                 color: Theme.of(context).buttonColor,
                                 fontWeight: FontWeight.normal)),
@@ -172,13 +174,13 @@ class _SessionCardWidgetState extends State<SessionCardWidget> {
                       children: [
                         Text(
                           "Time",
-                          style: kTitleStyle.copyWith(
+                          style: GoogleFonts.sen(
                               fontSize: 19,
                               color: Theme.of(context).buttonColor,
                               fontWeight: FontWeight.normal),
                         ),
                         Text(session.time,
-                            style: kTitleStyle.copyWith(
+                            style: GoogleFonts.sen(
                                 fontSize: 19,
                                 color: Theme.of(context).buttonColor,
                                 fontWeight: FontWeight.normal)),
@@ -190,21 +192,23 @@ class _SessionCardWidgetState extends State<SessionCardWidget> {
                       children: [
                         Text(
                           "Session Description",
-                          style: kTitleStyle.copyWith(
+                          style: GoogleFonts.sen(
                               fontSize: 19,
                               color: Theme.of(context).buttonColor,
                               fontWeight: FontWeight.normal),
                         ),
                       ],
                     ),
-                    SizedBox(height: ScreenSize.height *0.01,),
+                    SizedBox(
+                      height: ScreenSize.height * 0.01,
+                    ),
                     Align(
                       alignment: Alignment.topLeft,
                       child: Container(
                         color: Colors.transparent,
                         child: Text(
                           session.desc,
-                          style: kTitleStyle.copyWith(
+                          style: GoogleFonts.sen(
                               color: Theme.of(context).buttonColor,
                               fontWeight: FontWeight.w100,
                               fontSize: 17),
@@ -219,10 +223,11 @@ class _SessionCardWidgetState extends State<SessionCardWidget> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        //ReadFullDescription(session.desc);
+                        // TODO : Read Full Description Bottom Sheet
+                        // ReadFullDescription(session.desc);
                       },
-                      child: Text("click here to read the full description",
-                          style: kTitleStyle.copyWith(
+                      child: Text("Click here to read the full description",
+                          style: GoogleFonts.sen(
                               fontSize: 19,
                               color: Theme.of(context).buttonColor,
                               fontWeight: FontWeight.normal)),
@@ -287,7 +292,7 @@ class _SessionCardWidgetState extends State<SessionCardWidget> {
                       padding: const EdgeInsets.only(left: 11.0, right: 11.0),
                       child: Text(
                         widget.session.title,
-                        style: GoogleFonts.sarabun(
+                        style: GoogleFonts.sen(
                           textStyle: TextStyle(
                               fontSize: 21,
                               fontWeight: FontWeight.normal,
@@ -309,7 +314,7 @@ class _SessionCardWidgetState extends State<SessionCardWidget> {
                           DateFormat('yyyy-MM-dd').format(widget.session.date) +
                               " at " +
                               widget.session.time,
-                          style: GoogleFonts.sarabun(
+                          style: GoogleFonts.sen(
                             textStyle: TextStyle(
                                 fontSize: 21,
                                 fontWeight: FontWeight.normal,
@@ -324,10 +329,10 @@ class _SessionCardWidgetState extends State<SessionCardWidget> {
                     Padding(
                       padding: const EdgeInsets.only(left: 11),
                       child: Text(
-                        finish ? helperName : "loading..",
+                        finish ? helperName : "Loading...",
                         overflow: TextOverflow.ellipsis,
                         softWrap: false,
-                        style: GoogleFonts.sarabun(
+                        style: GoogleFonts.sen(
                           textStyle: TextStyle(
                               fontSize: 21,
                               fontWeight: FontWeight.normal,

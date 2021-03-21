@@ -13,6 +13,7 @@ import 'package:mytutor/classes/student.dart';
 import 'package:mytutor/classes/tutor.dart';
 import 'package:mytutor/classes/user.dart';
 import 'package:mytutor/components/circular_button.dart';
+import 'package:mytutor/components/disable_default_pop.dart';
 import 'package:mytutor/components/messages_stream_widget.dart';
 import 'package:mytutor/screens/view_receiver_profile.dart';
 import 'package:mytutor/utilities/constants.dart';
@@ -83,8 +84,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async => false,
+    return DisableDefaultPop(
       child: Scaffold(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         extendBodyBehindAppBar: true,
@@ -167,7 +167,7 @@ class _ChatScreenState extends State<ChatScreen> {
                               title: receiverDataLoadIndicator == true
                                   ? Text(
                                       receiver.name,
-                                      style: GoogleFonts.openSans(
+                                      style: GoogleFonts.sen(
                                           fontSize: 25, color: Colors.white),
                                       maxLines: 1,
                                     )
@@ -176,8 +176,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                 onTap: widget.currentsession.status == "closed"
                                     ? () {
                                         Fluttertoast.showToast(
-                                            msg:
-                                                "you cannot closed or rated this session.",
+                                            msg: "Session already closed!",
                                             toastLength: Toast.LENGTH_SHORT,
                                             gravity: ToastGravity.CENTER,
                                             textColor: Colors.white,
@@ -216,7 +215,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                         child: Center(
                                             child: Text(
                                           "All chat",
-                                          style: GoogleFonts.openSans(
+                                          style: GoogleFonts.sen(
                                               fontSize: 15,
                                               color:
                                                   userChooseForTypeofChat == 0
@@ -252,7 +251,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                         child: Center(
                                             child: Text(
                                           "Image only",
-                                          style: GoogleFonts.openSans(
+                                          style: GoogleFonts.sen(
                                               fontSize: 15,
                                               color:
                                                   userChooseForTypeofChat == 1
@@ -281,12 +280,9 @@ class _ChatScreenState extends State<ChatScreen> {
                     ),
                     // receiverDataLoadIndicator == false ? Text("hello") :
                     //     Text(receiverName),
-                    NotificationListener<OverscrollIndicatorNotification>(
-                      // ignore: missing_return
-                      onNotification: (overscroll) {
-                        overscroll.disallowGlow();
-                      },
-                      child: userChooseForTypeofChat == 0
+                    disableBlueOverflow(
+                      context,
+                      userChooseForTypeofChat == 0
                           ? MessagesStream(
                               sessionid: widget.currentsession.session_id,
                               imageOnly: false,
@@ -315,7 +311,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                 ? null
                                 : () async {
                                     refresh();
-                                    String filename = "hello";
+                                    //    String filename = "hello";
                                     FilePickerResult file = await FilePicker
                                         .platform
                                         .pickFiles(type: FileType.image);
@@ -356,7 +352,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                         "closed"
                                     ? 'the session is ended. its in view Mode only'
                                     : 'Type....',
-                                hintStyle: TextStyle(
+                                hintStyle: GoogleFonts.sen(
                                     color: Theme.of(context).iconTheme.color),
                                 border: InputBorder.none,
                               ),
@@ -405,273 +401,266 @@ class _ChatScreenState extends State<ChatScreen> {
     double friendRate = 0;
     double creativityRate = 0;
     showModalBottomSheet(
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.vertical(top: Radius.circular(25.0))),
+        backgroundColor: Colors.transparent,
         context: context,
         builder: (context) {
           return Container(
-              height: ScreenSize.height * 0.70,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(25),
-                    topRight: Radius.circular(25)),
-                color: Theme.of(context).scaffoldBackgroundColor,
-              ),
-              child: NotificationListener<OverscrollIndicatorNotification>(
-                // ignore: missing_return
-                onNotification: (overscroll) {
-                  overscroll.disallowGlow();
-                },
-                child: PageView(
-                  physics: new NeverScrollableScrollPhysics(),
-                  controller: _pageController,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(15.0),
-                      child: Column(
-                        children: [
-                          Text(
-                            "Teaching skills",
-                            style: kTitleStyle.copyWith(
-                                fontSize: 17,
-                                fontWeight: FontWeight.normal,
-                                color: Theme.of(context).buttonColor),
-                          ),
-                          SmoothStarRating(
-                              allowHalfRating: false,
-                              onRated: (v) {
-                                teachRate = v;
-                              },
-                              starCount: 5,
-                              rating: 0,
-                              size: 40.0,
-                              isReadOnly: false,
-                              color: kColorScheme[2],
-                              borderColor: kColorScheme[1],
-                              spacing: 0.0),
-                          SizedBox(
-                            height: ScreenSize.height * 0.0070,
-                          ),
-                          Text(
-                            "Communication",
-                            style: kTitleStyle.copyWith(
-                                fontSize: 17,
-                                fontWeight: FontWeight.normal,
-                                color: Theme.of(context).buttonColor),
-                          ),
-                          SmoothStarRating(
-                              allowHalfRating: false,
-                              onRated: (v) {
-                                commRate = v;
-                              },
-                              starCount: 5,
-                              rating: 0,
-                              size: 40.0,
-                              isReadOnly: false,
-                              color: kColorScheme[2],
-                              borderColor: kColorScheme[1],
-                              spacing: 0.0),
-                          SizedBox(
-                            height: ScreenSize.height * 0.0070,
-                          ),
-                          Text(
-                            "friendliness",
-                            style: kTitleStyle.copyWith(
-                                fontSize: 17,
-                                fontWeight: FontWeight.normal,
-                                color: Theme.of(context).buttonColor),
-                          ),
-                          SmoothStarRating(
-                              allowHalfRating: false,
-                              onRated: (v) {
-                                friendRate = v;
-                              },
-                              starCount: 5,
-                              rating: 0,
-                              size: 40.0,
-                              isReadOnly: false,
-                              color: kColorScheme[2],
-                              borderColor: kColorScheme[1],
-                              spacing: 0.0),
-                          SizedBox(
-                            height: ScreenSize.height * 0.0070,
-                          ),
-                          Text(
-                            "Creativity",
-                            style: kTitleStyle.copyWith(
-                                fontSize: 17,
-                                fontWeight: FontWeight.normal,
-                                color: Theme.of(context).buttonColor),
-                          ),
-                          SmoothStarRating(
+            height: ScreenSize.height * 0.50,
+            decoration: kCurvedShapeDecoration(
+                Theme.of(context).scaffoldBackgroundColor),
+            child: disableBlueOverflow(
+              context,
+              PageView(
+                physics: new NeverScrollableScrollPhysics(),
+                controller: _pageController,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(15.0),
+                    child: Column(
+                      children: [
+                        Text(
+                          "Teaching skills",
+                          style: GoogleFonts.sen(
+                              fontSize: 17,
+                              fontWeight: FontWeight.normal,
+                              color: Theme.of(context).buttonColor),
+                        ),
+                        SmoothStarRating(
                             allowHalfRating: false,
                             onRated: (v) {
-                              creativityRate = v;
+                              teachRate = v;
                             },
                             starCount: 5,
+                            rating: 0,
                             size: 40.0,
                             isReadOnly: false,
                             color: kColorScheme[2],
                             borderColor: kColorScheme[1],
-                          ),
-                          SizedBox(
-                            height: ScreenSize.height * 0.010,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              RaisedButton(
-                                onPressed: () {
-                                  // close the session without rating.
-                                  DatabaseAPI.changeSessionsStatus("closed",
-                                      widget.currentsession.session_id);
-                                  int count = 0;
-                                  Navigator.popUntil(context, (route) {
-                                    return count++ == 2;
-                                  });
-                                },
-                                child: Text(
-                                  "Close without rate",
-                                  style: GoogleFonts.sarabun(
-                                    textStyle: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.normal,
-                                        color: Colors.white),
-                                  ),
-                                ),
-                                color: kColorScheme[2],
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(15.0),
+                            spacing: 0.0),
+                        SizedBox(
+                          height: ScreenSize.height * 0.0070,
+                        ),
+                        Text(
+                          "Communication",
+                          style: GoogleFonts.sen(
+                              fontSize: 17,
+                              fontWeight: FontWeight.normal,
+                              color: Theme.of(context).buttonColor),
+                        ),
+                        SmoothStarRating(
+                            allowHalfRating: false,
+                            onRated: (v) {
+                              commRate = v;
+                            },
+                            starCount: 5,
+                            rating: 0,
+                            size: 40.0,
+                            isReadOnly: false,
+                            color: kColorScheme[2],
+                            borderColor: kColorScheme[1],
+                            spacing: 0.0),
+                        SizedBox(
+                          height: ScreenSize.height * 0.0070,
+                        ),
+                        Text(
+                          "Friendliness",
+                          style: GoogleFonts.sen(
+                              fontSize: 17,
+                              fontWeight: FontWeight.normal,
+                              color: Theme.of(context).buttonColor),
+                        ),
+                        SmoothStarRating(
+                            allowHalfRating: false,
+                            onRated: (v) {
+                              friendRate = v;
+                            },
+                            starCount: 5,
+                            rating: 0,
+                            size: 40.0,
+                            isReadOnly: false,
+                            color: kColorScheme[2],
+                            borderColor: kColorScheme[1],
+                            spacing: 0.0),
+                        SizedBox(
+                          height: ScreenSize.height * 0.0070,
+                        ),
+                        Text(
+                          "Creativity",
+                          style: GoogleFonts.sen(
+                              fontSize: 17,
+                              fontWeight: FontWeight.normal,
+                              color: Theme.of(context).buttonColor),
+                        ),
+                        SmoothStarRating(
+                          allowHalfRating: false,
+                          onRated: (v) {
+                            creativityRate = v;
+                          },
+                          starCount: 5,
+                          size: 40.0,
+                          isReadOnly: false,
+                          color: kColorScheme[2],
+                          borderColor: kColorScheme[1],
+                        ),
+                        SizedBox(
+                          height: ScreenSize.height * 0.010,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            RaisedButton(
+                              onPressed: () {
+                                // close the session without rating.
+                                DatabaseAPI.changeSessionsStatus(
+                                    "closed", widget.currentsession.session_id);
+                                int count = 0;
+                                Navigator.popUntil(context, (route) {
+                                  return count++ == 2;
+                                });
+                              },
+                              child: Text(
+                                "Close without Rate",
+                                style: GoogleFonts.sen(
+                                  textStyle: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.normal,
+                                      color: Colors.white),
                                 ),
                               ),
-                              RaisedButton(
-                                onPressed: () {
-                                  _pageController.animateToPage(
-                                    2,
-                                    duration: const Duration(milliseconds: 600),
-                                    curve: Curves.easeInOut,
-                                  );
-                                },
-                                child: Text(
-                                  "submit the rate",
-                                  style: GoogleFonts.sarabun(
-                                    textStyle: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.normal,
-                                        color: Colors.white),
-                                  ),
-                                ),
-                                color: kColorScheme[2],
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(15.0),
-                                ),
+                              color: kColorScheme[2],
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15.0),
                               ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(15.0),
-                      child: Column(
-                        children: [
-                          SizedBox(
-                            height: ScreenSize.height * 0.030,
-                          ),
-                          Text(
-                            "Rate a Review for your tutor!",
-                            style: kTitleStyle.copyWith(
-                                fontSize: 17,
-                                fontWeight: FontWeight.normal,
-                                color: Theme.of(context).buttonColor),
-                          ),
-                          SizedBox(
-                            height: ScreenSize.height * 0.0090,
-                          ),
-                          Text(
-                            "you can leave it empty if you want to",
-                            style: TextStyle(
-                                fontSize: 17,
-                                fontWeight: FontWeight.normal,
-                                color: Theme.of(context).buttonColor),
-                          ),
-                          SizedBox(
-                            height: ScreenSize.height * 0.0090,
-                          ),
-                          TextField(
-                            controller: reviewController,
-                            style: TextStyle(
-                                fontSize: 17,
-                                fontWeight: FontWeight.normal,
-                                color: Theme.of(context).buttonColor),
-                            onChanged: (value) {},
-                            decoration: InputDecoration(
-                              contentPadding: EdgeInsets.symmetric(
-                                  vertical: 10.0, horizontal: 20.0),
-                              hintText: 'Type your Review....',
-                              hintStyle: TextStyle(
-                                  color: Theme.of(context).buttonColor),
-                              border: InputBorder.none,
                             ),
-                          ),
-                          SizedBox(
-                            height: ScreenSize.height * 0.020,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              RaisedButton(
-                                onPressed: () {
-                                  reviewController.text.isNotEmpty
-                                      ? DatabaseAPI.rateTutor(
-                                          Rate(
-                                              reviewController.text,
-                                              teachRate,
-                                              friendRate,
-                                              commRate,
-                                              creativityRate,
-                                              DateTime.now(),
-                                              widget.currentsession.title),
-                                          widget.currentsession.tutor)
-                                      : DatabaseAPI.rateTutor(
-                                          Rate(
-                                              null,
-                                              teachRate,
-                                              friendRate,
-                                              commRate,
-                                              creativityRate,
-                                              DateTime.now(),
-                                              widget.currentsession.title),
-                                          widget.currentsession.tutor);
-                                  DatabaseAPI.changeSessionsStatus("closed",
-                                      widget.currentsession.session_id);
-                                  int count = 0;
-                                  Navigator.popUntil(context, (route) {
-                                    return count++ == 2;
-                                  });
-                                },
-                                child: Text(
-                                  "submit and close the Session",
-                                  style: GoogleFonts.sarabun(
-                                    textStyle: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.normal,
-                                        color: Colors.white),
-                                  ),
-                                ),
-                                color: kColorScheme[2],
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(15.0),
+                            RaisedButton(
+                              onPressed: () {
+                                _pageController.animateToPage(
+                                  2,
+                                  duration: const Duration(milliseconds: 600),
+                                  curve: Curves.easeInOut,
+                                );
+                              },
+                              child: Text(
+                                "Submit Rate",
+                                style: GoogleFonts.sen(
+                                  textStyle: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.normal,
+                                      color: Colors.white),
                                 ),
                               ),
-                            ],
-                          ),
-                        ],
-                      ),
+                              color: kColorScheme[2],
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15.0),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-              ));
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(15.0),
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          height: ScreenSize.height * 0.030,
+                        ),
+                        Text(
+                          "Provide a Review for your tutor!",
+                          style: GoogleFonts.sen(
+                              fontSize: 17,
+                              fontWeight: FontWeight.normal,
+                              color: Theme.of(context).buttonColor),
+                        ),
+                        SizedBox(
+                          height: ScreenSize.height * 0.0090,
+                        ),
+                        Text(
+                          "You can leave it empty if you want to",
+                          style: GoogleFonts.sen(
+                              fontSize: 17,
+                              fontWeight: FontWeight.normal,
+                              color: Theme.of(context).buttonColor),
+                        ),
+                        SizedBox(
+                          height: ScreenSize.height * 0.0090,
+                        ),
+                        TextField(
+                          controller: reviewController,
+                          style: TextStyle(
+                              fontSize: 17,
+                              fontWeight: FontWeight.normal,
+                              color: Theme.of(context).buttonColor),
+                          onChanged: (value) {},
+                          decoration: InputDecoration(
+                            contentPadding: EdgeInsets.symmetric(
+                                vertical: 10.0, horizontal: 20.0),
+                            hintText: 'Type your Review....',
+                            hintStyle:
+                                TextStyle(color: Theme.of(context).buttonColor),
+                            border: InputBorder.none,
+                          ),
+                        ),
+                        SizedBox(
+                          height: ScreenSize.height * 0.020,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            RaisedButton(
+                              onPressed: () {
+                                reviewController.text.isNotEmpty
+                                    ? DatabaseAPI.rateTutor(
+                                        Rate(
+                                            reviewController.text,
+                                            teachRate,
+                                            friendRate,
+                                            commRate,
+                                            creativityRate,
+                                            DateTime.now(),
+                                            widget.currentsession.title),
+                                        widget.currentsession.tutor)
+                                    : DatabaseAPI.rateTutor(
+                                        Rate(
+                                            null,
+                                            teachRate,
+                                            friendRate,
+                                            commRate,
+                                            creativityRate,
+                                            DateTime.now(),
+                                            widget.currentsession.title),
+                                        widget.currentsession.tutor);
+                                DatabaseAPI.changeSessionsStatus(
+                                    "closed", widget.currentsession.session_id);
+                                int count = 0;
+                                Navigator.popUntil(context, (route) {
+                                  return count++ == 2;
+                                });
+                              },
+                              child: Text(
+                                "Submit and Close Session",
+                                style: GoogleFonts.sen(
+                                  textStyle: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.normal,
+                                      color: Colors.white),
+                                ),
+                              ),
+                              color: kColorScheme[2],
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15.0),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
         });
   }
 
@@ -685,30 +674,25 @@ class _ChatScreenState extends State<ChatScreen> {
           return Container(
               decoration: kCurvedShapeDecoration(
                   Theme.of(context).scaffoldBackgroundColor),
-              height: ScreenSize.height * 0.30,
+              height: ScreenSize.height * 0.40,
               child: Padding(
                 padding: const EdgeInsets.all(15.0),
                 child: Column(
                   children: [
-                    Text(
-                      "title : " + widget.currentsession.title,
-                      style: GoogleFonts.openSans(
-                          color: Theme.of(context).buttonColor, fontSize: 17),
+                    InfoTile(
+                      iconData: Icons.title,
+                      text: widget.currentsession.title,
+                      expandable: true,
                     ),
-                    Text(
-                      "Subject : " +
-                          subjects
-                              .elementAt(widget.currentsession.subject)
-                              .title,
-                      style: GoogleFonts.openSans(
-                          color: Theme.of(context).buttonColor, fontSize: 17),
+                    InfoTile(
+                      iconData: Icons.subject,
+                      text: subjects[widget.currentsession.subject].title,
+                      expandable: false,
                     ),
-                    Text(
-                      "Description : " + widget.currentsession.desc,
-                      style: GoogleFonts.openSans(
-                          color: Theme.of(context).buttonColor, fontSize: 17),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
+                    InfoTile(
+                      iconData: Icons.description_outlined,
+                      text: widget.currentsession.desc,
+                      expandable: true,
                     ),
                     SizedBox(
                       height: ScreenSize.height * 0.030,
@@ -719,8 +703,8 @@ class _ChatScreenState extends State<ChatScreen> {
                         textColor: Colors.white,
                         isGradient: false,
                         colors: null,
-                        fontSize: 15,
-                        buttonText: "Close the session",
+                        fontSize: 20,
+                        buttonText: "Close Session",
                         hasBorder: false,
                         borderColor: null,
                         onPressed: () {
@@ -786,5 +770,100 @@ class _ChatScreenState extends State<ChatScreen> {
                 ),
               ));
         });
+  }
+}
+
+class InfoTile extends StatelessWidget {
+  IconData iconData;
+  String text;
+  bool expandable;
+
+  InfoTile(
+      {@required this.iconData,
+      @required this.text,
+      @required this.expandable});
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      shape: RoundedRectangleBorder(
+        side: BorderSide.none,
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: ListTile(
+        trailing: expandable && text.length > 20
+            ? GestureDetector(
+                onTap: () {
+                  showModalBottomSheet(
+                      backgroundColor: Colors.transparent,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.vertical(
+                              top: Radius.circular(25.0))),
+                      context: context,
+                      enableDrag: false,
+                      builder: (context) {
+                        return Container(
+                          height: ScreenSize.height * 0.4,
+                          child: Padding(
+                            padding: const EdgeInsets.all(20.0),
+                            child: Column(
+                              children: [
+                                Align(
+                                  alignment: Alignment.topLeft,
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: Icon(Icons.cancel),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: ScreenSize.height * 0.02,
+                                ),
+                                Container(
+                                  height: ScreenSize.height * 0.25,
+                                  child: disableBlueOverflow(
+                                    context,
+                                    SingleChildScrollView(
+                                      child: Text(
+                                        text,
+                                        textAlign: TextAlign.left,
+                                        style: GoogleFonts.sen(
+                                            fontSize: 20,
+                                            color:
+                                                Theme.of(context).buttonColor),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          decoration: kCurvedShapeDecoration(
+                              Theme.of(context).scaffoldBackgroundColor),
+                        );
+                      });
+                },
+                child: Icon(
+                  Icons.arrow_forward_ios,
+                  color: Theme.of(context).buttonColor,
+                ),
+              )
+            : Icon(
+                Icons.arrow_forward_ios,
+                color: Colors.transparent,
+              ),
+        leading: Icon(
+          iconData,
+          color: Theme.of(context).buttonColor,
+          size: 24,
+        ),
+        title: Text(text,
+            style: GoogleFonts.sen(
+                color: Theme.of(context).buttonColor, fontSize: 22),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis),
+      ),
+    );
   }
 }
