@@ -93,7 +93,7 @@ class _SessionCardWidgetState extends State<SessionCardWidget> {
                                           padding: const EdgeInsets.all(8.0),
                                           child: Center(
                                             child: Text(
-                                              'the session status has been changed now to active, please navigate to home screen or messages screen to start tutoring',
+                                              'Session is now active!',
                                               style: GoogleFonts.sen(
                                                   color: Theme.of(context)
                                                       .buttonColor,
@@ -118,9 +118,10 @@ class _SessionCardWidgetState extends State<SessionCardWidget> {
                                           padding: const EdgeInsets.all(8.0),
                                           child: Center(
                                             child: Text(
-                                              'Error occur please try again',
-                                              style: kTitleStyle.copyWith(
-                                                  color: kBlackish,
+                                              'Error occured please try again',
+                                              style: GoogleFonts.sen(
+                                                  color: Theme.of(context)
+                                                      .buttonColor,
                                                   fontSize: 14,
                                                   fontWeight:
                                                       FontWeight.normal),
@@ -200,37 +201,36 @@ class _SessionCardWidgetState extends State<SessionCardWidget> {
                       ],
                     ),
                     SizedBox(
-                      height: ScreenSize.height * 0.01,
+                      height: ScreenSize.height * 0.02,
                     ),
-                    Align(
-                      alignment: Alignment.topLeft,
-                      child: Container(
-                        color: Colors.transparent,
-                        child: Text(
-                          session.desc,
-                          style: GoogleFonts.sen(
-                              color: Theme.of(context).buttonColor,
-                              fontWeight: FontWeight.w100,
-                              fontSize: 17),
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 5,
+                    Container(
+                      height: ScreenSize.height * 0.2,
+                      child: disableBlueOverflow(
+                        context,
+                        SingleChildScrollView(
+                          child: Align(
+                            alignment: Alignment.topLeft,
+                            child: Container(
+                              height: ScreenSize.height * 0.3,
+                              color: Colors.transparent,
+                              child: Text(
+                                session.desc
+                                    ,
+                                style: GoogleFonts.sen(
+                                    color: Theme.of(context).buttonColor,
+                                    fontWeight: FontWeight.w100,
+                                    fontSize: 17),
+                                //overflow: TextOverflow.ellipsis,
+                                // maxLines: 5,
+                              ),
+                            ),
+                          ),
                         ),
                       ),
                     ),
                     Divider(),
                     SizedBox(
                       height: ScreenSize.height * 0.030,
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        // TODO : Read Full Description Bottom Sheet
-                        // ReadFullDescription(session.desc);
-                      },
-                      child: Text("Click here to read the full description",
-                          style: GoogleFonts.sen(
-                              fontSize: 19,
-                              color: Theme.of(context).buttonColor,
-                              fontWeight: FontWeight.normal)),
                     ),
                   ],
                 ),

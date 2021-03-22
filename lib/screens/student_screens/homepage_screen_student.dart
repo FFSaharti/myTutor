@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_villains/villains/villains.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:mytutor/components/disable_default_pop.dart';
 import 'package:mytutor/components/session_stream_widget.dart';
 import 'package:mytutor/screens/adjust_general_settings_screen.dart';
 import 'package:mytutor/screens/student_screens/profile_student_screen.dart';
 import 'package:mytutor/screens/student_screens/student_options.dart';
 import 'package:mytutor/utilities/constants.dart';
-import 'package:mytutor/utilities/database_api.dart';
 import 'package:mytutor/utilities/screen_size.dart';
 import 'package:mytutor/utilities/session_manager.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -46,8 +46,7 @@ class _HomepageScreenStudentState extends State<HomepageScreenStudent> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async => false,
+    return DisableDefaultPop(
       child: Scaffold(
         bottomNavigationBar: BottomNavyBar(
           backgroundColor: Theme.of(context).cardColor,
@@ -74,7 +73,7 @@ class _HomepageScreenStudentState extends State<HomepageScreenStudent> {
               ),
               title: Text(
                 'Home',
-                style: TextStyle(
+                style: GoogleFonts.sen(
                     color:
                         Theme.of(context).appBarTheme.textTheme.bodyText1.color,
                     fontWeight: FontWeight.bold),
@@ -90,7 +89,7 @@ class _HomepageScreenStudentState extends State<HomepageScreenStudent> {
               ),
               title: Text(
                 'Student',
-                style: TextStyle(
+                style: GoogleFonts.sen(
                     color:
                         Theme.of(context).appBarTheme.textTheme.bodyText1.color,
                     fontWeight: FontWeight.bold),
@@ -106,7 +105,7 @@ class _HomepageScreenStudentState extends State<HomepageScreenStudent> {
               ),
               title: Text(
                 'Messages',
-                style: TextStyle(
+                style: GoogleFonts.sen(
                     color:
                         Theme.of(context).appBarTheme.textTheme.bodyText1.color,
                     fontWeight: FontWeight.bold),
@@ -122,7 +121,7 @@ class _HomepageScreenStudentState extends State<HomepageScreenStudent> {
               ),
               title: Text(
                 'Profile',
-                style: TextStyle(
+                style: GoogleFonts.sen(
                     color:
                         Theme.of(context).appBarTheme.textTheme.bodyText1.color,
                     fontWeight: FontWeight.bold),
@@ -138,7 +137,7 @@ class _HomepageScreenStudentState extends State<HomepageScreenStudent> {
               ),
               title: Text(
                 'Settings',
-                style: TextStyle(
+                style: GoogleFonts.sen(
                     color:
                         Theme.of(context).appBarTheme.textTheme.bodyText1.color,
                     fontWeight: FontWeight.bold),
@@ -190,8 +189,6 @@ class _HomePageStudentState extends State<HomePageStudent> {
                     ),
                     child: SingleChildScrollView(
                       child: RichText(
-                      //  maxLines: 4,
-                       //overflow: TextOverflow.ellipsis,
                         text: TextSpan(children: [
                           TextSpan(
                             text: "Welcome,\nStudent ",
@@ -295,7 +292,7 @@ class _HomePageStudentState extends State<HomePageStudent> {
           alignment: Alignment.centerLeft,
           child: Text(
             "    " + title,
-            style: GoogleFonts.sarabun(
+            style: GoogleFonts.sen(
                 textStyle: TextStyle(
                     fontSize: 21,
                     fontWeight: FontWeight.normal,
