@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_villains/villains/villains.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mytutor/classes/session.dart';
+import 'package:mytutor/classes/student.dart';
+import 'package:mytutor/classes/tutor.dart';
 import 'package:mytutor/utilities/constants.dart';
 import 'package:mytutor/utilities/dataHelper.dart';
 import 'package:mytutor/utilities/database_api.dart';
@@ -27,6 +29,7 @@ class _MessageScreenState extends State<MessageScreen> {
   TextEditingController searchController = TextEditingController();
   int from = 0;
   int to = 200;
+  bool isStudent = false;
 
   void initState() {
     super.initState();
@@ -35,16 +38,25 @@ class _MessageScreenState extends State<MessageScreen> {
   _filterSession(String title) {
     if (this.mounted) {
       setState(() {
-        Searchtest = userMessages
-            .where((element) =>
-                element.nameHelper.toLowerCase().contains(title.toLowerCase()))
-            .toList();
+        if(isStudent){
+          Searchtest = userMessages
+              .where((element) =>
+              element.session.tutor.name.toLowerCase().contains(title.toLowerCase()))
+              .toList();
+        } else{
+          Searchtest = userMessages
+              .where((element) =>
+              element.session.student.name.toLowerCase().contains(title.toLowerCase()))
+              .toList();
+        }
+
       });
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    isStudent = SessionManager.loggedInTutor.userId == "" ? true : false;
     FocusNode n = new FocusNode();
     return Scaffold(
       body: SafeArea(
@@ -138,10 +150,20 @@ class _MessageScreenState extends State<MessageScreen> {
                               Timestamp stampOftheSessiondate = SessionDate;
                               Timestamp StampOfTheLastMessageTime =
                                   timeOfLastMessage;
-                              Session tempSession = Session(
+                              Session tempSession = isStudent == true ? Session(
                                   Sessiontitle,
-                                  Sessiontutor,
-                                  Sessionstudentid,
+                                  Tutor("name", "email", "pass", "aboutMe", Sessiontutor, [], "Profileimg"),
+                                  SessionManager.loggedInStudent,
+                                  session.id,
+                                  Sessiontime,
+                                  stampOftheSessiondate.toDate(),
+                                  SessionDesc,
+                                  SessionStatus,
+                                  SessionSubject) :
+                              Session(
+                                  Sessiontitle,
+                                  SessionManager.loggedInTutor,
+                                  Student("name", "email", "pass", "aboutMe", Sessionstudentid, [], "Profileimg"),
                                   session.id,
                                   Sessiontime,
                                   stampOftheSessiondate.toDate(),
@@ -159,7 +181,6 @@ class _MessageScreenState extends State<MessageScreen> {
                             }
                           }
                         }
-
                         return userMessages.isEmpty
                             ? Column(
                                 children: [
@@ -219,11 +240,10 @@ class _MessageScreenState extends State<MessageScreen> {
                                                   // add the widget to list of widget to use it for search later.
                                                   return Column(
                                                     children: [
+
                                                       MessageListTile(
                                                           session: testSession
                                                               .elementAt(index),
-                                                          nameHelper:
-                                                              snap.data["name"],
                                                           avatar: createAvatar(
                                                               snap.data[
                                                                   "name"]),
@@ -257,27 +277,63 @@ class _MessageScreenState extends State<MessageScreen> {
 
   void fetchWidgetIntoList(
       int index, List<Session> testSession, AsyncSnapshot snap) {
-    if (userMessages.elementAt(index).nameHelper == null) {
-      // pop this widget out and add new one with name
+    print(  snap.data["name"]);
+    if (userMessages.elementAt(index).session.student.name == "name") {
+      // means the tutor data has not been inserted into it so we need to do it right now
       userMessages.removeAt(index);
-      userMessages.insert(
-          index,
-          MessageListTile(
-            session: testSession.elementAt(index),
-            nameHelper: snap.data["name"],
-            avatar: createAvatar(
-              snap.data["name"],
-            ),
-            callBackFunction: () {
-              setState(() {
-                searchController.clear();
+      Session tempSession = testSession.elementAt(index);
+      Student newStu = Student(snap.data["name"], snap.data["email"], "pass", snap.data["aboutMe"], tempSession.student.userId, [], snap.data["profileImg"]);
 
-                Searchtest = [];
-                search = false;
-              });
-              WidgetsBinding.instance.focusManager.primaryFocus?.unfocus();
-            },
-          ));
+      tempSession.student = newStu;
+      if(this.mounted){
+        userMessages.insert(
+            index,
+            MessageListTile(
+              session: tempSession,
+              avatar: createAvatar(
+                snap.data["name"],
+              ),
+              callBackFunction: () {
+                setState(() {
+                  searchController.clear();
+
+                  Searchtest = [];
+                  search = false;
+                });
+                WidgetsBinding.instance.focusManager.primaryFocus?.unfocus();
+              },
+            ));
+      }
+
+    } else{
+      // means the tutor data has not been inserted into it the tutor so we need to do it right now
+      userMessages.removeAt(index);
+      Session tempSession = testSession.elementAt(index);
+      Tutor newTutor = Tutor(snap.data["name"], snap.data["email"], "pass", snap.data["aboutMe"], tempSession.tutor.userId, [], snap.data["profileImg"]);
+      List.from(snap.data["experiences"]).forEach((element) {
+        newTutor.addExperience(element);
+      });
+      tempSession.tutor = newTutor;
+      if(this.mounted){
+        userMessages.insert(
+            index,
+            MessageListTile(
+              session: tempSession,
+              avatar: createAvatar(
+                snap.data["name"],
+              ),
+              callBackFunction: () {
+                setState(() {
+                  searchController.clear();
+
+                  Searchtest = [];
+                  search = false;
+                });
+                WidgetsBinding.instance.focusManager.primaryFocus?.unfocus();
+              },
+            ));
+      }
+
     }
   }
 
@@ -293,13 +349,13 @@ class _MessageScreenState extends State<MessageScreen> {
 }
 
 class MessageListTile extends StatefulWidget {
+
   final Session session;
-  final String nameHelper;
   final String avatar;
   final Function callBackFunction;
 
   MessageListTile(
-      {this.session, this.nameHelper, this.avatar, this.callBackFunction});
+      {this.session, this.avatar, this.callBackFunction,});
 
   @override
   _MessageListTileState createState() => _MessageListTileState();
@@ -337,7 +393,7 @@ class _MessageListTileState extends State<MessageListTile> {
                   color: Theme.of(context).buttonColor,
                   fontWeight: FontWeight.bold),
             )),
-        title: Text(widget.nameHelper,
+        title: Text(SessionManager.loggedInTutor.userId == "" ? widget.session.tutor.name : widget.session.student.name,
             style: GoogleFonts.sen(
                 color: Theme.of(context).buttonColor,
                 fontWeight: FontWeight.bold,

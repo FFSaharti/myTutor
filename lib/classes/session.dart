@@ -1,8 +1,11 @@
 
+import 'package:mytutor/classes/student.dart';
+import 'package:mytutor/classes/tutor.dart';
+
 class Session {
   String _title;
-  String _tutor;
-  String _student;
+  Tutor _tutor;
+  Student _student;
   String _session_id;
   String _time;
   DateTime _date;
@@ -52,9 +55,9 @@ class Session {
     _title = value;
   }
 
-  String get student => _student;
+  Student get student => _student;
 
-  set student(String value) {
+  set student(Student value) {
     _student = value;
   }
 
@@ -64,9 +67,9 @@ class Session {
     _session_id = value;
   }
 
-  String get tutor => _tutor;
+  Tutor get tutor => _tutor;
 
-  set tutor(String value) {
+  set tutor(Tutor value) {
     _tutor = value;
   }
 

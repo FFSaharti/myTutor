@@ -8,6 +8,7 @@ import 'package:mytutor/classes/document.dart';
 import 'package:mytutor/classes/material.dart';
 import 'package:mytutor/classes/quiz.dart';
 import 'package:mytutor/classes/rate.dart';
+import 'package:mytutor/classes/session.dart';
 import 'package:mytutor/classes/student.dart';
 import 'package:mytutor/classes/subject.dart';
 import 'package:mytutor/classes/tutor.dart';
@@ -25,10 +26,10 @@ import 'package:mytutor/utilities/screen_size.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ViewReceiverProfile extends StatefulWidget {
-  final String userId;
+  final MyUser receiver;
   final String role;
 
-  const ViewReceiverProfile({this.role, this.userId});
+  const ViewReceiverProfile({this.role, this.receiver});
 
   @override
   _ViewReceiverProfileState createState() => _ViewReceiverProfileState();
@@ -41,44 +42,12 @@ class _ViewReceiverProfileState extends State<ViewReceiverProfile> {
 
   @override
   void initState() {
-    // inislize user object.
-    print(widget.userId);
-    widget.role == "tutor"
-        ? DatabaseAPI.getUserbyid(widget.userId, 0).then((value) => {
-              user = Tutor(
-                  value.data()["name"],
-                  "email",
-                  "pass",
-                  value.data()["aboutMe"],
-                  value.id,
-                  [],
-                  value.data()["profileImg"]),
-              List.from(value.data()['experiences']).forEach((element) {
-                (user as Tutor).addExperience(element);
-              }),
-              setState(() {
-                loading = !loading;
-              }),
-            })
-        : DatabaseAPI.getUserbyid(widget.userId, 1).then((value) => {
-              user = Student(
-                  value.data()["name"],
-                  "email",
-                  "pass",
-                  value.data()["aboutMe"],
-                  value.id,
-                  [],
-                  value.data()["profileImg"]),
-              (user as Student).favMats = value.data()["listOfFavMats"],
-              setState(() {
-                loading = !loading;
-              }),
-            });
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+
     return DisableDefaultPop(
         child: disableBlueOverflow(
       context,
@@ -87,16 +56,12 @@ class _ViewReceiverProfileState extends State<ViewReceiverProfile> {
         body: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            loading == false
-                ? Center(
-                    child: CircularProgressIndicator(),
-                  )
-                : widget.role == "tutor"
+         widget.role == "tutor"
                     ? ViewProfileTutor(
-                        tutor: user,
+                        tutor: widget.receiver
                       )
                     : ViewProfileStudent(
-                        student: user,
+                        student: widget.receiver
                       ),
           ],
         ),
@@ -175,6 +140,7 @@ class _ViewProfileTutorState extends State<ViewProfileTutor> {
 
   @override
   Widget build(BuildContext context) {
+    print(widget.tutor.userId);
     return SafeArea(
       child: Center(
         child: Container(

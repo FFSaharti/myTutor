@@ -25,37 +25,14 @@ class SessionCardWidget extends StatefulWidget {
 }
 
 class _SessionCardWidgetState extends State<SessionCardWidget> {
-  String helperName = "";
-  bool finish = false;
 
   void initState() {
-    // get the tutor name.
-
-    if (widget.isStudent == false) {
-      // means that the current user is not student, so get the student name
-      DatabaseAPI.getUserbyid(widget.session.student, 1).then((data) {
-        setState(() {
-          helperName = data.data()["name"];
-          finish = true;
-        });
-      });
-    } else if (widget.isStudent == true) {
-      DatabaseAPI.getUserbyid(widget.session.tutor, 0).then((data) {
-        setState(() {
-          helperName = data.data()["name"];
-          print(helperName);
-          finish = true;
-        });
-      });
-    }
-
     super.initState();
   }
 
   showBottomsheetModel(Session session) {
     // bottomsheet
     DateTime tempDate = new DateFormat("yyyy-MM-dd").parse("2021-12-1");
-    print(tempDate);
     showModalBottomSheet(
         backgroundColor: Theme.of(context).cardColor,
         shape: RoundedRectangleBorder(
@@ -242,6 +219,7 @@ class _SessionCardWidgetState extends State<SessionCardWidget> {
 
   @override
   Widget build(BuildContext context) {
+    print("im here in card , the tutor id is ::"+ widget.session.tutor.userId);
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: GestureDetector(
@@ -256,6 +234,7 @@ class _SessionCardWidgetState extends State<SessionCardWidget> {
                 textColor: Colors.white,
                 fontSize: 16.0);
           } else {
+
             Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -328,8 +307,18 @@ class _SessionCardWidgetState extends State<SessionCardWidget> {
                     ),
                     Padding(
                       padding: const EdgeInsets.only(left: 11),
-                      child: Text(
-                        finish ? helperName : "Loading...",
+                      child: widget.isStudent == true ? Text(
+                       widget.session.tutor.name,
+                        overflow: TextOverflow.ellipsis,
+                        softWrap: false,
+                        style: GoogleFonts.sen(
+                          textStyle: TextStyle(
+                              fontSize: 21,
+                              fontWeight: FontWeight.normal,
+                              color: Theme.of(context).buttonColor),
+                        ),
+                      ) :Text(
+                          widget.session.student.name,
                         overflow: TextOverflow.ellipsis,
                         softWrap: false,
                         style: GoogleFonts.sen(

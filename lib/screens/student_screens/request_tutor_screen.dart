@@ -481,7 +481,7 @@ class _TutorWidgetState extends State<TutorWidget> {
                       context,
                       MaterialPageRoute(
                           builder: (context) => ViewReceiverProfile(
-                                userId: widget.tutor.userId,
+                                receiver: widget.tutor,
                                 role: 'tutor',
                               )),
                     ).then((value) => {

@@ -32,46 +32,15 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
-  void getCurrentuser() {
-    SessionManager.loggedInTutor.userId == ""
-        ? DatabaseAPI.getUserbyid(widget.currentsession.tutor, 0)
-            .then((value) => {
-                  setState(() {
-                    receiverDataLoadIndicator = !receiverDataLoadIndicator;
-                    receiver = Student(
-                        value.data()["name"],
-                        value.data()["email"],
-                        "none",
-                        value.data()["aboutMe"],
-                        value.id,
-                        [],
-                        value.data()["profileImg"]);
-                  })
-                })
-        : DatabaseAPI.getUserbyid(widget.currentsession.student, 1)
-            .then((value) => {
-                  setState(() {
-                    receiverDataLoadIndicator = !receiverDataLoadIndicator;
-                    receiver = Tutor(
-                        value.data()["name"],
-                        value.data()["email"],
-                        "none",
-                        value.data()["aboutMe"],
-                        value.id,
-                        [],
-                        value.data()["profileImg"]);
-                  })
-                });
-  }
+
 
   void initState() {
-    getCurrentuser();
+
   }
 
   final messageTextController = TextEditingController();
   String dropdownValue = 'rate tutor';
   bool fileUploadIndicator = false;
-  bool receiverDataLoadIndicator = false;
   String newMessage;
   MyUser receiver;
   int userChooseForTypeofChat = 0;
@@ -84,19 +53,13 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   Widget build(BuildContext context) {
+    SessionManager.loggedInTutor.userId == ""?  receiver = widget.currentsession.tutor :  receiver = widget.currentsession.student;
     return DisableDefaultPop(
       child: Scaffold(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         extendBodyBehindAppBar: true,
         body: SafeArea(
-          child: receiverDataLoadIndicator == false
-              ? Center(
-                  child: CircularProgressIndicator(
-                    backgroundColor: Colors.white,
-                    valueColor: AlwaysStoppedAnimation<Color>(kColorScheme[3]),
-                  ),
-                )
-              : Column(
+          child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
@@ -132,13 +95,12 @@ class _ChatScreenState extends State<ChatScreen> {
                                   ),
                                   GestureDetector(
                                     onTap: () {
-                                      receiverDataLoadIndicator == true
-                                          ? Navigator.push(
+                                     Navigator.push(
                                               context,
                                               MaterialPageRoute(
                                                   builder: (context) =>
                                                       ViewReceiverProfile(
-                                                        userId: receiver.userId,
+                                                        receiver: receiver,
                                                         role: SessionManager
                                                                     .loggedInTutor
                                                                     .userId ==
@@ -146,8 +108,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                                             ? "tutor"
                                                             : "student",
                                                       )),
-                                            )
-                                          : print('wait to load');
+                                            );
                                     },
                                     child: receiver.profileImag == ""
                                         ? Icon(
@@ -164,14 +125,12 @@ class _ChatScreenState extends State<ChatScreen> {
                                   ),
                                 ],
                               ),
-                              title: receiverDataLoadIndicator == true
-                                  ? Text(
+                              title: Text(
                                       receiver.name,
                                       style: GoogleFonts.sen(
                                           fontSize: 25, color: Colors.white),
                                       maxLines: 1,
-                                    )
-                                  : Text(""),
+                                    ),
                               trailing: GestureDetector(
                                 onTap: widget.currentsession.status == "closed"
                                     ? () {
@@ -392,6 +351,7 @@ class _ChatScreenState extends State<ChatScreen> {
       ),
     );
   }
+
 
   showBottomSheetForStudent() {
     PageController _pageController = PageController();
@@ -620,7 +580,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                             creativityRate,
                                             DateTime.now(),
                                             widget.currentsession.title),
-                                        widget.currentsession.tutor)
+                                        widget.currentsession.tutor.userId)
                                     : DatabaseAPI.rateTutor(
                                         Rate(
                                             null,
@@ -630,7 +590,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                             creativityRate,
                                             DateTime.now(),
                                             widget.currentsession.title),
-                                        widget.currentsession.tutor);
+                                        widget.currentsession.tutor.userId);
                                 DatabaseAPI.changeSessionsStatus(
                                     "closed", widget.currentsession.session_id);
                                 int count = 0;

@@ -451,10 +451,10 @@ class DatabaseAPI {
   static Future<String> scheduleWithStudent(Session session) async {
     try {
       _firestore.collection("session").add({
-        'student': session.student,
+        'student': session.student.userId,
         'description': session.desc,
         'title': session.title,
-        'tutor': session.tutor,
+        'tutor': session.tutor.userId,
         'date': session.date,
         'time': session.time,
         'status': "waiting for student",
@@ -498,7 +498,7 @@ class DatabaseAPI {
     }
   }
 
-  static Stream<QuerySnapshot> fetchSessionData(int type, bool checkexpire) {
+  static Stream<QuerySnapshot> fetchSessionData(int type, bool checkexpire, String status) {
     // check the session that expired.
 
     if (checkexpire == true) {
@@ -508,13 +508,13 @@ class DatabaseAPI {
       // tutor
       return _firestore
           .collection("session")
-          .where("tutor", isEqualTo: SessionManager.loggedInTutor.userId)
+          .where("tutor", isEqualTo: SessionManager.loggedInTutor.userId).where('status', isEqualTo: status)
           .snapshots();
     } else {
       //student
       return _firestore
           .collection("session")
-          .where("student", isEqualTo: SessionManager.loggedInStudent.userId)
+          .where("student", isEqualTo: SessionManager.loggedInStudent.userId).where('status', isEqualTo: status)
           .snapshots();
     }
   }
@@ -602,6 +602,7 @@ class DatabaseAPI {
 
   static Future<String> changeSessionsStatus(
       String status, String sessionid) async {
+    print('inside the session  status method the id is :'+sessionid);
     // main status (pending-expired-active-closed-decline- waiting for student(tutor requesting session to the student))
     try {
       await _firestore

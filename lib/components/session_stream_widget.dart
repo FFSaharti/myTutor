@@ -3,9 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_villains/villains/villains.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mytutor/classes/session.dart';
+import 'package:mytutor/classes/student.dart';
+import 'package:mytutor/classes/tutor.dart';
 import 'package:mytutor/components/session_card_widget.dart';
 import 'package:mytutor/utilities/database_api.dart';
 import 'package:mytutor/utilities/screen_size.dart';
+import 'package:mytutor/utilities/session_manager.dart';
 
 class SessionStream extends StatelessWidget {
   // "check expire" to update the old sessions. "expiredSessionView" to disable send function and textfeld
@@ -14,6 +17,7 @@ class SessionStream extends StatelessWidget {
   final bool isStudent;
   final bool checkexpire;
   final bool expiredSessionView;
+
 
   const SessionStream(
       {@required this.status,
@@ -25,82 +29,92 @@ class SessionStream extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-      stream: DatabaseAPI.fetchSessionData(type, checkexpire),
+      stream: DatabaseAPI.fetchSessionData(type, checkexpire,status),
       builder: (context, snapshot) {
-        // List to fill up with all the session the user has.
-        List<Widget> UserSessions = [];
         int from = 0;
         int to = 400;
-        if (snapshot.hasData) {
-          List<QueryDocumentSnapshot> Sessions = snapshot.data.docs;
-          for (var session in Sessions) {
-            String SessionStatus = session.data()["status"];
-            if (SessionStatus.toLowerCase() == status.toLowerCase()) {
-              final Sessiontutor = session.data()["tutor"];
-              final Sessionstudentid = session.data()["student"];
-              final Sessiontitle = session.data()["title"];
-              final Sessiontime = session.data()["time"];
-              final SessionDate = session.data()["date"];
-              final SessionDesc = session.data()["description"];
-              final SessionSubject = session.data()["subject"];
-              // convert the date we got from firebase into timestamp. to change it later to datetime.
-              Timestamp stamp = SessionDate;
-              print(Sessiontitle);
-              UserSessions.add(
-                Villain(
-                  villainAnimation: VillainAnimation.fromBottom(
-                    from: Duration(milliseconds: from),
-                    to: Duration(milliseconds: to),
-                  ),
-                  animateEntrance: true,
-                  child: SessionCardWidget(
-                    isStudent: isStudent,
-                    height: ScreenSize.height,
-                    session: Session(
-                        Sessiontitle,
-                        Sessiontutor,
-                        Sessionstudentid,
-                        session.id,
-                        Sessiontime,
-                        stamp.toDate(),
-                        SessionDesc,
-                        SessionStatus,
-                        SessionSubject),
-                  ),
+        if (!snapshot.hasData || snapshot.data.docs.isEmpty) {
+          return Column(
+            children: [
+              SizedBox(
+                height: ScreenSize.height * 0.15,
+              ),
+              Center(
+                child: Text(
+                  "its quite empty in here",
+                  style: GoogleFonts.openSans(
+                      color: Colors.grey,
+                      // Theme.of(context).primaryColor,
+                      fontSize: 21),
+                  textAlign: TextAlign.center,
                 ),
-              );
+              ),
+            ],
+          );
+        } else{
+            // snap shot have some data.
+          return Expanded(
+            child: NotificationListener<
+                OverscrollIndicatorNotification>(
+              onNotification: (overscroll) {
+                overscroll.disallowGlow();
+              },
+              child: ListView.builder(
+                itemCount: snapshot.data.docs.length,
+                itemBuilder: (context, index) {
+                  DocumentSnapshot myDoc =
+                  snapshot.data.docs[index];
+                  return Column(
+                    children: [
+                      Villain(
+                        villainAnimation:
+                        VillainAnimation.fromBottom(
+                          from:
+                          Duration(milliseconds: from),
+                          to: Duration(milliseconds: to),
+                        ),
+                        child: FutureBuilder(
+                          future: DatabaseAPI.getUserbyid(
+                              isStudent == true ? myDoc.data()["tutor"] : myDoc
+                                  .data()["student"], isStudent == true ? 0 : 1),
+                          builder: (context,
+                              AsyncSnapshot snap) {
 
-              from += 100;
-              to += 100;
-            }
-          }
+                            if (snap.hasData) {
+                              if(status == myDoc.data()["status"]){
+
+                                // check if the user message at this index does not have a user name;
+                                if(isStudent){
+                                  Timestamp dateHolder = myDoc.data()["date"];
+                                  Tutor tempTutor =Tutor(snap.data["name"], snap.data["email"], "", snap.data["aboutMe"], myDoc.data()["tutor"], [], snap.data["profileImg"]);
+                                  List.from(snap.data["experiences"]).forEach((element) {
+                                    tempTutor.addExperience(element);
+                                  });
+                                    return SessionCardWidget( isStudent: isStudent,height: ScreenSize.height,session: Session(myDoc.data()["title"], tempTutor, SessionManager.loggedInStudent, myDoc.id, myDoc.data()["time"], dateHolder.toDate(), myDoc.data()["description"], myDoc.data()["status"], myDoc.data()["subject"]),);
+                                } else{
+                                  Timestamp dateHolder = myDoc.data()["date"];
+                                  return SessionCardWidget(isStudent: isStudent,height: ScreenSize.height,session: Session(myDoc.data()["title"], SessionManager.loggedInTutor, Student(snap.data["name"], snap.data["email"], "", snap.data["aboutMe"], myDoc.data()["student"], [], snap.data["profileImg"]), myDoc.id, myDoc.data()["time"], dateHolder.toDate(), myDoc.data()["description"], myDoc.data()["status"], myDoc.data()["subject"]),);
+                                }
+                              }
+
+                              // add the widget to list of widget to use it for search later.
+                            }
+                            from += 100;
+                            to += 100;
+                            return SizedBox();
+                          },
+                        ),
+                      ),
+                    ],
+                  );
+                },
+              ),
+            ),
+          );
         }
-        return UserSessions.isEmpty
-            ? Column(
-                children: [
-                  SizedBox(
-                    height: ScreenSize.height * 0.15,
-                  ),
-                  Center(
-                    child: Text(
-                      "its quite empty in here",
-                      style: GoogleFonts.openSans(
-                          color: Colors.grey,
-                          // Theme.of(context).primaryColor,
-                          fontSize: 21),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                ],
-              )
-            : Expanded(
-                child: ListView(
-                  reverse: false,
-                  padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5),
-                  children: UserSessions,
-                ),
-              );
-      },
+
+        }
     );
   }
 }
+

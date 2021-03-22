@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:mytutor/classes/question.dart';
 import 'package:mytutor/classes/session.dart';
+import 'package:mytutor/classes/student.dart';
 import 'package:mytutor/components/circular_button.dart';
 import 'package:mytutor/utilities/constants.dart';
 import 'package:mytutor/utilities/database_api.dart';
@@ -354,10 +355,12 @@ class _AnswerScreenQuestionDetailsState
                                   dateController.text.isNotEmpty &&
                                   problemController.text.isNotEmpty &&
                                   timeController.text.isNotEmpty) {
+                               // temp student since we only need the user id
+
                                 DatabaseAPI.scheduleWithStudent(Session(
                                         titleController.text,
-                                        SessionManager.loggedInTutor.userId,
-                                        widget.question.issuer.userId,
+                                        SessionManager.loggedInTutor,
+                                        Student("name", "email", "pass", "aboutMe", widget.question.issuer.userId, [], "Profileimg"),
                                         "",
                                         timeController.text,
                                         new DateFormat("yyyy-MM-dd")
