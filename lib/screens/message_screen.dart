@@ -218,12 +218,7 @@ class _MessageScreenState extends State<MessageScreen> {
                                                   .getStreamOfUserbyId(
                                                       SessionManager
                                                                   .loggedInTutor
-                                                                  .userId ==
-                                                              ""
-                                                          ? myDoc
-                                                              .data()["tutor"]
-                                                          : myDoc.data()[
-                                                              "student"],
+                                                                  .userId == "" ? myDoc.data()["tutor"] : myDoc.data()["student"],
                                                       SessionManager
                                                                   .loggedInTutor
                                                                   .userId ==
@@ -233,6 +228,7 @@ class _MessageScreenState extends State<MessageScreen> {
                                               builder: (context,
                                                   AsyncSnapshot snap) {
                                                 if (snap.hasData) {
+
                                                   // check if the user message at this index does not have a user name;
                                                   fetchWidgetIntoList(
                                                       index, testSession, snap);
@@ -277,7 +273,7 @@ class _MessageScreenState extends State<MessageScreen> {
 
   void fetchWidgetIntoList(
       int index, List<Session> testSession, AsyncSnapshot snap) {
-    print(  snap.data["name"]);
+
     if (userMessages.elementAt(index).session.student.name == "name") {
       // means the tutor data has not been inserted into it so we need to do it right now
       userMessages.removeAt(index);
@@ -305,7 +301,7 @@ class _MessageScreenState extends State<MessageScreen> {
             ));
       }
 
-    } else{
+    } else if(userMessages.elementAt(index).session.tutor.name == "name"){
       // means the tutor data has not been inserted into it the tutor so we need to do it right now
       userMessages.removeAt(index);
       Session tempSession = testSession.elementAt(index);
