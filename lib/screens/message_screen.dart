@@ -38,18 +38,19 @@ class _MessageScreenState extends State<MessageScreen> {
   _filterSession(String title) {
     if (this.mounted) {
       setState(() {
-        if(isStudent){
+        if (isStudent) {
           Searchtest = userMessages
-              .where((element) =>
-              element.session.tutor.name.toLowerCase().contains(title.toLowerCase()))
+              .where((element) => element.session.tutor.name
+                  .toLowerCase()
+                  .contains(title.toLowerCase()))
               .toList();
-        } else{
+        } else {
           Searchtest = userMessages
-              .where((element) =>
-              element.session.student.name.toLowerCase().contains(title.toLowerCase()))
+              .where((element) => element.session.student.name
+                  .toLowerCase()
+                  .contains(title.toLowerCase()))
               .toList();
         }
-
       });
     }
   }
@@ -150,26 +151,35 @@ class _MessageScreenState extends State<MessageScreen> {
                               Timestamp stampOftheSessiondate = SessionDate;
                               Timestamp StampOfTheLastMessageTime =
                                   timeOfLastMessage;
-                              Session tempSession = isStudent == true ? Session(
-                                  Sessiontitle,
-                                  Tutor("name", "email", "pass", "aboutMe", Sessiontutor, [], "Profileimg"),
-                                  SessionManager.loggedInStudent,
-                                  session.id,
-                                  Sessiontime,
-                                  stampOftheSessiondate.toDate(),
-                                  SessionDesc,
-                                  SessionStatus,
-                                  SessionSubject) :
-                              Session(
-                                  Sessiontitle,
-                                  SessionManager.loggedInTutor,
-                                  Student("name", "email", "pass", "aboutMe", Sessionstudentid, [], "Profileimg"),
-                                  session.id,
-                                  Sessiontime,
-                                  stampOftheSessiondate.toDate(),
-                                  SessionDesc,
-                                  SessionStatus,
-                                  SessionSubject);
+                              Session tempSession = isStudent == true
+                                  ? Session(
+                                      Sessiontitle,
+                                      Tutor("name", "email", "pass", "aboutMe",
+                                          Sessiontutor, [], "Profileimg"),
+                                      SessionManager.loggedInStudent,
+                                      session.id,
+                                      Sessiontime,
+                                      stampOftheSessiondate.toDate(),
+                                      SessionDesc,
+                                      SessionStatus,
+                                      SessionSubject)
+                                  : Session(
+                                      Sessiontitle,
+                                      SessionManager.loggedInTutor,
+                                      Student(
+                                          "name",
+                                          "email",
+                                          "pass",
+                                          "aboutMe",
+                                          Sessionstudentid,
+                                          [],
+                                          "Profileimg"),
+                                      session.id,
+                                      Sessiontime,
+                                      stampOftheSessiondate.toDate(),
+                                      SessionDesc,
+                                      SessionStatus,
+                                      SessionSubject);
                               tempSession.lastMessage =
                                   session.data()["lastMessage"];
                               tempSession.timeOfLastMessage =
@@ -218,7 +228,12 @@ class _MessageScreenState extends State<MessageScreen> {
                                                   .getStreamOfUserbyId(
                                                       SessionManager
                                                                   .loggedInTutor
-                                                                  .userId == "" ? myDoc.data()["tutor"] : myDoc.data()["student"],
+                                                                  .userId ==
+                                                              ""
+                                                          ? myDoc
+                                                              .data()["tutor"]
+                                                          : myDoc.data()[
+                                                              "student"],
                                                       SessionManager
                                                                   .loggedInTutor
                                                                   .userId ==
@@ -228,7 +243,6 @@ class _MessageScreenState extends State<MessageScreen> {
                                               builder: (context,
                                                   AsyncSnapshot snap) {
                                                 if (snap.hasData) {
-
                                                   // check if the user message at this index does not have a user name;
                                                   fetchWidgetIntoList(
                                                       index, testSession, snap);
@@ -236,7 +250,6 @@ class _MessageScreenState extends State<MessageScreen> {
                                                   // add the widget to list of widget to use it for search later.
                                                   return Column(
                                                     children: [
-
                                                       MessageListTile(
                                                           session: testSession
                                                               .elementAt(index),
@@ -273,15 +286,21 @@ class _MessageScreenState extends State<MessageScreen> {
 
   void fetchWidgetIntoList(
       int index, List<Session> testSession, AsyncSnapshot snap) {
-
     if (userMessages.elementAt(index).session.student.name == "name") {
       // means the tutor data has not been inserted into it so we need to do it right now
       userMessages.removeAt(index);
       Session tempSession = testSession.elementAt(index);
-      Student newStu = Student(snap.data["name"], snap.data["email"], "pass", snap.data["aboutMe"], tempSession.student.userId, [], snap.data["profileImg"]);
+      Student newStu = Student(
+          snap.data["name"],
+          snap.data["email"],
+          "pass",
+          snap.data["aboutMe"],
+          tempSession.student.userId,
+          [],
+          snap.data["profileImg"]);
 
       tempSession.student = newStu;
-      if(this.mounted){
+      if (this.mounted) {
         userMessages.insert(
             index,
             MessageListTile(
@@ -300,17 +319,23 @@ class _MessageScreenState extends State<MessageScreen> {
               },
             ));
       }
-
-    } else if(userMessages.elementAt(index).session.tutor.name == "name"){
+    } else if (userMessages.elementAt(index).session.tutor.name == "name") {
       // means the tutor data has not been inserted into it the tutor so we need to do it right now
       userMessages.removeAt(index);
       Session tempSession = testSession.elementAt(index);
-      Tutor newTutor = Tutor(snap.data["name"], snap.data["email"], "pass", snap.data["aboutMe"], tempSession.tutor.userId, [], snap.data["profileImg"]);
+      Tutor newTutor = Tutor(
+          snap.data["name"],
+          snap.data["email"],
+          "pass",
+          snap.data["aboutMe"],
+          tempSession.tutor.userId,
+          [],
+          snap.data["profileImg"]);
       List.from(snap.data["experiences"]).forEach((element) {
         newTutor.addExperience(element);
       });
       tempSession.tutor = newTutor;
-      if(this.mounted){
+      if (this.mounted) {
         userMessages.insert(
             index,
             MessageListTile(
@@ -329,7 +354,6 @@ class _MessageScreenState extends State<MessageScreen> {
               },
             ));
       }
-
     }
   }
 
@@ -345,13 +369,15 @@ class _MessageScreenState extends State<MessageScreen> {
 }
 
 class MessageListTile extends StatefulWidget {
-
   final Session session;
   final String avatar;
   final Function callBackFunction;
 
-  MessageListTile(
-      {this.session, this.avatar, this.callBackFunction,});
+  MessageListTile({
+    this.session,
+    this.avatar,
+    this.callBackFunction,
+  });
 
   @override
   _MessageListTileState createState() => _MessageListTileState();
@@ -389,13 +415,18 @@ class _MessageListTileState extends State<MessageListTile> {
                   color: Theme.of(context).buttonColor,
                   fontWeight: FontWeight.bold),
             )),
-        title: Text(SessionManager.loggedInTutor.userId == "" ? widget.session.tutor.name : widget.session.student.name,
+        title: Text(
+            SessionManager.loggedInTutor.userId == ""
+                ? widget.session.tutor.name
+                : widget.session.student.name,
             style: GoogleFonts.sen(
                 color: Theme.of(context).buttonColor,
                 fontWeight: FontWeight.bold,
                 fontSize: 20)),
         subtitle: Text(
-          widget.session.lastMessage,
+          widget.session.lastMessage.contains('image included type to load')
+              ? 'Image 📷'
+              : widget.session.lastMessage,
           style: GoogleFonts.sen(
               color: Theme.of(context).buttonColor,
               fontWeight: FontWeight.normal,
