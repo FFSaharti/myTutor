@@ -3,6 +3,7 @@ import 'package:flutter_villains/villains/villains.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mytutor/classes/subject.dart';
+import 'package:mytutor/components/disable_default_pop.dart';
 import 'package:mytutor/components/question_stream_widget.dart';
 import 'package:mytutor/utilities/constants.dart';
 import 'package:mytutor/utilities/database_api.dart';
@@ -124,8 +125,7 @@ class _AskScreenStudentState extends State<AskScreenStudent> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async => false,
+    return DisableDefaultPop(
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
@@ -170,7 +170,8 @@ class _AskScreenStudentState extends State<AskScreenStudent> {
                         onChanged: (value) {
                           setState(() {});
                         },
-                        style: TextStyle(color: Theme.of(context).accentColor),
+                        style: GoogleFonts.sen(
+                            color: Theme.of(context).accentColor),
                         textAlignVertical: TextAlignVertical.center,
                         decoration: InputDecoration(
                           fillColor: Theme.of(context)
@@ -179,8 +180,8 @@ class _AskScreenStudentState extends State<AskScreenStudent> {
                           contentPadding: EdgeInsets.all(0),
                           filled: true,
                           hintText: 'Search',
-                          hintStyle:
-                              TextStyle(color: Theme.of(context).accentColor),
+                          hintStyle: GoogleFonts.sen(
+                              color: Theme.of(context).accentColor),
                           prefixIcon: Icon(Icons.search,
                               color: Theme.of(context).accentColor),
                           enabledBorder: OutlineInputBorder(
@@ -328,7 +329,7 @@ void showAddQuestion() {
                               }),
                           Text(
                             "Add New Question",
-                            style: TextStyle(
+                            style: GoogleFonts.sen(
                                 fontSize: 20,
                                 color: Theme.of(context).buttonColor),
                           ),
@@ -367,20 +368,19 @@ void showAddQuestion() {
                               alignment: Alignment.topLeft,
                               child: Text(
                                 "Question Title",
-                                style: GoogleFonts.secularOne(
+                                style: GoogleFonts.sen(
                                     textStyle: TextStyle(
                                         fontSize: 17,
-                                        fontWeight: FontWeight.bold,
                                         color: Theme.of(context).buttonColor)),
                               ),
                             ),
                             TextField(
                               controller: titleController,
-                              style: TextStyle(
+                              style: GoogleFonts.sen(
                                   color: Theme.of(context).buttonColor),
                               decoration: InputDecoration(
                                 hintText: 'Type something...',
-                                hintStyle: TextStyle(
+                                hintStyle: GoogleFonts.sen(
                                     fontSize: 17.0,
                                     color: Theme.of(context)
                                         .buttonColor
@@ -394,22 +394,21 @@ void showAddQuestion() {
                               alignment: Alignment.topLeft,
                               child: Text(
                                 "Question Description",
-                                style: GoogleFonts.secularOne(
+                                style: GoogleFonts.sen(
                                     textStyle: TextStyle(
                                         fontSize: 17,
-                                        fontWeight: FontWeight.bold,
                                         color: Theme.of(context).buttonColor)),
                               ),
                             ),
                             TextField(
                               controller: problemController,
                               keyboardType: TextInputType.multiline,
-                              style: TextStyle(
+                              style: GoogleFonts.sen(
                                   color: Theme.of(context).buttonColor),
                               maxLines: null,
                               decoration: InputDecoration(
                                 hintText: 'Type something...',
-                                hintStyle: TextStyle(
+                                hintStyle: GoogleFonts.sen(
                                     fontSize: 17.0,
                                     color: Theme.of(context)
                                         .buttonColor
@@ -423,10 +422,9 @@ void showAddQuestion() {
                               alignment: Alignment.topLeft,
                               child: Text(
                                 "Subject",
-                                style: GoogleFonts.secularOne(
+                                style: GoogleFonts.sen(
                                     textStyle: TextStyle(
                                         fontSize: 17,
-                                        fontWeight: FontWeight.bold,
                                         color: Theme.of(context).buttonColor)),
                               ),
                             ),
@@ -439,8 +437,7 @@ void showAddQuestion() {
                                   onChanged: (value) {
                                     setModalState(() {
                                       searchBox = value;
-                                      getSubjects(searchBox);
-                                      // getSelectedSubjects(selectedInterests);
+                                      getSubjects(searchBox, setModalState);
                                     });
                                   },
                                   style: TextStyle(
@@ -484,7 +481,8 @@ void showAddQuestion() {
                                     },
                                     child: ListView(
                                         scrollDirection: Axis.horizontal,
-                                        children: getSubjects(searchBox)),
+                                        children: getSubjects(
+                                            searchBox, setModalState)),
                                   ),
                                 ),
                               ],
@@ -513,12 +511,12 @@ int getChosenSubject() {
   return chosenSubject;
 }
 
-List<Widget> getSubjects(String searchBox) {
+List<Widget> getSubjects(String searchBox, [setModalState]) {
   List<Widget> searchResults = [];
   for (int i = 0; i < subjects.length; i++) {
     if (subjects[i].searchKeyword(searchBox)) {
       searchResults.add(
-        InterestWidget(subjects[i]),
+        InterestWidget(subjects[i], setModalState),
       );
       searchResults.add(SizedBox(
         width: 15,
@@ -532,8 +530,9 @@ List<Widget> getSubjects(String searchBox) {
 class InterestWidget extends StatefulWidget {
   Subject subject;
   bool chosen = false;
+  Function setModalState;
 
-  InterestWidget(this.subject);
+  InterestWidget(this.subject, [this.setModalState]);
 
   @override
   _InterestWidgetState createState() => _InterestWidgetState();
@@ -561,9 +560,17 @@ class _InterestWidgetState extends State<InterestWidget> {
       child: GestureDetector(
         onTap: () {
           setState(() {
-            unchooseRemainingInterests(widget.subject.id);
-            widget.chosen = !widget.chosen;
-            widget.subject.toggleChosen();
+            if (widget.setModalState != null) {
+              widget.setModalState(() {
+                unchooseRemainingInterests(widget.subject.id);
+                widget.chosen = !widget.chosen;
+                widget.subject.toggleChosen();
+              });
+            } else {
+              unchooseRemainingInterests(widget.subject.id);
+              widget.chosen = !widget.chosen;
+              widget.subject.toggleChosen();
+            }
           });
         },
         child: Padding(

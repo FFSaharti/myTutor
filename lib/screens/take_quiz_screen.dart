@@ -1,9 +1,11 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_villains/villain.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mytutor/classes/quiz.dart';
 import 'package:mytutor/classes/quiz_question.dart';
 import 'package:mytutor/components/circular_button.dart';
+import 'package:mytutor/components/disable_default_pop.dart';
 import 'package:mytutor/utilities/constants.dart';
 import 'package:mytutor/utilities/database_api.dart';
 import 'package:mytutor/utilities/screen_size.dart';
@@ -67,8 +69,7 @@ class _TakeQuizScreenState extends State<TakeQuizScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async => false,
+    return DisableDefaultPop(
       child: Scaffold(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         appBar: buildAppBar(context, Theme.of(context).accentColor,
@@ -88,12 +89,13 @@ class _TakeQuizScreenState extends State<TakeQuizScreen> {
                       borderRadius: BorderRadius.circular(20),
                       color: Colors.white),
                   //color: Colors.white,
-                  child: NotificationListener<OverscrollIndicatorNotification>(
-                    onNotification: (overscroll) {
-                      overscroll.disallowGlow();
-                    },
-                    child: PageView(
+                  child: disableBlueOverflow(
+                    context,
+                    PageView(
                       controller: _pageController,
+                      onPageChanged: (int) {
+                        VillainController.playAllVillains(context);
+                      },
                       children: finish
                           ? getListOfQuestions(widget.quiz)
                           : [
@@ -136,8 +138,6 @@ class _TakeQuizScreenState extends State<TakeQuizScreen> {
                 borderColor: null,
                 onPressed: () {
                   calculateNumOfCorrectAnswers(groupValues);
-                  print("NUMBER OF CORRECT ANSWERS IS --> " +
-                      numOfCorrectAnswers.toString());
                   AwesomeDialog(
                     context: context,
                     animType: AnimType.SCALE,
@@ -148,7 +148,7 @@ class _TakeQuizScreenState extends State<TakeQuizScreen> {
                           Text(
                             "Completed Quiz [" + widget.quiz.title + "]",
                             textAlign: TextAlign.center,
-                            style: TextStyle(
+                            style: GoogleFonts.sen(
                                 color: Theme.of(context).buttonColor,
                                 fontSize: 23,
                                 fontWeight: FontWeight.bold),
@@ -162,7 +162,7 @@ class _TakeQuizScreenState extends State<TakeQuizScreen> {
                                 " out of " +
                                 widget.quiz.questions.length.toString(),
                             textAlign: TextAlign.center,
-                            style: TextStyle(
+                            style: GoogleFonts.sen(
                                 color: Theme.of(context).buttonColor,
                                 fontSize: 20),
                           )
@@ -229,8 +229,7 @@ class _QuizQuestionWidgetState extends State<QuizQuestionWidget> {
   }
 
   @override
-  void initState() {
-  }
+  void initState() {}
 
   @override
   Widget build(BuildContext context) {
@@ -260,8 +259,8 @@ class _QuizQuestionWidgetState extends State<QuizQuestionWidget> {
                 alignment: Alignment.centerLeft,
                 child: Text(
                   widget.question.question,
-                  style: kTitleStyle.copyWith(
-                      fontSize: 40, color: Theme.of(context).buttonColor),
+                  style: GoogleFonts.sen(
+                      fontSize: 30, color: Theme.of(context).buttonColor),
                 ),
               ),
             ),
@@ -280,39 +279,47 @@ class _QuizQuestionWidgetState extends State<QuizQuestionWidget> {
   List<Widget> getListOfAnswers(
       QuizQuestion question, Function setQuestionState) {
     List<Widget> widgets = [];
+    int from = 200;
+    int to = 500;
 
     for (int k = 0; k < question.answers.length; k++) {
       widgets.add(
-        Padding(
-          padding: const EdgeInsets.all(4.0),
-          child: GestureDetector(
-            onTap: () {
-              setState(() {
-                widget.groupValue[widget.questionIndex] = k;
-              });
-              setQuestionState();
-            },
-            child: Card(
-              shape: RoundedRectangleBorder(
-                side: BorderSide.none,
-                borderRadius: BorderRadius.circular(20),
-              ),
-              color: widget.groupValue[widget.questionIndex] == k
-                  ? kColorScheme[1]
-                  : kWhiteish,
-              elevation: 0,
-              child: Container(
-                width: ScreenSize.width * 0.85,
-                child: Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Text(
-                    widget.question.answers[k],
-                    style: GoogleFonts.sen(
-                        fontSize: 20,
-                        color: widget.groupValue[widget.questionIndex] == k
-                            ? Colors.white
-                            : Colors.black,
-                        fontWeight: FontWeight.normal),
+        Villain(
+          villainAnimation: VillainAnimation.fade(
+            from: Duration(milliseconds: from),
+            to: Duration(milliseconds: to),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(4.0),
+            child: GestureDetector(
+              onTap: () {
+                setState(() {
+                  widget.groupValue[widget.questionIndex] = k;
+                });
+                setQuestionState();
+              },
+              child: Card(
+                shape: RoundedRectangleBorder(
+                  side: BorderSide.none,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                color: widget.groupValue[widget.questionIndex] == k
+                    ? kColorScheme[1]
+                    : kWhiteish,
+                elevation: 0,
+                child: Container(
+                  width: ScreenSize.width * 0.85,
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Text(
+                      widget.question.answers[k],
+                      style: GoogleFonts.sen(
+                          fontSize: 20,
+                          color: widget.groupValue[widget.questionIndex] == k
+                              ? Colors.white
+                              : Colors.black,
+                          fontWeight: FontWeight.normal),
+                    ),
                   ),
                 ),
               ),
@@ -320,19 +327,10 @@ class _QuizQuestionWidgetState extends State<QuizQuestionWidget> {
           ),
         ),
       );
+      to += 100;
+      from += 100;
     }
 
     return widgets;
   }
 }
-
-// Radio(
-// onChanged: (value) {
-// setState(() {
-// widget.groupValue[widget.questionIndex] = value;
-// });
-// setQuestionState();
-// },
-// value: k,
-// groupValue: widget.groupValue[widget.questionIndex],
-// ),

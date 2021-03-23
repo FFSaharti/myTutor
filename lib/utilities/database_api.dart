@@ -293,7 +293,6 @@ class DatabaseAPI {
         .get()
         .then((value) => {
               print("QUESTION VALUE ... --> " + value.data().toString()),
-
               tempQuestion = Question(
                   value.data()["title"],
                   value.id,
@@ -303,28 +302,11 @@ class DatabaseAPI {
                   [],
                   value.data()['subject'].toString(),
                   value.data()['state']),
-
               print("QUESTION TITLE ... " + tempQuestion.title),
-
               List.from(value.data()['answers']).forEach((element) {
-                print("ANSWER PRINTING ... " +
-                    element
-                        .toString()
-                        .substring(25, element.toString().length - 1));
-                buildAnswers(
-                    element
-                        .toString()
-                        .substring(25, element.toString().length - 1),
-                    tempQuestion);
+                print("ANSWER PRINTING ... " + element);
+                buildAnswers(element, tempQuestion);
               })
-
-              // _tempTutor = Tutor(value.docs.single.data()['name'], email,
-              //     pass, "", value.docs.single.id, []),
-              // List.from(value.docs.single.data()['experiences'])
-              //     .forEach((element) {
-              //   print("ELEMENT PRINTING ... " + element.toString());
-              //   _tempTutor.addExperience(element);
-              // })
             });
 
     _tempStudent.addQuestion(tempQuestion);
@@ -341,17 +323,12 @@ class DatabaseAPI {
     String date = '';
     await _firestore.collection("Answer").doc(answerID).get().then((value) => {
           print("ANSWER PRINTING..." + value.data()['answer']),
-          print("TUTOR ID is  --> " +
-              value
-                  .data()['Tutor']
-                  .toString()
-                  .substring(24, value.data()['Tutor'].toString().length - 1)),
+          print("TUTOR ID is  --> " + value.data()['Tutor'].toString()),
           answer = value.data()['answer'],
           date = value.data()['date'],
-          tutorID = value
-              .data()['Tutor']
-              .toString()
-              .substring(24, value.data()['Tutor'].toString().length - 1),
+          print("TUTOR DATA TO STRING IS --> " +
+              value.data()['Tutor'].toString()),
+          tutorID = value.data()['Tutor'].toString(),
           buildTutor(tutorID).then((value) => {
                 tempTutor = value,
                 tempAnswer = Answer(answer, tempTutor, date),
@@ -498,7 +475,8 @@ class DatabaseAPI {
     }
   }
 
-  static Stream<QuerySnapshot> fetchSessionData(int type, bool checkexpire, String status) {
+  static Stream<QuerySnapshot> fetchSessionData(
+      int type, bool checkexpire, String status) {
     // check the session that expired.
 
     if (checkexpire == true) {
@@ -508,13 +486,15 @@ class DatabaseAPI {
       // tutor
       return _firestore
           .collection("session")
-          .where("tutor", isEqualTo: SessionManager.loggedInTutor.userId).where('status', isEqualTo: status)
+          .where("tutor", isEqualTo: SessionManager.loggedInTutor.userId)
+          .where('status', isEqualTo: status)
           .snapshots();
     } else {
       //student
       return _firestore
           .collection("session")
-          .where("student", isEqualTo: SessionManager.loggedInStudent.userId).where('status', isEqualTo: status)
+          .where("student", isEqualTo: SessionManager.loggedInStudent.userId)
+          .where('status', isEqualTo: status)
           .snapshots();
     }
   }
@@ -602,7 +582,7 @@ class DatabaseAPI {
 
   static Future<String> changeSessionsStatus(
       String status, String sessionid) async {
-    print('inside the session  status method the id is :'+sessionid);
+    print('inside the session  status method the id is :' + sessionid);
     // main status (pending-expired-active-closed-decline- waiting for student(tutor requesting session to the student))
     try {
       await _firestore
@@ -1012,7 +992,7 @@ class DatabaseAPI {
     return await _firestore.collection("QuizQuestion").doc(question).get();
   }
 
-  static Stream<QuerySnapshot> fetchQuestionAnswers(Question question){
+  static Stream<QuerySnapshot> fetchQuestionAnswers(Question question) {
     return _firestore
         .collection("Answer")
         .where("questionId", isEqualTo: question.id)

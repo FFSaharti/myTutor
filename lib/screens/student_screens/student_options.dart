@@ -3,8 +3,8 @@ import 'package:flutter_villains/villains/villains.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mytutor/screens/student_screens/request_tutor_screen.dart';
 import 'package:mytutor/screens/student_screens/view_materials_screen.dart';
-import 'package:mytutor/utilities/constants.dart';
 import 'package:mytutor/utilities/screen_size.dart';
+
 import 'ask_screen_student.dart';
 
 class StudentSection extends StatefulWidget {
@@ -37,13 +37,14 @@ class _StudentSectionState extends State<StudentSection> {
                     ),
                     child: Text(
                       "Select an option",
-                      style: GoogleFonts.sarala(
+                      style: GoogleFonts.sen(
                           fontSize: 25,
-                          color: Theme.of(context).buttonColor.withOpacity(0.6)),
+                          color:
+                              Theme.of(context).buttonColor.withOpacity(0.6)),
                     ),
                   ),
                   SizedBox(
-                    height: ScreenSize.height * 0.01,
+                    height: ScreenSize.height * 0.06,
                   ),
                   Villain(
                     villainAnimation: VillainAnimation.fromBottom(
@@ -131,7 +132,7 @@ class StudentSectionWidget extends StatelessWidget {
     return GestureDetector(
       onTap: onClick,
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(10.0),
         child: Card(
           elevation: 4,
           shape: RoundedRectangleBorder(
@@ -139,7 +140,7 @@ class StudentSectionWidget extends StatelessWidget {
           ),
           color: Theme.of(context).cardColor,
           child: Padding(
-            padding: const EdgeInsets.all(2.0),
+            padding: const EdgeInsets.all(10.0),
             child: ListTile(
               leading: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -152,12 +153,12 @@ class StudentSectionWidget extends StatelessWidget {
               ),
               title: Text(
                 title,
-                style: GoogleFonts.sarala(
+                style: GoogleFonts.sen(
                     fontSize: 25, color: Theme.of(context).buttonColor),
               ),
               subtitle: Text(
                 description,
-                style: GoogleFonts.sarala(
+                style: GoogleFonts.sen(
                     fontSize: 14, color: Theme.of(context).buttonColor),
               ),
               trailing: Container(
@@ -171,50 +172,6 @@ class StudentSectionWidget extends StatelessWidget {
           ),
         ),
       ),
-
-      // Container(
-      //   width: widget.width * 0.8,
-      //   decoration: BoxDecoration(
-      //     color: Theme.of(context).cardColor,
-      //     borderRadius: BorderRadius.circular(10),
-      //     boxShadow: [
-      //       BoxShadow(
-      //         color: Colors.black.withOpacity(0.2),
-      //         spreadRadius: 1,
-      //         blurRadius: 15,
-      //         offset: Offset(0, 6), // changes position of shadow
-      //       ),
-      //     ],
-      //   ),
-      //   child: Padding(
-      //     padding: const EdgeInsets.all(8.0),
-      //     child: Row(
-      //       mainAxisAlignment: MainAxisAlignment.start,
-      //       children: [
-      //         Image.asset(
-      //           imgPath,
-      //           width: 50,
-      //         ),
-      //         SizedBox(
-      //           width: 10,
-      //         ),
-      //         Column(
-      //           crossAxisAlignment: CrossAxisAlignment.start,
-      //           children: [
-      //             Text(
-      //               title,
-      //               style: GoogleFonts.sarala(fontSize: 25, color: kBlackish),
-      //             ),
-      //             Text(
-      //               description,
-      //               style: GoogleFonts.sarala(fontSize: 14, color: kGreyerish),
-      //             ),
-      //           ],
-      //         ),
-      //       ],
-      //     ),
-      //   ),
-      // ),
     );
   }
 }

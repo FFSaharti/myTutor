@@ -7,6 +7,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:mytutor/classes/document.dart';
 import 'package:mytutor/classes/material.dart';
 import 'package:mytutor/classes/quiz.dart';
+import 'package:mytutor/components/disable_default_pop.dart';
 import 'package:mytutor/screens/take_quiz_screen.dart';
 import 'package:mytutor/utilities/constants.dart';
 import 'package:mytutor/utilities/database_api.dart';
@@ -304,14 +305,11 @@ class _ViewMaterialsScreenState extends State<ViewMaterialsScreen> {
   Widget build(BuildContext context) {
     int fromDurationAnimationConter = 0;
     int toDurationAnimationConter = 400;
-    for (int i = 0; i < materials.length; i++) {
-      print(subjects[materials.elementAt(i).subjectID].path);
-    }
-    return WillPopScope(
-      onWillPop: () async => false,
+    return DisableDefaultPop(
       child: Scaffold(
         resizeToAvoidBottomInset: false,
-        appBar: buildAppBar(context, Theme.of(context).accentColor, "View Materials"),
+        appBar: buildAppBar(
+            context, Theme.of(context).accentColor, "View Materials"),
         body: SafeArea(
           child: Column(
             children: [
@@ -332,7 +330,8 @@ class _ViewMaterialsScreenState extends State<ViewMaterialsScreen> {
                     fillColor:
                         Theme.of(context).primaryColorLight.withOpacity(0.6),
                     hintText: 'Search',
-                    hintStyle: TextStyle(color: Theme.of(context).accentColor),
+                    hintStyle:
+                        GoogleFonts.sen(color: Theme.of(context).accentColor),
                     prefixIcon: Icon(Icons.search,
                         color: Theme.of(context).accentColor),
                     enabledBorder: OutlineInputBorder(
@@ -368,11 +367,9 @@ class _ViewMaterialsScreenState extends State<ViewMaterialsScreen> {
                 height: ScreenSize.height * 0.015,
               ),
               searchedMaterials.length > 0
-                  ? NotificationListener<OverscrollIndicatorNotification>(
-                      onNotification: (overscroll) {
-                        overscroll.disallowGlow();
-                      },
-                      child: Column(
+                  ? disableBlueOverflow(
+                      context,
+                      Column(
                         children: [
                           Text(
                             "Showing " +
@@ -519,10 +516,6 @@ class _ViewMaterialsScreenState extends State<ViewMaterialsScreen> {
                                                           .accentColor),
                                                   onTap: () {
                                                     // open the file reader if the file is pdf, else let the user download the file
-                                                    print("DOC ID IS --> " +
-                                                        searchedMaterials
-                                                            .elementAt(index)
-                                                            .docid);
                                                     if (SessionManager
                                                         .loggedInStudent.favMats
                                                         .contains(
@@ -543,8 +536,8 @@ class _ViewMaterialsScreenState extends State<ViewMaterialsScreen> {
                                                                   .all(8.0),
                                                           child: Center(
                                                             child: Text(
-                                                              'material already in favorites',
-                                                              style: kTitleStyle.copyWith(
+                                                              'Material Already in Favorites',
+                                                              style: GoogleFonts.sen(
                                                                   color: Theme.of(
                                                                           context)
                                                                       .buttonColor,
@@ -586,8 +579,8 @@ class _ViewMaterialsScreenState extends State<ViewMaterialsScreen> {
                                                                               Center(
                                                                             child:
                                                                                 Text(
-                                                                              'material added to favorites',
-                                                                              style: kTitleStyle.copyWith(color: Theme.of(context).buttonColor, fontSize: 14, fontWeight: FontWeight.normal),
+                                                                              'Material Added to Favorites',
+                                                                              style: GoogleFonts.sen(color: Theme.of(context).buttonColor, fontSize: 14, fontWeight: FontWeight.normal),
                                                                             ),
                                                                           ),
                                                                         ),
@@ -619,7 +612,7 @@ class _ViewMaterialsScreenState extends State<ViewMaterialsScreen> {
                                                                             child:
                                                                                 Text(
                                                                               'ERROR ',
-                                                                              style: kTitleStyle.copyWith(color: kBlackish, fontSize: 14, fontWeight: FontWeight.normal),
+                                                                              style: GoogleFonts.sen(color: Theme.of(context).buttonColor, fontSize: 14, fontWeight: FontWeight.normal),
                                                                             ),
                                                                           ),
                                                                         ),

@@ -9,6 +9,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:mytutor/classes/document.dart';
 import 'package:mytutor/classes/material.dart';
 import 'package:mytutor/classes/quiz.dart';
+import 'package:mytutor/components/disable_default_pop.dart';
 import 'package:mytutor/screens/take_quiz_screen.dart';
 import 'package:mytutor/utilities/constants.dart';
 import 'package:mytutor/utilities/database_api.dart';
@@ -36,9 +37,6 @@ class _ProfileStudentState extends State<ProfileStudent> {
 
   @override
   void initState() {
-    print(
-        "FAV MATS IS --> " + SessionManager.loggedInStudent.favMats.toString());
-
     DatabaseAPI.fetchDocument().then((data) {
       if (data.docs.isNotEmpty) {
         for (var material in data.docs) {
@@ -83,7 +81,6 @@ class _ProfileStudentState extends State<ProfileStudent> {
             }
           }
         }
-        print("length is --> " + favDocs.length.toString());
       }
     });
 
@@ -96,8 +93,7 @@ class _ProfileStudentState extends State<ProfileStudent> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async => false,
+    return DisableDefaultPop(
       child: Scaffold(
         appBar: buildAppBar(context, kColorScheme[3], "Profile", true),
         body: SafeArea(
@@ -229,7 +225,7 @@ class _ProfileStudentState extends State<ProfileStudent> {
                             ),
                             Text(
                               "About Me",
-                              style: TextStyle(
+                              style: GoogleFonts.sen(
                                   fontSize: 18,
                                   color: Theme.of(context).buttonColor),
                             ),
@@ -258,16 +254,13 @@ class _ProfileStudentState extends State<ProfileStudent> {
                                   Padding(
                                     padding: const EdgeInsets.all(3.0),
                                     child: SizedBox(
-                                      width: ScreenSize.width*0.80,
+                                      width: ScreenSize.width * 0.80,
                                       child: Text(
                                         SessionManager.loggedInStudent.aboutMe,
-                                        style: TextStyle(
+                                        style: GoogleFonts.sen(
                                             fontSize: 16.5,
-                                            color: Theme.of(context).buttonColor),
-                                        maxLines: 3,
-                                        overflow: TextOverflow.ellipsis,
-                                        softWrap: false,
-
+                                            color:
+                                                Theme.of(context).buttonColor),
                                       ),
                                     ),
                                   ),
@@ -282,9 +275,6 @@ class _ProfileStudentState extends State<ProfileStudent> {
                                       color: Theme.of(context).buttonColor,
                                     ),
                                   ),
-                                  SizedBox(
-                                    height: ScreenSize.height * 0.05,
-                                  ),
                                 ],
                               )
                             : Container(
@@ -294,7 +284,7 @@ class _ProfileStudentState extends State<ProfileStudent> {
                                     Center(
                                       child: Text(
                                         "No About Me",
-                                        style: GoogleFonts.openSans(
+                                        style: GoogleFonts.sen(
                                             color:
                                                 Theme.of(context).accentColor,
                                             // Theme.of(context).primaryColor,
@@ -328,7 +318,7 @@ class _ProfileStudentState extends State<ProfileStudent> {
                               ),
                               Text(
                                 "Bookmarked Materials",
-                                style: TextStyle(
+                                style: GoogleFonts.sen(
                                     fontSize: 18,
                                     color: Theme.of(context).buttonColor),
                               )
@@ -585,7 +575,7 @@ class _ProfileStudentState extends State<ProfileStudent> {
                               ),
                             ),
                             SizedBox(
-                              height: ScreenSize.height *0.020,
+                              height: ScreenSize.height * 0.020,
                             ),
                           ],
                         ),
