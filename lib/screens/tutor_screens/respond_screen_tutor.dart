@@ -13,8 +13,15 @@ import 'package:mytutor/utilities/database_api.dart';
 import 'package:mytutor/utilities/screen_size.dart';
 import 'package:mytutor/utilities/session_manager.dart';
 
-class RespondScreenTutor extends StatelessWidget {
+class RespondScreenTutor extends StatefulWidget {
   static String id = 'respond_screen_tutor';
+
+  @override
+  _RespondScreenTutorState createState() => _RespondScreenTutorState();
+}
+
+class _RespondScreenTutorState extends State<RespondScreenTutor> {
+  bool empty = true;
 
   @override
   Widget build(BuildContext context) {
@@ -27,38 +34,56 @@ class RespondScreenTutor extends StatelessWidget {
           child: Column(
             children: [
               StreamBuilder<QuerySnapshot>(
-                stream: DatabaseAPI.fetchSessionData(1, true,"pending"),
+                stream: DatabaseAPI.fetchSessionData(1, true, "pending"),
                 builder: (context, snapshot) {
                   int from = 0;
                   int to = 400;
-                  if (snapshot.hasData) {
+                  int size = snapshot.data != null ? snapshot.data.size : 0;
+                  if (size > 0) {
                     return Expanded(
-                      child: NotificationListener<
-                          OverscrollIndicatorNotification>(
+                      child:
+                          NotificationListener<OverscrollIndicatorNotification>(
                         onNotification: (overscroll) {
                           overscroll.disallowGlow();
                         },
                         child: ListView.builder(
                           itemCount: snapshot.data.docs.length,
                           itemBuilder: (context, index) {
-                            DocumentSnapshot myDoc =
-                            snapshot.data.docs[index];
+                            DocumentSnapshot myDoc = snapshot.data.docs[index];
                             return Column(
                               children: [
                                 Villain(
-                                  villainAnimation:
-                                  VillainAnimation.fromBottom(
-                                    from:
-                                    Duration(milliseconds: from),
+                                  villainAnimation: VillainAnimation.fromBottom(
+                                    from: Duration(milliseconds: from),
                                     to: Duration(milliseconds: to),
                                   ),
                                   child: FutureBuilder(
-                                    future: DatabaseAPI.getUserbyid(myDoc.data()["student"], 1),
-                                    builder: (context,
-                                        AsyncSnapshot snap) {
+                                    future: DatabaseAPI.getUserbyid(
+                                        myDoc.data()["student"], 1),
+                                    builder: (context, AsyncSnapshot snap) {
                                       if (snap.hasData) {
-                                        Timestamp dateHolder = myDoc.data()["date"];
-                                     return RespondSessionWidget(height: ScreenSize.height, session: Session(myDoc.data()["title"], SessionManager.loggedInTutor, Student(snap.data["name"], "email", "pass", "aboutMe", myDoc.data()["student"], [], "Profileimg"), myDoc.id, myDoc.data()["time"], dateHolder.toDate(), myDoc.data()["description"], myDoc.data()["status"], myDoc.data()["subject"]),);
+                                        Timestamp dateHolder =
+                                            myDoc.data()["date"];
+                                        return RespondSessionWidget(
+                                          height: ScreenSize.height,
+                                          session: Session(
+                                              myDoc.data()["title"],
+                                              SessionManager.loggedInTutor,
+                                              Student(
+                                                  snap.data["name"],
+                                                  "email",
+                                                  "pass",
+                                                  "aboutMe",
+                                                  myDoc.data()["student"],
+                                                  [],
+                                                  "Profileimg"),
+                                              myDoc.id,
+                                              myDoc.data()["time"],
+                                              dateHolder.toDate(),
+                                              myDoc.data()["description"],
+                                              myDoc.data()["status"],
+                                              myDoc.data()["subject"]),
+                                        );
                                         // add the widget to list of widget to use it for search later.
                                       }
                                       from += 100;
@@ -73,60 +98,35 @@ class RespondScreenTutor extends StatelessWidget {
                         ),
                       ),
                     );
+                  } else {
+                    return Column(
+                      children: [
+                        SizedBox(
+                          height: ScreenSize.height * 0.35,
+                        ),
+                        Villain(
+                          villainAnimation: VillainAnimation.fade(
+                            from: Duration(milliseconds: 300),
+                            to: Duration(milliseconds: 600),
+                          ),
+                          child: Center(
+                            child: Text(
+                              "its quite empty in here",
+                              style: GoogleFonts.sen(
+                                  color: Theme.of(context)
+                                      .buttonColor
+                                      .withOpacity(0.6),
+                                  // Theme.of(context).primaryColor,
+                                  fontSize: 21),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ),
+                      ],
+                    );
                   }
-                  return Text("empty");
-
                 },
               ),
-              // StreamBuilder<QuerySnapshot>(
-              //   stream: DatabaseAPI.fetchSessionData(1, true,"active"),
-              //   builder: (context, snapshot) {
-              //     // List to fill up with all the session the user has.
-              //     List<Widget> UserSessions = [];
-              //     if (snapshot.data == null) {
-              //       return Text("EMPTY");
-              //     } else if (snapshot.hasData) {
-              //       List<QueryDocumentSnapshot> Sessions = snapshot.data.docs;
-              //       for (var session in Sessions) {
-              //         String SessionStatus = session.data()["status"];
-              //         if (SessionStatus.toLowerCase() == "pending") {
-              //           // final Sessiontutor = session.data()["tutor"];
-              //           final Sessionstudentid = session.data()["student"];
-              //           final Sessiontitle = session.data()["title"];
-              //           final Sessiontime = session.data()["time"];
-              //           final SessionDate = session.data()["date"];
-              //           final SessionDesc = session.data()["description"];
-              //           final SessionSubject = session.data()["subject"];
-              //           // convert the date we got from firebase into timestamp. to change it later to datetime.
-              //           Timestamp stamp = SessionDate;
-              //           UserSessions.add(
-              //             RespondSessionWidget(
-              //               height: ScreenSize.height,
-              //               session: Session(
-              //                   Sessiontitle,
-              //                   SessionManager.loggedInTutor.userId,
-              //                   Sessionstudentid,
-              //                   session.id,
-              //                   Sessiontime,
-              //                   stamp.toDate(),
-              //                   SessionDesc,
-              //                   SessionStatus,
-              //                   SessionSubject),
-              //             ),
-              //           );
-              //         }
-              //       }
-              //     }
-              //     return Expanded(
-              //       child: ListView(
-              //         reverse: false,
-              //         padding: EdgeInsets.symmetric(
-              //             horizontal: 10.0, vertical: 20.0),
-              //         children: UserSessions,
-              //       ),
-              //     );
-              //   },
-              // ),
               SizedBox(
                 height: ScreenSize.height * 0.05,
               ),
@@ -156,7 +156,6 @@ class RespondSessionWidget extends StatefulWidget {
 }
 
 class _RespondSessionWidgetState extends State<RespondSessionWidget> {
-
   @override
   void initState() {
     super.initState();
@@ -170,7 +169,7 @@ class _RespondSessionWidgetState extends State<RespondSessionWidget> {
           height: widget.height * 0.010,
         ),
         Padding(
-          padding: const EdgeInsets.all(3.0),
+          padding: const EdgeInsets.all(15.0),
           child: GestureDetector(
             onTap: () {
               showBottomsheetModel(widget.session);
@@ -241,7 +240,7 @@ class _RespondSessionWidgetState extends State<RespondSessionWidget> {
                             child: SizedBox(
                               width: ScreenSize.width * 0.45,
                               child: Text(
-                               widget.session.student.name,
+                                widget.session.student.name,
                                 overflow: TextOverflow.ellipsis,
                                 style: GoogleFonts.sen(
                                   textStyle: TextStyle(

@@ -44,6 +44,8 @@ class _QuestionTutorWidgetState extends State<QuestionTutorWidget> {
                   Text(
                     widget.question.title,
                     maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    softWrap: false,
                     style: GoogleFonts.sen(
                         fontSize: 18, color: Theme.of(context).buttonColor),
                   ),

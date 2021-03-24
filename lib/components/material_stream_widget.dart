@@ -87,7 +87,7 @@ class _MaterialStreamTutorState extends State<MaterialStreamTutor> {
                                           }),
                                       Text(
                                         tempDoc.title,
-                                        style: kTitleStyle.copyWith(
+                                        style: GoogleFonts.sen(
                                             fontSize: 19,
                                             color:
                                                 Theme.of(context).buttonColor,
@@ -248,7 +248,7 @@ class _MaterialStreamTutorState extends State<MaterialStreamTutor> {
                                           }),
                                       Text(
                                         tempQuiz.title,
-                                        style: kTitleStyle.copyWith(
+                                        style: GoogleFonts.sen(
                                             fontSize: 19,
                                             color:
                                                 Theme.of(context).buttonColor,

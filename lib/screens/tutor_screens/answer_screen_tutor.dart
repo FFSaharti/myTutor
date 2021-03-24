@@ -20,7 +20,8 @@ class _AnswerScreenTutorState extends State<AnswerScreenTutor> {
       onWillPop: () async => false,
       child: Scaffold(
         resizeToAvoidBottomInset: false,
-        appBar: buildAppBar(context, Theme.of(context).accentColor, "Answer", false),
+        appBar: buildAppBar(
+            context, Theme.of(context).accentColor, "Answer", false),
         body: SafeArea(
           child: GestureDetector(
             onTap: () {
@@ -41,16 +42,20 @@ class _AnswerScreenTutorState extends State<AnswerScreenTutor> {
                                 VillainController.playAllVillains(context);
                               });
                             },
-                            style: TextStyle(color: Theme.of(context).accentColor),
+                            style:
+                                TextStyle(color: Theme.of(context).accentColor),
                             textAlignVertical: TextAlignVertical.center,
                             decoration: InputDecoration(
                               contentPadding: EdgeInsets.all(0),
                               filled: true,
+                              fillColor: Theme.of(context)
+                                  .primaryColorLight
+                                  .withOpacity(0.6),
                               hintText: 'Search by problem name or subject',
-                              hintStyle:
-                              TextStyle(color: Theme.of(context).accentColor),
-                              prefixIcon:
-                                  Icon(Icons.search, color: Theme.of(context).accentColor),
+                              hintStyle: TextStyle(
+                                  color: Theme.of(context).accentColor),
+                              prefixIcon: Icon(Icons.search,
+                                  color: Theme.of(context).accentColor),
                               enabledBorder: OutlineInputBorder(
                                   borderSide: BorderSide.none,
                                   borderRadius: BorderRadius.circular(15)),

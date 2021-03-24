@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mytutor/utilities/constants.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:mytutor/utilities/screen_size.dart';
 
 class ProfileInfoWidget extends StatelessWidget {
   ProfileInfoWidget(this.infoTitle, this.infoNum);
@@ -10,8 +11,8 @@ class ProfileInfoWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 85,
-      height: 53,
+      width: ScreenSize.width * 0.22,
+      height: ScreenSize.height * 0.075,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
         color: Theme.of(context).cardColor,
@@ -24,11 +25,17 @@ class ProfileInfoWidget extends StatelessWidget {
             children: [
               Text(
                 infoTitle,
-                style: TextStyle(color: Theme.of(context).buttonColor, fontSize: 18,fontWeight: FontWeight.bold),
+                style: GoogleFonts.sen(
+                    color: Theme.of(context).buttonColor,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold),
               ),
               Text(
                 infoNum,
-                style: TextStyle(color: Theme.of(context).buttonColor, fontSize: 18,fontWeight: FontWeight.bold),
+                style: GoogleFonts.sen(
+                    color: Theme.of(context).buttonColor,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold),
               ),
             ]),
       ),

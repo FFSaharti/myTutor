@@ -109,7 +109,6 @@ class _RequestTutorScreenState extends State<RequestTutorScreen> {
         resizeToAvoidBottomInset: false,
         appBar: buildAppBar(
             context, Theme.of(context).accentColor, "Request Tutor"),
-        //resizeToAvoidBottomInset : false,
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -555,12 +554,12 @@ class _TutorWidgetState extends State<TutorWidget> {
     String _date;
     String searchBox = '';
 
-    List<Widget> getSubjects(String searchBox) {
+    List<Widget> getSubjects(String searchBox, setModalState) {
       List<Widget> searchResults = [];
       for (int i = 0; i < subjects.length; i++) {
         if (subjects[i].searchKeyword(searchBox)) {
           searchResults.add(
-            InterestWidget(subjects[i]),
+            InterestWidget(subjects[i], setModalState),
           );
           searchResults.add(SizedBox(
             width: ScreenSize.width * 0.01,
@@ -616,96 +615,90 @@ class _TutorWidgetState extends State<TutorWidget> {
                                       color: Theme.of(context).buttonColor),
                                 ),
                                 IconButton(
-                                    icon: Icon(Icons.check),
-                                    onPressed: () {
-                                      if (titleController.text.isNotEmpty &&
-                                          dateController.text.isNotEmpty &&
-                                          problemController.text.isNotEmpty &&
-                                          timeController.text.isNotEmpty) {
-                                        DatabaseAPI.createNewSession(
-                                                titleController.text,
-                                                problemController.text,
-                                                dateController.text,
-                                                tutor,
-                                                timeController.text,
-                                                getChosenSubject())
-                                            .then((value) => {
-                                                  if (value == "success")
-                                                    {
-                                                      AwesomeDialog(
-                                                        context: context,
-                                                        animType:
-                                                            AnimType.SCALE,
-                                                        dialogType:
-                                                            DialogType.SUCCES,
-                                                        body: Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(8.0),
-                                                          child: Center(
-                                                            child: Text(
-                                                              'Session Created, Wait for it to get accepted 🕜',
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .center,
-                                                              style: GoogleFonts.sen(
-                                                                  color: Theme.of(
-                                                                          context)
-                                                                      .buttonColor,
-                                                                  fontSize: 14,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .normal),
-                                                            ),
+                                  icon: Icon(Icons.check),
+                                  onPressed: () {
+                                    if (titleController.text.isNotEmpty &&
+                                        dateController.text.isNotEmpty &&
+                                        problemController.text.isNotEmpty &&
+                                        timeController.text.isNotEmpty) {
+                                      DatabaseAPI.createNewSession(
+                                              titleController.text,
+                                              problemController.text,
+                                              dateController.text,
+                                              tutor,
+                                              timeController.text,
+                                              getChosenSubject())
+                                          .then((value) => {
+                                                if (value == "success")
+                                                  {
+                                                    AwesomeDialog(
+                                                      context: context,
+                                                      animType: AnimType.SCALE,
+                                                      dialogType:
+                                                          DialogType.SUCCES,
+                                                      body: Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(8.0),
+                                                        child: Center(
+                                                          child: Text(
+                                                            'Session Created, Wait for it to get accepted 🕜',
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            style: GoogleFonts.sen(
+                                                                color: Theme.of(
+                                                                        context)
+                                                                    .buttonColor,
+                                                                fontSize: 14,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .normal),
                                                           ),
                                                         ),
-                                                        btnOkOnPress: () {
-                                                          Navigator.pop(
-                                                              context);
-                                                        },
-                                                      ).show(),
-                                                    }
-                                                  else
-                                                    {
-                                                      AwesomeDialog(
-                                                        context: context,
-                                                        animType:
-                                                            AnimType.SCALE,
-                                                        dialogType:
-                                                            DialogType.ERROR,
-                                                        body: Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(8.0),
-                                                          child: Center(
-                                                            child: Text(
-                                                              value +
-                                                                  ' Please try again Later',
-                                                              style: GoogleFonts.sen(
-                                                                  color: Theme.of(
-                                                                          context)
-                                                                      .buttonColor,
-                                                                  fontSize: 14,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .normal),
-                                                            ),
+                                                      ),
+                                                      btnOkOnPress: () {
+                                                        Navigator.pop(context);
+                                                      },
+                                                    ).show(),
+                                                  }
+                                                else
+                                                  {
+                                                    AwesomeDialog(
+                                                      context: context,
+                                                      animType: AnimType.SCALE,
+                                                      dialogType:
+                                                          DialogType.ERROR,
+                                                      body: Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(8.0),
+                                                        child: Center(
+                                                          child: Text(
+                                                            value +
+                                                                ' Please try again Later',
+                                                            style: GoogleFonts.sen(
+                                                                color: Theme.of(
+                                                                        context)
+                                                                    .buttonColor,
+                                                                fontSize: 14,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .normal),
                                                           ),
                                                         ),
-                                                        btnOkOnPress: () {
-                                                          Navigator.pop(
-                                                              context);
-                                                        },
-                                                      ).show(),
-                                                    }
-                                                });
-                                        //Navigator.of(context).pop();
-                                      } else {
-                                        Fluttertoast.showToast(
-                                            msg:
-                                                "Please fill up all the fields");
-                                      }
-                                    }),
+                                                      ),
+                                                      btnOkOnPress: () {
+                                                        Navigator.pop(context);
+                                                      },
+                                                    ).show(),
+                                                  }
+                                              });
+                                    } else {
+                                      Fluttertoast.showToast(
+                                          msg: "Please fill up all the fields");
+                                    }
+                                  },
+                                ),
                               ],
                             ),
                             Text("Requesting",
@@ -760,7 +753,6 @@ class _TutorWidgetState extends State<TutorWidget> {
                                       style: GoogleFonts.sen(
                                           textStyle: TextStyle(
                                               fontSize: 17,
-                                              fontWeight: FontWeight.bold,
                                               color: Theme.of(context)
                                                   .buttonColor)),
                                     ),
@@ -785,7 +777,6 @@ class _TutorWidgetState extends State<TutorWidget> {
                                       style: GoogleFonts.sen(
                                           textStyle: TextStyle(
                                               fontSize: 17,
-                                              fontWeight: FontWeight.bold,
                                               color: Theme.of(context)
                                                   .buttonColor)),
                                     ),
@@ -810,7 +801,6 @@ class _TutorWidgetState extends State<TutorWidget> {
                                       style: GoogleFonts.sen(
                                           textStyle: TextStyle(
                                               fontSize: 17,
-                                              fontWeight: FontWeight.bold,
                                               color: Theme.of(context)
                                                   .buttonColor)),
                                     ),
@@ -867,7 +857,6 @@ class _TutorWidgetState extends State<TutorWidget> {
                                       style: GoogleFonts.sen(
                                           textStyle: TextStyle(
                                               fontSize: 17,
-                                              fontWeight: FontWeight.bold,
                                               color: Theme.of(context)
                                                   .buttonColor)),
                                     ),
@@ -969,7 +958,6 @@ class _TutorWidgetState extends State<TutorWidget> {
                                           style: GoogleFonts.sen(
                                               textStyle: TextStyle(
                                                   fontSize: 17,
-                                                  fontWeight: FontWeight.bold,
                                                   color: Theme.of(context)
                                                       .buttonColor)),
                                         ),
@@ -981,8 +969,8 @@ class _TutorWidgetState extends State<TutorWidget> {
                                         onChanged: (value) {
                                           setModalState(() {
                                             searchBox = value;
-                                            getSubjects(searchBox);
-                                            // getSelectedSubjects(selectedInterests);
+                                            getSubjects(
+                                                searchBox, setModalState);
                                           });
                                         },
                                         style: TextStyle(
@@ -1030,7 +1018,8 @@ class _TutorWidgetState extends State<TutorWidget> {
                                           },
                                           child: ListView(
                                               scrollDirection: Axis.horizontal,
-                                              children: getSubjects(searchBox)),
+                                              children: getSubjects(
+                                                  searchBox, setModalState)),
                                         ),
                                       ),
                                     ],
@@ -1062,8 +1051,9 @@ class _TutorWidgetState extends State<TutorWidget> {
 class InterestWidget extends StatefulWidget {
   Subject subject;
   bool chosen = false;
+  Function setModalState;
 
-  InterestWidget(this.subject);
+  InterestWidget(this.subject, [this.setModalState]);
 
   @override
   _InterestWidgetState createState() => _InterestWidgetState();
@@ -1091,9 +1081,17 @@ class _InterestWidgetState extends State<InterestWidget> {
       child: GestureDetector(
         onTap: () {
           setState(() {
-            unchooseRemainingInterests(widget.subject.id);
-            widget.chosen = !widget.chosen;
-            widget.subject.toggleChosen();
+            if (widget.setModalState != null) {
+              widget.setModalState(() {
+                unchooseRemainingInterests(widget.subject.id);
+                widget.chosen = !widget.chosen;
+                widget.subject.toggleChosen();
+              });
+            } else {
+              unchooseRemainingInterests(widget.subject.id);
+              widget.chosen = !widget.chosen;
+              widget.subject.toggleChosen();
+            }
           });
         },
         child: Padding(

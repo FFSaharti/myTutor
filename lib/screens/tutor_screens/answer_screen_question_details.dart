@@ -72,13 +72,42 @@ class _AnswerScreenQuestionDetailsState
                               Row(
                                 children: [
                                   Icon(Icons.description),
-                                  Text(
-                                    widget.question.title,
-                                    style: GoogleFonts.sen(
-                                        fontSize: 15,
-                                        color: Theme.of(context).buttonColor,
-                                        fontWeight: FontWeight.bold),
-                                  )
+                                  Container(
+                                    width: ScreenSize.width * 0.56,
+                                    child: Row(
+                                      children: [
+                                        Container(
+                                          width: ScreenSize.width * 0.5,
+                                          child: Text(
+                                            widget.question.title,
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                            softWrap: false,
+                                            style: GoogleFonts.sen(
+                                                fontSize: 18,
+                                                color: Theme.of(context)
+                                                    .buttonColor),
+                                          ),
+                                        ),
+                                        Spacer(),
+                                        (widget.question.title.length > 11)
+                                            ? GestureDetector(
+                                                onTap: () {
+                                                  showQuestionTitle(context);
+                                                },
+                                                child: Icon(
+                                                  Icons.arrow_forward_ios,
+                                                  size: 20,
+                                                ),
+                                              )
+                                            : Icon(
+                                                Icons.arrow_forward_ios,
+                                                size: 20,
+                                                color: Colors.transparent,
+                                              )
+                                      ],
+                                    ),
+                                  ),
                                 ],
                               ),
                               SizedBox(
@@ -90,9 +119,9 @@ class _AnswerScreenQuestionDetailsState
                                   Text(
                                     widget.question.dateOfSubmission,
                                     style: GoogleFonts.sen(
-                                        fontSize: 15,
-                                        color: Theme.of(context).buttonColor,
-                                        fontWeight: FontWeight.bold),
+                                      fontSize: 15,
+                                      color: Theme.of(context).buttonColor,
+                                    ),
                                   )
                                 ],
                               ),
@@ -133,12 +162,17 @@ class _AnswerScreenQuestionDetailsState
                 child: Container(
                   alignment: Alignment.topLeft,
                   height: ScreenSize.height * 0.4,
-                  child: Text(
-                    widget.question.description,
-                    style: GoogleFonts.sen(
-                        fontSize: 15,
-                        color: Theme.of(context).buttonColor,
-                        fontWeight: FontWeight.normal),
+                  child: disableBlueOverflow(
+                    context,
+                    SingleChildScrollView(
+                      child: Text(
+                        widget.question.description,
+                        style: GoogleFonts.sen(
+                            fontSize: 15,
+                            color: Theme.of(context).buttonColor,
+                            fontWeight: FontWeight.normal),
+                      ),
+                    ),
                   ),
                 ),
               ),
@@ -165,7 +199,7 @@ class _AnswerScreenQuestionDetailsState
                       borderColor: null,
                       onPressed: () {
                         print("Pressed answer");
-                        showAddQuestion(setParentState);
+                        showAnswerQuestion(setParentState);
                         // SHOW ANSWER BOTTOM BAR
                       }),
                   CircularButton(
@@ -190,7 +224,55 @@ class _AnswerScreenQuestionDetailsState
     );
   }
 
-  void showAddQuestion(Function setParentState) {
+  void showQuestionTitle(BuildContext context) {
+    showModalBottomSheet(
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(top: Radius.circular(25.0))),
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        enableDrag: true,
+        isScrollControlled: true,
+        context: ScreenSize.context,
+        builder: (context) {
+          return Container(
+            height: ScreenSize.height * 0.3,
+            child: Column(
+              children: [
+                SizedBox(
+                  height: ScreenSize.height * 0.03,
+                ),
+                Text(
+                  "Question Title",
+                  style: GoogleFonts.sen(
+                      color: Theme.of(context).accentColor, fontSize: 25),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    height: ScreenSize.height * 0.1,
+                    child: disableBlueOverflow(
+                      context,
+                      SingleChildScrollView(
+                        child: Padding(
+                          padding: const EdgeInsets.all(5.0),
+                          child: Text(
+                            widget.question.title +
+                                "hello helo helo helo helo hello helo helo helo helo hello helo helo helo helo hello helo helo helo helo hello helo helo helo helohello helo helo helo helo",
+                            style: GoogleFonts.sen(
+                                color: Theme.of(context).accentColor,
+                                fontSize: 20),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
+        });
+  }
+
+  void showAnswerQuestion(Function setParentState) {
     TextEditingController answerController = TextEditingController();
     showModalBottomSheet(
         shape: RoundedRectangleBorder(
@@ -269,7 +351,6 @@ class _AnswerScreenQuestionDetailsState
                                 style: GoogleFonts.sen(
                                     textStyle: TextStyle(
                                         fontSize: 17,
-                                        fontWeight: FontWeight.bold,
                                         color: Theme.of(context).buttonColor)),
                               ),
                             ),
@@ -322,7 +403,7 @@ class _AnswerScreenQuestionDetailsState
           return Container(
             padding: EdgeInsets.only(
                 bottom: MediaQuery.of(context).viewInsets.bottom),
-            height: height * 0.95,
+            height: height * 0.75,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(25), topRight: Radius.circular(25)),
@@ -355,12 +436,19 @@ class _AnswerScreenQuestionDetailsState
                                   dateController.text.isNotEmpty &&
                                   problemController.text.isNotEmpty &&
                                   timeController.text.isNotEmpty) {
-                               // temp student since we only need the user id
+                                // temp student since we only need the user id
 
                                 DatabaseAPI.scheduleWithStudent(Session(
                                         titleController.text,
                                         SessionManager.loggedInTutor,
-                                        Student("name", "email", "pass", "aboutMe", widget.question.issuer.userId, [], "Profileimg"),
+                                        Student(
+                                            "name",
+                                            "email",
+                                            "pass",
+                                            "aboutMe",
+                                            widget.question.issuer.userId,
+                                            [],
+                                            "Profileimg"),
                                         "",
                                         timeController.text,
                                         new DateFormat("yyyy-MM-dd")
@@ -409,20 +497,20 @@ class _AnswerScreenQuestionDetailsState
                             }),
                       ],
                     ),
-                    Text("Requesting",
+                    Text("Requesting Student",
                         style: GoogleFonts.sen(
                             fontSize: 22,
                             fontWeight: FontWeight.normal,
                             color: Theme.of(context).buttonColor)),
-                    Text(
-                      widget.question.issuer.name,
-                      style: GoogleFonts.sen(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.blueGrey),
-                    ),
+                    // Text(
+                    //   widget.question.issuer.name,
+                    //   style: GoogleFonts.sen(
+                    //       fontSize: 24,
+                    //       fontWeight: FontWeight.bold,
+                    //       color: Colors.blueGrey),
+                    // ),
                     SizedBox(
-                      height: ScreenSize.height * 0.01,
+                      height: ScreenSize.height * 0.02,
                     ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
@@ -432,11 +520,10 @@ class _AnswerScreenQuestionDetailsState
                           Align(
                             alignment: Alignment.topLeft,
                             child: Text(
-                              "SessionTitle",
+                              "Session Title",
                               style: GoogleFonts.sen(
                                   textStyle: TextStyle(
                                       fontSize: 17,
-                                      fontWeight: FontWeight.bold,
                                       color: Theme.of(context).buttonColor)),
                             ),
                           ),
@@ -462,7 +549,6 @@ class _AnswerScreenQuestionDetailsState
                               style: GoogleFonts.sen(
                                   textStyle: TextStyle(
                                       fontSize: 17,
-                                      fontWeight: FontWeight.bold,
                                       color: Theme.of(context).buttonColor)),
                             ),
                           ),
@@ -488,12 +574,13 @@ class _AnswerScreenQuestionDetailsState
                               style: GoogleFonts.sen(
                                   textStyle: TextStyle(
                                       fontSize: 17,
-                                      fontWeight: FontWeight.bold,
                                       color: Theme.of(context).buttonColor)),
                             ),
                           ),
                           TextField(
                             controller: dateController,
+                            style: GoogleFonts.sen(
+                                color: Theme.of(context).buttonColor),
                             decoration: InputDecoration(
                               suffixIcon: GestureDetector(
                                 child: Icon(
@@ -533,13 +620,14 @@ class _AnswerScreenQuestionDetailsState
                               style: GoogleFonts.sen(
                                   textStyle: TextStyle(
                                       fontSize: 17,
-                                      fontWeight: FontWeight.bold,
                                       color: Theme.of(context).buttonColor)),
                             ),
                           ),
                           TextField(
                             readOnly: true,
                             controller: timeController,
+                            style: GoogleFonts.sen(
+                                color: Theme.of(context).buttonColor),
                             decoration: InputDecoration(
                               suffixIcon: GestureDetector(
                                   onTap: () {

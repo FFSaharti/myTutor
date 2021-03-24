@@ -503,7 +503,7 @@ class _ProfileStudentState extends State<ProfileStudent> {
                               }),
                           Text(
                             "About Me",
-                            style: TextStyle(
+                            style: GoogleFonts.sen(
                                 fontSize: 20,
                                 color: Theme.of(context).buttonColor),
                           ),
@@ -548,20 +548,19 @@ class _ProfileStudentState extends State<ProfileStudent> {
                               alignment: Alignment.topLeft,
                               child: Text(
                                 "About Me",
-                                style: GoogleFonts.secularOne(
+                                style: GoogleFonts.sen(
                                     textStyle: TextStyle(
                                         fontSize: 17,
-                                        fontWeight: FontWeight.bold,
                                         color: Theme.of(context).buttonColor)),
                               ),
                             ),
                             TextField(
                               controller: aboutMeController,
                               keyboardType: TextInputType.multiline,
-                              style: TextStyle(
+                              style: GoogleFonts.sen(
                                   fontSize: 16.5,
                                   color: Theme.of(context).buttonColor),
-                              maxLines: null,
+                              maxLines: 6,
                               decoration: InputDecoration(
                                 hintText: !(SessionManager.loggedInStudent
                                             .aboutMe.isNotEmpty ||

@@ -54,7 +54,7 @@ class _MaterialWidgetState extends State<MaterialWidget> {
                     widget.material.title,
                     overflow: TextOverflow.ellipsis,
                     softWrap: false,
-                    style: GoogleFonts.sarabun(
+                    style: GoogleFonts.sen(
                       textStyle: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.normal,
@@ -69,7 +69,7 @@ class _MaterialWidgetState extends State<MaterialWidget> {
                   widget.material.desc,
                   overflow: TextOverflow.ellipsis,
                   softWrap: false,
-                  style: GoogleFonts.sarala(
+                  style: GoogleFonts.sen(
                       fontSize: 14,
                       color: Theme.of(context).buttonColor.withOpacity(0.6)),
                 ),
@@ -85,7 +85,7 @@ class _MaterialWidgetState extends State<MaterialWidget> {
                     (widget.material.type == 1)
                         ? (widget.material as Document).fileType
                         : "Quiz",
-                    style: GoogleFonts.sarabun(
+                    style: GoogleFonts.sen(
                       textStyle: TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.normal,

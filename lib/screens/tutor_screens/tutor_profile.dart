@@ -265,7 +265,7 @@ class _TutorProfileState extends State<TutorProfile> {
                       ],
                     ),
                     Divider(
-                      color: kGreyish,
+                      color: Theme.of(context).dividerColor,
                     ),
                     SizedBox(
                       height: ScreenSize.height * 0.01,
@@ -283,7 +283,7 @@ class _TutorProfileState extends State<TutorProfile> {
                             ),
                             Text(
                               "About Me",
-                              style: TextStyle(
+                              style: GoogleFonts.sen(
                                   fontSize: 18,
                                   color: Theme.of(context).buttonColor),
                             ),
@@ -312,15 +312,13 @@ class _TutorProfileState extends State<TutorProfile> {
                                   Padding(
                                     padding: const EdgeInsets.all(3.0),
                                     child: SizedBox(
-                                      width: ScreenSize.width*0.80,
+                                      width: ScreenSize.width * 0.80,
                                       child: Text(
                                         SessionManager.loggedInTutor.aboutMe,
-                                        maxLines: 3,
-                                        overflow: TextOverflow.ellipsis,
-                                        softWrap: false,
-                                        style: TextStyle(
+                                        style: GoogleFonts.sen(
                                             fontSize: 16.5,
-                                            color: Theme.of(context).buttonColor),
+                                            color:
+                                                Theme.of(context).buttonColor),
                                       ),
                                     ),
                                   ),
@@ -347,7 +345,7 @@ class _TutorProfileState extends State<TutorProfile> {
                                     Center(
                                       child: Text(
                                         "No About Me",
-                                        style: GoogleFonts.openSans(
+                                        style: GoogleFonts.sen(
                                             color:
                                                 Theme.of(context).buttonColor,
                                             fontSize: 21),
@@ -360,7 +358,7 @@ class _TutorProfileState extends State<TutorProfile> {
                       ],
                     ),
                     Divider(
-                      color: kGreyish,
+                      color: Theme.of(context).dividerColor,
                     ),
                     SizedBox(
                       height: ScreenSize.height * 0.01,
@@ -378,7 +376,7 @@ class _TutorProfileState extends State<TutorProfile> {
                             ),
                             Text(
                               "Experiences",
-                              style: TextStyle(
+                              style: GoogleFonts.sen(
                                   fontSize: 18,
                                   color: Theme.of(context).buttonColor),
                             ),
@@ -410,7 +408,7 @@ class _TutorProfileState extends State<TutorProfile> {
                       ],
                     ),
                     Divider(
-                      color: kGreyish,
+                      color: Theme.of(context).dividerColor,
                     ),
                     Container(
                       height: ScreenSize.height * 0.5,
@@ -427,7 +425,7 @@ class _TutorProfileState extends State<TutorProfile> {
                               ),
                               Text(
                                 "Materials",
-                                style: TextStyle(
+                                style: GoogleFonts.sen(
                                     fontSize: 18,
                                     color: Theme.of(context).buttonColor),
                               )

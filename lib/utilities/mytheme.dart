@@ -52,7 +52,7 @@ class MyTheme {
     iconTheme: IconThemeData(color: Colors.black),
     focusColor: kColorScheme[2],
     primaryColorLight: kWhiteish,
-    dividerColor: kWhiteish,
+    dividerColor: kGreyerish,
     // pick button, example at chat screen
     highlightColor: Colors.white,
     disabledColor: kColorScheme[1],

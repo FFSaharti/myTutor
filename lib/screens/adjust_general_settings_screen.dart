@@ -19,16 +19,13 @@ class AdjustGeneralSettings extends StatelessWidget {
           child: SafeArea(
             child: Column(
               children: [
-                // SizedBox(
-                //   height: ScreenSize.height * 0.05,
-                // ),
                 Villain(
                   villainAnimation: VillainAnimation.fromBottom(
                     from: Duration(milliseconds: 0),
                     to: Duration(milliseconds: 500),
                   ),
                   child: Card(
-                    elevation: 2.5,
+                    elevation: 0.5,
                     color: Theme.of(context).cardColor,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15.0),
@@ -37,14 +34,10 @@ class AdjustGeneralSettings extends StatelessWidget {
                       padding: const EdgeInsets.all(15.0),
                       child: Row(
                         children: [
-                          Text("Dark mode",
+                          Text("Dark Mode",
                               style: GoogleFonts.sen(
                                   color: Theme.of(context).buttonColor,
-                                  fontSize: 20)
-                              // TextStyle(
-                              //     color: Theme.of(context).primaryColor,
-                              //     fontSize: 30),
-                              ),
+                                  fontSize: 20)),
                           Spacer(),
                           Switch.adaptive(
                               value: themeProvider.isDark,
@@ -56,8 +49,41 @@ class AdjustGeneralSettings extends StatelessWidget {
                     ),
                   ),
                 ),
+                Villain(
+                  villainAnimation: VillainAnimation.fromBottom(
+                    from: Duration(milliseconds: 0),
+                    to: Duration(milliseconds: 500),
+                  ),
+                  child: Card(
+                    elevation: 0.5,
+                    color: Theme.of(context).cardColor,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15.0),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: Row(
+                        children: [
+                          Text("About Us",
+                              style: GoogleFonts.sen(
+                                  color: Theme.of(context).buttonColor,
+                                  fontSize: 20)),
+                          Spacer(),
+                          IconButton(
+                              icon: Icon(
+                                Icons.arrow_forward_ios,
+                                color: Theme.of(context).buttonColor,
+                              ),
+                              onPressed: () {
+                                showAboutUs(context);
+                              })
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
                 SizedBox(
-                  height: ScreenSize.height * 0.54,
+                  height: ScreenSize.height * 0.42,
                 ),
                 Opacity(
                   opacity: 0.90,
@@ -84,11 +110,7 @@ class AdjustGeneralSettings extends StatelessWidget {
                                 style: GoogleFonts.sen(
                                     color:
                                         Theme.of(context).secondaryHeaderColor,
-                                    fontSize: 20)
-                                // TextStyle(
-                                //     color: Theme.of(context).primaryColor,
-                                //     fontSize: 30),
-                                ),
+                                    fontSize: 20)),
                             Spacer(),
                             IconButton(
                                 icon: Icon(
@@ -109,26 +131,82 @@ class AdjustGeneralSettings extends StatelessWidget {
                     ),
                   ),
                 ),
-                // CircularButton(
-                //     width: ScreenSize.width * 0.40,
-                //     buttonColor: kColorScheme[1],
-                //     textColor: Theme.of(context).primaryColor,
-                //     isGradient: false,
-                //     colors: null,
-                //     buttonText: "Log out",
-                //     hasBorder: false,
-                //     borderColor: null,
-                //     onPressed: () {
-                //       DatabaseAPI.signOut();
-                //       Navigator.pushReplacement(
-                //           context,
-                //           MaterialPageRoute(
-                //               builder: (BuildContext context) =>
-                //                   WelcomeScreen()));
-                //     })
               ],
             ),
           ),
         ));
+  }
+
+  void showAboutUs(BuildContext context) {
+    showModalBottomSheet(
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(top: Radius.circular(25.0))),
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        enableDrag: true,
+        isScrollControlled: true,
+        context: ScreenSize.context,
+        builder: (context) {
+          return Container(
+            height: ScreenSize.height * 0.5,
+            child: Column(
+              children: [
+                SizedBox(
+                  height: ScreenSize.height * 0.01,
+                ),
+                Icon(
+                  Icons.keyboard_arrow_down_rounded,
+                  size: 45,
+                  color: Theme.of(context).accentColor,
+                ),
+                SizedBox(
+                  height: ScreenSize.height * 0.04,
+                ),
+                Text(
+                  "myTutor",
+                  style: GoogleFonts.sen(
+                      color: Theme.of(context).accentColor, fontSize: 35),
+                ),
+                Text(
+                  "Developed By: ",
+                  style: GoogleFonts.sen(
+                      color: Theme.of(context).accentColor, fontSize: 20),
+                ),
+                SizedBox(
+                  height: ScreenSize.height * 0.05,
+                ),
+                Card(
+                  shape: RoundedRectangleBorder(
+                    side: BorderSide.none,
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                        child: Text(
+                      "Faisal Faiz Saharti",
+                      style: GoogleFonts.sen(
+                          color: Theme.of(context).accentColor, fontSize: 20),
+                    )),
+                  ),
+                ),
+                Card(
+                  shape: RoundedRectangleBorder(
+                    side: BorderSide.none,
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                        child: Text(
+                      "Abdulrhman Masoud Al-Ahmadi",
+                      style: GoogleFonts.sen(
+                          color: Theme.of(context).accentColor, fontSize: 20),
+                    )),
+                  ),
+                ),
+              ],
+            ),
+          );
+        });
   }
 }
