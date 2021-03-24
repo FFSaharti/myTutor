@@ -322,10 +322,11 @@ class _ChatScreenState extends State<ChatScreen> {
                                 ? null
                                 : () {
                                     messageTextController.clear();
-                                    DatabaseAPI.saveNewMessage(
+                                    String status =DatabaseAPI.saveNewMessage(
                                         widget.currentsession.session_id,
                                         newMessage,
                                         SessionManager.loggedInUser.name);
+                                    status == 'error' ? Fluttertoast.showToast(msg: "error occur please check your network.") : "";
                                   },
                             child: Row(
                               children: [

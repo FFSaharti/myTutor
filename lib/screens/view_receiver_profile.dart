@@ -52,6 +52,7 @@ class _ViewReceiverProfileState extends State<ViewReceiverProfile> {
         child: disableBlueOverflow(
       context,
       Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: buildAppBar(context, Theme.of(context).accentColor, "Profile"),
         body: Column(
           mainAxisAlignment: MainAxisAlignment.center,

@@ -14,7 +14,9 @@ import 'package:mytutor/components/circular_button.dart';
 import 'package:mytutor/components/disable_default_pop.dart';
 import 'package:mytutor/utilities/constants.dart';
 import 'package:mytutor/utilities/database_api.dart';
+import 'package:mytutor/utilities/mytheme.dart';
 import 'package:mytutor/utilities/screen_size.dart';
+import 'package:mytutor/utilities/theme_provider.dart';
 
 import '../view_receiver_profile.dart';
 
@@ -550,6 +552,7 @@ class _TutorWidgetState extends State<TutorWidget> {
   }
 
   void showbutton(MyUser tutor) {
+
     String _preffredDate;
     String _date;
     String searchBox = '';
@@ -824,7 +827,15 @@ class _TutorWidgetState extends State<TutorWidget> {
                                                           ? DateTime.now()
                                                           : _preffredDate,
                                                   firstDate: DateTime.now(),
-                                                  lastDate: DateTime(2022))
+                                                  lastDate: DateTime(2022),
+                                            builder: (BuildContext context,
+                                                Widget child) {
+                                              return Theme(
+                                                // check the scaffold color to know which mode is active. since theme here can not read the theme data of the context..
+                                                data: Theme.of(context).scaffoldBackgroundColor ==  Color(0xff29273d) ? ThemeData.dark() : Theme.of(context),
+                                                child: child,
+                                              );
+                                            },)
                                               .then((value) => {
                                                     if (value == null)
                                                       {}

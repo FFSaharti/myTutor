@@ -5,6 +5,7 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_villains/villains/villains.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mytutor/classes/document.dart';
 import 'package:mytutor/classes/material.dart';
@@ -530,8 +531,7 @@ class _ProfileStudentState extends State<ProfileStudent> {
                                         });
                                 print("POP...");
                               } else {
-                                print("empty parameters");
-                                //TODO: Show error message cannot leave empty...
+                                Fluttertoast.showToast(msg: "Please fill up about me field first..");
                               }
                             },
                           ),

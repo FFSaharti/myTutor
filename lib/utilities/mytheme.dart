@@ -6,7 +6,6 @@ class MyTheme {
     // card, banner .. etc color
     cardColor: Color(0xff201f2d),
     scaffoldBackgroundColor: Color(0xff29273d),
-
     // section background card color
     buttonColor: Colors.white,
     backgroundColor: Colors.white,

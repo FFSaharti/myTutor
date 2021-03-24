@@ -164,8 +164,9 @@ class _CreateMaterialsScreenState extends State<CreateMaterialsScreen> {
                             ),
                             TextField(
                               controller: _titleController,
-                              style: TextStyle(
-                                  color: Theme.of(context).buttonColor),
+                              style: GoogleFonts.sen(
+                                fontSize: 14,
+                                color: Theme.of(context).buttonColor),
                               decoration: InputDecoration(
                                   hintText: 'Type Something here....',
                                   hintStyle: TextStyle(
@@ -194,7 +195,8 @@ class _CreateMaterialsScreenState extends State<CreateMaterialsScreen> {
                                 padding: const EdgeInsets.all(8.0),
                                 child: TextField(
                                   controller: _descController,
-                                  style: TextStyle(
+                                  style: GoogleFonts.sen(
+                                      fontSize: 14,
                                       color: Theme.of(context).buttonColor),
                                   maxLines: null,
                                   decoration: InputDecoration(
@@ -297,7 +299,8 @@ class _CreateMaterialsScreenState extends State<CreateMaterialsScreen> {
                               ),
                               TextField(
                                 controller: _quizTitleController,
-                                style: TextStyle(
+                                style: GoogleFonts.sen(
+                                    fontSize: 14,
                                     color: Theme.of(context).buttonColor),
                                 decoration: InputDecoration(
                                     hintText: 'Type Something here....',
@@ -327,7 +330,8 @@ class _CreateMaterialsScreenState extends State<CreateMaterialsScreen> {
                                   padding: const EdgeInsets.all(8.0),
                                   child: TextField(
                                     controller: _quizDescController,
-                                    style: TextStyle(
+                                    style: GoogleFonts.sen(
+                                        fontSize: 14,
                                         color: Theme.of(context).buttonColor),
                                     maxLines: null,
                                     decoration: InputDecoration(
@@ -447,7 +451,9 @@ class _CreateMaterialsScreenState extends State<CreateMaterialsScreen> {
       items.add(DropdownMenuItem(
         child: Text(
           subjects.elementAt(i).title,
-          style: TextStyle(color: Theme.of(context).buttonColor),
+          style: GoogleFonts.sen(
+              fontSize: 15,
+              color: Theme.of(context).buttonColor),
         ),
         value: i,
       ));

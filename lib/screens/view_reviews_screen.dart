@@ -4,20 +4,36 @@ import 'package:mytutor/classes/rate.dart';
 import 'package:mytutor/utilities/constants.dart';
 import 'package:mytutor/utilities/screen_size.dart';
 
-class ViewReviewsScreen extends StatelessWidget {
+class ViewReviewsScreen extends StatefulWidget {
   final List<Rate> tutorRates;
 
   ViewReviewsScreen({Key key, this.tutorRates}) : super(key: key);
 
   @override
+  _ViewReviewsScreenState createState() => _ViewReviewsScreenState();
+}
+
+class _ViewReviewsScreenState extends State<ViewReviewsScreen> {
+  bool hasReview = false;
+@override
+  void initState() {
+    checkReviews();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    print(hasReview);
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
           appBar: buildAppBar(context, Theme.of(context).accentColor, "Reviews"),
           body: Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Column(
+            child: hasReview == false ? Center(child: Text("the tutor does not have reviews - Yet" , style: GoogleFonts.openSans(
+                color: Theme.of(context).buttonColor,
+                // Theme.of(context).primaryColor,
+                fontSize: 21),),) : Column(
               children: [
                 Expanded(
                   child: NotificationListener<OverscrollIndicatorNotification>(
@@ -25,9 +41,9 @@ class ViewReviewsScreen extends StatelessWidget {
                       overscroll.disallowGlow();
                     },
                     child: ListView.builder(
-                      itemCount: tutorRates.length,
+                      itemCount: widget.tutorRates.length,
                       itemBuilder: (context, index) {
-                        return tutorRates.elementAt(index).review == null
+                        return widget.tutorRates.elementAt(index).review == null
                             ? Text("")
                             : Padding(
                                 padding: const EdgeInsets.all(3.0),
@@ -52,7 +68,7 @@ class ViewReviewsScreen extends StatelessWidget {
                                               width: ScreenSize.width * 0.02,
                                             ),
                                             Text(
-                                              tutorRates
+                                              widget.tutorRates
                                                   .elementAt(index)
                                                   .sessionTitle,
                                               style: GoogleFonts.sen(
@@ -61,13 +77,13 @@ class ViewReviewsScreen extends StatelessWidget {
                                             ),
                                             Spacer(),
                                             Text(getRating(
-                                                tutorRates.elementAt(index)) , style: TextStyle(color: Theme.of(context).buttonColor),),
+                                                widget.tutorRates.elementAt(index)) , style: TextStyle(color: Theme.of(context).buttonColor),),
                                           ],
                                         ),
                                         Align(
                                           alignment: Alignment.centerLeft,
                                           child: Text(
-                                            tutorRates.elementAt(index).review,
+                                            widget.tutorRates.elementAt(index).review,
                                             style: GoogleFonts.sen(
                                                 color: Theme.of(context).buttonColor),
                                           ),
@@ -85,6 +101,17 @@ class ViewReviewsScreen extends StatelessWidget {
             ),
           )),
     );
+  }
+
+  void checkReviews(){
+    for (var tutorRate in widget.tutorRates){
+      if (tutorRate.review != null){
+        setState(() {
+          hasReview =true;
+        });
+        return;
+      }
+    }
   }
 
   String getRating(Rate rating) {

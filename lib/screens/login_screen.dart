@@ -269,7 +269,12 @@ class _LoginScreenState extends State<LoginScreen> {
                   TextField(
                     controller: EmailController,
                     textAlign: TextAlign.left,
-                    style: TextStyle(color: Theme.of(context).buttonColor),
+                    style: GoogleFonts.sen(
+                      textStyle: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.normal,
+                          color: Theme.of(context).buttonColor),
+                    ),
                     decoration: InputDecoration(
                       contentPadding: EdgeInsets.symmetric(
                           vertical: 10.0, horizontal: 20.0),

@@ -257,7 +257,7 @@ class _MessageScreenState extends State<MessageScreen> {
                                                               snap.data[
                                                                   "name"]),
                                                           callBackFunction: () {
-                                                            //TODO: check for errors occur when calling back without searching.
+
                                                           }),
                                                       Divider(),
                                                     ],

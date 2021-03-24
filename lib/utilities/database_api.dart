@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:intl/intl.dart';
 import 'package:mytutor/classes/answer.dart';
@@ -533,16 +534,22 @@ class DatabaseAPI {
         .snapshots();
   }
 
-  static void saveNewMessage(String sessionid, String msg, String sender) {
-    _firestore.collection("session").doc(sessionid).collection("messages").add({
-      'text': msg,
-      'sender': sender,
-      'time': DateTime.now(),
-    });
-    _firestore.collection("session").doc(sessionid).update({
-      'lastMessage': msg,
-      'timeOfLastMessage': DateTime.now(),
-    });
+  static String saveNewMessage(String sessionid, String msg, String sender) {
+    try{
+      _firestore.collection("session").doc(sessionid).collection("messages").add({
+        'text': msg,
+        'sender': sender,
+        'time': DateTime.now(),
+      });
+      _firestore.collection("session").doc(sessionid).update({
+        'lastMessage': msg,
+        'timeOfLastMessage': DateTime.now(),
+      });
+      return 'success';
+    } on FirebaseException catch(e){
+      return 'error';
+    }
+
   }
 
   static Future<String> saveNewMessageAsImage(
@@ -582,7 +589,6 @@ class DatabaseAPI {
 
   static Future<String> changeSessionsStatus(
       String status, String sessionid) async {
-    print('inside the session  status method the id is :' + sessionid);
     // main status (pending-expired-active-closed-decline- waiting for student(tutor requesting session to the student))
     try {
       await _firestore
