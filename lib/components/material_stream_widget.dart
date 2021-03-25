@@ -38,7 +38,21 @@ class _MaterialStreamTutorState extends State<MaterialStreamTutor> {
       builder: (context, snapshot) {
         // List to fill up with all the session the user has.
         List<Widget> UserMaterials = [];
-        if (snapshot.hasData) {
+
+        if (!snapshot.hasData || snapshot.data.docs.isEmpty) {
+          if(widget.isSameUser){
+            return Center(child: Text(
+              "you don't have any materials", style: GoogleFonts.sen(color: Theme
+                .of(context)
+                .buttonColor, fontSize: 25,), textAlign: TextAlign.center,),);
+          } else{
+            return Center(child: Text(
+              "This tutor does not have any materials - Yet", style: GoogleFonts.sen(color: Theme
+                .of(context)
+                .buttonColor, fontSize: 25,), textAlign: TextAlign.center,),);
+          }
+        }
+        else if (snapshot.hasData) {
           List<QueryDocumentSnapshot> materials = snapshot.data.docs;
           for (var material in materials) {
             int materialType = material.data()["type"];
@@ -70,18 +84,22 @@ class _MaterialStreamTutorState extends State<MaterialStreamTutor> {
                             return Container(
                               height: ScreenSize.height * 0.20,
                               decoration: kCurvedShapeDecoration(
-                                  Theme.of(context).scaffoldBackgroundColor),
+                                  Theme
+                                      .of(context)
+                                      .scaffoldBackgroundColor),
                               child: Column(
                                 children: [
                                   Row(
                                     mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                    MainAxisAlignment.spaceBetween,
                                     children: [
                                       IconButton(
                                           icon: Icon(
                                             Icons.cancel,
                                             color:
-                                                Theme.of(context).buttonColor,
+                                            Theme
+                                                .of(context)
+                                                .buttonColor,
                                           ),
                                           onPressed: () {
                                             Navigator.of(context).pop();
@@ -91,7 +109,9 @@ class _MaterialStreamTutorState extends State<MaterialStreamTutor> {
                                         style: GoogleFonts.sen(
                                             fontSize: 19,
                                             color:
-                                                Theme.of(context).buttonColor,
+                                            Theme
+                                                .of(context)
+                                                .buttonColor,
                                             fontWeight: FontWeight.normal),
                                       ),
                                       IconButton(
@@ -109,9 +129,9 @@ class _MaterialStreamTutorState extends State<MaterialStreamTutor> {
                                     padding: const EdgeInsets.all(23.0),
                                     child: Row(
                                       mainAxisAlignment:
-                                          widget.isSameUser == false
-                                              ? MainAxisAlignment.center
-                                              : MainAxisAlignment.spaceAround,
+                                      widget.isSameUser == false
+                                          ? MainAxisAlignment.center
+                                          : MainAxisAlignment.spaceAround,
                                       children: [
                                         Container(
                                             height: ScreenSize.height * 0.04,
@@ -119,19 +139,19 @@ class _MaterialStreamTutorState extends State<MaterialStreamTutor> {
                                               onPressed: () async {
                                                 if (tempDoc.fileType == "pdf") {
                                                   PDFDocument doc =
-                                                      await PDFDocument.fromURL(
-                                                          tempDoc.url);
+                                                  await PDFDocument.fromURL(
+                                                      tempDoc.url);
                                                   showModalBottomSheet(
                                                     isScrollControlled: true,
                                                     context: context,
                                                     builder: (context) {
                                                       return Container(
                                                           height:
-                                                              ScreenSize.height,
+                                                          ScreenSize.height,
                                                           child: Scaffold(
                                                               body: PDFViewer(
                                                                   document:
-                                                                      doc)));
+                                                                  doc)));
                                                     },
                                                   );
                                                 } else {
@@ -147,46 +167,46 @@ class _MaterialStreamTutorState extends State<MaterialStreamTutor> {
                                                   textStyle: TextStyle(
                                                       fontSize: 18,
                                                       fontWeight:
-                                                          FontWeight.normal,
+                                                      FontWeight.normal,
                                                       color: Colors.white),
                                                 ),
                                               ),
                                               color: kColorScheme[2],
                                               shape: RoundedRectangleBorder(
                                                 borderRadius:
-                                                    BorderRadius.circular(30.0),
+                                                BorderRadius.circular(30.0),
                                               ),
                                             )),
                                         widget.isSameUser == false
                                             ? Container()
                                             : Container(
-                                                height:
-                                                    ScreenSize.height * 0.04,
-                                                child: RaisedButton(
-                                                  onPressed: () {
-                                                    showBottomSheetForEditDocument(
-                                                      tempDoc.title,
-                                                      material.id,
-                                                    );
-                                                  },
-                                                  child: Text(
-                                                    "Edit Document",
-                                                    style: GoogleFonts.sen(
-                                                      textStyle: TextStyle(
-                                                          fontSize: 18,
-                                                          fontWeight:
-                                                              FontWeight.normal,
-                                                          color: Colors.white),
-                                                    ),
-                                                  ),
-                                                  color: kColorScheme[2],
-                                                  shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            30.0),
-                                                  ),
-                                                ),
+                                          height:
+                                          ScreenSize.height * 0.04,
+                                          child: RaisedButton(
+                                            onPressed: () {
+                                              showBottomSheetForEditDocument(
+                                                tempDoc.title,
+                                                material.id,
+                                              );
+                                            },
+                                            child: Text(
+                                              "Edit Document",
+                                              style: GoogleFonts.sen(
+                                                textStyle: TextStyle(
+                                                    fontSize: 18,
+                                                    fontWeight:
+                                                    FontWeight.normal,
+                                                    color: Colors.white),
                                               ),
+                                            ),
+                                            color: kColorScheme[2],
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                              BorderRadius.circular(
+                                                  30.0),
+                                            ),
+                                          ),
+                                        ),
                                       ],
                                     ),
                                   ),
@@ -234,13 +254,15 @@ class _MaterialStreamTutorState extends State<MaterialStreamTutor> {
                                     topLeft: Radius.circular(25),
                                     topRight: Radius.circular(25)),
                                 color:
-                                    Theme.of(context).scaffoldBackgroundColor,
+                                Theme
+                                    .of(context)
+                                    .scaffoldBackgroundColor,
                               ),
                               child: Column(
                                 children: [
                                   Row(
                                     mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                    MainAxisAlignment.spaceBetween,
                                     children: [
                                       IconButton(
                                           icon: Icon(Icons.cancel),
@@ -252,7 +274,9 @@ class _MaterialStreamTutorState extends State<MaterialStreamTutor> {
                                         style: GoogleFonts.sen(
                                             fontSize: 19,
                                             color:
-                                                Theme.of(context).buttonColor,
+                                            Theme
+                                                .of(context)
+                                                .buttonColor,
                                             fontWeight: FontWeight.normal),
                                       ),
                                       IconButton(
@@ -270,9 +294,9 @@ class _MaterialStreamTutorState extends State<MaterialStreamTutor> {
                                     padding: const EdgeInsets.all(15.0),
                                     child: Row(
                                       mainAxisAlignment:
-                                          widget.isSameUser == false
-                                              ? MainAxisAlignment.center
-                                              : MainAxisAlignment.spaceAround,
+                                      widget.isSameUser == false
+                                          ? MainAxisAlignment.center
+                                          : MainAxisAlignment.spaceAround,
                                       children: [
                                         Container(
                                           height: ScreenSize.height * 0.04,
@@ -295,47 +319,47 @@ class _MaterialStreamTutorState extends State<MaterialStreamTutor> {
                                                 textStyle: TextStyle(
                                                     fontSize: 18,
                                                     fontWeight:
-                                                        FontWeight.normal,
+                                                    FontWeight.normal,
                                                     color: Colors.white),
                                               ),
                                             ),
                                             color: kColorScheme[2],
                                             shape: RoundedRectangleBorder(
                                               borderRadius:
-                                                  BorderRadius.circular(30.0),
+                                              BorderRadius.circular(30.0),
                                             ),
                                           ),
                                         ),
                                         widget.isSameUser == false
                                             ? Container()
                                             : Container(
-                                                height:
-                                                    ScreenSize.height * 0.04,
-                                                child: RaisedButton(
-                                                  onPressed: () {
-                                                    showBottomSheetForEditQuiz(
-                                                      tempQuiz.title,
-                                                      material.id,
-                                                    );
-                                                  },
-                                                  child: Text(
-                                                    "Edit Quiz",
-                                                    style: GoogleFonts.sen(
-                                                      textStyle: TextStyle(
-                                                          fontSize: 18,
-                                                          fontWeight:
-                                                              FontWeight.normal,
-                                                          color: Colors.white),
-                                                    ),
-                                                  ),
-                                                  color: kColorScheme[2],
-                                                  shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            30.0),
-                                                  ),
-                                                ),
+                                          height:
+                                          ScreenSize.height * 0.04,
+                                          child: RaisedButton(
+                                            onPressed: () {
+                                              showBottomSheetForEditQuiz(
+                                                tempQuiz.title,
+                                                material.id,
+                                              );
+                                            },
+                                            child: Text(
+                                              "Edit Quiz",
+                                              style: GoogleFonts.sen(
+                                                textStyle: TextStyle(
+                                                    fontSize: 18,
+                                                    fontWeight:
+                                                    FontWeight.normal,
+                                                    color: Colors.white),
                                               ),
+                                            ),
+                                            color: kColorScheme[2],
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                              BorderRadius.circular(
+                                                  30.0),
+                                            ),
+                                          ),
+                                        ),
                                       ],
                                     ),
                                   ),
@@ -390,7 +414,9 @@ class _MaterialStreamTutorState extends State<MaterialStreamTutor> {
         return Container(
             height: ScreenSize.height * 0.50,
             decoration: kCurvedShapeDecoration(
-                Theme.of(context).scaffoldBackgroundColor),
+                Theme
+                    .of(context)
+                    .scaffoldBackgroundColor),
             child: Padding(
               padding: const EdgeInsets.all(15.0),
               child: Column(
@@ -405,7 +431,9 @@ class _MaterialStreamTutorState extends State<MaterialStreamTutor> {
                       style: kTitleStyle.copyWith(
                           fontSize: 17,
                           fontWeight: FontWeight.normal,
-                          color: Theme.of(context).buttonColor),
+                          color: Theme
+                              .of(context)
+                              .buttonColor),
                     ),
                   ),
                   SizedBox(
@@ -416,11 +444,15 @@ class _MaterialStreamTutorState extends State<MaterialStreamTutor> {
                     style: GoogleFonts.sen(
                         fontSize: 17,
                         fontWeight: FontWeight.normal,
-                        color: Theme.of(context).buttonColor),
+                        color: Theme
+                            .of(context)
+                            .buttonColor),
                   ),
                   TextField(
                     controller: titleController,
-                    style: TextStyle(color: Theme.of(context).buttonColor),
+                    style: TextStyle(color: Theme
+                        .of(context)
+                        .buttonColor),
                     onChanged: (value) {
                       print(value);
                     },
@@ -428,34 +460,48 @@ class _MaterialStreamTutorState extends State<MaterialStreamTutor> {
                       hintText: 'Type your new title here....',
                       hintStyle: TextStyle(
                           color:
-                              Theme.of(context).buttonColor.withOpacity(0.6)),
+                          Theme
+                              .of(context)
+                              .buttonColor
+                              .withOpacity(0.6)),
                       border: InputBorder.none,
                     ),
                   ),
                   Divider(
-                    color: Theme.of(context).dividerColor,
+                    color: Theme
+                        .of(context)
+                        .dividerColor,
                   ),
                   Text(
                     "Description:",
                     style: GoogleFonts.sen(
                         fontSize: 17,
                         fontWeight: FontWeight.normal,
-                        color: Theme.of(context).buttonColor),
+                        color: Theme
+                            .of(context)
+                            .buttonColor),
                   ),
                   TextField(
                     controller: descController,
-                    style: TextStyle(color: Theme.of(context).buttonColor),
+                    style: TextStyle(color: Theme
+                        .of(context)
+                        .buttonColor),
                     onChanged: (value) {},
                     decoration: InputDecoration(
                       hintText: 'Type your new description here....',
                       hintStyle: TextStyle(
                           color:
-                              Theme.of(context).buttonColor.withOpacity(0.6)),
+                          Theme
+                              .of(context)
+                              .buttonColor
+                              .withOpacity(0.6)),
                       border: InputBorder.none,
                     ),
                   ),
                   Divider(
-                    color: Theme.of(context).dividerColor,
+                    color: Theme
+                        .of(context)
+                        .dividerColor,
                   ),
                   SizedBox(
                     height: ScreenSize.height * 0.0150,
@@ -470,63 +516,66 @@ class _MaterialStreamTutorState extends State<MaterialStreamTutor> {
                             if (descController.text.isNotEmpty ||
                                 titleController.text.isNotEmpty) {
                               DatabaseAPI.editMaterial(id, titleController.text,
-                                      descController.text, 1)
-                                  .then((value) => {
-                                        value == "success"
-                                            ? AwesomeDialog(
-                                                context: context,
-                                                animType: AnimType.SCALE,
-                                                dialogType: DialogType.SUCCES,
-                                                body: Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(8.0),
-                                                  child: Center(
-                                                    child: Text(
-                                                      'Updated successfully',
-                                                      style:
-                                                          kTitleStyle.copyWith(
-                                                              color: Theme.of(
-                                                                      context)
-                                                                  .buttonColor,
-                                                              fontSize: 20,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .normal),
-                                                    ),
-                                                  ),
-                                                ),
-                                                btnOkOnPress: () {
-                                                  Navigator.pop(context);
-                                                },
-                                              ).show()
-                                            : AwesomeDialog(
-                                                context: context,
-                                                animType: AnimType.SCALE,
-                                                dialogType: DialogType.ERROR,
-                                                body: Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(8.0),
-                                                  child: Center(
-                                                    child: Text(
-                                                      'erorr',
-                                                      style:
-                                                          kTitleStyle.copyWith(
-                                                              color: Theme.of(
-                                                                      context)
-                                                                  .buttonColor,
-                                                              fontSize: 20,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .normal),
-                                                    ),
-                                                  ),
-                                                ),
-                                                btnOkOnPress: () {
-                                                  Navigator.pop(context);
-                                                },
-                                              ).show()
-                                      });
-                            }else {
+                                  descController.text, 1)
+                                  .then((value) =>
+                              {
+                                value == "success"
+                                    ? AwesomeDialog(
+                                  context: context,
+                                  animType: AnimType.SCALE,
+                                  dialogType: DialogType.SUCCES,
+                                  body: Padding(
+                                    padding:
+                                    const EdgeInsets.all(8.0),
+                                    child: Center(
+                                      child: Text(
+                                        'Updated successfully',
+                                        style:
+                                        kTitleStyle.copyWith(
+                                            color: Theme
+                                                .of(
+                                                context)
+                                                .buttonColor,
+                                            fontSize: 20,
+                                            fontWeight:
+                                            FontWeight
+                                                .normal),
+                                      ),
+                                    ),
+                                  ),
+                                  btnOkOnPress: () {
+                                    Navigator.pop(context);
+                                  },
+                                ).show()
+                                    : AwesomeDialog(
+                                  context: context,
+                                  animType: AnimType.SCALE,
+                                  dialogType: DialogType.ERROR,
+                                  body: Padding(
+                                    padding:
+                                    const EdgeInsets.all(8.0),
+                                    child: Center(
+                                      child: Text(
+                                        'erorr',
+                                        style:
+                                        kTitleStyle.copyWith(
+                                            color: Theme
+                                                .of(
+                                                context)
+                                                .buttonColor,
+                                            fontSize: 20,
+                                            fontWeight:
+                                            FontWeight
+                                                .normal),
+                                      ),
+                                    ),
+                                  ),
+                                  btnOkOnPress: () {
+                                    Navigator.pop(context);
+                                  },
+                                ).show()
+                              });
+                            } else {
                               Fluttertoast.showToast(
                                   msg: "Please fill all of the information");
                             }
@@ -551,59 +600,62 @@ class _MaterialStreamTutorState extends State<MaterialStreamTutor> {
                         child: RaisedButton(
                           onPressed: () {
                             DatabaseAPI.deleteMaterial(title, id)
-                                .then((value) => {
-                                      value == "success"
-                                          ? AwesomeDialog(
-                                              context: context,
-                                              animType: AnimType.SCALE,
-                                              dialogType: DialogType.SUCCES,
-                                              body: Padding(
-                                                padding:
-                                                    const EdgeInsets.all(8.0),
-                                                child: Center(
-                                                  child: Text(
-                                                    'Deleted successfully',
-                                                    style: kTitleStyle.copyWith(
-                                                        color: Theme.of(context)
-                                                            .buttonColor,
-                                                        fontSize: 20,
-                                                        fontWeight:
-                                                            FontWeight.normal),
-                                                  ),
-                                                ),
-                                              ),
-                                              btnOkOnPress: () {
-                                                int count = 0;
-                                                Navigator.popUntil(context,
-                                                    (route) {
-                                                  return count++ == 2;
-                                                });
-                                              },
-                                            ).show()
-                                          : AwesomeDialog(
-                                              context: context,
-                                              animType: AnimType.SCALE,
-                                              dialogType: DialogType.ERROR,
-                                              body: Padding(
-                                                padding:
-                                                    const EdgeInsets.all(8.0),
-                                                child: Center(
-                                                  child: Text(
-                                                    'erorr',
-                                                    style: kTitleStyle.copyWith(
-                                                        color: Theme.of(context)
-                                                            .buttonColor,
-                                                        fontSize: 20,
-                                                        fontWeight:
-                                                            FontWeight.normal),
-                                                  ),
-                                                ),
-                                              ),
-                                              btnOkOnPress: () {
-                                                Navigator.pop(context);
-                                              },
-                                            ).show()
-                                    });
+                                .then((value) =>
+                            {
+                              value == "success"
+                                  ? AwesomeDialog(
+                                context: context,
+                                animType: AnimType.SCALE,
+                                dialogType: DialogType.SUCCES,
+                                body: Padding(
+                                  padding:
+                                  const EdgeInsets.all(8.0),
+                                  child: Center(
+                                    child: Text(
+                                      'Deleted successfully',
+                                      style: kTitleStyle.copyWith(
+                                          color: Theme
+                                              .of(context)
+                                              .buttonColor,
+                                          fontSize: 20,
+                                          fontWeight:
+                                          FontWeight.normal),
+                                    ),
+                                  ),
+                                ),
+                                btnOkOnPress: () {
+                                  int count = 0;
+                                  Navigator.popUntil(context,
+                                          (route) {
+                                        return count++ == 2;
+                                      });
+                                },
+                              ).show()
+                                  : AwesomeDialog(
+                                context: context,
+                                animType: AnimType.SCALE,
+                                dialogType: DialogType.ERROR,
+                                body: Padding(
+                                  padding:
+                                  const EdgeInsets.all(8.0),
+                                  child: Center(
+                                    child: Text(
+                                      'erorr',
+                                      style: kTitleStyle.copyWith(
+                                          color: Theme
+                                              .of(context)
+                                              .buttonColor,
+                                          fontSize: 20,
+                                          fontWeight:
+                                          FontWeight.normal),
+                                    ),
+                                  ),
+                                ),
+                                btnOkOnPress: () {
+                                  Navigator.pop(context);
+                                },
+                              ).show()
+                            });
                           },
                           child: Text(
                             "Delete",
@@ -640,7 +692,9 @@ class _MaterialStreamTutorState extends State<MaterialStreamTutor> {
         return Container(
             height: ScreenSize.height * 0.50,
             decoration: kCurvedShapeDecoration(
-                Theme.of(context).scaffoldBackgroundColor),
+                Theme
+                    .of(context)
+                    .scaffoldBackgroundColor),
             child: Padding(
               padding: const EdgeInsets.all(15.0),
               child: Column(
@@ -657,7 +711,9 @@ class _MaterialStreamTutorState extends State<MaterialStreamTutor> {
                         style: GoogleFonts.sen(
                             fontSize: 17,
                             fontWeight: FontWeight.normal,
-                            color: Theme.of(context).buttonColor),
+                            color: Theme
+                                .of(context)
+                                .buttonColor),
                       ),
                     ),
                   ),
@@ -669,11 +725,15 @@ class _MaterialStreamTutorState extends State<MaterialStreamTutor> {
                     style: GoogleFonts.sen(
                         fontSize: 17,
                         fontWeight: FontWeight.normal,
-                        color: Theme.of(context).buttonColor),
+                        color: Theme
+                            .of(context)
+                            .buttonColor),
                   ),
                   TextField(
                     controller: titleController,
-                    style: TextStyle(color: Theme.of(context).buttonColor),
+                    style: TextStyle(color: Theme
+                        .of(context)
+                        .buttonColor),
                     onChanged: (value) {
                       print(value);
                     },
@@ -683,23 +743,32 @@ class _MaterialStreamTutorState extends State<MaterialStreamTutor> {
                       hintText: 'Type your new title here....',
                       hintStyle: GoogleFonts.sen(
                           color:
-                              Theme.of(context).buttonColor.withOpacity(0.6)),
+                          Theme
+                              .of(context)
+                              .buttonColor
+                              .withOpacity(0.6)),
                       border: InputBorder.none,
                     ),
                   ),
                   Divider(
-                    color: Theme.of(context).dividerColor,
+                    color: Theme
+                        .of(context)
+                        .dividerColor,
                   ),
                   Text(
                     "Description:",
                     style: GoogleFonts.sen(
                         fontSize: 17,
                         fontWeight: FontWeight.normal,
-                        color: Theme.of(context).buttonColor),
+                        color: Theme
+                            .of(context)
+                            .buttonColor),
                   ),
                   TextField(
                     controller: descController,
-                    style: TextStyle(color: Theme.of(context).buttonColor),
+                    style: TextStyle(color: Theme
+                        .of(context)
+                        .buttonColor),
                     onChanged: (value) {},
                     decoration: InputDecoration(
                       focusedBorder: InputBorder.none,
@@ -707,12 +776,17 @@ class _MaterialStreamTutorState extends State<MaterialStreamTutor> {
                       hintText: 'Type your new description here....',
                       hintStyle: GoogleFonts.sen(
                           color:
-                              Theme.of(context).buttonColor.withOpacity(0.6)),
+                          Theme
+                              .of(context)
+                              .buttonColor
+                              .withOpacity(0.6)),
                       border: InputBorder.none,
                     ),
                   ),
                   Divider(
-                    color: Theme.of(context).dividerColor,
+                    color: Theme
+                        .of(context)
+                        .dividerColor,
                   ),
                   SizedBox(
                     height: ScreenSize.height * 0.010,
@@ -724,7 +798,9 @@ class _MaterialStreamTutorState extends State<MaterialStreamTutor> {
                         style: GoogleFonts.sen(
                             fontSize: 17,
                             fontWeight: FontWeight.normal,
-                            color: Theme.of(context).buttonColor),
+                            color: Theme
+                                .of(context)
+                                .buttonColor),
                       ),
                       Spacer(),
                       GestureDetector(
@@ -732,7 +808,8 @@ class _MaterialStreamTutorState extends State<MaterialStreamTutor> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => EditQuizScreen(
+                                builder: (context) =>
+                                    EditQuizScreen(
                                       quizID: id,
                                     )),
                           );
@@ -740,7 +817,9 @@ class _MaterialStreamTutorState extends State<MaterialStreamTutor> {
                         child: Icon(
                           Icons.edit,
                           size: 18,
-                          color: Theme.of(context).buttonColor,
+                          color: Theme
+                              .of(context)
+                              .buttonColor,
                         ),
                       )
                     ],
@@ -758,58 +837,61 @@ class _MaterialStreamTutorState extends State<MaterialStreamTutor> {
                             if (descController.text.isNotEmpty ||
                                 titleController.text.isNotEmpty) {
                               DatabaseAPI.editMaterial(id, titleController.text,
-                                      descController.text, 2)
-                                  .then((value) => {
-                                        value == "success"
-                                            ? AwesomeDialog(
-                                                context: context,
-                                                animType: AnimType.SCALE,
-                                                dialogType: DialogType.SUCCES,
-                                                body: Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(8.0),
-                                                  child: Center(
-                                                    child: Text(
-                                                      'Updated Successfully',
-                                                      style: GoogleFonts.sen(
-                                                          color:
-                                                              Theme.of(context)
-                                                                  .buttonColor,
-                                                          fontSize: 20,
-                                                          fontWeight: FontWeight
-                                                              .normal),
-                                                    ),
-                                                  ),
-                                                ),
-                                                btnOkOnPress: () {
-                                                  Navigator.pop(context);
-                                                },
-                                              ).show()
-                                            : AwesomeDialog(
-                                                context: context,
-                                                animType: AnimType.SCALE,
-                                                dialogType: DialogType.ERROR,
-                                                body: Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(8.0),
-                                                  child: Center(
-                                                    child: Text(
-                                                      'Error Occured',
-                                                      style: GoogleFonts.sen(
-                                                          color:
-                                                              Theme.of(context)
-                                                                  .buttonColor,
-                                                          fontSize: 20,
-                                                          fontWeight: FontWeight
-                                                              .normal),
-                                                    ),
-                                                  ),
-                                                ),
-                                                btnOkOnPress: () {
-                                                  Navigator.pop(context);
-                                                },
-                                              ).show()
-                                      });
+                                  descController.text, 2)
+                                  .then((value) =>
+                              {
+                                value == "success"
+                                    ? AwesomeDialog(
+                                  context: context,
+                                  animType: AnimType.SCALE,
+                                  dialogType: DialogType.SUCCES,
+                                  body: Padding(
+                                    padding:
+                                    const EdgeInsets.all(8.0),
+                                    child: Center(
+                                      child: Text(
+                                        'Updated Successfully',
+                                        style: GoogleFonts.sen(
+                                            color:
+                                            Theme
+                                                .of(context)
+                                                .buttonColor,
+                                            fontSize: 20,
+                                            fontWeight: FontWeight
+                                                .normal),
+                                      ),
+                                    ),
+                                  ),
+                                  btnOkOnPress: () {
+                                    Navigator.pop(context);
+                                  },
+                                ).show()
+                                    : AwesomeDialog(
+                                  context: context,
+                                  animType: AnimType.SCALE,
+                                  dialogType: DialogType.ERROR,
+                                  body: Padding(
+                                    padding:
+                                    const EdgeInsets.all(8.0),
+                                    child: Center(
+                                      child: Text(
+                                        'Error Occured',
+                                        style: GoogleFonts.sen(
+                                            color:
+                                            Theme
+                                                .of(context)
+                                                .buttonColor,
+                                            fontSize: 20,
+                                            fontWeight: FontWeight
+                                                .normal),
+                                      ),
+                                    ),
+                                  ),
+                                  btnOkOnPress: () {
+                                    Navigator.pop(context);
+                                  },
+                                ).show()
+                              });
                             } else {
                               Fluttertoast.showToast(
                                   msg: "Please fill all of the information");
@@ -835,59 +917,62 @@ class _MaterialStreamTutorState extends State<MaterialStreamTutor> {
                         child: RaisedButton(
                           onPressed: () {
                             DatabaseAPI.deleteMaterial(title, id)
-                                .then((value) => {
-                                      value == "success"
-                                          ? AwesomeDialog(
-                                              context: context,
-                                              animType: AnimType.SCALE,
-                                              dialogType: DialogType.SUCCES,
-                                              body: Padding(
-                                                padding:
-                                                    const EdgeInsets.all(8.0),
-                                                child: Center(
-                                                  child: Text(
-                                                    'Deleted Successfully',
-                                                    style: GoogleFonts.sen(
-                                                        color: Theme.of(context)
-                                                            .buttonColor,
-                                                        fontSize: 20,
-                                                        fontWeight:
-                                                            FontWeight.normal),
-                                                  ),
-                                                ),
-                                              ),
-                                              btnOkOnPress: () {
-                                                int count = 0;
-                                                Navigator.popUntil(context,
-                                                    (route) {
-                                                  return count++ == 2;
-                                                });
-                                              },
-                                            ).show()
-                                          : AwesomeDialog(
-                                              context: context,
-                                              animType: AnimType.SCALE,
-                                              dialogType: DialogType.ERROR,
-                                              body: Padding(
-                                                padding:
-                                                    const EdgeInsets.all(8.0),
-                                                child: Center(
-                                                  child: Text(
-                                                    'erorr',
-                                                    style: GoogleFonts.sen(
-                                                        color: Theme.of(context)
-                                                            .buttonColor,
-                                                        fontSize: 20,
-                                                        fontWeight:
-                                                            FontWeight.normal),
-                                                  ),
-                                                ),
-                                              ),
-                                              btnOkOnPress: () {
-                                                Navigator.pop(context);
-                                              },
-                                            ).show()
-                                    });
+                                .then((value) =>
+                            {
+                              value == "success"
+                                  ? AwesomeDialog(
+                                context: context,
+                                animType: AnimType.SCALE,
+                                dialogType: DialogType.SUCCES,
+                                body: Padding(
+                                  padding:
+                                  const EdgeInsets.all(8.0),
+                                  child: Center(
+                                    child: Text(
+                                      'Deleted Successfully',
+                                      style: GoogleFonts.sen(
+                                          color: Theme
+                                              .of(context)
+                                              .buttonColor,
+                                          fontSize: 20,
+                                          fontWeight:
+                                          FontWeight.normal),
+                                    ),
+                                  ),
+                                ),
+                                btnOkOnPress: () {
+                                  int count = 0;
+                                  Navigator.popUntil(context,
+                                          (route) {
+                                        return count++ == 2;
+                                      });
+                                },
+                              ).show()
+                                  : AwesomeDialog(
+                                context: context,
+                                animType: AnimType.SCALE,
+                                dialogType: DialogType.ERROR,
+                                body: Padding(
+                                  padding:
+                                  const EdgeInsets.all(8.0),
+                                  child: Center(
+                                    child: Text(
+                                      'erorr',
+                                      style: GoogleFonts.sen(
+                                          color: Theme
+                                              .of(context)
+                                              .buttonColor,
+                                          fontSize: 20,
+                                          fontWeight:
+                                          FontWeight.normal),
+                                    ),
+                                  ),
+                                ),
+                                btnOkOnPress: () {
+                                  Navigator.pop(context);
+                                },
+                              ).show()
+                            });
                           },
                           child: Text(
                             "Delete",

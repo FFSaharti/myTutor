@@ -134,61 +134,67 @@ class _QuestionAnswersScreenStudentState
                               ],
                             )
                           : Expanded(
-                              child: ListView.builder(
-                                itemCount: snapshot.data.docs.length,
-                                itemBuilder: (context, index) {
-                                  DocumentSnapshot myDoc =
-                                      snapshot.data.docs[index];
-                                  return Column(
-                                    children: [
-                                      Villain(
-                                        villainAnimation:
-                                            VillainAnimation.fromBottom(
-                                          from: Duration(milliseconds: from),
-                                          to: Duration(milliseconds: to),
-                                        ),
-                                        child: FutureBuilder(
-                                          future:
-                                              DatabaseAPI.getStreamOfUserbyId(
-                                                  myDoc.data()["Tutor"], 0),
-                                          builder:
-                                              (context, AsyncSnapshot snap) {
-                                            if (snap.hasData) {
-                                              Answer currentAnswer = Answer(
-                                                  myDoc.data()["answer"],
-                                                  Tutor(
-                                                      snap.data["name"],
-                                                      "email",
-                                                      "pass",
-                                                      "aboutMe",
-                                                      "userid",
-                                                      [],
-                                                      snap.data["profileImg"]),
-                                                  myDoc.data()["date"]);
-                                              return GestureDetector(
-                                                  onTap: () {
-                                                    Navigator.push(
-                                                      context,
-                                                      MaterialPageRoute(
-                                                          builder: (context) =>
-                                                              ViewAnswerScreen(
-                                                                  currentAnswer,
-                                                                  this.widget)),
-                                                    );
-                                                  },
-                                                  child: AnswerWidget(
-                                                      widget: widget,
-                                                      answer: currentAnswer));
-                                            }
-                                            from += 100;
-                                            to += 100;
-                                            return Text("");
-                                          },
-                                        ),
-                                      ),
-                                    ],
-                                  );
+                              child: NotificationListener<OverscrollIndicatorNotification>(
+                                // ignore: missing_return
+                                onNotification: (overscroll) {
+                                  overscroll.disallowGlow();
                                 },
+                                child: ListView.builder(
+                                  itemCount: snapshot.data.docs.length,
+                                  itemBuilder: (context, index) {
+                                    DocumentSnapshot myDoc =
+                                        snapshot.data.docs[index];
+                                    return Column(
+                                      children: [
+                                        Villain(
+                                          villainAnimation:
+                                              VillainAnimation.fromBottom(
+                                            from: Duration(milliseconds: from),
+                                            to: Duration(milliseconds: to),
+                                          ),
+                                          child: FutureBuilder(
+                                            future:
+                                                DatabaseAPI.getStreamOfUserbyId(
+                                                    myDoc.data()["Tutor"], 0),
+                                            builder:
+                                                (context, AsyncSnapshot snap) {
+                                              if (snap.hasData) {
+                                                Answer currentAnswer = Answer(
+                                                    myDoc.data()["answer"],
+                                                    Tutor(
+                                                        snap.data["name"],
+                                                        "email",
+                                                        "pass",
+                                                        "aboutMe",
+                                                        "userid",
+                                                        [],
+                                                        snap.data["profileImg"]),
+                                                    myDoc.data()["date"]);
+                                                return GestureDetector(
+                                                    onTap: () {
+                                                      Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                            builder: (context) =>
+                                                                ViewAnswerScreen(
+                                                                    currentAnswer,
+                                                                    this.widget)),
+                                                      );
+                                                    },
+                                                    child: AnswerWidget(
+                                                        widget: widget,
+                                                        answer: currentAnswer));
+                                              }
+                                              from += 100;
+                                              to += 100;
+                                              return Text("");
+                                            },
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                ),
                               ),
                             );
                     },
