@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_villains/villains/villains.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mytutor/classes/document.dart';
 import 'package:mytutor/classes/quiz.dart';
@@ -525,6 +526,9 @@ class _MaterialStreamTutorState extends State<MaterialStreamTutor> {
                                                 },
                                               ).show()
                                       });
+                            }else {
+                              Fluttertoast.showToast(
+                                  msg: "Please fill all of the information");
                             }
                           },
                           child: Text(
@@ -806,6 +810,9 @@ class _MaterialStreamTutorState extends State<MaterialStreamTutor> {
                                                 },
                                               ).show()
                                       });
+                            } else {
+                              Fluttertoast.showToast(
+                                  msg: "Please fill all of the information");
                             }
                           },
                           child: Text(
