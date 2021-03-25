@@ -8,7 +8,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:mytutor/classes/document.dart';
 import 'package:mytutor/classes/quiz.dart';
 import 'package:mytutor/classes/quiz_question.dart';
+import 'package:mytutor/components/add_answer_prompt.dart';
 import 'package:mytutor/components/disable_default_pop.dart';
+import 'package:mytutor/components/type_answer_widget.dart';
 import 'package:mytutor/utilities/constants.dart';
 import 'package:mytutor/utilities/database_api.dart';
 import 'package:mytutor/utilities/screen_size.dart';
@@ -637,8 +639,6 @@ class _CreateMaterialsScreenState extends State<CreateMaterialsScreen> {
   }
 
   void showAddNewQuestion(Function setParentState) {
-    // List<Widget> searchResults = [];
-    // String searchBox = '';
     QuizQuestion tempQuestion = QuizQuestion("", "");
 
     TextEditingController questionTitleController = TextEditingController();
@@ -897,117 +897,5 @@ class _CreateMaterialsScreenState extends State<CreateMaterialsScreen> {
     }
 
     return tempQ;
-  }
-}
-
-// ignore: must_be_immutable
-class AddAnswerPrompt extends StatefulWidget {
-  List<int> answersCounter;
-  Function setModalState;
-  List<bool> showAddAnswer;
-  int showAddAnswerIndex;
-
-  AddAnswerPrompt(this.answersCounter, this.setModalState, this.showAddAnswer,
-      this.showAddAnswerIndex);
-
-  @override
-  _AddAnswerPromptState createState() => _AddAnswerPromptState();
-}
-
-class _AddAnswerPromptState extends State<AddAnswerPrompt> {
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        ListTile(
-          title: Text(
-            "Add Answer",
-            style: GoogleFonts.sen(
-                color: Theme.of(context).buttonColor, fontSize: 17),
-          ),
-          trailing: Padding(
-            padding: const EdgeInsets.only(right: 12.0),
-            child: GestureDetector(
-              onTap: () {
-                widget.setModalState(() {
-                  widget.answersCounter[0]++;
-                  widget.showAddAnswer[widget.showAddAnswerIndex] = true;
-                });
-              },
-              child: Container(
-                child: Icon(
-                  Icons.add_circle_outline,
-                  color: Theme.of(context).accentColor,
-                ),
-              ),
-            ),
-          ),
-        ),
-        Divider(
-          color: Theme.of(context).dividerColor,
-        )
-      ],
-    );
-  }
-}
-
-// ignore: must_be_immutable
-class TypeAnswerWidget extends StatefulWidget {
-  TextEditingController textController;
-  List<int> correctAnswer;
-  Function setModalState;
-  int answerIndex;
-
-  TypeAnswerWidget(this.textController, this.correctAnswer, this.setModalState,
-      this.answerIndex);
-
-  @override
-  _TypeAnswerWidgetState createState() => _TypeAnswerWidgetState();
-}
-
-class _TypeAnswerWidgetState extends State<TypeAnswerWidget> {
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        ListTile(
-          title: TextField(
-            controller: widget.textController,
-            style: TextStyle(color: Theme.of(context).buttonColor),
-            decoration: InputDecoration(
-              focusedBorder: InputBorder.none,
-              enabledBorder: InputBorder.none,
-              hintText: 'Type Answer...',
-              hintStyle: GoogleFonts.sen(
-                  fontSize: 17.0,
-                  color: Theme.of(context).buttonColor.withOpacity(0.75)),
-            ),
-          ),
-          trailing: (widget.correctAnswer[0] == widget.answerIndex)
-              ? IconButton(
-                  icon: Icon(
-                    Icons.check,
-                    color: Colors.green,
-                  ),
-                  onPressed: () {})
-              : IconButton(
-                  icon: Icon(
-                    Icons.cancel,
-                    color: Colors.red,
-                  ),
-                  onPressed: () {
-                    widget.setModalState(() {
-                      widget.correctAnswer[0] = widget.answerIndex;
-                      print("Correct Answer : " +
-                          widget.correctAnswer[0].toString());
-                    });
-                  }),
-        ),
-        Divider(color: Theme.of(context).dividerColor),
-        SizedBox(
-          height: ScreenSize.height * 0.01,
-        ),
-      ],
-    );
   }
 }

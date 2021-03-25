@@ -411,8 +411,8 @@ class _MaterialStreamTutorState extends State<MaterialStreamTutor> {
                     height: ScreenSize.height * 0.0090,
                   ),
                   Text(
-                    "title:",
-                    style: kTitleStyle.copyWith(
+                    "Title:",
+                    style: GoogleFonts.sen(
                         fontSize: 17,
                         fontWeight: FontWeight.normal,
                         color: Theme.of(context).buttonColor),
@@ -431,10 +431,12 @@ class _MaterialStreamTutorState extends State<MaterialStreamTutor> {
                       border: InputBorder.none,
                     ),
                   ),
-                  Divider(),
+                  Divider(
+                    color: Theme.of(context).dividerColor,
+                  ),
                   Text(
-                    "description:",
-                    style: kTitleStyle.copyWith(
+                    "Description:",
+                    style: GoogleFonts.sen(
                         fontSize: 17,
                         fontWeight: FontWeight.normal,
                         color: Theme.of(context).buttonColor),
@@ -451,8 +453,11 @@ class _MaterialStreamTutorState extends State<MaterialStreamTutor> {
                       border: InputBorder.none,
                     ),
                   ),
+                  Divider(
+                    color: Theme.of(context).dividerColor,
+                  ),
                   SizedBox(
-                    height: ScreenSize.height * 0.090,
+                    height: ScreenSize.height * 0.0150,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -624,14 +629,14 @@ class _MaterialStreamTutorState extends State<MaterialStreamTutor> {
     TextEditingController titleController = TextEditingController();
     TextEditingController descController = TextEditingController();
     showModalBottomSheet(
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(top: Radius.circular(25.0))),
+      backgroundColor: Colors.transparent,
       isScrollControlled: true,
       context: context,
       builder: (context) {
         return Container(
-            color: Theme.of(context).scaffoldBackgroundColor,
             height: ScreenSize.height * 0.50,
+            decoration: kCurvedShapeDecoration(
+                Theme.of(context).scaffoldBackgroundColor),
             child: Padding(
               padding: const EdgeInsets.all(15.0),
               child: Column(
@@ -645,7 +650,7 @@ class _MaterialStreamTutorState extends State<MaterialStreamTutor> {
                     child: Center(
                       child: Text(
                         "Edit [" + title + "]",
-                        style: kTitleStyle.copyWith(
+                        style: GoogleFonts.sen(
                             fontSize: 17,
                             fontWeight: FontWeight.normal,
                             color: Theme.of(context).buttonColor),
@@ -656,8 +661,8 @@ class _MaterialStreamTutorState extends State<MaterialStreamTutor> {
                     height: ScreenSize.height * 0.0090,
                   ),
                   Text(
-                    "title:",
-                    style: kTitleStyle.copyWith(
+                    "Title:",
+                    style: GoogleFonts.sen(
                         fontSize: 17,
                         fontWeight: FontWeight.normal,
                         color: Theme.of(context).buttonColor),
@@ -669,16 +674,21 @@ class _MaterialStreamTutorState extends State<MaterialStreamTutor> {
                       print(value);
                     },
                     decoration: InputDecoration(
+                      focusedBorder: InputBorder.none,
+                      enabledBorder: InputBorder.none,
                       hintText: 'Type your new title here....',
-                      hintStyle:
-                          TextStyle(color: Theme.of(context).buttonColor),
+                      hintStyle: GoogleFonts.sen(
+                          color:
+                              Theme.of(context).buttonColor.withOpacity(0.6)),
                       border: InputBorder.none,
                     ),
                   ),
-                  Divider(),
+                  Divider(
+                    color: Theme.of(context).dividerColor,
+                  ),
                   Text(
-                    "description:",
-                    style: kTitleStyle.copyWith(
+                    "Description:",
+                    style: GoogleFonts.sen(
                         fontSize: 17,
                         fontWeight: FontWeight.normal,
                         color: Theme.of(context).buttonColor),
@@ -688,20 +698,26 @@ class _MaterialStreamTutorState extends State<MaterialStreamTutor> {
                     style: TextStyle(color: Theme.of(context).buttonColor),
                     onChanged: (value) {},
                     decoration: InputDecoration(
+                      focusedBorder: InputBorder.none,
+                      enabledBorder: InputBorder.none,
                       hintText: 'Type your new description here....',
-                      hintStyle:
-                          TextStyle(color: Theme.of(context).buttonColor),
+                      hintStyle: GoogleFonts.sen(
+                          color:
+                              Theme.of(context).buttonColor.withOpacity(0.6)),
                       border: InputBorder.none,
                     ),
                   ),
+                  Divider(
+                    color: Theme.of(context).dividerColor,
+                  ),
                   SizedBox(
-                    height: ScreenSize.height * 0.030,
+                    height: ScreenSize.height * 0.010,
                   ),
                   Row(
                     children: [
                       Text(
-                        "questions:",
-                        style: kTitleStyle.copyWith(
+                        "Questions:",
+                        style: GoogleFonts.sen(
                             fontSize: 17,
                             fontWeight: FontWeight.normal,
                             color: Theme.of(context).buttonColor),
@@ -709,7 +725,6 @@ class _MaterialStreamTutorState extends State<MaterialStreamTutor> {
                       Spacer(),
                       GestureDetector(
                         onTap: () {
-                          print("edit questions");
                           Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -720,7 +735,7 @@ class _MaterialStreamTutorState extends State<MaterialStreamTutor> {
                         },
                         child: Icon(
                           Icons.edit,
-                          size: 15,
+                          size: 18,
                           color: Theme.of(context).buttonColor,
                         ),
                       )
@@ -751,14 +766,14 @@ class _MaterialStreamTutorState extends State<MaterialStreamTutor> {
                                                       const EdgeInsets.all(8.0),
                                                   child: Center(
                                                     child: Text(
-                                                      'Updated successfully',
-                                                      style:
-                                                          kTitleStyle.copyWith(
-                                                              color: kBlackish,
-                                                              fontSize: 20,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .normal),
+                                                      'Updated Successfully',
+                                                      style: GoogleFonts.sen(
+                                                          color:
+                                                              Theme.of(context)
+                                                                  .buttonColor,
+                                                          fontSize: 20,
+                                                          fontWeight: FontWeight
+                                                              .normal),
                                                     ),
                                                   ),
                                                 ),
@@ -775,14 +790,14 @@ class _MaterialStreamTutorState extends State<MaterialStreamTutor> {
                                                       const EdgeInsets.all(8.0),
                                                   child: Center(
                                                     child: Text(
-                                                      'erorr',
-                                                      style:
-                                                          kTitleStyle.copyWith(
-                                                              color: kBlackish,
-                                                              fontSize: 20,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .normal),
+                                                      'Error Occured',
+                                                      style: GoogleFonts.sen(
+                                                          color:
+                                                              Theme.of(context)
+                                                                  .buttonColor,
+                                                          fontSize: 20,
+                                                          fontWeight: FontWeight
+                                                              .normal),
                                                     ),
                                                   ),
                                                 ),
@@ -824,9 +839,10 @@ class _MaterialStreamTutorState extends State<MaterialStreamTutor> {
                                                     const EdgeInsets.all(8.0),
                                                 child: Center(
                                                   child: Text(
-                                                    'Deleted successfully',
-                                                    style: kTitleStyle.copyWith(
-                                                        color: kBlackish,
+                                                    'Deleted Successfully',
+                                                    style: GoogleFonts.sen(
+                                                        color: Theme.of(context)
+                                                            .buttonColor,
                                                         fontSize: 20,
                                                         fontWeight:
                                                             FontWeight.normal),
@@ -851,8 +867,9 @@ class _MaterialStreamTutorState extends State<MaterialStreamTutor> {
                                                 child: Center(
                                                   child: Text(
                                                     'erorr',
-                                                    style: kTitleStyle.copyWith(
-                                                        color: kBlackish,
+                                                    style: GoogleFonts.sen(
+                                                        color: Theme.of(context)
+                                                            .buttonColor,
                                                         fontSize: 20,
                                                         fontWeight:
                                                             FontWeight.normal),
