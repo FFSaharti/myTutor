@@ -4,7 +4,7 @@ import 'package:flutter_villains/villains/villains.dart';
 import 'package:mytutor/screens/login_screen.dart';
 import 'package:mytutor/screens/signup_screen.dart';
 import 'package:mytutor/screens/student_screens/ask_screen_student.dart';
-import 'package:mytutor/screens/student_screens/homepage_screen_student.dart';
+import 'package:mytutor/screens/student_screens/homepage_student.dart';
 import 'package:mytutor/screens/student_screens/request_tutor_screen.dart';
 import 'package:mytutor/screens/student_screens/view_materials_screen.dart';
 import 'package:mytutor/screens/tour_screen.dart';

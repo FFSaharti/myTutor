@@ -7,7 +7,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mytutor/components/circular_button.dart';
 import 'package:mytutor/components/disable_default_pop.dart';
-import 'package:mytutor/screens/student_screens/homepage_screen_student.dart';
+import 'package:mytutor/screens/student_screens/homepage_student.dart';
 import 'package:mytutor/screens/welcome_screen.dart';
 import 'package:mytutor/utilities/constants.dart';
 import 'package:mytutor/utilities/database_api.dart';

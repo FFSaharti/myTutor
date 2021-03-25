@@ -6,7 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:mytutor/components/disable_default_pop.dart';
 import 'package:mytutor/components/session_stream_widget.dart';
 import 'package:mytutor/screens/adjust_general_settings_screen.dart';
-import 'package:mytutor/screens/student_screens/profile_student_screen.dart';
+import 'package:mytutor/screens/student_screens/student_profile.dart';
 import 'package:mytutor/screens/student_screens/student_options.dart';
 import 'package:mytutor/utilities/constants.dart';
 import 'package:mytutor/utilities/screen_size.dart';
