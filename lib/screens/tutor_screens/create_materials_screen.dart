@@ -526,6 +526,8 @@ class _CreateMaterialsScreenState extends State<CreateMaterialsScreen> {
                         },
                       ).show(),
               });
+    } else {
+      Fluttertoast.showToast(msg: "Please fill all of the information");
     }
   }
 
