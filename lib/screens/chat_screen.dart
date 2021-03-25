@@ -277,7 +277,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                     File _file;
                                     try {
                                       file.files.single.path == null
-                                          ? print("hello")
+                                          ? ""
                                           : _file =
                                               File(file.files.single.path);
                                       DatabaseAPI.uploadImageToStorage(
@@ -285,11 +285,12 @@ class _ChatScreenState extends State<ChatScreen> {
                                               widget.currentsession.session_id,
                                               SessionManager.loggedInUser.name)
                                           .then((value) => {
+                                            value == "done" ? print('') : Fluttertoast.showToast(msg: "we couldn't upload the image right now. check your connection and try again"),
                                                 refresh(),
                                               });
                                     } catch (e) {
+                                      Fluttertoast.showToast(msg: "Please choose image to upload");
                                       refresh();
-                                      print('never reached');
                                     }
                                   },
                           ),

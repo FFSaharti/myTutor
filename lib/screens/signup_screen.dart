@@ -92,7 +92,7 @@ class _SignupScreenState extends State<SignupScreen> {
                             FilePickerResult file = await FilePicker.platform
                                 .pickFiles(type: FileType.image);
                             file == null
-                                ? null
+                                ? Fluttertoast.showToast(msg: "Please choose image to upload if you want to set it as your profile image")
                                 : _file = File(file.files.single.path);
                             DatabaseAPI.tempFile = _file;
                           },

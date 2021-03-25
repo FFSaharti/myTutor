@@ -463,10 +463,9 @@ class _CreateMaterialsScreenState extends State<CreateMaterialsScreen> {
   }
 
   getFilesFromLocalStorage() async {
-    String filename = "hello";
     FilePickerResult file =
         await FilePicker.platform.pickFiles(type: FileType.any);
-    file == null ? null : _file = File(file.files.single.path);
+    file == null ?  Fluttertoast.showToast(msg: "Please choose file to upload") : _file = File(file.files.single.path);
   }
 
   // CREATE QUIZ
