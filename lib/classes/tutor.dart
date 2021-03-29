@@ -3,9 +3,7 @@ import 'package:mytutor/classes/user.dart';
 
 class Tutor extends MyUser {
   List<dynamic> _experiences = [];
-  // List<Material> bookmarkedMaterials
-  // List<Session> sessions;
-    List<Rate> _rates = [];
+  List<Rate> _rates = [];
 
   List<Rate> get rates => _rates;
 
@@ -14,8 +12,8 @@ class Tutor extends MyUser {
   }
 
   Tutor(String name, String email, String pass, String aboutMe, String userid,
-      List<int> experiences,Profileimg)
-      : super(name, email, pass, aboutMe, userid,Profileimg);
+      List<int> experiences, Profileimg)
+      : super(name, email, pass, aboutMe, userid, Profileimg);
 
   List<dynamic> get experiences => _experiences;
 
