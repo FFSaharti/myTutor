@@ -52,24 +52,30 @@ class _RequestTutorScreenState extends State<RequestTutorScreen> {
     return response;
   }
 
-  fetchRates(Tutor tutor) {
+  fetchRates() {
     Timestamp stamptemp;
-    DatabaseAPI.getTutorRates(tutor.userId).then((value) => {
-          for (var rate in value.docs)
-            {
-              stamptemp = rate.data()["rateDate"],
-              tutorRates.add(Rate(
-                rate.data()["review"],
-                rate.data()["teachingSkills"],
-                rate.data()["friendliness"],
-                rate.data()["communication"],
-                rate.data()["creativity"],
-                stamptemp.toDate(),
-                rate.data()["sessionTitle"],
-              )),
-              tutor.rates = tutorRates,
-            }
-        });
+    for (var tutor in tutors){
+      DatabaseAPI.getTutorRates(tutor.userId).then((value) => {
+        for (var rate in value.docs)
+          {
+            stamptemp = rate.data()["rateDate"],
+            tutorRates.add(Rate(
+              rate.data()["review"],
+              rate.data()["teachingSkills"],
+              rate.data()["friendliness"],
+              rate.data()["communication"],
+              rate.data()["creativity"],
+              stamptemp.toDate(),
+              rate.data()["sessionTitle"],
+            )),
+
+          },
+        tutor.rates = tutorRates,
+        tutorRates=[],
+
+      });
+    }
+
   }
 
   void initState() {
@@ -95,7 +101,7 @@ class _RequestTutorScreenState extends State<RequestTutorScreen> {
     }).whenComplete(() => {
           for (var tutor in tutors)
             {
-              fetchRates(tutor),
+              fetchRates(),
             }
         });
 

@@ -297,12 +297,16 @@ class _AnswerWidgetState extends State<AnswerWidget> {
                   ),
                   Container(
                     height: ScreenSize.height * 0.027,
-                    child: Text(
-                      widget.answer.answer,
-                      overflow: TextOverflow.ellipsis,
-                      softWrap: false,
-                      style: GoogleFonts.sen(
-                          fontSize: 14, color: Theme.of(context).buttonColor),
+                    child: SizedBox(
+                      width: ScreenSize.width*0.50,
+                      child: Text(
+                        widget.answer.answer,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                        softWrap: true,
+                        style: GoogleFonts.sen(
+                            fontSize: 14, color: Theme.of(context).buttonColor),
+                      ),
                     ),
                   ),
                   Container(

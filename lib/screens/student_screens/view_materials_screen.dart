@@ -108,7 +108,7 @@ class _ViewMaterialsScreenState extends State<ViewMaterialsScreen> {
   void searchFilter(String searchValue) {
     setState(() {
       searchedMaterials =
-          materials.where((doc) => doc.title.contains(searchValue)).toList();
+          materials.where((doc) => doc.title.toLowerCase().contains(searchValue.toLowerCase())).toList();
     });
   }
 

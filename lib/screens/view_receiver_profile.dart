@@ -658,39 +658,7 @@ class _ViewProfileStudentState extends State<ViewProfileStudent> {
                 SizedBox(
                   height: ScreenSize.height * 0.01,
                 ),
-                Container(
-                  height: ScreenSize.height * 0.5,
-                  child: Column(
-                    children: [
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.favorite_sharp,
-                            size: 18,
-                          ),
-                          SizedBox(
-                            width: ScreenSize.width * 0.02,
-                          ),
-                          Text(
-                            "Bookmarked Materials",
-                            style: TextStyle(
-                                fontSize: 18,
-                                color: Theme.of(context).buttonColor),
-                          )
-                        ],
-                      ),
-                      SizedBox(
-                        height: ScreenSize.height * 0.01,
-                      ),
-                      Container(
-                        height: ScreenSize.height * 0.4,
-                        child: ListView(
-                          children: getFavDocs(),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
+
               ],
             ),
           ),

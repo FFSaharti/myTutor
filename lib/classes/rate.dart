@@ -58,8 +58,11 @@ class Rate {
   static double getAverageRate(List<Rate> totalRates){
     double sum = 0;
     for(int i = 0 ; i < totalRates.length ; i++){
+
       sum += totalRates.elementAt(i).creativity+totalRates.elementAt(i).friendliness+totalRates.elementAt(i).communicationSkills+totalRates.elementAt(i).teachingSkills;
     }
+   // print(sum);
+   // print("the total lenght is "+totalRates.length.toString());
     return sum/ (totalRates.length * 4);
   }
   static double getAverageRateForCreativity(List<Rate> totalRates){

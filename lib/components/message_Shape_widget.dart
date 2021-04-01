@@ -67,39 +67,34 @@ class _MessageShapeState extends State<MessageShape> {
                       width: 150,
                     ),
                   ))
-              : Row(
-                  mainAxisAlignment: widget.SameUser
-                      ? MainAxisAlignment.end
-                      : MainAxisAlignment.start,
-                  children: [
-                    Material(
-                      borderRadius: widget.SameUser
-                          ? BorderRadius.only(
-                              topLeft: Radius.circular(20.0),
-                              bottomLeft: Radius.circular(30.0),
-                              bottomRight: Radius.circular(0.0))
-                          : BorderRadius.only(
-                              bottomLeft: Radius.circular(30.0),
-                              bottomRight: Radius.circular(30.0),
-                              topRight: Radius.circular(30.0),
-                            ),
-                      elevation: 3.0,
-                      color: widget.SameUser ? kColorScheme[1] : Colors.white,
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(
-                            vertical: 10.0, horizontal: 20.0),
-                        child: Text(
-                          widget.text,
-                          style: GoogleFonts.sen(
-                            color:
-                                widget.SameUser ? Colors.white : Colors.black54,
-                            fontSize: 15.0,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
+              :  Material(
+            borderRadius: widget.SameUser
+                ? BorderRadius.only(
+                topLeft: Radius.circular(20.0),
+                bottomLeft: Radius.circular(30.0),
+                bottomRight: Radius.circular(0.0))
+                : BorderRadius.only(
+              bottomLeft: Radius.circular(30.0),
+              bottomRight: Radius.circular(30.0),
+              topRight: Radius.circular(30.0),
+            ),
+            elevation: 3.0,
+            color: widget.SameUser ? kColorScheme[1] : Colors.white,
+            child: Padding(
+              padding: EdgeInsets.symmetric(
+                  vertical: 10.0, horizontal: 20.0),
+              child: Container(
+                child: Text(
+                  widget.text,
+                  style: GoogleFonts.sen(
+                    color:
+                    widget.SameUser ? Colors.white : Colors.black54,
+                    fontSize: 15.0,
+                  ),
                 ),
+              ),
+            ),
+          ),
 
           SizedBox(
             height: ScreenSize.height * 0.005,
