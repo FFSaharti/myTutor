@@ -37,6 +37,7 @@ class TutorApp extends StatelessWidget {
             themeMode: themeProvider.currentTheme,
             darkTheme: MyTheme.darkTheme,
             theme: MyTheme.lightTheme,
+            debugShowCheckedModeBanner: false,
             navigatorObservers: [new VillainTransitionObserver()],
             // Using Named Routes to specify all the screens in the app
             initialRoute: SplashScreen.id,

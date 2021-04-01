@@ -356,7 +356,6 @@ class DatabaseAPI {
   static Future<String> createTutor(tutorEmail) async {
     List<int> subjectIDs = getSubjects();
 
-    // check the file
     if (tempFile == null)
       tempUser.profileImag == "";
     else {
@@ -535,8 +534,12 @@ class DatabaseAPI {
   }
 
   static String saveNewMessage(String sessionid, String msg, String sender) {
-    try{
-      _firestore.collection("session").doc(sessionid).collection("messages").add({
+    try {
+      _firestore
+          .collection("session")
+          .doc(sessionid)
+          .collection("messages")
+          .add({
         'text': msg,
         'sender': sender,
         'time': DateTime.now(),
@@ -546,10 +549,9 @@ class DatabaseAPI {
         'timeOfLastMessage': DateTime.now(),
       });
       return 'success';
-    } on FirebaseException catch(e){
+    } on FirebaseException catch (e) {
       return 'error';
     }
-
   }
 
   static Future<String> saveNewMessageAsImage(
@@ -701,7 +703,6 @@ class DatabaseAPI {
         .where("email", isEqualTo: loggedInStudent.email)
         .get()
         .then((value) async => {
-              print("PRINTED STUDENT IS ---> " + value.docs.single.id),
               await _firestore.collection("Question").add({
                 "title": questionTitle,
                 "subject": chosenSubject,
@@ -718,7 +719,6 @@ class DatabaseAPI {
                     questionID = value
                         .toString()
                         .substring(27, value.toString().length - 1),
-                    print("QUESTION ID IS --> " + questionID),
                   }),
               loggedInStudent.addQuestion(Question(
                   questionTitle,
@@ -840,12 +840,6 @@ class DatabaseAPI {
                     })
                   });
             }),
-
-            // _firestore
-            //     .collection("Tutor")
-            //     .doc(userId)
-            //     .collection("Materials")
-            //     .add({'type': 2, 'quizId': quiz.id})
           });
       return "done";
     } on FirebaseException catch (e) {
