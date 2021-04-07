@@ -97,6 +97,7 @@ class AdjustGeneralSettings extends StatelessWidget {
                                   WelcomeScreen()));
                     },
                     child: Card(
+                      key: const ValueKey("log_out"),
                       elevation: 2.5,
                       color: Colors.red,
                       shape: RoundedRectangleBorder(

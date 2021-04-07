@@ -219,7 +219,6 @@ class _SessionCardWidgetState extends State<SessionCardWidget> {
 
   @override
   Widget build(BuildContext context) {
-    print("im here in card , the tutor id is ::"+ widget.session.tutor.userId);
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: GestureDetector(

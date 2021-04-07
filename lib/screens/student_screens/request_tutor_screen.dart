@@ -123,6 +123,7 @@ class _RequestTutorScreenState extends State<RequestTutorScreen> {
             children: [
               ListTile(
                 title: TextField(
+                  key: const ValueKey("request_search_bar"),
                   controller: searchController,
                   onChanged: (value) {
                     VillainController.playAllVillains(context);
@@ -215,8 +216,11 @@ class _RequestTutorScreenState extends State<RequestTutorScreen> {
                             to: Duration(
                                 milliseconds: toDurationAnimationConter),
                           ),
-                          child: TutorWidget(
-                              tutor: searchedTutors.elementAt(index)),
+                          child: Container(
+                            key: const ValueKey("tutor_widget"),
+                            child: TutorWidget(
+                                tutor: searchedTutors.elementAt(index)),
+                          ),
                         );
                       },
                     ),
@@ -535,21 +539,24 @@ class _TutorWidgetState extends State<TutorWidget> {
             SizedBox(
               height: ScreenSize.height * 0.01,
             ),
-            CircularButton(
-              width: ScreenSize.width * 0.4,
-              height: ScreenSize.height * 0.04,
-              fontSize: 18,
-              buttonColor: kColorScheme[1],
-              textColor: Colors.white,
-              isGradient: false,
-              colors: null,
-              buttonText: "Request",
-              hasBorder: false,
-              borderColor: null,
-              onPressed: () {
-                DatabaseAPI.resetInterests();
-                showbutton(widget.tutor);
-              },
+            Container(
+              key:  const ValueKey("request_tutor_button"),
+              child: CircularButton(
+                width: ScreenSize.width * 0.4,
+                height: ScreenSize.height * 0.04,
+                fontSize: 18,
+                buttonColor: kColorScheme[1],
+                textColor: Colors.white,
+                isGradient: false,
+                colors: null,
+                buttonText: "Request",
+                hasBorder: false,
+                borderColor: null,
+                onPressed: () {
+                  DatabaseAPI.resetInterests();
+                  showbutton(widget.tutor);
+                },
+              ),
             ),
           ],
         ),
@@ -624,6 +631,7 @@ class _TutorWidgetState extends State<TutorWidget> {
                                       color: Theme.of(context).buttonColor),
                                 ),
                                 IconButton(
+                                  key: const ValueKey("insert_session"),
                                   icon: Icon(Icons.check),
                                   onPressed: () {
                                     if (titleController.text.isNotEmpty &&
@@ -767,6 +775,7 @@ class _TutorWidgetState extends State<TutorWidget> {
                                     ),
                                   ),
                                   TextField(
+                                    key: const ValueKey("session_title"),
                                     style: TextStyle(
                                         color: Theme.of(context).buttonColor),
                                     controller: titleController,
@@ -791,6 +800,7 @@ class _TutorWidgetState extends State<TutorWidget> {
                                     ),
                                   ),
                                   TextField(
+                                    key: const ValueKey("session_description"),
                                     style: TextStyle(
                                         color: Theme.of(context).buttonColor),
                                     controller: problemController,
@@ -824,6 +834,7 @@ class _TutorWidgetState extends State<TutorWidget> {
                                         child: Icon(
                                           Icons.date_range,
                                           color: Theme.of(context).buttonColor,
+                                          key: const ValueKey("date_picker"),
                                         ),
                                         onTap: () {
                                           showDatePicker(
@@ -957,6 +968,7 @@ class _TutorWidgetState extends State<TutorWidget> {
                                             Icons.access_time,
                                             color:
                                                 Theme.of(context).buttonColor,
+                                            key: const ValueKey("time_picker"),
                                           )),
                                       hintText: '12:01 pm...',
                                       hintStyle: TextStyle(
@@ -983,6 +995,7 @@ class _TutorWidgetState extends State<TutorWidget> {
                                         height: ScreenSize.height * 0.01,
                                       ),
                                       TextField(
+                                        key: const ValueKey("session_subject_field"),
                                         onChanged: (value) {
                                           setModalState(() {
                                             searchBox = value;
@@ -1096,6 +1109,7 @@ class _InterestWidgetState extends State<InterestWidget> {
         ],
       ),
       child: GestureDetector(
+        key: const ValueKey("interest_widget"),
         onTap: () {
           setState(() {
             if (widget.setModalState != null) {

@@ -44,6 +44,7 @@ class WelcomeScreen extends StatelessWidget {
                 ),
               ),
               SizedBox(
+
                 width: ScreenSize.width,
                 child: TypewriterAnimatedTextKit(
                   speed: Duration(milliseconds: 200),
@@ -84,6 +85,7 @@ class WelcomeScreen extends StatelessWidget {
                                 height: ScreenSize.height * 0.05,
                               ),
                               Villain(
+
                                 villainAnimation: VillainAnimation.fromLeft(
                                   from: Duration(milliseconds: 100),
                                   to: Duration(milliseconds: 400),
@@ -91,30 +93,33 @@ class WelcomeScreen extends StatelessWidget {
                                 animateExit: false,
                                 child: Align(
                                   alignment: Alignment.centerLeft,
-                                  child: CircularButton(
-                                    width: ScreenSize.width * 0.9,
-                                    buttonColor: null,
-                                    textColor: Colors.white,
-                                    isGradient: true,
-                                    colors: [
-                                      kColorScheme[1],
-                                      kColorScheme[2],
-                                      kColorScheme[3],
-                                      kColorScheme[4]
-                                    ],
-                                    buttonText: 'Sign In',
-                                    hasBorder: true,
-                                    borderColor: kColorScheme[3],
-                                    onPressed: () {
-                                      Navigator.push(
-                                        context,
-                                        PageTransition(
-                                          type: PageTransitionType.bottomToTop,
-                                          duration: Duration(milliseconds: 200),
-                                          child: LoginScreen(),
-                                        ),
-                                      );
-                                    },
+                                  child: Container(
+                                    key: const ValueKey("sign_in"),
+                                    child: CircularButton(
+                                      width: ScreenSize.width * 0.9,
+                                      buttonColor: null,
+                                      textColor: Colors.white,
+                                      isGradient: true,
+                                      colors: [
+                                        kColorScheme[1],
+                                        kColorScheme[2],
+                                        kColorScheme[3],
+                                        kColorScheme[4]
+                                      ],
+                                      buttonText: 'Sign In',
+                                      hasBorder: true,
+                                      borderColor: kColorScheme[3],
+                                      onPressed: () {
+                                        Navigator.push(
+                                          context,
+                                          PageTransition(
+                                            type: PageTransitionType.bottomToTop,
+                                            duration: Duration(milliseconds: 200),
+                                            child: LoginScreen(),
+                                          ),
+                                        );
+                                      },
+                                    ),
                                   ),
                                 ),
                               ),

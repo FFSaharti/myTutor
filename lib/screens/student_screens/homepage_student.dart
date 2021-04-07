@@ -49,6 +49,7 @@ class _HomepageScreenStudentState extends State<HomepageScreenStudent> {
     return DisableDefaultPop(
       child: Scaffold(
         bottomNavigationBar: BottomNavyBar(
+          key: const ValueKey("bottom_bar"),
           backgroundColor: Theme.of(context).cardColor,
           selectedIndex: _currentIndex,
           showElevation: true,
@@ -86,6 +87,7 @@ class _HomepageScreenStudentState extends State<HomepageScreenStudent> {
               icon: Icon(
                 FontAwesomeIcons.chalkboardTeacher,
                 color: Theme.of(context).appBarTheme.iconTheme.color,
+                key: const ValueKey("student_bottom_bar"),
               ),
               title: Text(
                 'Student',
@@ -134,6 +136,7 @@ class _HomepageScreenStudentState extends State<HomepageScreenStudent> {
               icon: Icon(
                 Icons.settings,
                 color: Theme.of(context).appBarTheme.iconTheme.color,
+                key: const ValueKey("settings_bottom_bar"),
               ),
               title: Text(
                 'Settings',
@@ -229,12 +232,15 @@ class _HomePageStudentState extends State<HomePageStudent> {
                       controller: _pageController,
                       children: [
                         mainScreenPage(
-                            SessionStream(
-                              status: "active",
-                              type: 0,
-                              checkexpire: false,
-                              isStudent: true,
-                              expiredSessionView: false,
+                            Container(
+                              key: const ValueKey("sessions"),
+                              child: SessionStream(
+                                status: "active",
+                                type: 0,
+                                checkexpire: false,
+                                isStudent: true,
+                                expiredSessionView: false,
+                              ),
                             ),
                             "Upcoming Sessions"),
                         mainScreenPage(

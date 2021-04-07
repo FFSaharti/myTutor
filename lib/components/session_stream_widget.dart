@@ -92,19 +92,22 @@ class SessionStream extends StatelessWidget {
                                         .forEach((element) {
                                       tempTutor.addExperience(element);
                                     });
-                                    return SessionCardWidget(
-                                      isStudent: isStudent,
-                                      height: ScreenSize.height,
-                                      session: Session(
-                                          myDoc.data()["title"],
-                                          tempTutor,
-                                          SessionManager.loggedInStudent,
-                                          myDoc.id,
-                                          myDoc.data()["time"],
-                                          dateHolder.toDate(),
-                                          myDoc.data()["description"],
-                                          myDoc.data()["status"],
-                                          myDoc.data()["subject"]),
+                                    return Container(
+                                      key: const ValueKey("first_session"),
+                                      child: SessionCardWidget(
+                                        isStudent: isStudent,
+                                        height: ScreenSize.height,
+                                        session: Session(
+                                            myDoc.data()["title"],
+                                            tempTutor,
+                                            SessionManager.loggedInStudent,
+                                            myDoc.id,
+                                            myDoc.data()["time"],
+                                            dateHolder.toDate(),
+                                            myDoc.data()["description"],
+                                            myDoc.data()["status"],
+                                            myDoc.data()["subject"]),
+                                      ),
                                     );
                                   } else {
                                     Timestamp dateHolder = myDoc.data()["date"];

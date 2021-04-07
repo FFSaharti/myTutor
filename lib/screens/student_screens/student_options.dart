@@ -51,16 +51,18 @@ class _StudentSectionState extends State<StudentSection> {
                       from: Duration(milliseconds: 0),
                       to: Duration(milliseconds: 600),
                     ),
-                    child: StudentSectionWidget(
-                      widget: widget,
-                      onClick: () {
-                        print("clicked ASK");
-                        Navigator.pushNamed(context, AskScreenStudent.id);
-                      },
-                      imgPath: "images/Student_Section/Ask_Logo.png",
-                      title: "Ask",
-                      description:
-                          "Post questions that can be viewed and \nanswered by tutors!",
+                    child: Container(
+                      child: StudentSectionWidget(
+                        widget: widget,
+                        onClick: () {
+                          print("clicked ASK");
+                          Navigator.pushNamed(context, AskScreenStudent.id);
+                        },
+                        imgPath: "images/Student_Section/Ask_Logo.png",
+                        title: "Ask",
+                        description:
+                            "Post questions that can be viewed and \nanswered by tutors!",
+                      ),
                     ),
                   ),
                   SizedBox(
@@ -71,16 +73,19 @@ class _StudentSectionState extends State<StudentSection> {
                       from: Duration(milliseconds: 300),
                       to: Duration(milliseconds: 700),
                     ),
-                    child: StudentSectionWidget(
-                      widget: widget,
-                      onClick: () {
-                        print("clicked REQUEST");
-                        Navigator.pushNamed(context, RequestTutorScreen.id);
-                      },
-                      imgPath: "images/Student_Section/Request_Logo.png",
-                      title: "Request",
-                      description:
-                          "Search for Tutors with a variety of \nfilters and request them!",
+                    child: Container(
+                      key: const ValueKey("request_button"),
+                      child: StudentSectionWidget(
+                        widget: widget,
+                        onClick: () {
+                          print("clicked REQUEST");
+                          Navigator.pushNamed(context, RequestTutorScreen.id);
+                        },
+                        imgPath: "images/Student_Section/Request_Logo.png",
+                        title: "Request",
+                        description:
+                            "Search for Tutors with a variety of \nfilters and request them!",
+                      ),
                     ),
                   ),
                   SizedBox(
@@ -91,16 +96,18 @@ class _StudentSectionState extends State<StudentSection> {
                       from: Duration(milliseconds: 300),
                       to: Duration(milliseconds: 700),
                     ),
-                    child: StudentSectionWidget(
-                      widget: widget,
-                      onClick: () {
-                        print("clicked MATERIALS");
-                        Navigator.pushNamed(context, ViewMaterialsScreen.id);
-                      },
-                      imgPath: "images/Student_Section/Materials_Logo.png",
-                      title: "Materials",
-                      description:
-                          "Search for Materials posted by \nother Tutors and bookmark them",
+                    child: Container(
+                      child: StudentSectionWidget(
+                        widget: widget,
+                        onClick: () {
+                          print("clicked MATERIALS");
+                          Navigator.pushNamed(context, ViewMaterialsScreen.id);
+                        },
+                        imgPath: "images/Student_Section/Materials_Logo.png",
+                        title: "Materials",
+                        description:
+                            "Search for Materials posted by \nother Tutors and bookmark them",
+                      ),
                     ),
                   )
                 ],

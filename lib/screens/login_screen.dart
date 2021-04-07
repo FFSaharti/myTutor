@@ -101,22 +101,25 @@ class _LoginScreenState extends State<LoginScreen> {
                       from: Duration(milliseconds: 200),
                       to: Duration(milliseconds: 500),
                     ),
-                    child: TextFieldWidget(
-                      hintText: 'Email',
-                      isPassword: false,
-                      obscureText: false,
-                      prefixIconData: Icons.mail_outline,
-                      colorScheme: Theme.of(context).primaryColorDark,
-                      suffixIcon: Validator.isValidEmail(email)
-                          ? Icon(Icons.check,
-                              color: Theme.of(context).primaryColorDark)
-                          : Icon(Icons.check, color: Colors.transparent),
-                      onChanged: (value) {
-                        setState(() {
-                          email = value;
-                        });
-                        Validator.isValidEmail(value);
-                      },
+                    child: Container(
+                      key: const ValueKey("login_field"),
+                      child: TextFieldWidget(
+                        hintText: 'Email',
+                        isPassword: false,
+                        obscureText: false,
+                        prefixIconData: Icons.mail_outline,
+                        colorScheme: Theme.of(context).primaryColorDark,
+                        suffixIcon: Validator.isValidEmail(email)
+                            ? Icon(Icons.check,
+                                color: Theme.of(context).primaryColorDark)
+                            : Icon(Icons.check, color: Colors.transparent),
+                        onChanged: (value) {
+                          setState(() {
+                            email = value;
+                          });
+                          Validator.isValidEmail(value);
+                        },
+                      ),
                     ),
                   ),
                   SizedBox(
@@ -127,20 +130,23 @@ class _LoginScreenState extends State<LoginScreen> {
                       from: Duration(milliseconds: 200),
                       to: Duration(milliseconds: 500),
                     ),
-                    child: TextFieldWidget(
-                      hintText: 'Password',
-                      obscureText: LoginScreen.passwordVisible,
-                      prefixIconData: Icons.lock,
-                      suffixIcon: LoginScreen.passwordVisible
-                          ? Icon(Icons.visibility)
-                          : Icon(Icons.visibility_off),
-                      colorScheme: Theme.of(context).primaryColorDark,
-                      isPassword: true,
-                      onChanged: (value) {
-                        setState(() {
-                          password = value;
-                        });
-                      },
+                    child: Container(
+                      key: const ValueKey("password_field"),
+                      child: TextFieldWidget(
+                        hintText: 'Password',
+                        obscureText: LoginScreen.passwordVisible,
+                        prefixIconData: Icons.lock,
+                        suffixIcon: LoginScreen.passwordVisible
+                            ? Icon(Icons.visibility)
+                            : Icon(Icons.visibility_off),
+                        colorScheme: Theme.of(context).primaryColorDark,
+                        isPassword: true,
+                        onChanged: (value) {
+                          setState(() {
+                            password = value;
+                          });
+                        },
+                      ),
                     ),
                   ),
                   SizedBox(
@@ -164,61 +170,64 @@ class _LoginScreenState extends State<LoginScreen> {
                   SizedBox(
                     height: ScreenSize.height * 0.05,
                   ),
-                  CircularButton(
-                      width: ScreenSize.width * 0.9,
-                      buttonColor: Theme.of(context).cardColor,
-                      textColor: Theme.of(context).accentColor,
-                      isGradient: false,
-                      colors: [
-                        kColorScheme[1],
-                        kColorScheme[2],
-                        kColorScheme[3],
-                        kColorScheme[4]
-                      ],
-                      buttonText: 'Sign In',
-                      hasBorder: true,
-                      borderColor: Theme.of(context).primaryColor,
-                      onPressed: () {
-                        beginLoading();
-                        DatabaseAPI.userLogin(email, password).then((value) => {
-                              // Calling the api to login to the system
-                              if (value == "Student Login")
-                                {
-                                  // if the information provided belongs to a student, proceed to the student page
-                                  Future.delayed(Duration(milliseconds: 100),
-                                      () {
-                                    Fluttertoast.showToast(
-                                        msg: 'Signed in as ' +
-                                            SessionManager
-                                                .loggedInStudent.name);
-                                    Navigator.pushNamed(
-                                        context, HomepageScreenStudent.id);
-                                  })
-                                }
-                              else if (value == "Tutor Login")
-                                {
-                                  // if the information provided belongs to a tutor, proceed to the student page
-                                  Future.delayed(Duration(milliseconds: 100),
-                                      () {
-                                    Fluttertoast.showToast(
-                                        msg: 'Signed in as ' +
-                                            SessionManager.loggedInTutor.name);
-                                    Navigator.pushNamed(
-                                        context, HomepageScreenTutor.id);
-                                  })
-                                }
-                              else
-                                {
-                                  // If the user is not found, show a toast of the message
-                                  Future.delayed(Duration(milliseconds: 1000),
-                                      () {
-                                    stopLoading(); // stops the loading indicator
-                                    Fluttertoast.showToast(
-                                        msg: 'Invalid Email/Password');
-                                  })
-                                }
-                            });
-                      }),
+                  Container(
+                    key: const ValueKey("sign_in_button"),
+                    child: CircularButton(
+                        width: ScreenSize.width * 0.9,
+                        buttonColor: Theme.of(context).cardColor,
+                        textColor: Theme.of(context).accentColor,
+                        isGradient: false,
+                        colors: [
+                          kColorScheme[1],
+                          kColorScheme[2],
+                          kColorScheme[3],
+                          kColorScheme[4]
+                        ],
+                        buttonText: 'Sign In',
+                        hasBorder: true,
+                        borderColor: Theme.of(context).primaryColor,
+                        onPressed: () {
+                          beginLoading();
+                          DatabaseAPI.userLogin(email, password).then((value) => {
+                                // Calling the api to login to the system
+                                if (value == "Student Login")
+                                  {
+                                    // if the information provided belongs to a student, proceed to the student page
+                                    Future.delayed(Duration(milliseconds: 100),
+                                        () {
+                                      Fluttertoast.showToast(
+                                          msg: 'Signed in as ' +
+                                              SessionManager
+                                                  .loggedInStudent.name);
+                                      Navigator.pushNamed(
+                                          context, HomepageScreenStudent.id);
+                                    })
+                                  }
+                                else if (value == "Tutor Login")
+                                  {
+                                    // if the information provided belongs to a tutor, proceed to the student page
+                                    Future.delayed(Duration(milliseconds: 100),
+                                        () {
+                                      Fluttertoast.showToast(
+                                          msg: 'Signed in as ' +
+                                              SessionManager.loggedInTutor.name);
+                                      Navigator.pushNamed(
+                                          context, HomepageScreenTutor.id);
+                                    })
+                                  }
+                                else
+                                  {
+                                    // If the user is not found, show a toast of the message
+                                    Future.delayed(Duration(milliseconds: 1000),
+                                        () {
+                                      stopLoading(); // stops the loading indicator
+                                      Fluttertoast.showToast(
+                                          msg: 'Invalid Email/Password');
+                                    })
+                                  }
+                              });
+                        }),
+                  ),
                   SizedBox(
                     height: ScreenSize.height * 0.05,
                   ),

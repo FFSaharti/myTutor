@@ -86,6 +86,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                       onTap: () {
                                         Navigator.pop(context);
                                       },
+                                      key: const ValueKey("chat_screen_back"),
                                       child: Icon(
                                         Icons.arrow_back,
                                         color: Colors.white,
@@ -296,6 +297,7 @@ class _ChatScreenState extends State<ChatScreen> {
                           ),
                           Expanded(
                             child: TextField(
+                              key: const ValueKey("chat_text_field"),
                               style: TextStyle(
                                   color: Theme.of(context).accentColor),
                               readOnly: widget.currentsession.status == "closed"
@@ -319,6 +321,7 @@ class _ChatScreenState extends State<ChatScreen> {
                             ),
                           ),
                           FlatButton(
+                            key: const  ValueKey("chat_send_button"),
                             onPressed: widget.currentsession.status == "closed"
                                 ? null
                                 : () {
