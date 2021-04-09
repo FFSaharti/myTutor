@@ -4,8 +4,6 @@ import 'package:mytutor/classes/user.dart';
 class Student extends MyUser {
   List<Question> _questions = [];
   List<dynamic> _favMats = [];
-  // List<Session> sessions;
-  // List<Material> bookmarkedMaterials;
 
   Student(String name, String email, String pass, String aboutMe, String userId,
       List<Question> _questions, Profileimg)
