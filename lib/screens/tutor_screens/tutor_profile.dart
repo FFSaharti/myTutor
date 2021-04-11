@@ -331,6 +331,7 @@ class _TutorProfileState extends State<TutorProfile> {
                                       Icons.edit,
                                       size: 20,
                                       color: Theme.of(context).iconTheme.color,
+                                      key: const ValueKey("edit_aboutMe_tutor"),
                                     ),
                                   ),
                                   SizedBox(
@@ -692,6 +693,7 @@ class _TutorProfileState extends State<TutorProfile> {
                                 color: Theme.of(context).buttonColor),
                           ),
                           IconButton(
+                            key: const ValueKey("insert_new_aboutMe"),
                             icon: Icon(Icons.check),
                             onPressed: () {
                               // ADD NEW QUESTION
@@ -745,6 +747,7 @@ class _TutorProfileState extends State<TutorProfile> {
                               ),
                             ),
                             TextField(
+                              key: const ValueKey("aboutMe_textField"),
                               style: TextStyle(
                                   color: Theme.of(context).buttonColor),
                               controller: aboutMeController,

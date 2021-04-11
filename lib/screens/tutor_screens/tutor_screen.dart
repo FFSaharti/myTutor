@@ -28,6 +28,7 @@ class _HomepageScreenTutorState extends State<HomepageScreenTutor> {
     return DisableDefaultPop(
       child: Scaffold(
         bottomNavigationBar: BottomNavyBar(
+          key: const ValueKey("tutor_bottom_bar"),
           backgroundColor: Theme.of(context).cardColor,
           selectedIndex: _currentIndex,
           showElevation: true,
@@ -97,6 +98,7 @@ class _HomepageScreenTutorState extends State<HomepageScreenTutor> {
               icon: Icon(
                 Icons.person,
                 color: Theme.of(context).appBarTheme.iconTheme.color,
+                key: const ValueKey("tutor_profile_bottom_bar"),
               ),
               title: Text(
                 'Profile',
@@ -113,6 +115,7 @@ class _HomepageScreenTutorState extends State<HomepageScreenTutor> {
               icon: Icon(
                 Icons.settings,
                 color: Theme.of(context).appBarTheme.iconTheme.color,
+                key: const ValueKey("tutor_settings_bottom_bar"),
               ),
               title: Text(
                 'Settings',
